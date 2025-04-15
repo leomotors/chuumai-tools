@@ -1,5 +1,5 @@
 {
-  "name": "my-turborepo",
+  "name": "chuumai-tools",
   "private": true,
   "scripts": {
     "build": "turbo run build",
