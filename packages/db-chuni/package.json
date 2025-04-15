@@ -1,0 +1,25 @@
+{
+  "name": "@repo/db-chuni",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "lint": "eslint src",
+    "format": "eslint src --fix",
+    "db:generate": "dotenv -- drizzle-kit generate",
+    "db:migrate": "dotenv -- drizzle-kit migrate",
+    "db:export": "dotenv -- drizzle-kit export"
+  },
+  "exports": {
+    "./client": "./src/client.ts",
+    "./schema": "./src/schema/index.ts"
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.40.0",
+    "postgres": "^3.4.5",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "dotenv-cli": "^8.0.0",
+    "drizzle-kit": "^0.30.5"
+  }
+}

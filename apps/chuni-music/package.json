@@ -1,0 +1,21 @@
+{
+  "name": "chuni-music",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "preview": "dotenv -- node ./dist/index.js",
+    "build": "tsup",
+    "test": "vitest run",
+    "test:cov": "vitest run --coverage"
+  },
+  "devDependencies": {
+    "@repo/db-chuni": "workspace:*",
+    "@vitest/coverage-v8": "^3.0.7",
+    "dotenv-cli": "^8.0.0",
+    "drizzle-orm": "^0.40.0",
+    "tsup": "^8.4.0",
+    "typescript": "^5.8.2",
+    "vitest": "^3.0.7",
+    "zod": "^3.24.2"
+  }
+}
