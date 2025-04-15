@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "Helvetica Neue Cyr";
+  font-weight: 700;
+  src: url("/fonts/HelveticaNeueCyr-Bold.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Helvetica Neue Cyr";
+  font-weight: 300;
+  src: url("/fonts/HelveticaNeueCyr-Light.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Helvetica Neue Cyr";
+  font-weight: 500;
+  src: url("/fonts/HelveticaNeueCyr-Medium.woff2") format("woff2");
+}
+
+@theme {
+  --font-helvetica: "Helvetica Neue Cyr", sans-serif;
+}

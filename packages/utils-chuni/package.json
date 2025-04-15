@@ -1,0 +1,14 @@
+{
+  "name": "@repo/utils-chuni",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "lint": "eslint src",
+    "format": "eslint src --fix",
+    "test": "vitest run"
+  },
+  "main": "./src/index.ts",
+  "devDependencies": {
+    "vitest": "^3.1.1"
+  }
+}
