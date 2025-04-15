@@ -1,0 +1,173 @@
+{
+  "id": "54dca4f0-baab-40a3-b6be-459f7ba7efa1",
+  "prevId": "825bf9d5-ded5-442e-a444-3527b32a1788",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.music_data": {
+      "name": "music_data",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "category": {
+          "name": "category",
+          "type": "category",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "title": {
+          "name": "title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "artist": {
+          "name": "artist",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "image": {
+          "name": "image",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.music_level": {
+      "name": "music_level",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "identity": {
+            "type": "always",
+            "name": "music_level_id_seq",
+            "schema": "public",
+            "increment": "1",
+            "startWith": "1",
+            "minValue": "1",
+            "maxValue": "2147483647",
+            "cache": "1",
+            "cycle": false
+          }
+        },
+        "music_id": {
+          "name": "music_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "difficulty": {
+          "name": "difficulty",
+          "type": "std_chart_difficulty",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "level": {
+          "name": "level",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "constant": {
+          "name": "constant",
+          "type": "numeric(3, 1)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "version": {
+          "name": "version",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "music_level_music_id_music_data_id_fk": {
+          "name": "music_level_music_id_music_data_id_fk",
+          "tableFrom": "music_level",
+          "tableTo": "music_data",
+          "columnsFrom": [
+            "music_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "music_level_music_id_difficulty_version_unique": {
+          "name": "music_level_music_id_difficulty_version_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "music_id",
+            "difficulty",
+            "version"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {
+    "public.category": {
+      "name": "category",
+      "schema": "public",
+      "values": [
+        "POPS & ANIME",
+        "niconico",
+        "東方Project",
+        "VARIETY",
+        "イロドリミドリ",
+        "ゲキマイ",
+        "ORIGINAL"
+      ]
+    },
+    "public.std_chart_difficulty": {
+      "name": "std_chart_difficulty",
+      "schema": "public",
+      "values": [
+        "basic",
+        "advanced",
+        "expert",
+        "master",
+        "ultima"
+      ]
+    }
+  },
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

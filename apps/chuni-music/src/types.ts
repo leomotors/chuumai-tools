@@ -1,6 +1,9 @@
 import { z } from "zod";
 
-import { categoryValues } from "@repo/db-chuni/schema";
+import {
+  categoryValues,
+  stdChartDifficultyValues,
+} from "@repo/db-chuni/schema";
 
 export const musicSchema = z.object({
   id: z.coerce.number(),
@@ -20,3 +23,25 @@ export const musicSchema = z.object({
 });
 
 export const musicJsonSchema = z.array(musicSchema);
+
+// Using only field we need, from: https://arcade-songs.zetaraku.dev/chunithm/
+const zSheet = z.discriminatedUnion("type", [
+  z.object({
+    type: z.literal("std"),
+    difficulty: z.enum(stdChartDifficultyValues),
+    internalLevel: z.string().nullable(),
+  }),
+  z.object({
+    type: z.literal("we"),
+    difficulty: z.string(),
+  }),
+]);
+
+const zSong = z.object({
+  title: z.string(),
+  sheets: z.array(zSheet),
+});
+
+export const zSchema = z.object({
+  songs: z.array(zSong),
+});

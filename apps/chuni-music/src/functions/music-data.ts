@@ -4,12 +4,14 @@ import {
   S3Client,
 } from "@aws-sdk/client-s3";
 import cliProgress from "cli-progress";
+import { PgInsertValue } from "drizzle-orm/pg-core";
 
 import { db } from "@repo/db-chuni/client";
-import { musicDataTable } from "@repo/db-chuni/schema";
+import { musicDataTable, musicLevelTable } from "@repo/db-chuni/schema";
 
 import { environment } from "../environment.js";
 import { musicJsonSchema } from "../types.js";
+import { updateMusicConstant } from "./utils/music-constant.js";
 
 const url = "https://chunithm.sega.jp/storage/json/music.json";
 const s3Folder = "musicImages";
@@ -116,7 +118,53 @@ export async function downloadMusicData(version: string) {
 
   progress.stop();
 
-  // todo chart version
+  // Section: Chart Level
+  const existingChartLevel = await db.select().from(musicLevelTable);
+
+  const payload = [] as PgInsertValue<typeof musicLevelTable>[];
+  for (const music of stdMusicData) {
+    const levels = [
+      { difficulty: "basic" as const, level: music.lev_bas },
+      { difficulty: "advanced" as const, level: music.lev_adv },
+      { difficulty: "expert" as const, level: music.lev_exp },
+      { difficulty: "master" as const, level: music.lev_mas },
+      { difficulty: "ultima" as const, level: music.lev_ult },
+    ];
+
+    for (const l of levels) {
+      if (l.level) {
+        payload.push({
+          musicId: music.id,
+          difficulty: l.difficulty,
+          level: l.level,
+          version,
+        });
+      }
+    }
+  }
+
+  for (const p of payload) {
+    const result = existingChartLevel.find(
+      (c) =>
+        c.musicId === p.musicId &&
+        c.difficulty === p.difficulty &&
+        c.version === version,
+    );
+    if (result) {
+      if (result.level !== p.level) {
+        console.log(
+          `Warning: Level mismatch for musicId ${p.musicId} and difficulty ${p.difficulty}. Existing level: ${result.level}, New level: ${p.level}`,
+        );
+      }
+    }
+  }
+
+  if (payload.length > 0) {
+    await db.insert(musicLevelTable).values(payload).onConflictDoNothing();
+  }
+
+  // Section: Chart Constant
+  await updateMusicConstant(version);
 
   await db.$client.end();
 }

@@ -1,4 +1,11 @@
-import { decimal, integer, pgEnum, pgTable, text } from "drizzle-orm/pg-core";
+import {
+  decimal,
+  integer,
+  pgEnum,
+  pgTable,
+  text,
+  unique,
+} from "drizzle-orm/pg-core";
 
 export const categoryValues = [
   "POPS & ANIME",
@@ -33,15 +40,19 @@ export const musicDataTable = pgTable("music_data", {
   image: text().notNull(),
 });
 
-export const musicLevelTable = pgTable("music_level", {
-  id: integer().primaryKey().generatedAlwaysAsIdentity(),
+export const musicLevelTable = pgTable(
+  "music_level",
+  {
+    id: integer().primaryKey().generatedAlwaysAsIdentity(),
 
-  musicId: integer("music_id")
-    .notNull()
-    .references(() => musicDataTable.id),
-  difficulty: stdChartDifficultyType().notNull(),
-  level: text().notNull(),
-  constant: decimal({ precision: 3, scale: 1 }),
+    musicId: integer("music_id")
+      .notNull()
+      .references(() => musicDataTable.id),
+    difficulty: stdChartDifficultyType().notNull(),
+    level: text().notNull(),
+    constant: decimal({ precision: 3, scale: 1 }),
 
-  version: text().notNull(),
-});
+    version: text().notNull(),
+  },
+  (t) => [unique().on(t.musicId, t.difficulty, t.version)],
+);
