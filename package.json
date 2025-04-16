@@ -3,10 +3,11 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "turbo run build",
+    "build": "turbo run build --continue=dependencies-successful",
     "dev": "turbo run dev",
-    "lint": "turbo run lint",
-    "format": "turbo run format",
+    "lint": "turbo run lint --continue",
+    "format": "turbo run format --continue",
+    "test": "turbo run test --continue",
     "check-types": "turbo run check-types"
   },
   "devDependencies": {

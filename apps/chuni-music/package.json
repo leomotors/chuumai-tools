@@ -5,8 +5,6 @@
   "scripts": {
     "preview": "dotenv -- node ./dist/index.js",
     "build": "tsup",
-    "test": "vitest run",
-    "test:cov": "vitest run --coverage",
     "lint": "eslint && tsc",
     "format": "eslint --fix"
   },
@@ -22,7 +20,6 @@
     "drizzle-orm": "^0.42.0",
     "tsup": "^8.4.0",
     "typescript": "^5.8.3",
-    "vitest": "^3.1.1",
     "zod": "^3.24.2"
   }
 }
