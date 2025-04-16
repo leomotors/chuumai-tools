@@ -138,6 +138,9 @@ importers:
 
   apps/chunithm-scraper:
     devDependencies:
+      '@repo/db-chuni':
+        specifier: workspace:*
+        version: link:../../packages/db-chuni
       '@repo/types-chuni':
         specifier: workspace:*
         version: link:../../packages/types-chuni
@@ -168,6 +171,9 @@ importers:
       postgres:
         specifier: ^3.4.5
         version: 3.4.5
+      tsup:
+        specifier: ^8.4.0
+        version: 8.4.0(jiti@2.4.2)(postcss@8.5.3)(typescript@5.8.3)
       typescript:
         specifier: ^5.8.3
         version: 5.8.3
