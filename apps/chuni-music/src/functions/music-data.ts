@@ -6,9 +6,9 @@ import {
 import cliProgress from "cli-progress";
 import { PgInsertValue } from "drizzle-orm/pg-core";
 
-import { db } from "@repo/db-chuni/client";
 import { musicDataTable, musicLevelTable } from "@repo/db-chuni/schema";
 
+import { db } from "../db.js";
 import { environment } from "../environment.js";
 import { musicJsonSchema } from "../types.js";
 import { updateMusicConstant } from "./utils/music-constant.js";

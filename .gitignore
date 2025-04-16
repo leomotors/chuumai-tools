@@ -38,5 +38,4 @@ yarn-error.log*
 *.pem
 
 # Temp
-apps/chunithm-scraper-old
 packages/db-chuni-old
