@@ -1,7 +1,7 @@
 <script lang="ts">
   import { toPng } from "html-to-image";
 
-  import Chart from "./Chart.svelte";
+  import Render from "./Render.svelte";
 
   const ut = {
     id: 2582,
@@ -26,19 +26,32 @@
 </script>
 
 <div>
-  <h1>Chunithm Scraper</h1>
+  <h1 class="font-bold text-3xl">Chunithm Scraper</h1>
 
-  <Chart
+  <Render
     input={{
-      playerName: "Ｌｅｏψｒθφ",
-      playerRating: 16.3,
-      playerLevel: 69,
-      lastPlayed: new Date("2025-04-10T12:00:00Z"),
-      characterImage: "a48871f78a3f1e9d.png", // mafuyu
-      characterFrame: "rainbow",
-      honorText: "Ultimate Force",
-      honorLevel: "platina",
-      classEmblem: 4,
+      profile: {
+        characterImage:
+          "https://chunithm-net-eng.com/mobile/img/a48871f78a3f1e9d.png",
+        characterRarity: "RAINBOW",
+
+        teamName: "Team Name",
+        teamEmblem: "SILVER",
+
+        honorText: "Ultimate Force",
+        honorLevel: "PLATINUM",
+
+        playerLevel: 69,
+        playerName: "Ｌｅｏψｒθφ",
+        classEmblem: 4,
+
+        rating: 16.3,
+        overpowerValue: 28475.22,
+        overpowerPercent: 26.62,
+
+        lastPlayed: new Date("2025-04-04T09:49:00Z"),
+        playCount: 499,
+      },
       best: [
         ut,
         {

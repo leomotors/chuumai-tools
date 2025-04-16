@@ -6,7 +6,9 @@
     "preview": "dotenv -- node ./dist/index.js",
     "build": "tsup",
     "test": "vitest run",
-    "test:cov": "vitest run --coverage"
+    "test:cov": "vitest run --coverage",
+    "lint": "eslint && tsc",
+    "format": "eslint --fix"
   },
   "dependencies": {
     "cli-progress": "^3.12.0"
