@@ -95,3 +95,18 @@ export function recordToGenInput(
     aj: record.aj,
   };
 }
+
+export function recordToGenInputWithFullChain(
+  record: ReturnType<typeof parseRecord>,
+): BaseChartSchema & { fullChain: number } {
+  return {
+    id: record.musicId,
+    title: record.musicTitle,
+    difficulty: stdChartDifficultyValues[record.difficulty],
+    score: record.score,
+    clearMark: record.clearMark,
+    fc: record.fc,
+    aj: record.aj,
+    fullChain: record.fullChain,
+  };
+}
