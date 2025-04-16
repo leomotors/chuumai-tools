@@ -1,3 +1,4 @@
+output-*.json
+
 # Temp
-3-qman.ts
-4-genimage.ts
+legacy-*.ts

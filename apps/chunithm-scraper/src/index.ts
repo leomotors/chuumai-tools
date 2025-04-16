@@ -1,13 +1,16 @@
+import fs from "node:fs/promises";
+
 import { chromium } from "playwright";
 
 import { jobTable } from "@repo/db-chuni/schema";
+import { ImgGenInput } from "@repo/types-chuni";
 
 import { db } from "./db.js";
+import { recordToGenInput } from "./parser/music.js";
 import { PwPage } from "./playwright.js";
 import { login } from "./steps/1-login.js";
 import { scrapePlayerData } from "./steps/2-playerdata.js";
-// import { qman } from "./steps/3-qman.js";
-// import { genImage } from "./steps/4-genimage.js";
+import { scrapeMusicRecord } from "./steps/3-music.js";
 
 const jobId = (await db?.insert(jobTable).values({}).returning())?.[0].id;
 console.log(`Created job with ID: ${jobId}`);
@@ -33,17 +36,28 @@ const playerData = await pwPage.runStep(
   scrapePlayerData,
 );
 
-// // * Step 3: Qman
-// const qmanResult = await pwPage.runStep("Step 3: Qman", (jobId, page, db) =>
-//   qman(jobId, page, db, lastPlayed),
-// );
+// * Step 3: Music Record (For Rating and All)
+const musicRecords = await pwPage.runStep(
+  "Step 3: Scrape Music Records",
+  scrapeMusicRecord,
+);
 
-// // * Step 4: Generate Image
-// await pwPage.runStep(
-//   "Step 4: Generate Image",
-//   (_, page, __, retried) => genImage(page, qmanResult, retried),
-//   3,
-// );
+// * Step 4: Create JSON for Image Generation
+const imgGenInput = {
+  profile: playerData,
+  best: musicRecords.bestSongs.map(recordToGenInput),
+  new: musicRecords.newSongs.map(recordToGenInput),
+} satisfies ImgGenInput;
+
+await fs.writeFile(
+  `output-${jobId}.json`,
+  JSON.stringify(imgGenInput, null, 2),
+);
+
+// * Step 5: Save data to DB
+
+// * Step 6: Generate Image
+// todo
 
 await db?.$client.end();
 await browser.close();

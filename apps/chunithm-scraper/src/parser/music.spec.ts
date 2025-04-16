@@ -34,6 +34,15 @@ test("Music parser", async () => {
         difficulty: 3,
       },
     ],
+    [
+      "matsukensaiba.html",
+      {
+        musicId: 2493,
+        musicTitle: "マツケンサンバⅡ",
+        score: 0,
+        difficulty: 3,
+      },
+    ],
   ];
 
   for (const [fixture, expected] of fixtures) {
@@ -76,6 +85,16 @@ test("Full Music Parser", async () => {
       score: 1006530,
       difficulty: 2,
       clearMark: "ABSOLUTE",
+      fc: false,
+      aj: false,
+      fullChain: 0,
+    },
+    "matsukensaiba.html": {
+      musicId: 2493,
+      musicTitle: "マツケンサンバⅡ",
+      score: 0,
+      difficulty: 3,
+      clearMark: undefined,
       fc: false,
       aj: false,
       fullChain: 0,

@@ -2,6 +2,7 @@ import { JSDOM } from "jsdom";
 import { z } from "zod";
 
 import { RarityLevel, rarityLevelValues } from "@repo/db-chuni/schema";
+import { ImgGenInput } from "@repo/types-chuni";
 
 import { rarityFromUrl } from "./imageUrl";
 import { parseCurrentRating } from "./playerRating";
@@ -34,10 +35,9 @@ export function parsePossession(dom: JSDOM): RarityLevel {
 }
 
 // Left
-export function parseCharacter(dom: JSDOM): {
-  rarity: RarityLevel;
-  imgUrl: string;
-} {
+export function parseCharacter(
+  dom: JSDOM,
+): Pick<ImgGenInput["profile"], "characterRarity" | "characterImage"> {
   const ele = dom.window.document.querySelector(
     ".player_data_left",
   )! as HTMLDivElement;
@@ -53,7 +53,7 @@ export function parseCharacter(dom: JSDOM): {
     throw new Error("Failed to parse character frame rarity level");
   }
 
-  return { rarity: rarityLevel, imgUrl };
+  return { characterRarity: rarityLevel, characterImage: imgUrl };
 }
 
 const rightDataSchema = z.object({

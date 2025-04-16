@@ -9,24 +9,20 @@ import {
 } from "../parser/playerData.js";
 
 export async function scrapePlayerData(page: Page) {
-  const boxData = page.locator(".box_playerprofile");
-  const boxDataHTML = await boxData.innerHTML();
-  const boxDataDom = new JSDOM(boxDataHTML);
+  const pageData = page.locator(".frame01_inside.w460");
+  const pageDataHTML = await pageData.innerHTML();
+  const pageDataDom = new JSDOM(pageDataHTML);
 
-  const bottomData = page.locator(".w420.box01");
-  const bottomDataHTML = await bottomData.innerHTML();
-  const bottomDataDom = new JSDOM(bottomDataHTML);
+  const possession = parsePossession(pageDataDom);
+  const character = parseCharacter(pageDataDom);
+  const rightData = parseRightData(pageDataDom);
 
-  const possession = parsePossession(boxDataDom);
-  const character = parseCharacter(boxDataDom);
-  const rightData = parseRightData(boxDataDom);
-
-  const bottomDataParsed = parseBottomData(bottomDataDom);
+  const bottomData = parseBottomData(pageDataDom);
 
   return {
     possession,
     ...character,
     ...rightData,
-    ...bottomDataParsed,
+    ...bottomData,
   };
 }

@@ -134,6 +134,13 @@ importers:
         version: 3.24.2
 
   apps/chunithm-scraper:
+    dependencies:
+      jsdom:
+        specifier: ^26.1.0
+        version: 26.1.0
+      playwright:
+        specifier: ^1.50.1
+        version: 1.51.1
     devDependencies:
       '@repo/db-chuni':
         specifier: workspace:*
@@ -156,15 +163,9 @@ importers:
       drizzle-orm:
         specifier: ^0.42.0
         version: 0.42.0(postgres@3.4.5)
-      jsdom:
-        specifier: ^26.1.0
-        version: 26.1.0
       papaparse:
         specifier: ^5.5.2
         version: 5.5.2
-      playwright:
-        specifier: ^1.50.1
-        version: 1.51.1
       postgres:
         specifier: ^3.4.5
         version: 3.4.5

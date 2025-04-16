@@ -1,13 +1,14 @@
-import { ClearMark } from "@repo/db-chuni/schema";
+import { ClearMark, stdChartDifficultyValues } from "@repo/db-chuni/schema";
+import { BaseChartSchema } from "@repo/types-chuni";
 
 export function parseMusic(element: Element) {
   const musicTitle = element.querySelector(".music_title")!.textContent!;
 
-  const score = element.querySelector(
-    ".play_musicdata_highscore .text_b",
-  )!.textContent!;
+  const score = element
+    .querySelector(".play_musicdata_highscore .text_b")
+    ?.textContent?.trim();
 
-  const scoreNumber = parseInt(score.replace(/,/g, ""));
+  const scoreNumber = score ? parseInt(score.replace(/,/g, "")) : 0;
 
   const difficulty = element
     .querySelector("input[name=diff]")!
@@ -25,7 +26,11 @@ export function parseMusic(element: Element) {
   };
 }
 
-function getClearMark(src: string): ClearMark | undefined {
+function getClearMark(src: string | undefined): ClearMark | undefined {
+  if (!src) {
+    return undefined;
+  }
+
   if (src.includes("icon_catastrophy")) {
     return "CATASTROPHY";
   }
@@ -74,5 +79,19 @@ export function parseRecord(element: Element) {
     fc,
     aj,
     fullChain: fullChainPlus ? 2 : fullChainGold ? 1 : 0,
+  };
+}
+
+export function recordToGenInput(
+  record: ReturnType<typeof parseRecord>,
+): BaseChartSchema {
+  return {
+    id: record.musicId,
+    title: record.musicTitle,
+    difficulty: stdChartDifficultyValues[record.difficulty],
+    score: record.score,
+    clearMark: record.clearMark,
+    fc: record.fc,
+    aj: record.aj,
   };
 }

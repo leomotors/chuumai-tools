@@ -38,24 +38,29 @@ describe("Player Data", () => {
   it("Left (Character Profile)", async () => {
     const fixtures = {
       "elysia.html": {
-        rarity: "RAINBOW",
-        imgUrl: "https://chunithm-net-eng.com/mobile/img/3948279459da27ff.png", // arisu
+        characterRarity: "RAINBOW",
+        characterImage:
+          "https://chunithm-net-eng.com/mobile/img/3948279459da27ff.png", // arisu
       },
       "leomotors.html": {
-        rarity: "RAINBOW",
-        imgUrl: "https://chunithm-net-eng.com/mobile/img/a48871f78a3f1e9d.png", // mafuyu
+        characterRarity: "RAINBOW",
+        characterImage:
+          "https://chunithm-net-eng.com/mobile/img/a48871f78a3f1e9d.png", // mafuyu
       },
       "minori.html": {
-        rarity: "PLATINUM",
-        imgUrl: "https://chunithm-net-eng.com/mobile/img/e16348980f62f5ed.png", // minori bnw
+        characterRarity: "PLATINUM",
+        characterImage:
+          "https://chunithm-net-eng.com/mobile/img/e16348980f62f5ed.png", // minori bnw
       },
       "pooh.html": {
-        rarity: "SILVER",
-        imgUrl: "https://chunithm-net-eng.com/mobile/img/c80eeee609c42acf.png", // laur
+        characterRarity: "SILVER",
+        characterImage:
+          "https://chunithm-net-eng.com/mobile/img/c80eeee609c42acf.png", // laur
       },
       "thatcat.html": {
-        rarity: "RAINBOW",
-        imgUrl: "https://chunithm-net-eng.com/mobile/img/ca42d927c55a6f9b.png", // toa
+        characterRarity: "RAINBOW",
+        characterImage:
+          "https://chunithm-net-eng.com/mobile/img/ca42d927c55a6f9b.png", // toa
       },
     };
 
