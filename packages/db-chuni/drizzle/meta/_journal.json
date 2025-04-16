@@ -15,6 +15,13 @@
       "when": 1744731624290,
       "tag": "0001_open_bedlam",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1744800313366,
+      "tag": "0002_final-version-hopefully",
+      "breakpoints": true
     }
   ]
 }

@@ -1,36 +1,6 @@
-import {
-  decimal,
-  integer,
-  pgEnum,
-  pgTable,
-  text,
-  unique,
-} from "drizzle-orm/pg-core";
+import { decimal, integer, pgTable, text, unique } from "drizzle-orm/pg-core";
 
-export const categoryValues = [
-  "POPS & ANIME",
-  "niconico",
-  "東方Project",
-  "VARIETY",
-  "イロドリミドリ",
-  "ゲキマイ",
-  "ORIGINAL",
-] as const;
-export type Category = (typeof categoryValues)[number];
-export const categoryType = pgEnum("category", categoryValues);
-
-export const stdChartDifficultyValues = [
-  "basic",
-  "advanced",
-  "expert",
-  "master",
-  "ultima",
-] as const;
-export type StdChartDifficulty = (typeof stdChartDifficultyValues)[number];
-export const stdChartDifficultyType = pgEnum(
-  "std_chart_difficulty",
-  stdChartDifficultyValues,
-);
+import { categoryType, stdChartDifficultyType } from "./types";
 
 export const musicDataTable = pgTable("music_data", {
   id: integer().primaryKey(),

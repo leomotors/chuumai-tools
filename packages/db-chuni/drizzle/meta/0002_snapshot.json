@@ -1,0 +1,799 @@
+{
+  "id": "de6d5b85-d7a3-442a-badc-945294f2e7d0",
+  "prevId": "54dca4f0-baab-40a3-b6be-459f7ba7efa1",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.manual_rating": {
+      "name": "manual_rating",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "identity": {
+            "type": "always",
+            "name": "manual_rating_id_seq",
+            "schema": "public",
+            "increment": "1",
+            "startWith": "1",
+            "minValue": "1",
+            "maxValue": "2147483647",
+            "cache": "1",
+            "cycle": false
+          }
+        },
+        "rating": {
+          "name": "rating",
+          "type": "numeric(4, 2)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "timestamp": {
+          "name": "timestamp",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.music_data": {
+      "name": "music_data",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "category": {
+          "name": "category",
+          "type": "category",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "title": {
+          "name": "title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "artist": {
+          "name": "artist",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "image": {
+          "name": "image",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.music_level": {
+      "name": "music_level",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "identity": {
+            "type": "always",
+            "name": "music_level_id_seq",
+            "schema": "public",
+            "increment": "1",
+            "startWith": "1",
+            "minValue": "1",
+            "maxValue": "2147483647",
+            "cache": "1",
+            "cycle": false
+          }
+        },
+        "music_id": {
+          "name": "music_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "difficulty": {
+          "name": "difficulty",
+          "type": "std_chart_difficulty",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "level": {
+          "name": "level",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "constant": {
+          "name": "constant",
+          "type": "numeric(3, 1)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "version": {
+          "name": "version",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "music_level_music_id_music_data_id_fk": {
+          "name": "music_level_music_id_music_data_id_fk",
+          "tableFrom": "music_level",
+          "tableTo": "music_data",
+          "columnsFrom": [
+            "music_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "music_level_music_id_difficulty_version_unique": {
+          "name": "music_level_music_id_difficulty_version_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "music_id",
+            "difficulty",
+            "version"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.for_rating": {
+      "name": "for_rating",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "identity": {
+            "type": "always",
+            "name": "for_rating_id_seq",
+            "schema": "public",
+            "increment": "1",
+            "startWith": "1",
+            "minValue": "1",
+            "maxValue": "2147483647",
+            "cache": "1",
+            "cycle": false
+          }
+        },
+        "job_id": {
+          "name": "job_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "music_id": {
+          "name": "music_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "record_id": {
+          "name": "record_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "rating_type": {
+          "name": "rating_type",
+          "type": "rating_type",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "order": {
+          "name": "order",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "version": {
+          "name": "version",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "for_rating_job_id_job_id_fk": {
+          "name": "for_rating_job_id_job_id_fk",
+          "tableFrom": "for_rating",
+          "tableTo": "job",
+          "columnsFrom": [
+            "job_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.image_cache": {
+      "name": "image_cache",
+      "schema": "",
+      "columns": {
+        "key": {
+          "name": "key",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "value": {
+          "name": "value",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.job": {
+      "name": "job",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "identity": {
+            "type": "always",
+            "name": "job_id_seq",
+            "schema": "public",
+            "increment": "1",
+            "startWith": "1",
+            "minValue": "1",
+            "maxValue": "2147483647",
+            "cache": "1",
+            "cycle": false
+          }
+        },
+        "job_start": {
+          "name": "job_start",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "job_end": {
+          "name": "job_end",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "job_error": {
+          "name": "job_error",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "is_from_old_version": {
+          "name": "is_from_old_version",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.music_record": {
+      "name": "music_record",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "identity": {
+            "type": "always",
+            "name": "music_record_id_seq",
+            "schema": "public",
+            "increment": "1",
+            "startWith": "1",
+            "minValue": "1",
+            "maxValue": "2147483647",
+            "cache": "1",
+            "cycle": false
+          }
+        },
+        "job_id": {
+          "name": "job_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "music_id": {
+          "name": "music_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "difficulty": {
+          "name": "difficulty",
+          "type": "std_chart_difficulty",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "score": {
+          "name": "score",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "clear_mark": {
+          "name": "clear_mark",
+          "type": "clear_mark",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "fc": {
+          "name": "fc",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "aj": {
+          "name": "aj",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "full_chain": {
+          "name": "full_chain",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "music_record_job_id_job_id_fk": {
+          "name": "music_record_job_id_job_id_fk",
+          "tableFrom": "music_record",
+          "tableTo": "job",
+          "columnsFrom": [
+            "job_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "music_record_music_id_difficulty_score_clear_mark_fc_aj_full_chain_unique": {
+          "name": "music_record_music_id_difficulty_score_clear_mark_fc_aj_full_chain_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "music_id",
+            "difficulty",
+            "score",
+            "clear_mark",
+            "fc",
+            "aj",
+            "full_chain"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.player_data": {
+      "name": "player_data",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "identity": {
+            "type": "always",
+            "name": "player_data_id_seq",
+            "schema": "public",
+            "increment": "1",
+            "startWith": "1",
+            "minValue": "1",
+            "maxValue": "2147483647",
+            "cache": "1",
+            "cycle": false
+          }
+        },
+        "job_id": {
+          "name": "job_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "character_rarity": {
+          "name": "character_rarity",
+          "type": "rarity_level",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "character_image": {
+          "name": "character_image",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "team_name": {
+          "name": "team_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "team_emblem": {
+          "name": "team_emblem",
+          "type": "rarity_level",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "honor_text": {
+          "name": "honor_text",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "honor_rarity": {
+          "name": "honor_rarity",
+          "type": "rarity_level",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "player_level": {
+          "name": "player_level",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "player_name": {
+          "name": "player_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "class_emblem": {
+          "name": "class_emblem",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "rating": {
+          "name": "rating",
+          "type": "numeric(4, 2)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "max_rating": {
+          "name": "max_rating",
+          "type": "numeric(4, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "overpower_value": {
+          "name": "overpower_value",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "overpower_percent": {
+          "name": "overpower_percent",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "last_played": {
+          "name": "last_played",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "current_currency": {
+          "name": "current_currency",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "total_currency": {
+          "name": "total_currency",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "play_count": {
+          "name": "play_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "player_data_job_id_job_id_fk": {
+          "name": "player_data_job_id_job_id_fk",
+          "tableFrom": "player_data",
+          "tableTo": "job",
+          "columnsFrom": [
+            "job_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "player_data_character_image_image_cache_key_fk": {
+          "name": "player_data_character_image_image_cache_key_fk",
+          "tableFrom": "player_data",
+          "tableTo": "image_cache",
+          "columnsFrom": [
+            "character_image"
+          ],
+          "columnsTo": [
+            "key"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.raw_scrape_data": {
+      "name": "raw_scrape_data",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "identity": {
+            "type": "always",
+            "name": "raw_scrape_data_id_seq",
+            "schema": "public",
+            "increment": "1",
+            "startWith": "1",
+            "minValue": "1",
+            "maxValue": "2147483647",
+            "cache": "1",
+            "cycle": false
+          }
+        },
+        "job_id": {
+          "name": "job_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "version": {
+          "name": "version",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "box_player_profile_html": {
+          "name": "box_player_profile_html",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "data_bottom_box_html": {
+          "name": "data_bottom_box_html",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "for_rating_best_html": {
+          "name": "for_rating_best_html",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "for_rating_new_html": {
+          "name": "for_rating_new_html",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "for_rating_selection_html": {
+          "name": "for_rating_selection_html",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "data_for_image_gen": {
+          "name": "data_for_image_gen",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "raw_scrape_data_job_id_job_id_fk": {
+          "name": "raw_scrape_data_job_id_job_id_fk",
+          "tableFrom": "raw_scrape_data",
+          "tableTo": "job",
+          "columnsFrom": [
+            "job_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {
+    "public.category": {
+      "name": "category",
+      "schema": "public",
+      "values": [
+        "POPS & ANIME",
+        "niconico",
+        "東方Project",
+        "VARIETY",
+        "イロドリミドリ",
+        "ゲキマイ",
+        "ORIGINAL"
+      ]
+    },
+    "public.clear_mark": {
+      "name": "clear_mark",
+      "schema": "public",
+      "values": [
+        "CLEAR",
+        "HARD",
+        "ABSOLUTE",
+        "ABSOLUTE+",
+        "CATASTROPHY"
+      ]
+    },
+    "public.ranks": {
+      "name": "ranks",
+      "schema": "public",
+      "values": [
+        "D",
+        "C",
+        "B",
+        "BB",
+        "BBB",
+        "A",
+        "AA",
+        "AAA",
+        "S",
+        "S+",
+        "SS",
+        "SS+",
+        "SSS",
+        "SSS+"
+      ]
+    },
+    "public.rarity_level": {
+      "name": "rarity_level",
+      "schema": "public",
+      "values": [
+        "NORMAL",
+        "BRONZE",
+        "SILVER",
+        "GOLD",
+        "PLATINUM",
+        "RAINBOW",
+        "HOLOGRAPHIC"
+      ]
+    },
+    "public.rating_type": {
+      "name": "rating_type",
+      "schema": "public",
+      "values": [
+        "BEST",
+        "NEW",
+        "SELECTION"
+      ]
+    },
+    "public.std_chart_difficulty": {
+      "name": "std_chart_difficulty",
+      "schema": "public",
+      "values": [
+        "basic",
+        "advanced",
+        "expert",
+        "master",
+        "ultima"
+      ]
+    }
+  },
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

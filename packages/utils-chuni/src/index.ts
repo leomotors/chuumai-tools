@@ -1,2 +1,2 @@
-export * from "./rank.js";
-export * from "./rating.js";
+export * from "./rank";
+export * from "./rating";
