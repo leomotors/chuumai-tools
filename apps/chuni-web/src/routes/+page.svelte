@@ -1,12 +1,69 @@
 <script lang="ts">
   import { toPng } from "html-to-image";
 
+  import { env } from "$env/dynamic/public";
+  import { type RawImageGen } from "$lib/types";
+
+  import { type ImgGenInput, imgGenInputSchema } from "@repo/types-chuni";
+
   import Render from "./Render.svelte";
+
+  let files = $state<FileList>();
+  let userData = $state<ImgGenInput>();
+  let userError = $state<string>();
+
+  async function parseFile(fileList: FileList) {
+    const file = fileList[0];
+
+    const content = await file.text();
+    const json = JSON.parse(content);
+    const parseResult = imgGenInputSchema.safeParse(json);
+
+    if (parseResult.success) {
+      userData = parseResult.data;
+      userError = undefined;
+    } else {
+      userData = undefined;
+      userError = parseResult.error.message;
+    }
+  }
+
+  $effect(() => {
+    if (files) {
+      parseFile(files);
+    }
+  });
+
+  let renderData = $state<RawImageGen>();
+
+  async function getRatingData(userData: ImgGenInput) {
+    const res = await fetch("/api/calcRating", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        data: userData,
+        version: "VRS",
+      }),
+    });
+
+    renderData = await res.json();
+  }
+
+  $effect(() => {
+    if (userData) {
+      getRatingData(userData);
+    }
+  });
 
   async function handleDownload() {
     const element = document.getElementById("chart")!;
 
+    element.style.display = "flex";
     const dataUrl = await toPng(element);
+    element.style.display = "none";
+
     // Download
     const link = document.createElement("a");
     link.download = "chart.png";
@@ -15,393 +72,64 @@
   }
 </script>
 
-<div>
-  <h1 class="font-bold text-3xl">Chunithm Scraper</h1>
+<main class="flex flex-col items-center w-screen px-4 py-8 gap-4">
+  <h1 class="font-bold text-3xl">Chunithm Music for Rating Image Generator</h1>
+  <p>Version: {env.PUBLIC_VERSION}</p>
 
-  <Render
-    input={{
-      profile: {
-        characterRarity: "RAINBOW",
-        characterImage: "/api/profileImg?img=a48871f78a3f1e9d.png",
-        teamEmblem: "NORMAL",
-        teamName: "ＣＰ　ｖｓ　ＣＥＤＴ",
-        honorLevel: "PLATINUM",
-        honorText: "携帯恋話",
-        playerLevel: 70,
-        playerName: "Ｌｅｏψｒθφ",
-        classEmblem: 4,
-        rating: 16.29,
-        overpowerValue: 28475.22,
-        overpowerPercent: 26.62,
-        lastPlayed: new Date("2025-04-04T07:49:00.000Z"),
-        playCount: 465,
-      },
-      best: [
-        {
-          id: 749,
-          title: "Fracture Ray",
-          difficulty: "master",
-          score: 1008159,
-          clearMark: "HARD",
-          fc: true,
-          aj: false,
-        },
-        {
-          id: 697,
-          title: "folern",
-          difficulty: "master",
-          score: 1007850,
-          clearMark: "HARD",
-          fc: false,
-          aj: false,
-        },
-        {
-          id: 2562,
-          title: "Prominence",
-          difficulty: "master",
-          score: 1008663,
-          clearMark: "HARD",
-          fc: false,
-          aj: false,
-        },
-        {
-          id: 2582,
-          title: "Ultimate Force",
-          difficulty: "expert",
-          score: 1007412,
-          clearMark: "HARD",
-          fc: true,
-          aj: false,
-        },
-        {
-          id: 695,
-          title: "ハートアタック",
-          difficulty: "master",
-          score: 1008153,
-          clearMark: "HARD",
-          fc: false,
-          aj: false,
-        },
-        {
-          id: 1086,
-          title: "祈 -我ら神祖と共に歩む者なり-",
-          difficulty: "expert",
-          score: 1007155,
-          clearMark: "HARD",
-          fc: false,
-          aj: false,
-        },
-        {
-          id: 2339,
-          title: "Daphnis",
-          difficulty: "expert",
-          score: 1007602,
-          clearMark: "HARD",
-          fc: false,
-          aj: false,
-        },
-        {
-          id: 2739,
-          title: "Aether Crest: Celestial",
-          difficulty: "expert",
-          score: 1007554,
-          clearMark: "BRAVE",
-          fc: false,
-          aj: false,
-        },
-        {
-          id: 2241,
-          title: "DA'AT -The First Seeker of Souls-",
-          difficulty: "expert",
-          score: 1008328,
-          clearMark: "HARD",
-          fc: false,
-          aj: false,
-        },
-        {
-          id: 2648,
-          title: "Tuatha Dé Danann",
-          difficulty: "expert",
-          score: 1008399,
-          clearMark: "HARD",
-          fc: true,
-          aj: false,
-        },
-        {
-          id: 2135,
-          title: "IMPACT",
-          difficulty: "master",
-          score: 1006889,
-          clearMark: "HARD",
-          fc: false,
-          aj: false,
-        },
-        {
-          id: 994,
-          title: "Last Celebration",
-          difficulty: "master",
-          score: 1005722,
-          clearMark: "HARD",
-          fc: false,
-          aj: false,
-        },
-        {
-          id: 1086,
-          title: "祈 -我ら神祖と共に歩む者なり-",
-          difficulty: "master",
-          score: 997538,
-          clearMark: "CLEAR",
-          fc: false,
-          aj: false,
-        },
-        {
-          id: 2652,
-          title: "Forsaken Tale",
-          difficulty: "expert",
-          score: 1006530,
-          clearMark: "BRAVE",
-          fc: false,
-          aj: false,
-        },
-        {
-          id: 784,
-          title: "YURUSHITE",
-          difficulty: "master",
-          score: 1003890,
-          clearMark: "HARD",
-          fc: false,
-          aj: false,
-        },
-        {
-          id: 2658,
-          title: "熱異常",
-          difficulty: "master",
-          score: 1008341,
-          clearMark: "HARD",
-          fc: true,
-          aj: false,
-        },
-        {
-          id: 2397,
-          title: "もぺもぺ",
-          difficulty: "master",
-          score: 1008345,
-          clearMark: "HARD",
-          fc: true,
-          aj: false,
-        },
-        {
-          id: 2648,
-          title: "Tuatha Dé Danann",
-          difficulty: "master",
-          score: 999420,
-          clearMark: "CLEAR",
-          fc: false,
-          aj: false,
-        },
-        {
-          id: 2428,
-          title: "とあちゃんのおもちゃ箱",
-          difficulty: "master",
-          score: 1004754,
-          clearMark: "HARD",
-          fc: false,
-          aj: false,
-        },
-        {
-          id: 2354,
-          title: "月の光",
-          difficulty: "master",
-          score: 1005393,
-          clearMark: "HARD",
-          fc: false,
-          aj: false,
-        },
-        {
-          id: 2634,
-          title: "Dramatic…?",
-          difficulty: "master",
-          score: 1008267,
-          clearMark: "HARD",
-          fc: false,
-          aj: false,
-        },
-        {
-          id: 999,
-          title: "AttraqtiA",
-          difficulty: "master",
-          score: 1004293,
-          clearMark: "HARD",
-          fc: false,
-          aj: false,
-        },
-        {
-          id: 2339,
-          title: "Daphnis",
-          difficulty: "master",
-          score: 995496,
-          clearMark: "CLEAR",
-          fc: false,
-          aj: false,
-        },
-        {
-          id: 2064,
-          title: "ピュグマリオンの咒文",
-          difficulty: "master",
-          score: 1008611,
-          clearMark: "BRAVE",
-          fc: true,
-          aj: false,
-        },
-        {
-          id: 998,
-          title: "Arcahv",
-          difficulty: "master",
-          score: 1008485,
-          clearMark: "BRAVE",
-          fc: true,
-          aj: false,
-        },
-        {
-          id: 2340,
-          title: "To：Be Continued",
-          difficulty: "master",
-          score: 999604,
-          clearMark: "HARD",
-          fc: false,
-          aj: false,
-        },
-        {
-          id: 2127,
-          title: "プナイプナイたいそう",
-          difficulty: "master",
-          score: 1006433,
-          clearMark: "HARD",
-          fc: false,
-          aj: false,
-        },
-        {
-          id: 1106,
-          title: "アポカリプスに反逆の焔を焚べろ",
-          difficulty: "master",
-          score: 1002790,
-          clearMark: "HARD",
-          fc: false,
-          aj: false,
-        },
-        {
-          id: 1107,
-          title: "AstrøNotes.",
-          difficulty: "master",
-          score: 1003742,
-          clearMark: "HARD",
-          fc: false,
-          aj: false,
-        },
-        {
-          id: 2193,
-          title: "モ°ルモ°ル",
-          difficulty: "master",
-          score: 1008287,
-          clearMark: "BRAVE",
-          fc: false,
-          aj: false,
-        },
-      ],
-      new: [
-        {
-          id: 2562,
-          title: "Prominence",
-          difficulty: "master",
-          score: 1008663,
-          clearMark: "HARD",
-          fc: false,
-          aj: false,
-        },
-        {
-          id: 2652,
-          title: "Forsaken Tale",
-          difficulty: "expert",
-          score: 1006530,
-          clearMark: "BRAVE",
-          fc: false,
-          aj: false,
-        },
-        {
-          id: 2634,
-          title: "Dramatic…?",
-          difficulty: "master",
-          score: 1008267,
-          clearMark: "HARD",
-          fc: false,
-          aj: false,
-        },
-        {
-          id: 2739,
-          title: "Aether Crest: Celestial",
-          difficulty: "expert",
-          score: 1007554,
-          clearMark: "BRAVE",
-          fc: false,
-          aj: false,
-        },
-        {
-          id: 2648,
-          title: "Tuatha Dé Danann",
-          difficulty: "master",
-          score: 999420,
-          clearMark: "CLEAR",
-          fc: false,
-          aj: false,
-        },
-        {
-          id: 1086,
-          title: "祈 -我ら神祖と共に歩む者なり-",
-          difficulty: "master",
-          score: 997538,
-          clearMark: "CLEAR",
-          fc: false,
-          aj: false,
-        },
-        {
-          id: 1086,
-          title: "祈 -我ら神祖と共に歩む者なり-",
-          difficulty: "expert",
-          score: 1007155,
-          clearMark: "HARD",
-          fc: false,
-          aj: false,
-        },
-        {
-          id: 2652,
-          title: "Forsaken Tale",
-          difficulty: "master",
-          score: 990270,
-          clearMark: "CLEAR",
-          fc: false,
-          aj: false,
-        },
-        {
-          id: 2648,
-          title: "Tuatha Dé Danann",
-          difficulty: "master",
-          score: 999420,
-          clearMark: "CLEAR",
-          fc: false,
-          aj: false,
-        },
-        {
-          id: 2339,
-          title: "Daphnis",
-          difficulty: "master",
-          score: 995496,
-          clearMark: "CLEAR",
-          fc: false,
-          aj: false,
-        },
-      ],
-    }}
-  />
+  <div
+    class="flex flex-col items-center gap-2 p-4 bg-gradient-to-br from-blue-100 to-green-100 rounded-xl"
+  >
+    <label class="font-bold" for="fileInput">Upload JSON File</label>
+    <input
+      class="border border-black p-2 rounded-lg"
+      type="file"
+      accept=".json"
+      id="fileInput"
+      bind:files
+    />
 
-  <button onclick={handleDownload}>Download</button>
-</div>
+    <p>
+      JSON file should match
+      <a
+        class="text-blue-500 hover:underline"
+        href="https://github.com/leomotors/chuumai-tools/blob/main/packages/types-chuni/src/index.ts"
+        target="_blank"
+        rel="noreferrer"
+      >
+        following schema
+      </a>
+    </p>
+  </div>
+
+  {#if userError}
+    <p class="text-red-500">Error Parsing JSON File! Please check schema</p>
+    <p>{userError}</p>
+  {/if}
+
+  {#if userData}
+    <section class="flex flex-col items-center">
+      <p class="text-green-500">File parsed successfully!</p>
+      <p>Player Name: {userData.profile.playerName}</p>
+      <p>Last Played: {userData.profile.lastPlayed}</p>
+    </section>
+  {/if}
+
+  {#if renderData}
+    <section class="flex flex-col items-center">
+      <p class="text-green-500">Data fetched successfully, ready for render!</p>
+      <p>Rating: {renderData.rating.totalAvg}</p>
+    </section>
+  {/if}
+
+  <button
+    class="bg-blue-300 rounded-lg p-2 disabled:bg-gray-300 hover:bg-blue-400 transition-colors disabled:cursor-not-allowed"
+    onclick={handleDownload}
+    disabled={!renderData}
+  >
+    Generate and Download
+  </button>
+
+  {#if renderData}
+    <Render input={renderData} />
+  {/if}
+</main>

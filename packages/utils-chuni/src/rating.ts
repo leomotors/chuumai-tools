@@ -34,8 +34,13 @@ function calculateRatingRaw(score: number, level: number) {
   }
 }
 
+export function floorDecimalPlaces(num: number, places: number) {
+  const factor = Math.pow(10, places);
+  return Math.floor(num * factor + Number.EPSILON * factor * 100) / factor;
+}
+
 export function calculateRating(score: number, level: number) {
   const rating = calculateRatingRaw(score, level);
 
-  return Math.max(0, Math.floor(rating * 100 + Number.EPSILON * 1000000) / 100);
+  return Math.max(0, floorDecimalPlaces(rating, 2));
 }

@@ -31,7 +31,7 @@ export const profileSchema = z.object({
 
   playerLevel: z.coerce.number(),
   playerName: z.string().nonempty(),
-  classEmblem: z.coerce.number().int().min(1).max(6).optional(),
+  classEmblem: z.coerce.number().int().min(0).max(6).optional(),
 
   rating: z.coerce.number(),
   overpowerValue: z.coerce.number(),

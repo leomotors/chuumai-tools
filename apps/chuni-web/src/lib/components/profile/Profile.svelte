@@ -6,9 +6,10 @@
 
   interface Props {
     profile: ImgGenInput["profile"];
+    calculatedRating: number;
   }
 
-  let { profile }: Props = $props();
+  let { profile, calculatedRating }: Props = $props();
 </script>
 
 <div class="bg-white/60 rounded-xl p-2 flex gap-2">
@@ -41,7 +42,7 @@
     <div
       class="w-[400px] h-[42px] bg-contain bg-no-repeat bg-center flex items-center justify-center"
       style="background-image: url(/honor_bg/{anotherRarity(
-        profile.honorLevel.toLowerCase(),
+        profile.honorRarity.toLowerCase(),
       )}.png)"
     >
       <p class="text-2xl font-bold text-center">{profile.honorText}</p>
@@ -64,7 +65,7 @@
       <p class="text-2xl font-bold">RATING</p>
 
       <div class="items-center flex gap-1 ml-4">
-        <Rating rating={profile.rating} />
+        <Rating rating={profile.rating} {calculatedRating} />
       </div>
     </div>
 
