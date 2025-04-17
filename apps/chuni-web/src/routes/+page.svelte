@@ -36,6 +36,8 @@
 
   let renderData = $state<RawImageGen>();
 
+  let dataError = $state<string>();
+
   async function getRatingData(userData: ImgGenInput) {
     const res = await fetch("/api/calcRating", {
       method: "POST",
@@ -47,6 +49,12 @@
         version: "VRS",
       }),
     });
+
+    if (!res.ok) {
+      console.error("Error fetching rating data:", res.statusText);
+      dataError = `${res.statusText} ${await res.text()}`;
+      return;
+    }
 
     renderData = await res.json();
   }
@@ -74,7 +82,7 @@
 
 <main class="flex flex-col items-center w-screen px-4 py-8 gap-4">
   <h1 class="font-bold text-3xl">Chunithm Music for Rating Image Generator</h1>
-  <p>Version: {env.PUBLIC_VERSION}</p>
+  <p>Version: {env.PUBLIC_VERSION || "error"}</p>
 
   <div
     class="flex flex-col items-center gap-2 p-4 bg-gradient-to-br from-blue-100 to-green-100 rounded-xl"
@@ -112,6 +120,11 @@
       <p>Player Name: {userData.profile.playerName}</p>
       <p>Last Played: {userData.profile.lastPlayed}</p>
     </section>
+  {/if}
+
+  {#if dataError}
+    <p class="text-red-500">Error Fetching Rating Data!</p>
+    <p>{dataError}</p>
   {/if}
 
   {#if renderData}

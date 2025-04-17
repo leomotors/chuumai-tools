@@ -1,4 +1,7 @@
 packages:
+  - name: chuni-web
+    fullName: Chunithm Rating Image Generator
+    packagePath: apps/chuni-web
   - name: chunithm-scraper
     fullName: Chunithm Scraper
     packagePath: apps/chunithm-scraper
