@@ -27,7 +27,7 @@ export const profileSchema = z.object({
   teamEmblem: z.enum(rarityLevelValues).nullish(),
 
   honorText: z.string().nonempty(),
-  honorLevel: z.enum(rarityLevelValues),
+  honorRarity: z.enum(rarityLevelValues),
 
   playerLevel: z.coerce.number(),
   playerName: z.string().nonempty(),

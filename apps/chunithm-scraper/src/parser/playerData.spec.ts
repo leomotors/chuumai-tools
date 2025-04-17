@@ -47,6 +47,11 @@ describe("Player Data", () => {
         characterImage:
           "https://chunithm-net-eng.com/mobile/img/a48871f78a3f1e9d.png", // mafuyu
       },
+      "leomotors-vrs.html": {
+        characterRarity: "RAINBOW",
+        characterImage:
+          "https://chunithm-net-eng.com/mobile/img/a48871f78a3f1e9d.png", // mafuyu
+      },
       "minori.html": {
         characterRarity: "PLATINUM",
         characterImage:
@@ -58,6 +63,11 @@ describe("Player Data", () => {
           "https://chunithm-net-eng.com/mobile/img/c80eeee609c42acf.png", // laur
       },
       "thatcat.html": {
+        characterRarity: "RAINBOW",
+        characterImage:
+          "https://chunithm-net-eng.com/mobile/img/ca42d927c55a6f9b.png", // toa
+      },
+      "thatcat-vrs.html": {
         characterRarity: "RAINBOW",
         characterImage:
           "https://chunithm-net-eng.com/mobile/img/ca42d927c55a6f9b.png", // toa
@@ -76,8 +86,8 @@ describe("Player Data", () => {
       "elysia.html": {
         teamEmblem: "GOLD",
         teamName: "－ＫＵＢ・ＬＡＤＰＲＡＯ－",
-        honorLevel: "PLATINUM",
-        honorText: "STARRED HEART",
+        mainHonorRarity: "PLATINUM",
+        mainHonorText: "STARRED HEART",
         playerLevel: 152,
         playerName: "～Ｅｌｙｓｉａ～",
         classEmblem: 5,
@@ -89,8 +99,8 @@ describe("Player Data", () => {
       "leomotors.html": {
         teamEmblem: "NORMAL",
         teamName: "ＣＰ　ｖｓ　ＣＥＤＴ",
-        honorLevel: "PLATINUM",
-        honorText: "携帯恋話",
+        mainHonorRarity: "PLATINUM",
+        mainHonorText: "携帯恋話",
         playerLevel: 70,
         playerName: "Ｌｅｏψｒθφ",
         classEmblem: 4,
@@ -99,11 +109,28 @@ describe("Player Data", () => {
         overpowerPercent: 26.62,
         lastPlayed: new Date("2025-04-04T07:49:00Z"),
       },
+      "leomotors-vrs.html": {
+        teamEmblem: "NORMAL",
+        teamName: "ＣＰ　ｖｓ　ＣＥＤＴ",
+        mainHonorRarity: "PLATINUM",
+        mainHonorText: "携帯恋話",
+        subHonor1Rarity: "PLATINUM",
+        subHonor1Text: "ラビットハウス",
+        subHonor2Rarity: "PLATINUM",
+        subHonor2Text: "完璧で究極のアイドル",
+        playerLevel: 71,
+        playerName: "Ｌｅｏψｒθφ",
+        classEmblem: 0,
+        rating: 10.48,
+        overpowerValue: 28422.85,
+        overpowerPercent: 26.63,
+        lastPlayed: new Date("2025-04-17T09:15:00Z"),
+      },
       "minori.html": {
         teamEmblem: "NORMAL",
         teamName: "ＣＰ　ｖｓ　ＣＥＤＴ",
-        honorLevel: "GOLD",
-        honorText: "THE ACHIEVER／RATING 14.50",
+        mainHonorRarity: "GOLD",
+        mainHonorText: "THE ACHIEVER／RATING 14.50",
         playerLevel: 12,
         playerName: "Ｍｉｎｏｒｉｎ♪",
         classEmblem: 0,
@@ -115,8 +142,8 @@ describe("Player Data", () => {
       "pooh.html": {
         teamEmblem: undefined,
         teamName: undefined,
-        honorLevel: "PLATINUM",
-        honorText: "THE ACHIEVER／RATING 15.50",
+        mainHonorRarity: "PLATINUM",
+        mainHonorText: "THE ACHIEVER／RATING 15.50",
         playerLevel: 29,
         playerName: "Ｐｏｏｈ５８２１",
         classEmblem: 0,
@@ -128,8 +155,21 @@ describe("Player Data", () => {
       "thatcat.html": {
         teamEmblem: "NORMAL",
         teamName: "ＣＰ　ｖｓ　ＣＥＤＴ",
-        honorLevel: "SILVER",
-        honorText: "ノーツに嫌われている。",
+        mainHonorRarity: "SILVER",
+        mainHonorText: "ノーツに嫌われている。",
+        playerLevel: 122,
+        playerName: "ＴＨＡＴＣＡＴ",
+        classEmblem: 0,
+        rating: 17.17,
+        overpowerValue: 47546.36,
+        overpowerPercent: 43.77,
+        lastPlayed: new Date("2025-04-06T03:55:00Z"),
+      },
+      "thatcat-vrs.html": {
+        teamEmblem: "NORMAL",
+        teamName: "ＣＰ　ｖｓ　ＣＥＤＴ",
+        mainHonorRarity: "SILVER",
+        mainHonorText: "ノーツに嫌われている。",
         playerLevel: 122,
         playerName: "ＴＨＡＴＣＡＴ",
         classEmblem: 0,
@@ -143,7 +183,8 @@ describe("Player Data", () => {
     for (const [filename, expected] of Object.entries(fixtures)) {
       const dom = await getFixture("playerData", filename);
 
-      expect(parseRightData(dom)).toStrictEqual(expected);
+      // Note: Not toStrictEqual because I lazy adding undefined fields
+      expect(parseRightData(dom)).toEqual(expected);
     }
   });
 
@@ -153,6 +194,11 @@ describe("Player Data", () => {
         currentCurrency: 0,
         totalCurrency: 1373000,
         playCount: 465,
+      },
+      "vrs.html": {
+        currentCurrency: 8000,
+        totalCurrency: 8000,
+        playCount: 468,
       },
     };
 

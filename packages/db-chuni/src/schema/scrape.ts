@@ -44,12 +44,12 @@ export const playerDataTable = pgTable("player_data", {
   teamName: text("team_name"),
   teamEmblem: rarityLevelType("team_emblem"), // null for no team
 
-  honor1Text: text("honor1_text").notNull(),
-  honor1Rarity: rarityLevelType("honor1_rarity").notNull(),
-  honor2Text: text("honor2_text"),
-  honor2Rarity: rarityLevelType("honor2_rarity"),
-  honor3Text: text("honor3_text"),
-  honor3Rarity: rarityLevelType("honor3_rarity"),
+  mainHonorText: text("main_honor_text").notNull(),
+  mainHonorRarity: rarityLevelType("main_honor_rarity").notNull(),
+  subHonor1Text: text("sub_honor1_text"),
+  subHonor1Rarity: rarityLevelType("sub_honor1_rarity"),
+  subHonor2Text: text("sub_honor2_text"),
+  subHonor2Rarity: rarityLevelType("sub_honor2_rarity"),
 
   playerLevel: integer("player_level").notNull(),
   playerName: text("player_name").notNull(),

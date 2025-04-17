@@ -60,8 +60,12 @@ const rightDataSchema = z.object({
   teamEmblem: z.enum(rarityLevelValues).optional(),
   teamName: z.string().optional(),
 
-  honorLevel: z.enum(rarityLevelValues),
-  honorText: z.string(),
+  mainHonorRarity: z.enum(rarityLevelValues),
+  mainHonorText: z.string(),
+  subHonor1Rarity: z.enum(rarityLevelValues).optional(),
+  subHonor1Text: z.string().optional(),
+  subHonor2Rarity: z.enum(rarityLevelValues).optional(),
+  subHonor2Text: z.string().optional(),
 
   playerLevel: z.number().int(),
   playerName: z.string(),
@@ -102,14 +106,13 @@ export function parseRightData(dom: JSDOM) {
     ?.textContent?.trim();
 
   // Honor Text
-  const honorElement = rightData.querySelector(
-    ".player_honor_short",
-  ) as HTMLDivElement;
-
-  const honorLevel = rarityFromUrl(honorElement.style.backgroundImage);
-  const honorText = honorElement
-    .querySelector(".player_honor_text")
-    ?.textContent?.trim();
+  const honorsData = parseHonor(dom);
+  const mainHonorText = honorsData[0].text;
+  const mainHonorRarity = honorsData[0].rarity;
+  const subHonor1Text = honorsData[1]?.text;
+  const subHonor1Rarity = honorsData[1]?.rarity;
+  const subHonor2Text = honorsData[2]?.text;
+  const subHonor2Rarity = honorsData[2]?.rarity;
 
   // Player Level, Name, and Class Emblem
   const playerLevel = rightData
@@ -166,8 +169,12 @@ export function parseRightData(dom: JSDOM) {
     teamEmblem,
     teamName,
 
-    honorLevel,
-    honorText,
+    mainHonorText,
+    mainHonorRarity,
+    subHonor1Text,
+    subHonor1Rarity,
+    subHonor2Text,
+    subHonor2Rarity,
 
     playerLevel: totalPlayerLevel,
     playerName,
@@ -180,6 +187,28 @@ export function parseRightData(dom: JSDOM) {
 
     lastPlayed: lasyPlayedData,
   });
+}
+
+function parseHonor(dom: JSDOM) {
+  const honors = dom.window.document.querySelectorAll(".player_honor_short");
+  const honorList = [...honors] as HTMLDivElement[];
+
+  if (honorList.length < 1 || honorList.length > 3) {
+    throw new Error(`Invalid honor list, got: ${honorList.length}`);
+  }
+
+  const honorsData = honorList.map((ele) => {
+    const level = rarityFromUrl(ele.style.backgroundImage);
+    if (level === undefined) {
+      throw new Error("Failed to parse honor level");
+    }
+    return {
+      rarity: level,
+      text: ele.querySelector(".player_honor_text")!.textContent!.trim(),
+    };
+  });
+
+  return honorsData;
 }
 
 // Bottom
