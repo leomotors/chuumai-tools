@@ -1,0 +1,8 @@
+**/node_modules/
+**/.turbo/
+**/build/
+**/coverage/
+**/dist/
+**/.env
+
+**/.DS_Store

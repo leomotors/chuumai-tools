@@ -1,0 +1,4 @@
+packages:
+  - name: chunithm-scraper
+    fullName: Chunithm Scraper
+    packagePath: apps/chunithm-scraper

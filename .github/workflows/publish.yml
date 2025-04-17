@@ -3,43 +3,39 @@ name: Publish Release
 on:
   push:
     tags:
-      - "*.*"
+      - "*@*.*.*"
 
 jobs:
   release:
     name: Publish Release
     runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Publish Release
-        uses: leomotors/auto-publish-release@main
-        with:
-          githubToken: ${{ secrets.GITHUB_TOKEN }}
-          title: "CHUNITHM-NET Scraper"
-          tag: ${{ github.ref_name }}
-
-  image:
-    name: Docker Image
-    # https://github.com/actions/runner-images/issues/11471
-    runs-on: ubuntu-22.04
-
     permissions:
+      contents: write
       id-token: write
       packages: write
 
     steps:
-      - name: Checkout
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Extract Major Version
-        uses: winterjung/split@v2
-        id: version
+      - name: Package Info
+        id: package-info
+        uses: leomotors/release-action@v6
         with:
-          msg: ${{ github.ref_name }}
-          separator: "."
+          mode: get-packages-info
+          tag: ${{ github.ref_name }}
+          # todo remove this optional field
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create Release
+        uses: leomotors/release-action@v6
+        with:
+          mode: release
+          tag: ${{ steps.package-info.outputs.package-version }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          title: ${{ steps.package-info.outputs.package-full-name }}
+          changelog-file: ${{ steps.package-info.outputs.changelog-path}}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -62,7 +58,7 @@ jobs:
           context: .
           file: Dockerfile
           push: true
-          tags: ghcr.io/leomotors/chunithm-net-scraper:${{ github.ref_name }},ghcr.io/leomotors/chunithm-net-scraper:v${{ steps.version.outputs._0 }},ghcr.io/leomotors/chunithm-net-scraper:latest
+          tags: ghcr.io/leomotors/chunithm-scraper:${{ steps.package-info.outputs.package-version }},ghcr.io/leomotors/chunithm-scraper:latest
           platforms: linux/amd64,linux/arm64
           cache-from: type=gha
           cache-to: type=gha,mode=max
