@@ -3,7 +3,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "lint": "eslint src && tsc",
+    "check": "tsc",
+    "lint": "eslint src",
     "format": "eslint src --fix"
   },
   "main": "./src/index.ts",

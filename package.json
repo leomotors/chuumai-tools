@@ -5,6 +5,7 @@
   "scripts": {
     "build": "turbo run build --continue=dependencies-successful",
     "dev": "turbo run dev",
+    "check": "turbo run check --continue",
     "lint": "turbo run lint --continue",
     "format": "turbo run format --continue",
     "test": "turbo run test --continue",

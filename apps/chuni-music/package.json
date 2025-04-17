@@ -5,7 +5,8 @@
   "scripts": {
     "preview": "dotenv -- node ./dist/index.js",
     "build": "tsup",
-    "lint": "eslint && tsc",
+    "check": "tsc",
+    "lint": "eslint",
     "format": "eslint --fix"
   },
   "dependencies": {

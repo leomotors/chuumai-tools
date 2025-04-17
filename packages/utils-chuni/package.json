@@ -4,7 +4,8 @@
   "type": "module",
   "main": "./src/index.ts",
   "scripts": {
-    "lint": "eslint src && tsc",
+    "check": "tsc",
+    "lint": "eslint src",
     "format": "eslint src --fix",
     "test": "vitest run"
   },
