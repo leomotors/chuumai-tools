@@ -25,14 +25,12 @@ jobs:
         with:
           mode: get-packages-info
           tag: ${{ github.ref_name }}
-          # todo remove this optional field
-          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create Release
         uses: leomotors/release-action@v6
         with:
           mode: release
-          tag: ${{ steps.package-info.outputs.package-version }}
+          tag: ${{ github.ref_name }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
           title: ${{ steps.package-info.outputs.package-full-name }}
           changelog-file: ${{ steps.package-info.outputs.changelog-path}}
@@ -56,9 +54,9 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          file: Dockerfile
+          file: ${{ steps.package-info.outputs.package-path }}/Dockerfile
           push: true
-          tags: ghcr.io/leomotors/chunithm-scraper:${{ steps.package-info.outputs.package-version }},ghcr.io/leomotors/chunithm-scraper:latest
+          tags: ghcr.io/leomotors/chunithm-scraper:${{ steps.package-info.outputs.package-version }},ghcr.io/leomotors/chunithm-scraper:v${{ steps.package-info.outputs.package-major-version }},ghcr.io/leomotors/chunithm-scraper:latest
           platforms: linux/amd64,linux/arm64
           cache-from: type=gha
           cache-to: type=gha,mode=max
