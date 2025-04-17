@@ -1,84 +1,33 @@
-# Turborepo starter
+# Chuumai Tools
 
-This Turborepo starter is maintained by the Turborepo core team.
+## Chunithm
 
-## Using this example
+(Internation Ver.)
 
-Run the following command:
+packages:
 
-```sh
-npx create-turbo@latest
-```
+- db-chuni: Database Schema
 
-## What's inside?
+apps:
 
-This Turborepo includes the following packages/apps:
+- chuni-music: Seeding data into database and music jacket into S3
+- chuni-web: Web for generating Music for Rating Image
+- chunithm-scraper: Web scraper
 
-### Apps and Packages
+### Database
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+PostgreSQL and S3-compatible storage is needed, use `apps/chuni-music` to see the data
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+If you don't use minio, you may have to modify some code (`forcePathStyle`)
 
-### Utilities
+### Scraper
 
-This Turborepo has some additional tools already setup for you:
+**Requires**: Docker (to run the image)
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+**Optional**: Saving to database (Requires seeding), Sending Image to Discord (requires Discord Bot Client)
 
-### Build
+todo: add publish docker image
 
-To build all apps and packages, run the following command:
+## maimai
 
-```
-cd my-turborepo
-pnpm build
-```
-
-### Develop
-
-To develop all apps and packages, run the following command:
-
-```
-cd my-turborepo
-pnpm dev
-```
-
-### Remote Caching
-
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
-
-Turborepo can use a technique known as [Remote Caching](https://turbo.build/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
-
-```
-cd my-turborepo
-npx turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-```
-npx turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turbo.build/docs/core-concepts/monorepos/running-tasks)
-- [Caching](https://turbo.build/docs/core-concepts/caching)
-- [Remote Caching](https://turbo.build/docs/core-concepts/remote-caching)
-- [Filtering](https://turbo.build/docs/core-concepts/monorepos/filtering)
-- [Configuration Options](https://turbo.build/docs/reference/configuration)
-- [CLI Usage](https://turbo.build/docs/reference/command-line-reference)
+todo

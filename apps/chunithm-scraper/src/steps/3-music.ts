@@ -35,8 +35,11 @@ export async function scrapeMusicRecord(page: Page) {
   );
   await page.waitForTimeout(1000);
 
+  let totalHTML = "<!-- BEST -->\n";
+
   const best = page.locator(".box05.w400");
   const bestHTML = await best.innerHTML();
+  totalHTML += bestHTML;
   const bestDom = new JSDOM(bestHTML);
 
   const bestMusic = [] as Array<ReturnType<typeof parseMusic>>;
@@ -55,6 +58,7 @@ export async function scrapeMusicRecord(page: Page) {
 
   const newSection = page.locator(".box05.w400");
   const newSectionHTML = await newSection.innerHTML();
+  totalHTML += `\n<!-- NEW -->\n${newSectionHTML}`;
   const newSectionDom = new JSDOM(newSectionHTML);
 
   const newSectionMusic = [] as Array<ReturnType<typeof parseMusic>>;
@@ -73,6 +77,7 @@ export async function scrapeMusicRecord(page: Page) {
 
   const selection = page.locator(".box05.w400");
   const selectionHTML = await selection.innerHTML();
+  totalHTML += `\n<!-- SELECTION -->\n${selectionHTML}`;
   const selectionDom = new JSDOM(selectionHTML);
   const selectionMusic = [] as Array<ReturnType<typeof parseMusic>>;
   for (const element of selectionDom.window.document.querySelectorAll(
@@ -107,6 +112,7 @@ export async function scrapeMusicRecord(page: Page) {
 
     for (const category of allCategories) {
       const categoryHTML = await category.innerHTML();
+      totalHTML += `\n<!-- ${btnClass} -->\n${categoryHTML}`;
       const categoryDom = new JSDOM(categoryHTML);
       for (const element of categoryDom.window.document.querySelectorAll(
         ".w388.musiclist_box",
@@ -117,9 +123,12 @@ export async function scrapeMusicRecord(page: Page) {
   }
 
   return {
-    bestSongs: fillMarkInfo(bestMusic, allRecords),
-    newSongs: fillMarkInfo(newSectionMusic, allRecords),
-    selectionSongs: fillMarkInfo(selectionMusic, allRecords),
-    allRecords: allRecords,
+    recordData: {
+      bestSongs: fillMarkInfo(bestMusic, allRecords),
+      newSongs: fillMarkInfo(newSectionMusic, allRecords),
+      selectionSongs: fillMarkInfo(selectionMusic, allRecords),
+      allRecords: allRecords,
+    },
+    recordHtml: totalHTML,
   };
 }

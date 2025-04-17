@@ -23,17 +23,9 @@ export const jobTable = pgTable("job", {
   jobStart: timestamp("job_start").defaultNow().notNull(),
   jobEnd: timestamp("job_end"),
 
-  jobError: boolean("job_error").default(false).notNull(),
+  jobError: text("job_error"),
 
   isFromOldVersion: boolean("is_from_old_version").default(false).notNull(),
-});
-
-/**
- * Table for *storing image in database*. I know it's cursed.
- */
-export const imageCacheTable = pgTable("image_cache", {
-  key: text().primaryKey(),
-  value: text().notNull(),
 });
 
 /**
@@ -47,13 +39,17 @@ export const playerDataTable = pgTable("player_data", {
   // Home Page
   // From left to right, top to bottom
   characterRarity: rarityLevelType("character_rarity").notNull(),
-  characterImage: text("character_image").references(() => imageCacheTable.key),
+  characterImage: text("character_image").notNull(),
 
-  teamName: text("team_name").notNull(),
+  teamName: text("team_name"),
   teamEmblem: rarityLevelType("team_emblem"), // null for no team
 
-  honorText: text("honor_text").notNull(),
-  honorRarity: rarityLevelType("honor_rarity").notNull(),
+  honor1Text: text("honor1_text").notNull(),
+  honor1Rarity: rarityLevelType("honor1_rarity").notNull(),
+  honor2Text: text("honor2_text"),
+  honor2Rarity: rarityLevelType("honor2_rarity"),
+  honor3Text: text("honor3_text"),
+  honor3Rarity: rarityLevelType("honor3_rarity"),
 
   playerLevel: integer("player_level").notNull(),
   playerName: text("player_name").notNull(),
@@ -96,7 +92,7 @@ export const musicRecordTable = pgTable(
     fullChain: integer("full_chain").notNull(),
   },
   (t) => [
-    unique().on(
+    unique("music_record_unique").on(
       t.musicId,
       t.difficulty,
       t.score,
@@ -135,12 +131,7 @@ export const rawScrapeDataTable = pgTable("raw_scrape_data", {
 
   version: text().notNull(),
 
-  boxPlayerProfileHtml: text("box_player_profile_html"),
-  dataBottomBoxHtml: text("data_bottom_box_html"),
-
-  forRatingBestHtml: text("for_rating_best_html"),
-  forRatingNewHtml: text("for_rating_new_html"),
-  forRatingSelectionHtml: text("for_rating_selection_html"),
-
+  playerDataHtml: text("player_data_html"),
+  allMusicRecordHtml: text("all_music_record_html"),
   dataForImageGen: text("data_for_image_gen"),
 });

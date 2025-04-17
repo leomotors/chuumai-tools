@@ -3,16 +3,6 @@
 
   import Render from "./Render.svelte";
 
-  const ut = {
-    id: 2582,
-    title: "Ultimate Force",
-    difficulty: "master",
-    score: 1010000,
-    clearMark: "CATASTROPHY",
-    fc: true,
-    aj: true,
-  } as const;
-
   async function handleDownload() {
     const element = document.getElementById("chart")!;
 

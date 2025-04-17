@@ -20,9 +20,12 @@ export async function scrapePlayerData(page: Page) {
   const bottomData = parseBottomData(pageDataDom);
 
   return {
-    possession,
-    ...character,
-    ...rightData,
-    ...bottomData,
+    playerData: {
+      possession,
+      ...character,
+      ...rightData,
+      ...bottomData,
+    },
+    playerDataHtml: pageDataHTML,
   };
 }

@@ -19,6 +19,7 @@ export const chartSchema = z.object({
 export type BaseChartSchema = z.infer<typeof chartSchema>;
 
 export const profileSchema = z.object({
+  // Must be data URL of base64 or URL from website without CORS
   characterImage: z.string().nonempty(),
   characterRarity: z.enum(rarityLevelValues),
 

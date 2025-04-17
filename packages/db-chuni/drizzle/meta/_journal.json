@@ -5,22 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1744727689467,
-      "tag": "0000_faulty_otto_octavius",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1744731624290,
-      "tag": "0001_open_bedlam",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1744800313366,
-      "tag": "0002_final-version-hopefully",
+      "when": 1744860182626,
+      "tag": "0000_verse-almost-final",
       "breakpoints": true
     }
   ]

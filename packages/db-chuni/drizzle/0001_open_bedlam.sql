@@ -1,1 +1,0 @@
-ALTER TABLE "music_level" ADD CONSTRAINT "music_level_music_id_difficulty_version_unique" UNIQUE("music_id","difficulty","version");

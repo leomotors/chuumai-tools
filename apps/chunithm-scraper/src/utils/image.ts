@@ -20,3 +20,13 @@ export function base64ImageToBlob(base64: string) {
 
   return blob;
 }
+
+export async function downloadImageAsBase64(url: string) {
+  const res = await fetch(url);
+  const contentType = res.headers.get("content-type");
+  const arrayBuffer = await res.arrayBuffer();
+  const base64 = Buffer.from(arrayBuffer).toString("base64");
+  const content = `data:${contentType};base64,${base64}`;
+
+  return content;
+}
