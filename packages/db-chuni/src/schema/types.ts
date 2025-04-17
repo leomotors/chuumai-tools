@@ -44,8 +44,8 @@ export const ranksType = pgEnum("ranks", ranks);
 export const clearMarkValues = [
   "CLEAR",
   "HARD",
-  "ABSOLUTE", // BRAVE
-  "ABSOLUTE+", // ABSOLUTE
+  "BRAVE",
+  "ABSOLUTE",
   "CATASTROPHY",
 ] as const;
 export type ClearMark = (typeof clearMarkValues)[number];

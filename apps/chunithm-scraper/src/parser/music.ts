@@ -35,12 +35,12 @@ function getClearMark(src: string | undefined): ClearMark | undefined {
     return "CATASTROPHY";
   }
 
-  if (src.includes("icon_absolutep")) {
-    return "ABSOLUTE+";
-  }
-
   if (src.includes("icon_absolute")) {
     return "ABSOLUTE";
+  }
+
+  if (src.includes("icon_brave")) {
+    return "BRAVE";
   }
 
   if (src.includes("icon_hard")) {

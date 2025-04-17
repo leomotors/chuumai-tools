@@ -1,8 +1,7 @@
 <script lang="ts">
   import { twMerge } from "tailwind-merge";
 
-  import type { BaseChartSchema } from "$lib";
-
+  import type { BaseChartSchema } from "@repo/types-chuni";
   import { calculateRating, getRank } from "@repo/utils-chuni";
 
   interface Props {
@@ -15,13 +14,6 @@
   }
 
   let { music, index }: Props = $props();
-
-  function clearMarkPath(clearMark: NonNullable<BaseChartSchema["clearMark"]>) {
-    if (clearMark === "ABSOLUTE+") {
-      return "/clearmark/absolutep.png";
-    }
-    return `/clearmark/${clearMark.toLowerCase()}.png`;
-  }
 </script>
 
 <div
@@ -98,7 +90,10 @@
   <!-- Lower -->
   <div class="flex justify-between px-2">
     {#if music.clearMark}
-      <img src={clearMarkPath(music.clearMark)} alt="Clear Mark" />
+      <img
+        src="/clearmark/{music.clearMark.toLowerCase()}.png"
+        alt="Clear Mark"
+      />
     {:else}
       <div class="w-[64px] h-[18px] border-2 border-gray-300 bg-gray-200"></div>
     {/if}

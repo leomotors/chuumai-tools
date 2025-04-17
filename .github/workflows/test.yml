@@ -4,19 +4,28 @@ on:
   push:
 
 jobs:
-  unit-test:
-    name: Unit Test
+  test:
+    name: Lint and Unit Test
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
 
       - name: Install Dependencies
-        run: bun install
+        run: pnpm install --frozen-lockfile
 
-      - name: Run Unit Test
-        run: bun run test
+      - name: Run Lint
+        run: pnpm lint
+
+      - name: Run Tests
+        run: pnpm test

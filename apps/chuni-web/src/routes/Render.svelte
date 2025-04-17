@@ -1,12 +1,13 @@
 <script lang="ts">
   import Music from "$lib/components/Music.svelte";
   import Profile from "$lib/components/profile/Profile.svelte";
-  import type { Input } from "$lib/index.js";
+
+  import type { ImgGenInput } from "@repo/types-chuni";
 
   import type { ResponseData } from "./api/getConstant/+server";
 
   interface Props {
-    input: Input;
+    input: ImgGenInput;
   }
 
   let { input }: Props = $props();
