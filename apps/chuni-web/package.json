@@ -15,6 +15,7 @@
   },
   "devDependencies": {
     "@leomotors/config": "^1.0.0-rc.1",
+    "@lucide/svelte": "^0.488.0",
     "@repo/db-chuni": "workspace:*",
     "@repo/types-chuni": "workspace:*",
     "@repo/utils-chuni": "workspace:*",

@@ -1,15 +1,12 @@
 <script lang="ts">
   import { twMerge } from "tailwind-merge";
 
-  import type { BaseChartSchema } from "@repo/types-chuni";
-  import { calculateRating, getRank } from "@repo/utils-chuni";
+  import type { ChartForRender } from "$lib/types";
+
+  import { getRank } from "@repo/utils-chuni";
 
   interface Props {
-    music: BaseChartSchema & {
-      constant: number;
-      constantSure: boolean;
-      jacketImg: string;
-    };
+    music: ChartForRender;
     index: number;
   }
 
@@ -19,13 +16,15 @@
 <div
   class={twMerge(
     "rounded-lg w-[220px] h-[200px] flex flex-col gap-2 relative",
-    music.difficulty === "basic" && "bg-green-400/80",
-    music.difficulty === "advanced" && "bg-yellow-400/80",
-    music.difficulty === "expert" && "bg-red-400/80",
-    music.difficulty === "master" && "bg-purple-400/80",
-    music.difficulty === "ultima" && "bg-black/80 text-white",
+    music.difficulty === "basic" && "bg-green-400/60",
+    music.difficulty === "advanced" && "bg-orange-400/60",
+    music.difficulty === "expert" && "bg-red-400/60",
+    music.difficulty === "master" && "bg-purple-400/60",
+    music.difficulty === "ultima" &&
+      "bg-gray-900/60 text-white outline-solid outline-[#ff3a3a]",
   )}
 >
+  <!-- Order -->
   <div
     class="absolute rounded-full -top-[10px] -left-[10px] p-1 w-8 h-8 bg-white flex justify-center items-center text-black"
   >
@@ -33,7 +32,16 @@
   </div>
 
   <!-- Upper -->
-  <div class="flex justify-between px-2 pt-2">
+  <div
+    class={twMerge(
+      "flex justify-between px-2 pt-2 rounded-t-lg",
+      music.difficulty === "basic" && "bg-[#1eb393]",
+      music.difficulty === "advanced" && "bg-[#ff7e00]",
+      music.difficulty === "expert" && "bg-[#e35454]",
+      music.difficulty === "master" && "bg-[#bf6aff]",
+      music.difficulty === "ultima" && "bg-[#232323] text-white",
+    )}
+  >
     <!-- Left -->
     <div>
       <p class="font-bold pl-6 text-xl font-helvetica">
@@ -41,7 +49,7 @@
       </p>
       <p
         class={twMerge(
-          "text-xl -mt-1 whitespace-nowrap w-[150px] overflow-ellipsis overflow-hidden",
+          "text-xl -mt-1 whitespace-nowrap w-[150px] overflow-ellipsis overflow-hidden -translate-y-0.5",
           music.title.length > 15 && "text-lg",
         )}
       >
@@ -67,7 +75,7 @@
   <!-- Mid -->
   <div class="px-2 flex gap-2">
     <img
-      src="https://s3.lmhome.dev/chunithm/musicImages/{music.jacketImg}"
+      src="/api/imageProxy?img={music.image}"
       alt="Jacket"
       class="w-[100px] h-[100px]"
     />
@@ -81,7 +89,7 @@
       <div class="flex flex-col">
         <p class="text-sm">PLAY RATING</p>
         <p class="font-bold text-2xl">
-          {calculateRating(music.score, music.constant).toFixed(2)}
+          {music.rating.toFixed(2)}
         </p>
       </div>
     </div>

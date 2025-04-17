@@ -29,7 +29,7 @@
   }
 
   $effect(() => {
-    if (files) {
+    if (files && files.length > 0) {
       parseFile(files);
     }
   });
