@@ -56,7 +56,7 @@ jobs:
           context: .
           file: ${{ steps.package-info.outputs.package-path }}/Dockerfile
           push: true
-          tags: ghcr.io/leomotors/chunithm-scraper:${{ steps.package-info.outputs.package-version }},ghcr.io/leomotors/chunithm-scraper:v${{ steps.package-info.outputs.package-major-version }},ghcr.io/leomotors/chunithm-scraper:latest
+          tags: ghcr.io/leomotors/${{ steps.package-info.outputs.package-name }}:${{ steps.package-info.outputs.package-version }},ghcr.io/leomotors/${{ steps.package-info.outputs.package-name }}:v${{ steps.package-info.outputs.package-major-version }},ghcr.io/leomotors/${{ steps.package-info.outputs.package-name }}:latest
           platforms: linux/amd64,linux/arm64
           cache-from: type=gha
           cache-to: type=gha,mode=max
