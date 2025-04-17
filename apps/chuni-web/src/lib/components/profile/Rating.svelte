@@ -6,23 +6,25 @@
   let { rating }: Props = $props();
 
   let ratingLevel =
-    rating >= 16
-      ? "rainbow"
-      : rating >= 15.25
-        ? "platinum"
-        : rating >= 14.5
-          ? "gold"
-          : rating >= 13.25
-            ? "silver"
-            : rating >= 12
-              ? "bronze"
-              : rating >= 10
-                ? "purple"
-                : rating >= 7
-                  ? "red"
-                  : rating >= 4
-                    ? "orange"
-                    : "green";
+    rating >= 17
+      ? "kiwami"
+      : rating >= 16
+        ? "rainbow"
+        : rating >= 15.25
+          ? "platinum"
+          : rating >= 14.5
+            ? "gold"
+            : rating >= 13.25
+              ? "silver"
+              : rating >= 12
+                ? "bronze"
+                : rating >= 10
+                  ? "purple"
+                  : rating >= 7
+                    ? "red"
+                    : rating >= 4
+                      ? "orange"
+                      : "green";
 
   let tens = Math.floor(rating / 10);
   let ones = Math.floor(rating % 10);

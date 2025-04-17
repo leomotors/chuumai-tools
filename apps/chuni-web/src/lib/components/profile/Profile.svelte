@@ -1,12 +1,12 @@
 <script lang="ts">
-  import type { Input } from "$lib";
+  import type { ImgGenInput } from "@repo/types-chuni";
 
   import { anotherRarity } from "@repo/utils-chuni";
 
   import Rating from "./Rating.svelte";
 
   interface Props {
-    profile: Input["profile"];
+    profile: ImgGenInput["profile"];
   }
 
   let { profile }: Props = $props();
