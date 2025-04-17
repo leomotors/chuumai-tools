@@ -1,5 +1,5 @@
 {
-  "id": "d0371238-3b0d-4f37-96a2-e6b8260cca35",
+  "id": "504ed4d7-558f-4b1d-9d6a-e97a6e15121e",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -473,40 +473,40 @@
           "primaryKey": false,
           "notNull": false
         },
-        "honor1_text": {
-          "name": "honor1_text",
+        "main_honor_text": {
+          "name": "main_honor_text",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "honor1_rarity": {
-          "name": "honor1_rarity",
+        "main_honor_rarity": {
+          "name": "main_honor_rarity",
           "type": "rarity_level",
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
-        "honor2_text": {
-          "name": "honor2_text",
+        "sub_honor1_text": {
+          "name": "sub_honor1_text",
           "type": "text",
           "primaryKey": false,
           "notNull": false
         },
-        "honor2_rarity": {
-          "name": "honor2_rarity",
+        "sub_honor1_rarity": {
+          "name": "sub_honor1_rarity",
           "type": "rarity_level",
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": false
         },
-        "honor3_text": {
-          "name": "honor3_text",
+        "sub_honor2_text": {
+          "name": "sub_honor2_text",
           "type": "text",
           "primaryKey": false,
           "notNull": false
         },
-        "honor3_rarity": {
-          "name": "honor3_rarity",
+        "sub_honor2_rarity": {
+          "name": "sub_honor2_rarity",
           "type": "rarity_level",
           "typeSchema": "public",
           "primaryKey": false,
@@ -739,8 +739,9 @@
       "schema": "public",
       "values": [
         "BEST",
-        "NEW",
-        "SELECTION"
+        "CURRENT",
+        "SELECTION_BEST",
+        "SELECTION_CURRENT"
       ]
     },
     "public.std_chart_difficulty": {

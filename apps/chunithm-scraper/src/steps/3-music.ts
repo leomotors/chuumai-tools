@@ -29,7 +29,7 @@ function fillMarkInfo(
 
 export async function scrapeMusicRecord(page: Page) {
   await page.getByRole("link", { name: "MUSIC FOR RATING" }).click();
-  // Best
+  // Best Songs
   await page.waitForURL(
     "https://chunithm-net-eng.com/mobile/home/playerData/ratingDetailBest/",
   );
@@ -37,6 +37,7 @@ export async function scrapeMusicRecord(page: Page) {
 
   let totalHTML = "<!-- BEST -->\n";
 
+  // warning: error if no best songs
   const best = page.locator(".box05.w400");
   const bestHTML = await best.innerHTML();
   totalHTML += bestHTML;
@@ -49,23 +50,24 @@ export async function scrapeMusicRecord(page: Page) {
     bestMusic.push(parseMusic(element));
   }
 
-  await page.getByRole("link", { name: "Recent" }).click();
-  // New Section
+  await page.getByRole("link", { name: "Current" }).click();
+  // Current (New) Songs
   await page.waitForURL(
     "https://chunithm-net-eng.com/mobile/home/playerData/ratingDetailRecent/",
   );
   await page.waitForTimeout(1000);
 
-  const newSection = page.locator(".box05.w400");
-  const newSectionHTML = await newSection.innerHTML();
-  totalHTML += `\n<!-- NEW -->\n${newSectionHTML}`;
-  const newSectionDom = new JSDOM(newSectionHTML);
+  // warning: error if no current songs
+  const current = page.locator(".box05.w400");
+  const currentHTML = await current.innerHTML();
+  totalHTML += `\n<!-- NEW -->\n${currentHTML}`;
+  const currentDom = new JSDOM(currentHTML);
 
-  const newSectionMusic = [] as Array<ReturnType<typeof parseMusic>>;
-  for (const element of newSectionDom.window.document.querySelectorAll(
+  const currentMusic = [] as Array<ReturnType<typeof parseMusic>>;
+  for (const element of currentDom.window.document.querySelectorAll(
     ".w388.musiclist_box",
   )) {
-    newSectionMusic.push(parseMusic(element));
+    currentMusic.push(parseMusic(element));
   }
 
   await page.getByRole("link", { name: "Selection" }).click();
@@ -75,15 +77,32 @@ export async function scrapeMusicRecord(page: Page) {
   );
   await page.waitForTimeout(1000);
 
-  const selection = page.locator(".box05.w400");
-  const selectionHTML = await selection.innerHTML();
-  totalHTML += `\n<!-- SELECTION -->\n${selectionHTML}`;
-  const selectionDom = new JSDOM(selectionHTML);
-  const selectionMusic = [] as Array<ReturnType<typeof parseMusic>>;
-  for (const element of selectionDom.window.document.querySelectorAll(
+  const selection = await page.locator(".w420.box01").all();
+
+  if (selection.length !== 2) {
+    throw new Error(
+      `Step 3 Error: Expected 2 elements in selection page, got ${selection.length}`,
+    );
+  }
+
+  const selectionBestHTML = await selection[0].innerHTML();
+  totalHTML += `\n<!-- SELECTION BEST -->\n${selectionBestHTML}`;
+  const selectionBestDom = new JSDOM(selectionBestHTML);
+  const selectionBestMusic = [] as Array<ReturnType<typeof parseMusic>>;
+  for (const element of selectionBestDom.window.document.querySelectorAll(
     ".w388.musiclist_box",
   )) {
-    selectionMusic.push(parseMusic(element));
+    selectionBestMusic.push(parseMusic(element));
+  }
+
+  const selectionCurrentHTML = await selection[1].innerHTML();
+  totalHTML += `\n<!-- SELECTION BEST -->\n${selectionCurrentHTML}`;
+  const selectionCurrentDom = new JSDOM(selectionCurrentHTML);
+  const selectionCurrentMusic = [] as Array<ReturnType<typeof parseMusic>>;
+  for (const element of selectionCurrentDom.window.document.querySelectorAll(
+    ".w388.musiclist_box",
+  )) {
+    selectionCurrentMusic.push(parseMusic(element));
   }
 
   // Part 3.2: All Records
@@ -125,8 +144,9 @@ export async function scrapeMusicRecord(page: Page) {
   return {
     recordData: {
       bestSongs: fillMarkInfo(bestMusic, allRecords),
-      newSongs: fillMarkInfo(newSectionMusic, allRecords),
-      selectionSongs: fillMarkInfo(selectionMusic, allRecords),
+      currentSongs: fillMarkInfo(currentMusic, allRecords),
+      selectionBestSongs: fillMarkInfo(selectionBestMusic, allRecords),
+      selectionCurrentSongs: fillMarkInfo(selectionCurrentMusic, allRecords),
       allRecords: allRecords,
     },
     recordHtml: totalHTML,

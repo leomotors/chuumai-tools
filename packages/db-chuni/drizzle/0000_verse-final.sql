@@ -2,7 +2,7 @@ CREATE TYPE "public"."category" AS ENUM('POPS & ANIME', 'niconico', '東方Proje
 CREATE TYPE "public"."clear_mark" AS ENUM('CLEAR', 'HARD', 'BRAVE', 'ABSOLUTE', 'CATASTROPHY');--> statement-breakpoint
 CREATE TYPE "public"."ranks" AS ENUM('D', 'C', 'B', 'BB', 'BBB', 'A', 'AA', 'AAA', 'S', 'S+', 'SS', 'SS+', 'SSS', 'SSS+');--> statement-breakpoint
 CREATE TYPE "public"."rarity_level" AS ENUM('NORMAL', 'BRONZE', 'SILVER', 'GOLD', 'PLATINUM', 'RAINBOW', 'HOLOGRAPHIC');--> statement-breakpoint
-CREATE TYPE "public"."rating_type" AS ENUM('BEST', 'NEW', 'SELECTION');--> statement-breakpoint
+CREATE TYPE "public"."rating_type" AS ENUM('BEST', 'CURRENT', 'SELECTION_BEST', 'SELECTION_CURRENT');--> statement-breakpoint
 CREATE TYPE "public"."std_chart_difficulty" AS ENUM('basic', 'advanced', 'expert', 'master', 'ultima');--> statement-breakpoint
 CREATE TABLE "manual_rating" (
 	"id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "manual_rating_id_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1),
@@ -66,12 +66,12 @@ CREATE TABLE "player_data" (
 	"character_image" text NOT NULL,
 	"team_name" text,
 	"team_emblem" "rarity_level",
-	"honor1_text" text NOT NULL,
-	"honor1_rarity" "rarity_level" NOT NULL,
-	"honor2_text" text,
-	"honor2_rarity" "rarity_level",
-	"honor3_text" text,
-	"honor3_rarity" "rarity_level",
+	"main_honor_text" text NOT NULL,
+	"main_honor_rarity" "rarity_level" NOT NULL,
+	"sub_honor1_text" text,
+	"sub_honor1_rarity" "rarity_level",
+	"sub_honor2_text" text,
+	"sub_honor2_rarity" "rarity_level",
 	"player_level" integer NOT NULL,
 	"player_name" text NOT NULL,
 	"class_emblem" integer,

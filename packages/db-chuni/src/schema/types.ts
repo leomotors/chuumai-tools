@@ -51,6 +51,11 @@ export const clearMarkValues = [
 export type ClearMark = (typeof clearMarkValues)[number];
 export const clearMarkType = pgEnum("clear_mark", clearMarkValues);
 
-export const ratingTypeValues = ["BEST", "NEW", "SELECTION"] as const;
+export const ratingTypeValues = [
+  "BEST",
+  "CURRENT",
+  "SELECTION_BEST",
+  "SELECTION_CURRENT",
+] as const;
 export type RatingType = (typeof ratingTypeValues)[number];
 export const ratingType = pgEnum("rating_type", ratingTypeValues);

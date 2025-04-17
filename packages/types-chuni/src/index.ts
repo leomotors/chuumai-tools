@@ -44,7 +44,7 @@ export const profileSchema = z.object({
 export const imgGenInputSchema = z.object({
   profile: profileSchema,
   best: z.array(chartSchema),
-  new: z.array(chartSchema),
+  current: z.array(chartSchema),
 });
 
 export type ImgGenInput = z.infer<typeof imgGenInputSchema>;

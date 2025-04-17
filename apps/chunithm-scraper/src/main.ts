@@ -55,9 +55,11 @@ export async function main(jobId: number | undefined, browser: Browser) {
     profile: {
       ...playerData,
       characterImage: charaImageData,
+      honorText: playerData.mainHonorText,
+      honorRarity: playerData.mainHonorRarity,
     },
     best: recordData.bestSongs.map(recordToGenInput),
-    new: recordData.newSongs.map(recordToGenInput),
+    current: recordData.currentSongs.map(recordToGenInput),
   } satisfies ImgGenInput;
 
   await fs.writeFile(
@@ -73,8 +75,12 @@ export async function main(jobId: number | undefined, browser: Browser) {
       characterImage: playerData.characterImage,
       teamName: playerData.teamName,
       teamEmblem: playerData.teamEmblem,
-      honor1Text: playerData.honorText,
-      honor1Rarity: playerData.honorLevel,
+      mainHonorText: playerData.mainHonorText,
+      mainHonorRarity: playerData.mainHonorRarity,
+      subHonor1Text: playerData.subHonor1Text,
+      subHonor1Rarity: playerData.subHonor1Rarity,
+      subHonor2Text: playerData.subHonor2Text,
+      subHonor2Rarity: playerData.subHonor2Rarity,
       playerLevel: playerData.playerLevel,
       playerName: playerData.playerName,
       classEmblem: playerData.classEmblem,
@@ -149,12 +155,16 @@ export async function main(jobId: number | undefined, browser: Browser) {
       "BEST",
     );
     await insertRating(
-      recordData.newSongs.map(recordToGenInputWithFullChain),
-      "NEW",
+      recordData.currentSongs.map(recordToGenInputWithFullChain),
+      "CURRENT",
     );
     await insertRating(
-      recordData.selectionSongs.map(recordToGenInputWithFullChain),
-      "SELECTION",
+      recordData.selectionBestSongs.map(recordToGenInputWithFullChain),
+      "SELECTION_BEST",
+    );
+    await insertRating(
+      recordData.selectionCurrentSongs.map(recordToGenInputWithFullChain),
+      "SELECTION_CURRENT",
     );
 
     await db.insert(rawScrapeDataTable).values({
