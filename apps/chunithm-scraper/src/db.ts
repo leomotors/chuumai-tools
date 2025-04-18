@@ -9,3 +9,5 @@ if (!environment.DATABASE_URL) {
 export const db = environment.DATABASE_URL
   ? createClient(environment.DATABASE_URL)
   : null;
+
+export type Db = NonNullable<typeof db>;

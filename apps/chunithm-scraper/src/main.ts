@@ -2,30 +2,31 @@ import fs from "node:fs/promises";
 
 import { Browser } from "playwright";
 
-import {
-  forRatingTable,
-  musicRecordTable,
-  playerDataTable,
-  RatingType,
-  rawScrapeDataTable,
-} from "@repo/db-chuni/schema";
-import { BaseChartSchema, ImgGenInput } from "@repo/types-chuni";
+import { ImgGenInput } from "@repo/types-chuni";
 
 import { db } from "./db.js";
-import { environment } from "./environment.js";
-import {
-  recordToGenInput,
-  recordToGenInputWithFullChain,
-} from "./parser/music.js";
+import { recordToGenInput } from "./parser/music.js";
 import { PwPage } from "./playwright.js";
 import { login } from "./steps/1-login.js";
 import { scrapePlayerData } from "./steps/2-playerdata.js";
 import { scrapeMusicRecord } from "./steps/3-music.js";
+import { saveToDatabase } from "./steps/5-savedb.js";
+import { generateImage } from "./steps/6-image.js";
 import { downloadImageAsBase64 } from "./utils/image.js";
 
 export async function main(jobId: number | undefined, browser: Browser) {
   const page = await browser.newPage();
   const pwPage = new PwPage(page);
+
+  // * Step 0: Preparation
+  // Create folder "outputs" if not exists
+  try {
+    await fs.mkdir("outputs");
+  } catch (err) {
+    if ((err as NodeJS.ErrnoException)?.code !== "EEXIST") {
+      throw err;
+    }
+  }
 
   // * Step 1: Login
   await pwPage.runStep("Step 1: Login", (page) => login(page));
@@ -62,123 +63,30 @@ export async function main(jobId: number | undefined, browser: Browser) {
     current: recordData.currentSongs.map(recordToGenInput),
   } satisfies ImgGenInput;
 
+  const fileName = `${playerData.lastPlayed.toISOString()}-${jobId}.json`;
+
   await fs.writeFile(
-    `output-${jobId}.json`,
+    `outputs/${fileName}`,
     JSON.stringify(imgGenInput, null, 2),
   );
 
   // * Step 5: Save data to DB
   if (db) {
-    const playerDataValue = {
-      jobId,
-      characterRarity: playerData.characterRarity,
-      characterImage: playerData.characterImage,
-      teamName: playerData.teamName,
-      teamEmblem: playerData.teamEmblem,
-      mainHonorText: playerData.mainHonorText,
-      mainHonorRarity: playerData.mainHonorRarity,
-      subHonor1Text: playerData.subHonor1Text,
-      subHonor1Rarity: playerData.subHonor1Rarity,
-      subHonor2Text: playerData.subHonor2Text,
-      subHonor2Rarity: playerData.subHonor2Rarity,
-      playerLevel: playerData.playerLevel,
-      playerName: playerData.playerName,
-      classEmblem: playerData.classEmblem,
-      rating: playerData.rating.toString(),
-      overpowerValue: playerData.overpowerValue.toFixed(2),
-      overpowerPercent: playerData.overpowerPercent.toFixed(2),
-      lastPlayed: playerData.lastPlayed,
-      currentCurrency: playerData.currentCurrency,
-      totalCurrency: playerData.totalCurrency,
-      playCount: playerData.playCount,
-    } satisfies typeof playerDataTable.$inferInsert;
-
-    await db.insert(playerDataTable).values(playerDataValue);
-
-    await db
-      .insert(musicRecordTable)
-      .values(
-        recordData.allRecords
-          .map(recordToGenInputWithFullChain)
-          .map((record) => ({
-            jobId,
-            musicId: record.id,
-            difficulty: record.difficulty,
-            score: record.score,
-            clearMark: record.clearMark,
-            fc: record.fc,
-            aj: record.aj,
-            fullChain: record.fullChain,
-          })),
-      )
-      .onConflictDoNothing();
-
-    const allRecords = await db.select().from(musicRecordTable);
-
-    async function insertRating(
-      records: Array<BaseChartSchema & { fullChain: number }>,
-      ratingType: RatingType,
-    ) {
-      await db!.insert(forRatingTable).values(
-        records.map((record, index) => {
-          const recordId = allRecords.find(
-            (r) =>
-              r.musicId === record.id &&
-              r.difficulty === record.difficulty &&
-              r.score === record.score &&
-              r.clearMark === record.clearMark &&
-              r.fc === record.fc &&
-              r.aj === record.aj &&
-              r.fullChain === record.fullChain,
-          )?.id;
-
-          if (!recordId) {
-            throw new Error(
-              `Insert Database Failure: ${record.id} ${record.difficulty} ${record.score} ${record.clearMark} ${record.fc} ${record.aj} ${record.fullChain} not in musicRecordTable`,
-            );
-          }
-
-          return {
-            jobId,
-            musicId: record.id,
-            recordId,
-            ratingType: ratingType,
-            order: index + 1,
-            version: environment.VERSION,
-          };
-        }),
-      );
-    }
-
-    await insertRating(
-      recordData.bestSongs.map(recordToGenInputWithFullChain),
-      "BEST",
-    );
-    await insertRating(
-      recordData.currentSongs.map(recordToGenInputWithFullChain),
-      "CURRENT",
-    );
-    await insertRating(
-      recordData.selectionBestSongs.map(recordToGenInputWithFullChain),
-      "SELECTION_BEST",
-    );
-    await insertRating(
-      recordData.selectionCurrentSongs.map(recordToGenInputWithFullChain),
-      "SELECTION_CURRENT",
-    );
-
-    await db.insert(rawScrapeDataTable).values({
-      jobId,
-      version: environment.VERSION,
-      playerDataHtml,
-      allMusicRecordHtml: recordHtml,
-      dataForImageGen: JSON.stringify(imgGenInput),
+    await pwPage.runStep("Step 5: Save to DB", async () => {
+      await saveToDatabase(jobId!, db!, {
+        playerData,
+        recordData,
+        playerDataHtml,
+        allMusicRecordHtml: recordHtml,
+        imgGenInput,
+      });
     });
+  } else {
+    console.warn("Database Mode disabled, skipped saving to DB");
   }
 
   // * Step 6: Generate Image
-  // todo
-
-  await db?.$client.end();
-  await browser.close();
+  await pwPage.runStep("Step 6: Generate Image", (page) =>
+    generateImage(page, fileName),
+  );
 }

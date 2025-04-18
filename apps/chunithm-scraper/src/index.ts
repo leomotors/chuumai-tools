@@ -9,6 +9,7 @@ import { main } from "./main.js";
 const browser = await chromium.launch({
   headless: !process.env.DEBUG,
   args: ["--disable-blink-features=AutomationControlled", "--start-maximized"],
+  slowMo: 100,
 });
 
 const jobId = (await db?.insert(jobTable).values({}).returning())?.[0].id;

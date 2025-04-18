@@ -6,8 +6,11 @@ const environmentSchema = z.object({
   PASSWORD: z.string(),
   VERSION: z.string(),
 
-  // For saving to Database
+  // For saving to Database (requires seed)
   DATABASE_URL: z.string().optional(),
+
+  // For Image Generation (Suggest: https://chuni.wonderhoy.me)
+  IMAGE_GEN_URL: z.string().optional(),
 
   // For sending image to Discord
   DISCORD_TOKEN: z.string().optional(),
