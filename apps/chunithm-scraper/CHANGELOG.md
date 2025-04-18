@@ -2,6 +2,10 @@
 
 For changelog before V4: [here](https://github.com/leomotors/chunithm-net-scraper/blob/main/CHANGELOG.md)
 
+## [4.0.2] - 2025-04-18
+
+- fix: forgot to implement send image to discord
+
 ## [4.0.1] - 2025-04-18
 
 - fix: unable to generate image in debian
