@@ -1,5 +1,5 @@
 {
-  "id": "504ed4d7-558f-4b1d-9d6a-e97a6e15121e",
+  "id": "a455aa36-ccb6-4430-8261-a94a903ed182",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -404,7 +404,7 @@
       "uniqueConstraints": {
         "music_record_unique": {
           "name": "music_record_unique",
-          "nullsNotDistinct": false,
+          "nullsNotDistinct": true,
           "columns": [
             "music_id",
             "difficulty",

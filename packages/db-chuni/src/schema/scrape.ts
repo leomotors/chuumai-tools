@@ -92,15 +92,17 @@ export const musicRecordTable = pgTable(
     fullChain: integer("full_chain").notNull(),
   },
   (t) => [
-    unique("music_record_unique").on(
-      t.musicId,
-      t.difficulty,
-      t.score,
-      t.clearMark,
-      t.fc,
-      t.aj,
-      t.fullChain,
-    ),
+    unique("music_record_unique")
+      .on(
+        t.musicId,
+        t.difficulty,
+        t.score,
+        t.clearMark,
+        t.fc,
+        t.aj,
+        t.fullChain,
+      )
+      .nullsNotDistinct(),
   ],
 );
 

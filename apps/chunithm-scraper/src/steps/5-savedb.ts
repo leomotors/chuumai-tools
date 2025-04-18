@@ -28,6 +28,11 @@ async function insertRating(
   records: Array<BaseChartSchema & { fullChain: number }>,
   ratingType: RatingType,
 ) {
+  if (records.length === 0) {
+    console.log(`Note: No data for ${ratingType}`);
+    return;
+  }
+
   await db!.insert(forRatingTable).values(
     records.map((record, index) => {
       const recordId = allRecords.find(
@@ -35,7 +40,7 @@ async function insertRating(
           r.musicId === record.id &&
           r.difficulty === record.difficulty &&
           r.score === record.score &&
-          r.clearMark === record.clearMark &&
+          r.clearMark === (record.clearMark ?? null) &&
           r.fc === record.fc &&
           r.aj === record.aj &&
           r.fullChain === record.fullChain,
@@ -94,62 +99,64 @@ export async function saveToDatabase(
     playCount: playerData.playCount,
   } satisfies typeof playerDataTable.$inferInsert;
 
-  await db.insert(playerDataTable).values(playerDataValue);
+  try {
+    await db.insert(playerDataTable).values(playerDataValue);
 
-  await db
-    .insert(musicRecordTable)
-    .values(
-      recordData.allRecords
-        .map(recordToGenInputWithFullChain)
-        .map((record) => ({
-          jobId,
-          musicId: record.id,
-          difficulty: record.difficulty,
-          score: record.score,
-          clearMark: record.clearMark,
-          fc: record.fc,
-          aj: record.aj,
-          fullChain: record.fullChain,
-        })),
-    )
-    .onConflictDoNothing();
+    await db
+      .insert(musicRecordTable)
+      .values(
+        recordData.allRecords
+          .map(recordToGenInputWithFullChain)
+          .map((record) => ({
+            jobId,
+            musicId: record.id,
+            difficulty: record.difficulty,
+            score: record.score,
+            clearMark: record.clearMark,
+            fc: record.fc,
+            aj: record.aj,
+            fullChain: record.fullChain,
+          })),
+      )
+      .onConflictDoNothing();
 
-  const allRecords = await db.select().from(musicRecordTable);
+    const allRecords = await db.select().from(musicRecordTable);
 
-  await insertRating(
-    jobId,
-    db,
-    allRecords,
-    recordData.bestSongs.map(recordToGenInputWithFullChain),
-    "BEST",
-  );
-  await insertRating(
-    jobId,
-    db,
-    allRecords,
-    recordData.currentSongs.map(recordToGenInputWithFullChain),
-    "CURRENT",
-  );
-  await insertRating(
-    jobId,
-    db,
-    allRecords,
-    recordData.selectionBestSongs.map(recordToGenInputWithFullChain),
-    "SELECTION_BEST",
-  );
-  await insertRating(
-    jobId,
-    db,
-    allRecords,
-    recordData.selectionCurrentSongs.map(recordToGenInputWithFullChain),
-    "SELECTION_CURRENT",
-  );
-
-  await db.insert(rawScrapeDataTable).values({
-    jobId,
-    version: environment.VERSION,
-    playerDataHtml,
-    allMusicRecordHtml,
-    dataForImageGen: JSON.stringify(imgGenInput),
-  });
+    await insertRating(
+      jobId,
+      db,
+      allRecords,
+      recordData.bestSongs.map(recordToGenInputWithFullChain),
+      "BEST",
+    );
+    await insertRating(
+      jobId,
+      db,
+      allRecords,
+      recordData.currentSongs.map(recordToGenInputWithFullChain),
+      "CURRENT",
+    );
+    await insertRating(
+      jobId,
+      db,
+      allRecords,
+      recordData.selectionBestSongs.map(recordToGenInputWithFullChain),
+      "SELECTION_BEST",
+    );
+    await insertRating(
+      jobId,
+      db,
+      allRecords,
+      recordData.selectionCurrentSongs.map(recordToGenInputWithFullChain),
+      "SELECTION_CURRENT",
+    );
+  } finally {
+    await db.insert(rawScrapeDataTable).values({
+      jobId,
+      version: environment.VERSION,
+      playerDataHtml,
+      allMusicRecordHtml,
+      dataForImageGen: JSON.stringify(imgGenInput),
+    });
+  }
 }

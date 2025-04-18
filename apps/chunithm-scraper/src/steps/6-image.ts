@@ -2,7 +2,7 @@ import { Page } from "playwright";
 
 import { environment } from "../environment";
 
-export async function generateImage(page: Page, inputFileLocation: string) {
+export async function generateImage(page: Page, inputFileName: string) {
   if (!environment.IMAGE_GEN_URL) {
     console.warn("IMAGE_GEN_URL is not set. Skipping image generation.");
     return;
@@ -12,7 +12,7 @@ export async function generateImage(page: Page, inputFileLocation: string) {
 
   await page
     .getByRole("textbox", { name: "Upload JSON File" })
-    .setInputFiles(inputFileLocation);
+    .setInputFiles(`outputs/${inputFileName}`);
 
   await page
     .getByText("Data fetched successfully,")
@@ -22,7 +22,7 @@ export async function generateImage(page: Page, inputFileLocation: string) {
   await page.getByRole("button", { name: "Generate and Download" }).click();
   const download = await downloadPromise;
 
-  const outputFileLocation = `${inputFileLocation.replace(".json", ".png")}`;
+  const outputFileLocation = `outputs/${inputFileName.replace(".json", ".png")}`;
 
   await download.saveAs(outputFileLocation);
 

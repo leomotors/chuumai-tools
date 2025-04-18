@@ -56,7 +56,7 @@ CREATE TABLE "music_record" (
 	"fc" boolean NOT NULL,
 	"aj" boolean NOT NULL,
 	"full_chain" integer NOT NULL,
-	CONSTRAINT "music_record_unique" UNIQUE("music_id","difficulty","score","clear_mark","fc","aj","full_chain")
+	CONSTRAINT "music_record_unique" UNIQUE NULLS NOT DISTINCT("music_id","difficulty","score","clear_mark","fc","aj","full_chain")
 );
 --> statement-breakpoint
 CREATE TABLE "player_data" (

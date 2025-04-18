@@ -72,15 +72,19 @@ export async function main(jobId: number | undefined, browser: Browser) {
 
   // * Step 5: Save data to DB
   if (db) {
-    await pwPage.runStep("Step 5: Save to DB", async () => {
-      await saveToDatabase(jobId!, db!, {
-        playerData,
-        recordData,
-        playerDataHtml,
-        allMusicRecordHtml: recordHtml,
-        imgGenInput,
+    await pwPage
+      .runStep("Step 5: Save to DB", async () => {
+        await saveToDatabase(jobId!, db!, {
+          playerData,
+          recordData,
+          playerDataHtml,
+          allMusicRecordHtml: recordHtml,
+          imgGenInput,
+        });
+      })
+      .catch((err) => {
+        console.error(`Step 5 Error: ${err}`);
       });
-    });
   } else {
     console.warn("Database Mode disabled, skipped saving to DB");
   }

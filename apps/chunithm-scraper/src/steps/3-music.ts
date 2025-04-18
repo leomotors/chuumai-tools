@@ -33,7 +33,7 @@ export async function scrapeMusicRecord(page: Page) {
   await page.waitForURL(
     "https://chunithm-net-eng.com/mobile/home/playerData/ratingDetailBest/",
   );
-  await page.waitForTimeout(1000);
+  await page.waitForTimeout(2000);
 
   let totalHTML = "<!-- BEST -->\n";
 
@@ -49,13 +49,14 @@ export async function scrapeMusicRecord(page: Page) {
   )) {
     bestMusic.push(parseMusic(element));
   }
+  console.log("Step 3.1.1: Best Songs done");
 
   await page.getByRole("link", { name: "Current" }).click();
   // Current (New) Songs
   await page.waitForURL(
     "https://chunithm-net-eng.com/mobile/home/playerData/ratingDetailRecent/",
   );
-  await page.waitForTimeout(1000);
+  await page.waitForTimeout(2000);
 
   // warning: error if no current songs
   const current = page.locator(".box05.w400");
@@ -69,13 +70,14 @@ export async function scrapeMusicRecord(page: Page) {
   )) {
     currentMusic.push(parseMusic(element));
   }
+  console.log("Step 3.1.2: Current Songs done");
 
   await page.getByRole("link", { name: "Selection" }).click();
   // Selection
   await page.waitForURL(
     "https://chunithm-net-eng.com/mobile/home/playerData/ratingDetailNext/",
   );
-  await page.waitForTimeout(1000);
+  await page.waitForTimeout(2000);
 
   const selection = await page.locator(".w420.box01").all();
 
@@ -104,6 +106,7 @@ export async function scrapeMusicRecord(page: Page) {
   )) {
     selectionCurrentMusic.push(parseMusic(element));
   }
+  console.log("Step 3.1.3: Selection Songs done");
 
   // Part 3.2: All Records
   const allRecords = [] as Array<ReturnType<typeof parseRecord>>;
@@ -126,8 +129,14 @@ export async function scrapeMusicRecord(page: Page) {
   ];
   for (const btnClass of btnClasses) {
     await page.locator(`.${btnClass}`).click();
-    await page.waitForTimeout(3000);
+    await page.waitForTimeout(5000);
     const allCategories = await page.locator(".box05.w400").all();
+
+    if (allCategories.length !== 7) {
+      throw new Error(
+        `Step 3 Error: Expected 7 elements in all categories, got ${allCategories.length}`,
+      );
+    }
 
     for (const category of allCategories) {
       const categoryHTML = await category.innerHTML();
@@ -139,6 +148,8 @@ export async function scrapeMusicRecord(page: Page) {
         allRecords.push(parseRecord(element));
       }
     }
+
+    console.log(`Step 3.2: ${btnClass} done`);
   }
 
   return {
