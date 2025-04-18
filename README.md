@@ -30,7 +30,7 @@ This basic command will scrape your data and save both json and image into `outp
 ### Advanced Usage
 
 - Add `-e DISCORD_TOKEN=YOUR_BOT_TOKEN -e CHANNEL_ID=DISCORD_CHANNEL_ID` to send the rendered image to Discord, or send screenshot if the scraper ran into error.
-- Add `-e DB_URL=postgres://USER:PASSWORD@HOST:PORT/DB` to save the scraped data into PostgreSQL database. You need to migrate database by using `packages/db-chuni` (Seeding is not required).
+- Add `-e DATABASE_URL=postgres://USER:PASSWORD@HOST:PORT/DB` to save the scraped data into PostgreSQL database. You need to migrate database by using `packages/db-chuni` (Seeding is not required).
 
 ### Technical Details
 
