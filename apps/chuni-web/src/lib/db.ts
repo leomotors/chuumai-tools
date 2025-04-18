@@ -1,5 +1,5 @@
-import { env } from "$env/dynamic/private";
-
 import { createClient } from "@repo/db-chuni/client";
 
-export const db = createClient(env.DATABASE_URL);
+import { environment } from "./environment.js";
+
+export const db = createClient(environment.DATABASE_URL);

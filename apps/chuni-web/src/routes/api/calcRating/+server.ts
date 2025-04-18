@@ -1,15 +1,15 @@
 import { json } from "@sveltejs/kit";
 import { and, eq, inArray } from "drizzle-orm";
 
-import { env } from "$env/dynamic/public";
-import { db } from "$lib/db";
-import { type ChartForRender, rawImageGenSchema } from "$lib/types";
+import { db } from "$lib/db.js";
+import { environment } from "$lib/environment.js";
+import { type ChartForRender, rawImageGenSchema } from "$lib/types.js";
 
 import { musicDataTable, musicLevelTable } from "@repo/db-chuni/schema";
 import { type BaseChartSchema, imgGenInputSchema } from "@repo/types-chuni";
 import { calculateRating, floorDecimalPlaces } from "@repo/utils-chuni";
 
-import type { RequestHandler } from "./$types";
+import type { RequestHandler } from "./$types.js";
 
 function constantFromLevel(level: string) {
   if (level.endsWith("+")) {
@@ -77,7 +77,7 @@ export const POST: RequestHandler = async ({ request }) => {
     .from(musicLevelTable)
     .where(
       and(
-        eq(musicLevelTable.version, env.PUBLIC_VERSION),
+        eq(musicLevelTable.version, environment.PUBLIC_VERSION),
         inArray(musicLevelTable.musicId, allIds),
       ),
     );

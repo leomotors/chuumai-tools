@@ -1,6 +1,6 @@
-import { env } from "$env/dynamic/private";
+import { environment } from "$lib/environment.js";
 
-import type { RequestHandler } from "./$types";
+import type { RequestHandler } from "./$types.js";
 
 export const GET: RequestHandler = async ({ url }) => {
   const img = url.searchParams.get("img");
@@ -12,7 +12,7 @@ export const GET: RequestHandler = async ({ url }) => {
     return new Response("Bad Request", { status: 400 });
   }
 
-  const res = await fetch(`${env.MUSIC_IMAGE_URL}/${img}`);
+  const res = await fetch(`${environment.MUSIC_IMAGE_URL}/${img}`);
   if (!res.ok) {
     return new Response("Getting image failed", { status: res.status });
   }

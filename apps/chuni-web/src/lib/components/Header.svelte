@@ -2,7 +2,7 @@
   import { Github, Twitter } from "@lucide/svelte";
   import type { Snippet } from "svelte";
 
-  import { env } from "$env/dynamic/public";
+  import { environment } from "$lib/environment";
 
   interface Props {
     children: Snippet;
@@ -41,7 +41,7 @@
         <p>@LeomotorsTH</p>
       </div>
 
-      <p>Web Version: {webVersion} @ {env.PUBLIC_VERSION || "???"}</p>
+      <p>Web Version: {webVersion} @ {environment.PUBLIC_VERSION}</p>
     </div>
 
     <img src="/verse_logo.webp" alt="Verse Logo" class="h-[217px]" />

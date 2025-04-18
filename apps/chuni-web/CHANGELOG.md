@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.0.3] - 2025-04-18
+## [1.1.0] - 2025-04-18
 
 - feat: enforce font for consistency across OS
 - feat: add more details to how to use
