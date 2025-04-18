@@ -19,5 +19,6 @@
 }
 
 @theme {
+  --font-app: Inter, "Noto Sans JP", ui-sans-serif, system-ui;
   --font-helvetica: "Helvetica Neue Cyr", sans-serif;
 }

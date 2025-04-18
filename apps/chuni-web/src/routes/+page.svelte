@@ -98,7 +98,7 @@
   }
 </script>
 
-<main class="flex flex-col items-center w-screen px-4 py-8 gap-4">
+<main class="flex flex-col items-center w-screen px-4 py-8 gap-4 font-app">
   <h1 class="font-bold text-3xl">Chunithm Music for Rating Image Generator</h1>
   <p>Version: {env.PUBLIC_VERSION || "error"}</p>
 
@@ -115,15 +115,16 @@
     />
 
     <p>
-      JSON file should match
+      Please refer to
       <a
         class="text-blue-500 hover:underline"
-        href="https://github.com/leomotors/chuumai-tools/blob/main/packages/types-chuni/src/index.ts"
+        href="https://github.com/leomotors/chuumai-tools?tab=readme-ov-file#chunithm"
         target="_blank"
         rel="noreferrer"
       >
-        following schema
+        GitHub
       </a>
+      for how to get the JSON file.
     </p>
   </div>
 

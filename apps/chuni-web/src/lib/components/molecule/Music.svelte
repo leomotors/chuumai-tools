@@ -28,7 +28,7 @@
   <div
     class="absolute rounded-full -top-[10px] -left-[10px] p-1 w-8 h-8 bg-white flex justify-center items-center text-black"
   >
-    <p class="text-2xl font-bold">{index + 1}</p>
+    <p class="text-xl font-bold">{index + 1}</p>
   </div>
 
   <!-- Upper -->
@@ -87,7 +87,7 @@
       </div>
 
       <div class="flex flex-col">
-        <p class="text-sm">PLAY RATING</p>
+        <p class="text-sm text-nowrap">PLAY RATING</p>
         <p class="font-bold text-2xl">
           {music.rating.toFixed(2)}
         </p>

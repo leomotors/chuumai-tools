@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.0.3] - 2025-04-18
+
+- feat: enforce font for consistency across OS
+- feat: add more details to how to use
+
 ## [1.0.2] - 2025-04-18
 
 - fix: attempt to fix image loading when rendering
