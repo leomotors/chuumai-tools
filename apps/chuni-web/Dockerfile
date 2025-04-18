@@ -12,6 +12,11 @@ COPY apps/ ./apps/
 COPY packages/ ./packages/
 
 RUN pnpm install --frozen-lockfile
+
+ENV DATABASE_URL=postgresql://mock:value@somewhere:5432/dbname
+ENV PUBLIC_VERSION=MOCK_SHOULD_NOT_APPEAR_ON_PROD
+ENV MUSIC_IMAGE_URL=http://mock:3000/value
+
 RUN pnpm --filter=chuni-web build
 
 

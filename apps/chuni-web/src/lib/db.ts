@@ -1,5 +1,9 @@
+import { env } from "$env/dynamic/private";
+
 import { createClient } from "@repo/db-chuni/client";
 
-import { environment } from "./environment.js";
+if (!env.DATABASE_URL) {
+  throw new Error("DATABASE_URL is not set");
+}
 
-export const db = createClient(environment.DATABASE_URL);
+export const db = createClient(env.DATABASE_URL);
