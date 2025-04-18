@@ -65,10 +65,28 @@
     }
   });
 
+  async function ensureImageLoaded(element: HTMLElement) {
+    const images = Array.from(element.querySelectorAll("img"));
+
+    await Promise.all(
+      images.map((img) => {
+        if (img.complete) {
+          return Promise.resolve(); // Already loaded
+        }
+        return new Promise<void>((resolve, reject) => {
+          img.onload = () => resolve();
+          img.onerror = () =>
+            reject(new Error(`Failed to load image: ${img.src}`));
+        });
+      }),
+    );
+  }
+
   async function handleDownload() {
     const element = document.getElementById("chart")!;
 
     element.style.display = "flex";
+    await ensureImageLoaded(element);
     const dataUrl = await toPng(element);
     element.style.display = "none";
 

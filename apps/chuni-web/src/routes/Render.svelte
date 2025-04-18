@@ -1,6 +1,7 @@
 <script lang="ts">
   import { Github } from "@lucide/svelte";
 
+  import { env } from "$env/dynamic/public";
   import Music from "$lib/components/Music.svelte";
   import Profile from "$lib/components/profile/Profile.svelte";
   import type { RawImageGen } from "$lib/types";
@@ -37,7 +38,7 @@
           <p>leomotors/chuumai-tools</p>
         </div>
 
-        <p>Web Version: {webVersion}</p>
+        <p>Web Version: {webVersion} @ {env.PUBLIC_VERSION || "???"}</p>
       </div>
 
       <img src="/verse_logo.webp" alt="Verse Logo" class="h-[217px]" />
