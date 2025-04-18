@@ -1,8 +1,8 @@
 <script lang="ts">
+  import Header from "$lib/components/Header.svelte";
   import Music from "$lib/components/molecule/Music.svelte";
   import Profile from "$lib/components/profile/Profile.svelte";
   import type { RawImageGen } from "$lib/types";
-  import Header from "$lib/components/Header.svelte";
 
   interface Props {
     input: RawImageGen;

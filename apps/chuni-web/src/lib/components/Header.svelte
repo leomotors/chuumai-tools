@@ -1,7 +1,8 @@
 <script lang="ts">
-  import { env } from "$env/dynamic/public";
   import { Github, Twitter } from "@lucide/svelte";
   import type { Snippet } from "svelte";
+
+  import { env } from "$env/dynamic/public";
 
   interface Props {
     children: Snippet;
