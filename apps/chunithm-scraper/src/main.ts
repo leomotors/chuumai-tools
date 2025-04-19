@@ -105,7 +105,7 @@ export async function main(jobId: number | undefined, browser: Browser) {
 **Name**: ${playerData.playerName}
 **Level**: ${playerData.playerLevel}
 **Play Count**: ${playerData.playCount}
-**Rating**: ${playerData.rating.toFixed(4)}
+**Rating**: ${playerData.rating.toFixed(2)}
 **Last Played**: ${playerData.lastPlayed}`;
 
     await sendImage(

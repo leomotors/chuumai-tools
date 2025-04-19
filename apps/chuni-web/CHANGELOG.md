@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.2.0] - 2025-04-19
+
+- fix: japanese font (Noto Sans JP)
+- feat: add separator between Best and Current section
+- chore: bump deps
+
 ## [1.1.1] - 2025-04-18
 
 - fix: font

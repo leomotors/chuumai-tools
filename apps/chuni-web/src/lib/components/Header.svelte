@@ -3,6 +3,7 @@
   import type { Snippet } from "svelte";
 
   import { env } from "$env/dynamic/public";
+  import { webVersion } from "$lib/version.js";
 
   interface Props {
     children: Snippet;
@@ -10,10 +11,6 @@
   }
 
   let { children, lastPlayed }: Props = $props();
-
-  // @ts-expect-error defined global in Vite
-  // eslint-disable-next-line no-undef
-  const webVersion = WEB_VERSION as string;
 </script>
 
 <header class="flex justify-between gap-4 pb-2">
@@ -22,7 +19,9 @@
 
   <!-- Right -->
   <div class="flex gap-8">
-    <div class="bg-white/60 rounded-lg p-4 self-end text-xl font-bold mb-4">
+    <div class="bg-white/60 rounded-lg p-4 self-end text-xl">
+      <p class="font-bold">Music for Rating Image Generator</p>
+
       <p>
         Last Played: {new Date(lastPlayed).toLocaleString()}
       </p>

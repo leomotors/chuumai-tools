@@ -26,15 +26,9 @@
   font-display: swap;
 }
 
-@font-face {
-  font-family: "Noto Sans JP";
-  src: url("/fonts/NotoSansJP-VariableFont.woff2") format("woff2-variations");
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: swap;
-}
+@import "@fontsource-variable/noto-sans-jp";
 
 @theme {
-  --font-app: Inter, "Noto Sans JP", ui-sans-serif, system-ui;
+  --font-app: Inter, "Noto Sans JP Variable", ui-sans-serif, system-ui;
   --font-helvetica: "Helvetica Neue Cyr", sans-serif;
 }

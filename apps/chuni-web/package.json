@@ -1,7 +1,7 @@
 {
   "name": "chuni-web",
   "private": true,
-  "version": "1.1.1",
+  "version": "1.2.0",
   "type": "module",
   "scripts": {
     "dev": "vite dev",
@@ -14,8 +14,9 @@
     "format": "eslint --fix"
   },
   "devDependencies": {
+    "@fontsource-variable/noto-sans-jp": "^5.2.5",
     "@leomotors/config": "^1.0.0-rc.1",
-    "@lucide/svelte": "^0.488.0",
+    "@lucide/svelte": "^0.501.0",
     "@repo/db-chuni": "workspace:*",
     "@repo/types-chuni": "workspace:*",
     "@repo/utils-chuni": "workspace:*",
@@ -30,14 +31,14 @@
     "postgres": "^3.4.5",
     "prettier": "^3.5.3",
     "prettier-plugin-svelte": "^3.3.3",
-    "svelte": "^5.0.0",
+    "svelte": "^5.28.1",
     "svelte-check": "^4.0.0",
-    "svelte-eslint-parser": "^1.1.2",
+    "svelte-eslint-parser": "^1.1.3",
     "tailwind-merge": "^3.2.0",
     "tailwindcss": "^4.0.0",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.30.1",
-    "vite": "^6.3.0",
+    "vite": "^6.3.2",
     "zod": "^3.24.2"
   }
 }

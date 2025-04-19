@@ -3,6 +3,7 @@
 
   import { env } from "$env/dynamic/public";
   import { type RawImageGen } from "$lib/types";
+  import { webVersion } from "$lib/version.js";
 
   import { type ImgGenInput, imgGenInputSchema } from "@repo/types-chuni";
 
@@ -80,6 +81,8 @@
         });
       }),
     );
+
+    await document.fonts.ready; // Ensure all fonts are loaded
   }
 
   async function handleDownload() {
@@ -100,7 +103,8 @@
 
 <main class="flex flex-col items-center w-screen px-4 py-8 gap-4 font-app">
   <h1 class="font-bold text-3xl">Chunithm Music for Rating Image Generator</h1>
-  <p>Version: {env.PUBLIC_VERSION || "error"}</p>
+  <p>Web Version: {webVersion}</p>
+  <p>Chart Constant Version: {env.PUBLIC_VERSION || "???"}</p>
 
   <div
     class="flex flex-col items-center gap-2 p-4 bg-gradient-to-br from-blue-100 to-green-100 rounded-xl"

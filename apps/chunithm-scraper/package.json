@@ -1,6 +1,6 @@
 {
   "name": "chunithm-scraper",
-  "version": "4.0.2",
+  "version": "4.0.3",
   "private": true,
   "scripts": {
     "build": "tsup",
@@ -14,7 +14,7 @@
   "license": "MIT",
   "dependencies": {
     "jsdom": "^26.1.0",
-    "playwright": "^1.50.1"
+    "playwright": "^1.52.0"
   },
   "devDependencies": {
     "@repo/db-chuni": "workspace:*",
