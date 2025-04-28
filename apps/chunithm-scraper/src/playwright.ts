@@ -1,7 +1,6 @@
 import { Page } from "playwright";
 
 import { type db as dbValue } from "./db.js";
-import { environment } from "./environment.js";
 import { sendImage } from "./utils/discord.js";
 
 export type dbType = typeof dbValue;
@@ -18,17 +17,11 @@ export class PwPage {
       } catch (e) {
         console.error(e);
 
-        if (environment.CHANNEL_ID && environment.DISCORD_TOKEN) {
-          const screenshot = await this.page.screenshot();
-          await sendImage(
-            environment.DISCORD_TOKEN,
-            environment.CHANNEL_ID,
-            `ALERT :warning:: An error occured at step ${stepName} (Attempt ${i + 1}/${retries})`,
-            new Blob([screenshot]),
-          );
-        } else {
-          console.log("Screenshot not sent to Discord because it is disabled");
-        }
+        const screenshot = await this.page.screenshot();
+        await sendImage(
+          `ALERT :warning:: An error occured at step ${stepName} (Attempt ${i + 1}/${retries})`,
+          new Blob([screenshot]),
+        );
       }
     }
 

@@ -1,6 +1,6 @@
 {
   "name": "chunithm-scraper",
-  "version": "4.0.3",
+  "version": "4.1.0",
   "private": true,
   "scripts": {
     "build": "tsup",

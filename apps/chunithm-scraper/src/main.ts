@@ -5,7 +5,6 @@ import { Browser } from "playwright";
 import { ImgGenInput } from "@repo/types-chuni";
 
 import { db } from "./db.js";
-import { environment } from "./environment.js";
 import { recordToGenInput } from "./parser/music.js";
 import { PwPage } from "./playwright.js";
 import { login } from "./steps/1-login.js";
@@ -13,7 +12,7 @@ import { scrapePlayerData } from "./steps/2-playerdata.js";
 import { scrapeMusicRecord } from "./steps/3-music.js";
 import { saveToDatabase } from "./steps/5-savedb.js";
 import { generateImage } from "./steps/6-image.js";
-import { sendImage } from "./utils/discord.js";
+import { sendDiscordImage } from "./steps/7-discord.js";
 import { downloadImageAsBase64 } from "./utils/image.js";
 
 export async function main(jobId: number | undefined, browser: Browser) {
@@ -97,25 +96,8 @@ export async function main(jobId: number | undefined, browser: Browser) {
     (page) => generateImage(page, fileName),
   );
 
-  if (environment.DISCORD_TOKEN && environment.CHANNEL_ID && outputLocation) {
-    const image = await fs.readFile(outputLocation);
-    const blob = new Blob([image], { type: "image/png" });
-
-    const message = `## Your Music for Rating Image is here!
-**Name**: ${playerData.playerName}
-**Level**: ${playerData.playerLevel}
-**Play Count**: ${playerData.playCount}
-**Rating**: ${playerData.rating.toFixed(2)}
-**Last Played**: ${playerData.lastPlayed}`;
-
-    await sendImage(
-      environment.DISCORD_TOKEN,
-      environment.CHANNEL_ID,
-      message,
-      blob,
-      outputLocation.split("/").pop() || "image.png",
-    ).catch((err) => {
-      console.error(`Discord API Error: ${err}`);
-    });
-  }
+  // * Step 7: Send Image to Discord
+  await pwPage.runStep("Step 7: Send Image to Discord", () =>
+    sendDiscordImage(outputLocation, playerData),
+  );
 }

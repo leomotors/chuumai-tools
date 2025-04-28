@@ -2,6 +2,10 @@
 
 For changelog before V4: [here](https://github.com/leomotors/chunithm-net-scraper/blob/main/CHANGELOG.md)
 
+## [4.1.0] - 2025-04-28
+
+- feat: option for discord webhook url
+
 ## [4.0.3] - 2025-04-19
 
 - feat: slightly update text when sending result to discord
