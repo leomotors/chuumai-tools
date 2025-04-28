@@ -1,0 +1,38 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "Helvetica Neue Cyr";
+  font-weight: 700;
+  src: url("/public/chuni-web/fonts/HelveticaNeueCyr-Bold.woff2")
+    format("woff2");
+}
+
+@font-face {
+  font-family: "Helvetica Neue Cyr";
+  font-weight: 300;
+  src: url("/public/chuni-web/fonts/HelveticaNeueCyr-Light.woff2")
+    format("woff2");
+}
+
+@font-face {
+  font-family: "Helvetica Neue Cyr";
+  font-weight: 500;
+  src: url("/public/chuni-web/fonts/HelveticaNeueCyr-Medium.woff2")
+    format("woff2");
+}
+
+@font-face {
+  font-family: "Inter";
+  src: url("/public/chuni-web/fonts/InterVariable.woff2")
+    format("woff2-variations");
+  font-weight: 100 900;
+  font-style: normal italic;
+  font-display: swap;
+}
+
+@import "@fontsource-variable/noto-sans-jp";
+
+@theme {
+  --font-app: Inter, "Noto Sans JP Variable", ui-sans-serif, system-ui;
+  --font-helvetica: "Helvetica Neue Cyr", sans-serif;
+}

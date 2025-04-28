@@ -1,0 +1,38 @@
+{
+  "name": "chuni-video",
+  "version": "0.0.0",
+  "private": true,
+  "description": "My Remotion video",
+  "scripts": {
+    "dev": "remotion studio",
+    "build": "remotion bundle",
+    "upgrade": "remotion upgrade",
+    "lint": "eslint src",
+    "format": "eslint src --fix",
+    "check": "tsc"
+  },
+  "sideEffects": [
+    "*.css"
+  ],
+  "dependencies": {
+    "@remotion/cli": "4.0.291",
+    "@remotion/tailwind-v4": "4.0.291",
+    "@remotion/zod-types": "4.0.291",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "remotion": "4.0.291",
+    "tailwindcss": "^4.1.4",
+    "zod": "3.22.3"
+  },
+  "devDependencies": {
+    "@fontsource-variable/noto-sans-jp": "^5.2.5",
+    "@remotion/eslint-config-flat": "4.0.291",
+    "@types/react": "^19.1.2",
+    "@types/web": "^0.0.227",
+    "eslint": "^9.25.1",
+    "eslint-config-prettier": "^10.1.2",
+    "eslint-plugin-prettier": "^5.2.6",
+    "prettier": "^3.5.3",
+    "typescript": "^5.8.3"
+  }
+}
