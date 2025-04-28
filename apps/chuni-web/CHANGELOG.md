@@ -1,8 +1,9 @@
 # Changelog
 
-## [1.2.1] - 2025-04-28
+## [1.3.0] - 2025-04-28
 
-- fix: rating formula for A-AAA
+- fix: rating formula for A-AAA, updated formula is from `https://reiwa.f5.si/newbestimg/chunithm_int/` by [Qman](https://github.com/Qman11010101)
+- feat: change favicon because why not
 
 ## [1.2.0] - 2025-04-19
 

@@ -2,6 +2,7 @@
   import { toPng } from "html-to-image";
 
   import { env } from "$env/dynamic/public";
+  import ExtLink from "$lib/components/molecule/ExtLink.svelte";
   import { type RawImageGen } from "$lib/types";
   import { webVersion } from "$lib/version.js";
 
@@ -103,8 +104,20 @@
 
 <main class="flex flex-col items-center w-screen px-4 py-8 gap-4 font-app">
   <h1 class="font-bold text-3xl">Chunithm Music for Rating Image Generator</h1>
-  <p>Web Version: {webVersion}</p>
-  <p>Chart Constant Version: {env.PUBLIC_VERSION || "???"}</p>
+
+  <article class="flex flex-col items-center">
+    <p>
+      By <ExtLink href="https://github.com/leomotors">Leomotors</ExtLink>
+    </p>
+    <p>
+      Web Version: {webVersion} (<ExtLink
+        href="https://github.com/leomotors/chuumai-tools/blob/main/apps/chuni-web/CHANGELOG.md"
+      >
+        Changelog
+      </ExtLink>)
+    </p>
+    <p>Chart Constant Version: {env.PUBLIC_VERSION || "???"}</p>
+  </article>
 
   <div
     class="flex flex-col items-center gap-2 p-4 bg-gradient-to-br from-blue-100 to-green-100 rounded-xl"
@@ -120,15 +133,12 @@
 
     <p>
       Please refer to
-      <a
-        class="text-blue-500 hover:underline"
+      <ExtLink
         href="https://github.com/leomotors/chuumai-tools?tab=readme-ov-file#chunithm"
-        target="_blank"
-        rel="noreferrer"
       >
         GitHub
-      </a>
-      for how to get the JSON file.
+      </ExtLink>
+      for the schema and how to get the JSON file.
     </p>
   </div>
 
