@@ -6,8 +6,8 @@
     "preview": "dotenv -- node ./dist/index.js",
     "build": "tsup",
     "check": "tsc",
-    "lint": "eslint",
-    "format": "eslint --fix"
+    "lint": "eslint src *.ts",
+    "format": "eslint src *.ts --fix"
   },
   "dependencies": {
     "cli-progress": "^3.12.0"

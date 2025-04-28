@@ -6,8 +6,8 @@
     "build": "tsup",
     "preview": "dotenv -- node dist/index.js",
     "check": "tsc",
-    "lint": "eslint",
-    "format": "eslint --fix",
+    "lint": "eslint src *.ts",
+    "format": "eslint src *.ts --fix",
     "test": "vitest run"
   },
   "type": "module",

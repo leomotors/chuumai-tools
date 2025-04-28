@@ -4,8 +4,8 @@
   "type": "module",
   "scripts": {
     "check": "tsc",
-    "lint": "eslint src",
-    "format": "eslint src --fix",
+    "lint": "eslint src *.ts",
+    "format": "eslint src *.ts --fix",
     "db:generate": "dotenv -- drizzle-kit generate",
     "db:migrate": "dotenv -- drizzle-kit migrate",
     "db:export": "dotenv -- drizzle-kit export"
