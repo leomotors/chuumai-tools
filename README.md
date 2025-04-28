@@ -5,7 +5,7 @@ Collection of tools made by Chunithm and maimai players for Chunithm and maimai 
 ## Chunithm
 
 > [!NOTE]
-> These tools are made for International Version
+> These tools are made for International Version (It may work for Japanese Version with some tweaks)
 
 ### Requirements
 
@@ -28,7 +28,7 @@ docker run --rm \
 You will have to change `USERNAME` and `PASSWORD` to your own,
 `TZ` and `LANG` so that the image show timezone and time format correctly.
 
-This basic command will scrape your data, saving to json. Then, launch a playwright browser to generate an image on https://chuni.wonderhoy.me
+This basic command will scrape your data, saving to json. Then, launch a playwright browser to generate an image on https://chuni.wonderhoy.me (My hosted instance of `apps/chuni-web`).
 
 Both json and image will be available on `outputs` folder (If you mount it correctly).
 
@@ -68,4 +68,4 @@ Big thanks to [Qman](https://github.com/Qman11010101) for inspiration.
 
 ## maimai
 
-todo
+todo, prob before PRiSM PLUS
