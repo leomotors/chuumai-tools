@@ -1,5 +1,7 @@
 # Chuumai Tools
 
+Collection of tools made by Chunithm and maimai players for Chunithm and maimai players.
+
 ## Chunithm
 
 (For Internation Ver.)
@@ -27,10 +29,13 @@ You will have to change `USERNAME` and `PASSWORD` to your own,
 
 This basic command will scrape your data and save both json and image into `outputs` folder.
 
+> [!WARNING]
+> If you use Docker Desktop on Windows, when using `-v` option, make sure to start with `//` and use absolute path. For example: `-v //c/Users/username/outputs:/app/outputs`
+
 ### Advanced Usage
 
-- Add `-e DISCORD_TOKEN=YOUR_BOT_TOKEN -e CHANNEL_ID=DISCORD_CHANNEL_ID` to send the rendered image to Discord, or send screenshot if the scraper ran into error.
-- Add `-e DATABASE_URL=postgres://USER:PASSWORD@HOST:PORT/DB` to save the scraped data into PostgreSQL database. You need to migrate database by using `packages/db-chuni` (Seeding is not required).
+- Add `-e DISCORD_WEBHOOK_URL=your_webhook_url` to send the rendered image to Discord, or send screenshot if the scraper ran into error.
+- Add `-e DATABASE_URL=postgres://USER:PASSWORD@HOST:PORT/DB` to save the scraped data into PostgreSQL database. You need to migrate database by cloning the repo and use `packages/db-chuni` (Seeding is not required).
 
 ### Technical Details
 
