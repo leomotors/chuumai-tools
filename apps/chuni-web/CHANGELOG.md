@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.2.1] - 2025-04-28
+
+- fix: rating formula for A-AAA
+
 ## [1.2.0] - 2025-04-19
 
 - fix: japanese font (Noto Sans JP)

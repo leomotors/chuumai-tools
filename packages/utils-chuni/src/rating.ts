@@ -21,10 +21,8 @@ function calculateRatingRaw(score: number, level: number) {
     return clamp(1000000, 1005000, level + 1, level + 1.5, score);
   } else if (score >= 975000) {
     return clamp(975000, 1000000, level, level + 1, score);
-  } else if (score >= 925000) {
-    return clamp(925000, 975000, level - 3, level, score);
   } else if (score >= 900000) {
-    return clamp(900000, 925000, level - 5, level - 3, score);
+    return clamp(900000, 975000, level - 5, level, score);
   } else if (score >= 800000) {
     return clamp(800000, 900000, (level - 5) / 2, level - 5, score);
   } else if (score >= 500000) {
