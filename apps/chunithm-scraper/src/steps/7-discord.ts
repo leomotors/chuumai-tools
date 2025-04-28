@@ -1,6 +1,5 @@
 import fs from "node:fs/promises";
 
-import { environment } from "../environment";
 import { sendImage } from "../utils/discord.js";
 import type { scrapePlayerData } from "./2-playerdata";
 
@@ -25,13 +24,11 @@ export async function sendDiscordImage(
 **Rating**: ${playerData.rating.toFixed(2)}
 **Last Played**: ${playerData.lastPlayed}`;
 
-  if (environment.DISCORD_TOKEN && environment.CHANNEL_ID && imageLocation) {
-    await sendImage(
-      message,
-      blob,
-      imageLocation.split("/").pop() || "image.png",
-    ).catch((err) => {
-      console.error(`Discord API Error: ${err}`);
-    });
-  }
+  await sendImage(
+    message,
+    blob,
+    imageLocation.split("/").pop() || "image.png",
+  ).catch((err) => {
+    console.error(`Discord API Error: ${err}`);
+  });
 }
