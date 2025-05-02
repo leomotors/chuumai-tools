@@ -2,6 +2,10 @@
 
 For changelog before V4: [here](https://github.com/leomotors/chunithm-net-scraper/blob/main/CHANGELOG.md)
 
+## [4.2.0] - 2025-05-02
+
+- feat: support hidden songs
+
 ## [4.1.1] - 2025-04-28
 
 - fix: generate image using webhook issues

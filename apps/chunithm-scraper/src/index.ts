@@ -33,6 +33,7 @@ try {
       jobError: `${err}`,
     })
     .where(eq(jobTable.id, jobId!));
+  console.error(err);
 } finally {
   await browser.close();
   await db?.$client.end();

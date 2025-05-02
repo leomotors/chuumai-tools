@@ -5,6 +5,7 @@ import { Browser } from "playwright";
 import { ImgGenInput } from "@repo/types-chuni";
 
 import { db } from "./db.js";
+import { readHiddenCharts } from "./hidden.js";
 import { recordToGenInput } from "./parser/music.js";
 import { PwPage } from "./playwright.js";
 import { login } from "./steps/1-login.js";
@@ -16,10 +17,12 @@ import { sendDiscordImage } from "./steps/7-discord.js";
 import { downloadImageAsBase64 } from "./utils/image.js";
 
 export async function main(jobId: number | undefined, browser: Browser) {
+  // * Step 0: Preparation
+  const hiddenCharts = await readHiddenCharts();
+
   const page = await browser.newPage();
   const pwPage = new PwPage(page);
 
-  // * Step 0: Preparation
   // Create folder "outputs" if not exists
   try {
     await fs.mkdir("outputs");
@@ -62,6 +65,7 @@ export async function main(jobId: number | undefined, browser: Browser) {
     },
     best: recordData.bestSongs.map(recordToGenInput),
     current: recordData.currentSongs.map(recordToGenInput),
+    hidden: hiddenCharts || undefined,
   } satisfies ImgGenInput;
 
   const fileName = `${playerData.lastPlayed.toISOString()}-${jobId}.json`;
