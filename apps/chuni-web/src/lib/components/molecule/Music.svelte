@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { Lock } from "@lucide/svelte";
   import { twMerge } from "tailwind-merge";
 
   import type { ChartForRender } from "$lib/types";
@@ -26,9 +27,16 @@
 >
   <!-- Order -->
   <div
-    class="absolute rounded-full -top-[10px] -left-[10px] p-1 w-8 h-8 bg-white flex justify-center items-center text-black"
+    class={twMerge(
+      "absolute rounded-full -top-[10px] -left-[10px] p-1 w-8 h-8 flex justify-center items-center",
+      music.isHidden ? "bg-red-500 text-white" : "bg-white text-black",
+    )}
   >
-    <p class="text-xl font-bold">{index + 1}</p>
+    {#if music.isHidden}
+      <Lock class="w-[20px] h-[20px]" />
+    {:else}
+      <p class="text-xl font-bold">{index + 1}</p>
+    {/if}
   </div>
 
   <!-- Upper -->

@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.4.0] - 2025-05-02
+
+- feat: add support for hidden songs
+- feat: move honor text to the top for メズマライザー meme
+
 ## [1.3.0] - 2025-04-28
 
 - fix: rating formula for A-AAA, updated formula is from `https://reiwa.f5.si/newbestimg/chunithm_int/` by [Qman](https://github.com/Qman11010101)

@@ -6,13 +6,34 @@
   import { type RawImageGen } from "$lib/types";
   import { webVersion } from "$lib/version.js";
 
-  import { type ImgGenInput, imgGenInputSchema } from "@repo/types-chuni";
+  import {
+    clearMarkValues,
+    type RatingType,
+    stdChartDifficultyValues,
+  } from "@repo/db-chuni/schema";
+  import {
+    type HiddenChart,
+    type ImgGenInput,
+    imgGenInputSchema,
+  } from "@repo/types-chuni";
 
   import Render from "./Render.svelte";
 
   let files = $state<FileList>();
   let userData = $state<ImgGenInput>();
   let userError = $state<string>();
+
+  let hiddenCharts = $state<HiddenChart[]>([
+    {
+      search: "Theatore Creatore",
+      difficulty: "ultima",
+      ratingType: "CURRENT",
+      score: 0,
+      clearMark: null,
+      fc: false,
+      aj: false,
+    },
+  ]);
 
   async function parseFile(fileList: FileList) {
     const file = fileList[0];
@@ -24,6 +45,7 @@
     if (parseResult.success) {
       userData = parseResult.data;
       userError = undefined;
+      getRatingData(userData);
     } else {
       userData = undefined;
       userError = parseResult.error.message;
@@ -47,7 +69,13 @@
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        data: userData,
+        data: {
+          ...userData,
+          hidden: [
+            ...(userData.hidden ?? []),
+            ...hiddenCharts.filter((chart) => chart.score > 0),
+          ],
+        },
         version: "VRS",
       }),
     });
@@ -60,12 +88,6 @@
 
     renderData = await res.json();
   }
-
-  $effect(() => {
-    if (userData) {
-      getRatingData(userData);
-    }
-  });
 
   async function ensureImageLoaded(element: HTMLElement) {
     const images = Array.from(element.querySelectorAll("img"));
@@ -140,6 +162,123 @@
       </ExtLink>
       for the schema and how to get the JSON file.
     </p>
+
+    <section class="flex flex-col items-center gap-2">
+      <p class="font-bold">Hidden Songs</p>
+
+      {#each hiddenCharts as chart, index (index)}
+        <div class="hiddenCharts">
+          <div>
+            <label for="rating-type-{index}">Type</label>
+            <select
+              name="rating-type-{index}"
+              id="rating-type-{index}"
+              bind:value={chart.ratingType}
+            >
+              <option
+                value={"CURRENT" satisfies RatingType}
+                selected={chart.ratingType === "CURRENT"}
+              >
+                CURRENT
+              </option>
+              <option
+                value={"BEST" satisfies RatingType}
+                selected={chart.ratingType === "BEST"}>BEST</option
+              >
+            </select>
+          </div>
+          <div>
+            <label for="search-{index}">Search</label>
+            <input
+              type="text"
+              bind:value={chart.search}
+              placeholder="Search"
+              id="search-{index}"
+            />
+          </div>
+          <div>
+            <label for="difficulty-{index}">Difficulty</label>
+            <select
+              name="difficulty-{index}"
+              id="difficulty-{index}"
+              bind:value={chart.difficulty}
+            >
+              {#each stdChartDifficultyValues as difficulty (difficulty)}
+                <option
+                  value={difficulty}
+                  selected={chart.difficulty === difficulty}
+                >
+                  {difficulty.toUpperCase()}
+                </option>
+              {/each}
+            </select>
+          </div>
+          <div>
+            <label for="score-{index}">Score</label>
+            <input
+              type="number"
+              bind:value={chart.score}
+              placeholder="Score"
+              id="score-{index}"
+            />
+          </div>
+          <div>
+            <label for="clearmark-{index}">Clear Mark</label>
+            <select
+              name="clearmark-{index}"
+              id="clearmark-{index}"
+              bind:value={chart.clearMark}
+            >
+              <option value={null} selected={!!chart.clearMark}>NONE</option>
+              {#each clearMarkValues as clearMark (clearMark)}
+                <option
+                  value={clearMark}
+                  selected={chart.clearMark === clearMark}
+                >
+                  {clearMark}
+                </option>
+              {/each}
+            </select>
+          </div>
+          <div>
+            <label for="fc-{index}">FC</label>
+            <input type="checkbox" id="fc-{index}" bind:checked={chart.fc} />
+          </div>
+          <div>
+            <label for="aj-{index}">AJ</label>
+            <input type="checkbox" id="aj-{index}" bind:checked={chart.aj} />
+          </div>
+          <button
+            class="bg-red-500 rounded-lg p-2 hover:bg-red-600 transition-colors text-white h-fit self-center"
+            onclick={() => {
+              hiddenCharts = hiddenCharts.filter((_, i) => i !== index);
+            }}
+          >
+            RM
+          </button>
+        </div>
+      {/each}
+
+      <button
+        class="self-end bg-blue-500 rounded-lg p-2 hover:bg-blue-600 transition-colors text-white"
+        onclick={() => {
+          hiddenCharts = [
+            ...hiddenCharts,
+            {
+              search: "",
+              difficulty: "master",
+              ratingType: "CURRENT",
+              score: 0,
+              clearMark: null,
+              fc: false,
+              aj: false,
+            },
+          ];
+        }}
+      >
+        Add
+      </button>
+    </section>
   </div>
 
   {#if userError}
@@ -164,6 +303,16 @@
     <section class="flex flex-col items-center">
       <p class="text-green-500">Data fetched successfully, ready for render!</p>
       <p>Rating: {renderData.rating.totalAvg}</p>
+
+      <button
+        class="bg-blue-300 p-2 rounded-lg hover:bg-blue-400 transition-colors"
+        onclick={() => {
+          renderData = undefined;
+          if (userData) getRatingData(userData);
+        }}
+      >
+        Reload
+      </button>
     </section>
   {/if}
 
@@ -179,3 +328,24 @@
     <Render input={renderData} />
   {/if}
 </main>
+
+<style lang="postcss">
+  @reference "tailwindcss";
+
+  .hiddenCharts {
+    @apply flex flex-row gap-2;
+
+    & > div {
+      @apply flex flex-col items-start gap-1;
+
+      & > input,
+      & > select {
+        @apply border border-black p-2 rounded-lg;
+      }
+
+      & > input[type="checkbox"] {
+        @apply w-6 h-6;
+      }
+    }
+  }
+</style>

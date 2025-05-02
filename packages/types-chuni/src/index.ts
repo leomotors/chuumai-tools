@@ -3,6 +3,7 @@ import { z } from "zod";
 import {
   clearMarkValues,
   rarityLevelValues,
+  ratingTypeValues,
   stdChartDifficultyValues,
 } from "@repo/db-chuni/schema";
 
@@ -14,6 +15,7 @@ export const chartSchema = z.object({
   clearMark: z.enum(clearMarkValues).nullish(),
   fc: z.boolean().default(false),
   aj: z.boolean().default(false),
+  isHidden: z.boolean().default(false),
 });
 
 export type BaseChartSchema = z.infer<typeof chartSchema>;
@@ -41,10 +43,23 @@ export const profileSchema = z.object({
   playCount: z.coerce.number(),
 });
 
+export const hiddenChartSchema = z.object({
+  search: z.coerce.string().nonempty(),
+  difficulty: z.enum(stdChartDifficultyValues),
+  ratingType: z.enum(ratingTypeValues),
+  score: z.coerce.number().int().min(0).max(1010000),
+  clearMark: z.enum(clearMarkValues).nullish(),
+  fc: z.boolean().default(false),
+  aj: z.boolean().default(false),
+});
+
+export type HiddenChart = z.infer<typeof hiddenChartSchema>;
+
 export const imgGenInputSchema = z.object({
   profile: profileSchema,
   best: z.array(chartSchema),
   current: z.array(chartSchema),
+  hidden: z.array(hiddenChartSchema).optional(),
 });
 
 export type ImgGenInput = z.infer<typeof imgGenInputSchema>;

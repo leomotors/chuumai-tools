@@ -1,4 +1,4 @@
-import { json } from "@sveltejs/kit";
+import { error, json } from "@sveltejs/kit";
 import { and, eq, inArray } from "drizzle-orm";
 
 import { env } from "$env/dynamic/public";
@@ -6,7 +6,11 @@ import { db } from "$lib/db";
 import { type ChartForRender, rawImageGenSchema } from "$lib/types";
 
 import { musicDataTable, musicLevelTable } from "@repo/db-chuni/schema";
-import { type BaseChartSchema, imgGenInputSchema } from "@repo/types-chuni";
+import {
+  type BaseChartSchema,
+  type HiddenChart,
+  imgGenInputSchema,
+} from "@repo/types-chuni";
 import { calculateRating, floorDecimalPlaces } from "@repo/utils-chuni";
 
 import type { RequestHandler } from "./$types";
@@ -52,6 +56,35 @@ function addForRenderInfo(
   };
 }
 
+function hiddenChartToData(
+  data: HiddenChart,
+  chartData: Pick<
+    typeof musicDataTable.$inferSelect,
+    "id" | "title" | "image"
+  >[],
+): BaseChartSchema {
+  const chart = chartData.find(
+    (c) =>
+      c.title.toLowerCase().replace(/\s/g, "") ===
+      data.search.toLowerCase().replace(/\s/g, ""),
+  );
+
+  if (!chart) {
+    error(400, `Chart not found: ${data.search}`);
+  }
+
+  return {
+    id: chart.id,
+    title: chart.title,
+    difficulty: data.difficulty,
+    score: data.score,
+    clearMark: data.clearMark,
+    fc: data.fc,
+    aj: data.aj,
+    isHidden: true,
+  };
+}
+
 export const POST: RequestHandler = async ({ request }) => {
   if (!env.PUBLIC_VERSION) {
     throw new Error("PUBLIC_VERSION is not set");
@@ -72,7 +105,7 @@ export const POST: RequestHandler = async ({ request }) => {
   }
   const input = inputParseResult.data;
 
-  const { profile, best, current } = input;
+  const { profile, best, current, hidden } = input;
 
   const allIds = [...best.map((c) => c.id), ...current.map((c) => c.id)];
 
@@ -86,20 +119,46 @@ export const POST: RequestHandler = async ({ request }) => {
       ),
     );
 
-  const musicImageData = await db
+  const musicData = await db
     .select({
       id: musicDataTable.id,
+      title: musicDataTable.title,
       image: musicDataTable.image,
     })
     .from(musicDataTable)
     .where(inArray(musicDataTable.id, allIds));
 
-  const bestWithRating = best.map((c) =>
-    addForRenderInfo(c, chartConstantData, musicImageData, version),
-  );
-  const currentWithRating = current.map((c) =>
-    addForRenderInfo(c, chartConstantData, musicImageData, version),
-  );
+  const bestWithRating = best
+    .map((c) => addForRenderInfo(c, chartConstantData, musicData, version))
+    .concat(
+      (hidden || [])
+        .filter((c) => c.ratingType === "BEST")
+        .map((c) =>
+          addForRenderInfo(
+            hiddenChartToData(c, musicData),
+            chartConstantData,
+            musicData,
+            version,
+          ),
+        ),
+    )
+    .slice(0, 30);
+
+  const currentWithRating = current
+    .map((c) => addForRenderInfo(c, chartConstantData, musicData, version))
+    .concat(
+      (hidden || [])
+        .filter((c) => c.ratingType === "CURRENT")
+        .map((c) =>
+          addForRenderInfo(
+            hiddenChartToData(c, musicData),
+            chartConstantData,
+            musicData,
+            version,
+          ),
+        ),
+    )
+    .slice(0, 20);
 
   const rating = {
     bestAvg: floorDecimalPlaces(

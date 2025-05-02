@@ -45,7 +45,8 @@
         profile.honorRarity.toLowerCase(),
       )}.png)"
     >
-      <p class="text-2xl font-bold text-center">{profile.honorText}</p>
+      <!-- z-10 is specially for Phosphoribosylaminoimidazolesuccinocarboxamide (メズマライザー ULTIMA SSS)-->
+      <p class="text-2xl font-bold text-center z-10">{profile.honorText}</p>
     </div>
 
     <div class="flex gap-2 items-center justify-between text-2xl px-4">
