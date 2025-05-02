@@ -19,7 +19,6 @@ docker run --rm \
  -e USERNAME=YOUR_SEGA_ID \
  -e PASSWORD=YOUR_SEGA_PASSWORD \
  -e VERSION=VRS \
- -e IMAGE_GEN_URL=https://chuni.wonderhoy.me \
  -e TZ=Asia/Bangkok \
  -e LANG=th_TH.UTF-8 \
  ghcr.io/leomotors/chunithm-scraper:v4
@@ -28,12 +27,20 @@ docker run --rm \
 You will have to change `USERNAME` and `PASSWORD` to your own,
 `TZ` and `LANG` so that the image show timezone and time format correctly.
 
-This basic command will scrape your data, saving to json. Then, launch a playwright browser to generate an image on https://chuni.wonderhoy.me (My hosted instance of `apps/chuni-web`).
-
-Both json and image will be available on `outputs` folder (If you mount it correctly).
+This basic command will scrape your data, saving to json in `outputs` folder (If you mount it correctly).  
+To generate image, go to https://chuni.wonderhoy.me (My hosted instance of `apps/chuni-web`) and upload this JSON file.  
+You can also add `-e IMAGE_GEN_URL=https://chuni.wonderhoy.me` to tell scraper to launch a playwright browser to generate on the website. The output image will be saved in `outputs` folder.
 
 > [!WARNING]
 > If you use Docker Desktop on Windows, when using `-v` option, make sure to start with `//` and use absolute path. For example: `-v //c/Users/username/outputs:/app/outputs`
+
+### Hidden Songs
+
+For example: Theatore Creatore ULTIMA (At the time of writing)
+
+These songs don't appear on Chunithm-Net, therefore scraper won't be able to get these data, you have to manually input your score.
+
+You can follow instructions on the website in case you choose to manually upload the JSON file. If you use scraper to generate the image, you have to mount `hidden.json` to `/app/hidden.json` using `-v ./hidden.json:/app/hidden.json:ro`, see [hidden.example.json](./apps/chunithm-scraper/hidden.example.json) for example.
 
 ### Advanced Usage
 
