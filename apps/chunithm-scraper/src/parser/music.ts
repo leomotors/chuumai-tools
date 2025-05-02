@@ -93,6 +93,7 @@ export function recordToGenInput(
     clearMark: record.clearMark,
     fc: record.fc,
     aj: record.aj,
+    isHidden: false,
   };
 }
 
@@ -108,5 +109,6 @@ export function recordToGenInputWithFullChain(
     fc: record.fc,
     aj: record.aj,
     fullChain: record.fullChain,
+    isHidden: false,
   };
 }
