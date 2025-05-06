@@ -1,7 +1,7 @@
 {
   "name": "chuni-web",
   "private": true,
-  "version": "1.4.0",
+  "version": "1.5.0",
   "type": "module",
   "scripts": {
     "dev": "vite dev",
@@ -16,7 +16,7 @@
   "devDependencies": {
     "@fontsource-variable/noto-sans-jp": "^5.2.5",
     "@leomotors/config": "^1.0.0-rc.1",
-    "@lucide/svelte": "^0.505.0",
+    "@lucide/svelte": "^0.507.0",
     "@repo/db-chuni": "workspace:*",
     "@repo/types-chuni": "workspace:*",
     "@repo/utils-chuni": "workspace:*",
@@ -33,13 +33,13 @@
     "prettier-plugin-svelte": "^3.3.3",
     "sass-embedded": "^1.87.0",
     "svelte": "^5.28.2",
-    "svelte-check": "^4.0.0",
+    "svelte-check": "^4.1.7",
     "svelte-eslint-parser": "^1.1.3",
     "tailwind-merge": "^3.2.0",
     "tailwindcss": "^4.1.5",
     "typescript": "^5.8.3",
-    "typescript-eslint": "^8.31.1",
-    "vite": "^6.3.4",
-    "zod": "^3.24.3"
+    "typescript-eslint": "^8.32.0",
+    "vite": "^6.3.5",
+    "zod": "^3.24.4"
   }
 }

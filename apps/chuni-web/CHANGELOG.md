@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.5.0] - 2025-05-06
+
+- fix: rounding error in rating display
+- feat: 3rd and 4th rating digits now have color
+
 ## [1.4.0] - 2025-05-02
 
 - feat: add support for hidden songs

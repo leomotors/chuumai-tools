@@ -1,9 +1,9 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, test } from "vitest";
 
 import { getRank } from "./rank.js";
 
 describe("Utils Chuni", () => {
-  it("Get Rank", () => {
+  test("Get Rank", () => {
     const testcases = [
       [0, 0],
       [499999, 0],

@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { extractDigits } from "@repo/utils-chuni";
+
   interface Props {
     rating: number;
     calculatedRating: number;
@@ -27,10 +29,8 @@
                       ? "orange"
                       : "green";
 
-  let tens = Math.floor(rating / 10);
-  let ones = Math.floor(rating % 10);
-  let tenth = Math.floor((rating % 1) * 10);
-  let hundredth = Math.floor(((rating + Number.EPSILON * 10) % 0.1) * 100);
+  let { tens, ones, tenths, hundredths, thousandths, tenthousandths } =
+    $derived(extractDigits(calculatedRating));
 
   let ratingMatched = $derived(
     rating <= calculatedRating && calculatedRating < rating + 0.01,
@@ -55,23 +55,26 @@
   class="self-end"
 />
 <img
-  src="/rating/{ratingLevel}/{tenth}.png"
+  src="/rating/{ratingLevel}/{tenths}.png"
   class="self-end"
   alt="Rating Tenth"
 />
 <img
-  src="/rating/{ratingLevel}/{hundredth}.png"
+  src="/rating/{ratingLevel}/{hundredths}.png"
   class="self-end"
   alt="Rating Hundredth"
 />
 {#if ratingMatched}
-  <span
-    class="font-helvetica font-bold translate-y-1.5 text-xl ml-0.5 tracking-widest"
-  >
-    {String(
-      Math.floor(((calculatedRating % 0.01) + Number.EPSILON * 10000) * 10000),
-    ).padStart(2, "0")}
-  </span>
+  <img
+    src="/rating/{ratingLevel}/{thousandths}.png"
+    class="self-end h-[19px]"
+    alt="Rating Thousandth"
+  />
+  <img
+    src="/rating/{ratingLevel}/{tenthousandths}.png"
+    class="self-end h-[19px]"
+    alt="Rating Tenthousandth"
+  />
 {:else}
   <span class="font-helvetica font-bold translate-y-1.5 text-xl ml-0.5">
     ({calculatedRating.toFixed(4)})
