@@ -23,17 +23,7 @@
   let userData = $state<ImgGenInput>();
   let userError = $state<string>();
 
-  let hiddenCharts = $state<HiddenChart[]>([
-    {
-      search: "Theatore Creatore",
-      difficulty: "ultima",
-      ratingType: "CURRENT",
-      score: 0,
-      clearMark: null,
-      fc: false,
-      aj: false,
-    },
-  ]);
+  let hiddenCharts = $state<HiddenChart[]>([]);
 
   async function parseFile(fileList: FileList) {
     const file = fileList[0];
@@ -163,7 +153,7 @@
       for the schema and how to get the JSON file.
     </p>
 
-    <section class="flex flex-col items-center gap-2">
+    <section class="flex flex-col items-center gap-2 w-full">
       <p class="font-bold">Hidden Songs</p>
 
       {#each hiddenCharts as chart, index (index)}

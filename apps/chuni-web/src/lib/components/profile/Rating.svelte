@@ -29,23 +29,33 @@
                       ? "orange"
                       : "green";
 
+  let {
+    tens: tensOri,
+    ones: onesOri,
+    tenths: tenthsOri,
+    hundredths: hundredthsOri,
+  } = $derived(extractDigits(rating));
+
   let { tens, ones, tenths, hundredths, thousandths, tenthousandths } =
     $derived(extractDigits(calculatedRating));
 
   let ratingMatched = $derived(
-    rating <= calculatedRating && calculatedRating < rating + 0.01,
+    tens === tensOri &&
+      ones === onesOri &&
+      tenths === tenthsOri &&
+      hundredths === hundredthsOri,
   );
 </script>
 
-{#if tens}
+{#if tensOri}
   <img
-    src="/rating/{ratingLevel}/{tens}.png"
+    src="/rating/{ratingLevel}/{tensOri}.png"
     class="self-end"
     alt="Rating Tens"
   />
 {/if}
 <img
-  src="/rating/{ratingLevel}/{ones}.png"
+  src="/rating/{ratingLevel}/{onesOri}.png"
   class="self-end"
   alt="Rating Ones"
 />
@@ -55,12 +65,12 @@
   class="self-end"
 />
 <img
-  src="/rating/{ratingLevel}/{tenths}.png"
+  src="/rating/{ratingLevel}/{tenthsOri}.png"
   class="self-end"
   alt="Rating Tenth"
 />
 <img
-  src="/rating/{ratingLevel}/{hundredths}.png"
+  src="/rating/{ratingLevel}/{hundredthsOri}.png"
   class="self-end"
   alt="Rating Hundredth"
 />

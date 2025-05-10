@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.5.1] - 2025-05-11
+
+- update default hidden songs list (need to make this dynamically configurable soon)
+- fix: show actual rating when calculation mismatch
+
 ## [1.5.0] - 2025-05-06
 
 - fix: rounding error in rating display
