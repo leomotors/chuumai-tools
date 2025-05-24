@@ -24,6 +24,7 @@ export const jobTable = pgTable("job", {
   jobEnd: timestamp("job_end"),
 
   jobError: text("job_error"),
+  jobLog: text("job_log"),
 
   isFromOldVersion: boolean("is_from_old_version").default(false).notNull(),
 });

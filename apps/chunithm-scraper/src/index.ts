@@ -19,23 +19,23 @@ try {
   logger.log(`Created job with ID: ${jobId}`);
 
   await main(jobId, browser);
-
-  await db
-    ?.update(jobTable)
-    .set({
-      jobEnd: new Date(),
-    })
-    .where(eq(jobTable.id, jobId!));
 } catch (err) {
   await db
     ?.update(jobTable)
     .set({
-      jobEnd: new Date(),
       jobError: `${err}`,
     })
     .where(eq(jobTable.id, jobId!));
-  console.error(err);
+  logger.error(`${err}`);
 } finally {
+  await db
+    ?.update(jobTable)
+    .set({
+      jobEnd: new Date(),
+      jobLog: logger.getMessages().join("\n"),
+    })
+    .where(eq(jobTable.id, jobId!));
+
   await browser.close();
   await db?.$client.end();
 }

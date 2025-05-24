@@ -15,6 +15,13 @@
       "when": 1748100247641,
       "tag": "0001_class-band-and-calculated-rating",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1748101050745,
+      "tag": "0002_job-log",
+      "breakpoints": true
     }
   ]
 }
