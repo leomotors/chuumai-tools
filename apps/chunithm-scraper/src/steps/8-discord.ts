@@ -1,5 +1,6 @@
 import fs from "node:fs/promises";
 
+import { logger } from "../logger.js";
 import { sendImage } from "../utils/discord.js";
 import type { scrapePlayerData } from "./2-playerdata.js";
 
@@ -8,7 +9,7 @@ export async function sendDiscordImage(
   playerData: Awaited<ReturnType<typeof scrapePlayerData>>["playerData"],
 ) {
   if (!imageLocation) {
-    console.warn(
+    logger.warn(
       "Image location is not provided. Skipping Discord image sending.",
     );
     return;
@@ -29,6 +30,6 @@ export async function sendDiscordImage(
     blob,
     imageLocation.split("/").pop() || "image.png",
   ).catch((err) => {
-    console.error(`Discord API Error: ${err}`);
+    logger.error(`Discord API Error: ${err}`);
   });
 }

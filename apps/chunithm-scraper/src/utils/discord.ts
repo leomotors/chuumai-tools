@@ -1,6 +1,7 @@
 import { Routes } from "discord-api-types/v10";
 
-import { Environment, environment } from "../environment";
+import { Environment, environment } from "../environment.js";
+import { logger } from "../logger.js";
 
 const endpoint = "https://discord.com/api/v10";
 
@@ -43,13 +44,13 @@ export async function sendImage(
   fileName = "image.jpg",
 ) {
   if (!webhookEnabled(environment) && !discordBotEnabled(environment)) {
-    console.warn(
+    logger.warn(
       "Neither Discord Webhook nor Discord Bot is enabled. Skipping Discord image sending.",
     );
     return;
   }
 
-  console.log(
+  logger.log(
     `Sending message and image with size of ${(blob.size / 1024).toFixed(3)} kB to Discord using ${webhookEnabled(environment) ? "Webhook" : "Discord Bot"}`,
   );
 
@@ -64,7 +65,7 @@ export async function sendImage(
   });
 
   if (!res.ok) {
-    console.error(`Discord API Failed ${res.status} ${res.statusText}`);
-    console.error(await res.text().catch());
+    logger.error(`Discord API Failed ${res.status} ${res.statusText}`);
+    logger.error(await res.text().catch());
   }
 }

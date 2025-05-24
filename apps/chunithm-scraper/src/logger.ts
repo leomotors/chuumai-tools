@@ -28,6 +28,11 @@ export class Logger {
     console.error(message);
   }
 
+  public info(message: string) {
+    this.messages.push(message);
+    console.info(message);
+  }
+
   public getMessages() {
     return this.messages;
   }

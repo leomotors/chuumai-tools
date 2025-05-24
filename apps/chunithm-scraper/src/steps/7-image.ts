@@ -1,10 +1,11 @@
 import { Page } from "playwright";
 
-import { environment } from "../environment";
+import { environment } from "../environment.js";
+import { logger } from "../logger.js";
 
 export async function generateImage(page: Page, inputFileName: string) {
   if (!environment.IMAGE_GEN_URL) {
-    console.warn("IMAGE_GEN_URL is not set. Skipping image generation.");
+    logger.warn("IMAGE_GEN_URL is not set. Skipping image generation.");
     return;
   }
 

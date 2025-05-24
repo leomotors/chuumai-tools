@@ -8,6 +8,7 @@ import type { RawImageGen } from "../../chuni-web/src/lib/types.js";
 import { db } from "./db.js";
 import { environment } from "./environment.js";
 import { readHiddenCharts } from "./hidden.js";
+import { logger } from "./logger.js";
 import { recordToGenInput } from "./parser/music.js";
 import { PwPage } from "./playwright.js";
 import { login } from "./steps/1-login.js";
@@ -91,7 +92,7 @@ export async function main(jobId: number | undefined, browser: Browser) {
     "Step 5: Calculate Rating",
     async () => {
       if (!environment.IMAGE_GEN_URL) {
-        console.warn("IMAGE_GEN_URL is not set. Skipping rating calculation.");
+        logger.warn("IMAGE_GEN_URL is not set. Skipping rating calculation.");
         return;
       }
 
@@ -127,10 +128,10 @@ export async function main(jobId: number | undefined, browser: Browser) {
         });
       })
       .catch((err) => {
-        console.error(`Step 6 Error: ${err}`);
+        logger.error(`Step 6 Error: ${err}`);
       });
   } else {
-    console.warn("Database Mode disabled, skipped saving to DB");
+    logger.warn("Database Mode disabled, skipped saving to DB");
   }
 
   // * Step 7: Generate Image

@@ -4,6 +4,8 @@ import { z } from "zod";
 
 import { hiddenChartSchema } from "@repo/types-chuni";
 
+import { logger } from "./logger.js";
+
 export async function readHiddenCharts() {
   try {
     const content = await fs.readFile("./hidden.json", "utf-8");
@@ -12,19 +14,19 @@ export async function readHiddenCharts() {
     const parsed = z.array(hiddenChartSchema).safeParse(json);
 
     if (!parsed.success) {
-      console.error("hidden.json is given but invalid format");
+      logger.error("hidden.json is given but invalid format");
       throw new Error(parsed.error.message);
     }
 
-    console.info("hidden.json is given and valid format");
+    logger.info("hidden.json is given and valid format");
     return parsed.data;
   } catch (err) {
     if ((err as NodeJS.ErrnoException)?.code !== "ENOENT") {
-      console.error(`Error while reading hidden.json: ${err}`);
+      logger.error(`Error while reading hidden.json: ${err}`);
       throw err;
     }
 
-    console.info(
+    logger.info(
       "hidden.json is not found, Hidden Charts feature is not active",
     );
   }

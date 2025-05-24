@@ -1,6 +1,7 @@
 import { JSDOM } from "jsdom";
 import { Page } from "playwright";
 
+import { logger } from "../logger.js";
 import { parseMusic, parseRecord } from "../parser/music.js";
 
 function fillMarkInfo(
@@ -49,7 +50,7 @@ export async function scrapeMusicRecord(page: Page) {
   )) {
     bestMusic.push(parseMusic(element));
   }
-  console.log("Step 3.1.1: Best Songs done");
+  logger.log("Step 3.1.1: Best Songs done");
 
   await page.getByRole("link", { name: "Current" }).click();
   // Current (New) Songs
@@ -70,7 +71,7 @@ export async function scrapeMusicRecord(page: Page) {
   )) {
     currentMusic.push(parseMusic(element));
   }
-  console.log("Step 3.1.2: Current Songs done");
+  logger.log("Step 3.1.2: Current Songs done");
 
   await page.getByRole("link", { name: "Selection" }).click();
   // Selection
@@ -106,7 +107,7 @@ export async function scrapeMusicRecord(page: Page) {
   )) {
     selectionCurrentMusic.push(parseMusic(element));
   }
-  console.log("Step 3.1.3: Selection Songs done");
+  logger.log("Step 3.1.3: Selection Songs done");
 
   // Part 3.2: All Records
   const allRecords = [] as Array<ReturnType<typeof parseRecord>>;
@@ -149,7 +150,7 @@ export async function scrapeMusicRecord(page: Page) {
       }
     }
 
-    console.log(`Step 3.2: ${btnClass} done`);
+    logger.log(`Step 3.2: ${btnClass} done`);
   }
 
   return {

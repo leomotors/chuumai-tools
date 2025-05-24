@@ -9,6 +9,7 @@ import type { BaseChartSchema, ImgGenInput } from "@repo/types-chuni";
 
 import type { Db } from "../db.js";
 import { environment } from "../environment.js";
+import { logger } from "../logger.js";
 import { recordToGenInputWithFullChain } from "../parser/music.js";
 import type { scrapePlayerData } from "./2-playerdata.js";
 import type { scrapeMusicRecord } from "./3-music.js";
@@ -30,7 +31,7 @@ async function insertRating(
   ratingType: RatingType,
 ) {
   if (records.length === 0) {
-    console.log(`Note: No data for ${ratingType}`);
+    logger.log(`Note: No data for ${ratingType}`);
     return;
   }
 
