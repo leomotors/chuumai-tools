@@ -19,6 +19,7 @@ type Params = {
   playerDataHtml: string;
   allMusicRecordHtml: string;
   imgGenInput: ImgGenInput;
+  calculatedRating: number | undefined;
 };
 
 async function insertRating(
@@ -73,6 +74,7 @@ export async function saveToDatabase(
     playerDataHtml,
     allMusicRecordHtml,
     imgGenInput,
+    calculatedRating,
   }: Params,
 ) {
   const playerDataValue = {
@@ -89,8 +91,10 @@ export async function saveToDatabase(
     subHonor2Rarity: playerData.subHonor2Rarity,
     playerLevel: playerData.playerLevel,
     playerName: playerData.playerName,
+    classBand: playerData.classBand,
     classEmblem: playerData.classEmblem,
     rating: playerData.rating.toString(),
+    calculatedRating: calculatedRating?.toString(),
     overpowerValue: playerData.overpowerValue.toFixed(2),
     overpowerPercent: playerData.overpowerPercent.toFixed(2),
     lastPlayed: playerData.lastPlayed,

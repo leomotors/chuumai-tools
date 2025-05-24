@@ -69,6 +69,7 @@ const rightDataSchema = z.object({
 
   playerLevel: z.number().int(),
   playerName: z.string(),
+  classBand: z.number().int().min(0).max(6),
   classEmblem: z.number().int().min(0).max(6),
 
   rating: z.number(),
@@ -128,13 +129,23 @@ export function parseRightData(dom: JSDOM) {
   const totalPlayerLevel = +playerReborn * 100 + +playerLevel;
 
   const playerName = rightData.querySelector(".player_name_in")?.textContent;
-  const classEmblem = +(
+  const classBand = +(
     (
-      rightData.querySelector(".player_classemblem_top > img") as
-        | HTMLImageElement
-        | undefined
+      rightData.querySelector(
+        ".player_classemblem_base > img",
+      ) as HTMLImageElement | null
     )?.src
-      .split("_")
+      ?.split("_")
+      .at(-1)
+      ?.split(".")[0] ?? "0"
+  );
+  const classMedal = +(
+    (
+      rightData.querySelector(
+        ".player_classemblem_top > img",
+      ) as HTMLImageElement | null
+    )?.src
+      ?.split("_")
       .at(-1)
       ?.split(".")[0] ?? "0"
   );
@@ -178,7 +189,8 @@ export function parseRightData(dom: JSDOM) {
 
     playerLevel: totalPlayerLevel,
     playerName,
-    classEmblem,
+    classBand,
+    classEmblem: classMedal,
 
     rating: playerRating,
 

@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 
 import { sendImage } from "../utils/discord.js";
-import type { scrapePlayerData } from "./2-playerdata";
+import type { scrapePlayerData } from "./2-playerdata.js";
 
 export async function sendDiscordImage(
   imageLocation: string | undefined,

@@ -4,16 +4,18 @@ import { Browser } from "playwright";
 
 import { ImgGenInput } from "@repo/types-chuni";
 
+import type { RawImageGen } from "../../chuni-web/src/lib/types.js";
 import { db } from "./db.js";
+import { environment } from "./environment.js";
 import { readHiddenCharts } from "./hidden.js";
 import { recordToGenInput } from "./parser/music.js";
 import { PwPage } from "./playwright.js";
 import { login } from "./steps/1-login.js";
 import { scrapePlayerData } from "./steps/2-playerdata.js";
 import { scrapeMusicRecord } from "./steps/3-music.js";
-import { saveToDatabase } from "./steps/5-savedb.js";
-import { generateImage } from "./steps/6-image.js";
-import { sendDiscordImage } from "./steps/7-discord.js";
+import { saveToDatabase } from "./steps/6-savedb.js";
+import { generateImage } from "./steps/7-image.js";
+import { sendDiscordImage } from "./steps/8-discord.js";
 import { downloadImageAsBase64 } from "./utils/image.js";
 
 export async function main(jobId: number | undefined, browser: Browser) {
@@ -54,54 +56,91 @@ export async function main(jobId: number | undefined, browser: Browser) {
   );
 
   // * Step 4: Create JSON for Image Generation
-  const charaImageData = await downloadImageAsBase64(playerData.characterImage);
+  const { imgGenInput, fileName } = await pwPage.runStep(
+    "Step 4: Create JSON for Image Generation",
+    async () => {
+      const charaImageData = await downloadImageAsBase64(
+        playerData.characterImage,
+      );
 
-  const imgGenInput = {
-    profile: {
-      ...playerData,
-      characterImage: charaImageData,
-      honorText: playerData.mainHonorText,
-      honorRarity: playerData.mainHonorRarity,
+      const imgGenInput = {
+        profile: {
+          ...playerData,
+          characterImage: charaImageData,
+          honorText: playerData.mainHonorText,
+          honorRarity: playerData.mainHonorRarity,
+        },
+        best: recordData.bestSongs.map(recordToGenInput),
+        current: recordData.currentSongs.map(recordToGenInput),
+        hidden: hiddenCharts || undefined,
+      } satisfies ImgGenInput;
+
+      const fileName = `${playerData.lastPlayed.toISOString()}-${jobId}.json`;
+
+      await fs.writeFile(
+        `outputs/${fileName}`,
+        JSON.stringify(imgGenInput, null, 2),
+      );
+
+      return { imgGenInput, fileName };
     },
-    best: recordData.bestSongs.map(recordToGenInput),
-    current: recordData.currentSongs.map(recordToGenInput),
-    hidden: hiddenCharts || undefined,
-  } satisfies ImgGenInput;
-
-  const fileName = `${playerData.lastPlayed.toISOString()}-${jobId}.json`;
-
-  await fs.writeFile(
-    `outputs/${fileName}`,
-    JSON.stringify(imgGenInput, null, 2),
   );
 
-  // * Step 5: Save data to DB
+  // * Step 5: Calculate Rating
+  const rawImgGen = await pwPage.runStep(
+    "Step 5: Calculate Rating",
+    async () => {
+      if (!environment.IMAGE_GEN_URL) {
+        console.warn("IMAGE_GEN_URL is not set. Skipping rating calculation.");
+        return;
+      }
+
+      const res = await fetch(environment.IMAGE_GEN_URL + "/api/calcRating", {
+        method: "POST",
+        body: JSON.stringify({
+          data: imgGenInput,
+          version: environment.VERSION,
+        }),
+      });
+
+      if (!res.ok) {
+        throw new Error(
+          `Failed to call calculate rating API: ${res.status} ${res.statusText} ${await res.text()}`,
+        );
+      }
+
+      return (await res.json()) as RawImageGen;
+    },
+  );
+
+  // * Step 6: Save data to DB
   if (db) {
     await pwPage
-      .runStep("Step 5: Save to DB", async () => {
+      .runStep("Step 6: Save to DB", async () => {
         await saveToDatabase(jobId!, db!, {
           playerData,
           recordData,
           playerDataHtml,
           allMusicRecordHtml: recordHtml,
           imgGenInput,
+          calculatedRating: rawImgGen?.rating.totalAvg,
         });
       })
       .catch((err) => {
-        console.error(`Step 5 Error: ${err}`);
+        console.error(`Step 6 Error: ${err}`);
       });
   } else {
     console.warn("Database Mode disabled, skipped saving to DB");
   }
 
-  // * Step 6: Generate Image
+  // * Step 7: Generate Image
   const outputLocation = await pwPage.runStep(
-    "Step 6: Generate Image",
+    "Step 7: Generate Image",
     (page) => generateImage(page, fileName),
   );
 
-  // * Step 7: Send Image to Discord
-  await pwPage.runStep("Step 7: Send Image to Discord", () =>
+  // * Step 8: Send Image to Discord
+  await pwPage.runStep("Step 8: Send Image to Discord", () =>
     sendDiscordImage(outputLocation, playerData),
   );
 }

@@ -53,10 +53,14 @@ export const playerDataTable = pgTable("player_data", {
 
   playerLevel: integer("player_level").notNull(),
   playerName: text("player_name").notNull(),
+  classBand: integer("class_band"),
   classEmblem: integer("class_emblem"),
 
   rating: decimal({ precision: 4, scale: 2 }).notNull(),
-  maxRating: decimal("max_rating", { precision: 4, scale: 2 }), // todo check verse
+  calculatedRating: decimal("calculated_rating", {
+    precision: 6,
+    scale: 4,
+  }),
 
   overpowerValue: decimal("overpower_value", { scale: 2 }).notNull(),
   overpowerPercent: decimal("overpower_percent", { scale: 2 }).notNull(),

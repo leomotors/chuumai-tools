@@ -8,6 +8,13 @@
       "when": 1744972390064,
       "tag": "0000_verse-final-v2",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1748100247641,
+      "tag": "0001_class-band-and-calculated-rating",
+      "breakpoints": true
     }
   ]
 }
