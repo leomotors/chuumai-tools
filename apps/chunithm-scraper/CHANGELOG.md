@@ -2,6 +2,12 @@
 
 For changelog before V4: [here](https://github.com/leomotors/chunithm-net-scraper/blob/main/CHANGELOG.md)
 
+## [4.3.0] - 2025-05-24
+
+- feat: support for class emblem: band
+- feat: calculate rating and save to database
+- feat: save log to database
+
 ## [4.2.0] - 2025-05-02
 
 - feat: support hidden songs

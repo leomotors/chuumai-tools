@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.6.0] - 2025-05-24
+
+- feat: support for class emblem: band
+
 ## [1.5.1] - 2025-05-11
 
 - update default hidden songs list (need to make this dynamically configurable soon)
