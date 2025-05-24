@@ -3,7 +3,6 @@
   import type { Snippet } from "svelte";
 
   import { env } from "$env/dynamic/public";
-  import { webVersion } from "$lib/version.js";
 
   interface Props {
     children: Snippet;
@@ -40,7 +39,7 @@
         <p>@LeomotorsTH</p>
       </div>
 
-      <p>Web Version: {webVersion} @ {env.PUBLIC_VERSION || "???"}</p>
+      <p>Web Version: {WEB_VERSION} @ {env.PUBLIC_VERSION || "???"}</p>
     </div>
 
     <img src="/verse_logo.webp" alt="Verse Logo" class="h-[217px]" />

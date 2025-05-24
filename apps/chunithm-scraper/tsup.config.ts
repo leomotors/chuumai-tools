@@ -8,4 +8,7 @@ export default defineConfig({
   clean: true, // Clean output folder before build
   platform: "node",
   target: "esnext", // Target latest Node.js version
+  define: {
+    APP_VERSION: JSON.stringify(process.env.npm_package_version || "unknown"),
+  },
 });

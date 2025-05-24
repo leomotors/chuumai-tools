@@ -4,7 +4,6 @@
   import { env } from "$env/dynamic/public";
   import ExtLink from "$lib/components/molecule/ExtLink.svelte";
   import { type RawImageGen } from "$lib/types";
-  import { webVersion } from "$lib/version.js";
 
   import {
     clearMarkValues,
@@ -122,7 +121,7 @@
       By <ExtLink href="https://github.com/leomotors">Leomotors</ExtLink>
     </p>
     <p>
-      Web Version: {webVersion} (<ExtLink
+      Web Version: {WEB_VERSION} (<ExtLink
         href="https://github.com/leomotors/chuumai-tools/blob/main/apps/chuni-web/CHANGELOG.md"
       >
         Changelog

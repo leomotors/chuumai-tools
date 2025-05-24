@@ -4,7 +4,8 @@ import { Browser } from "playwright";
 
 import { ImgGenInput } from "@repo/types-chuni";
 
-import type { RawImageGen } from "../../chuni-web/src/lib/types.js";
+import type { RawImageGen } from "@/app/chuni-web/src/lib/types.js";
+
 import { db } from "./db.js";
 import { environment } from "./environment.js";
 import { readHiddenCharts } from "./hidden.js";
@@ -142,6 +143,6 @@ export async function main(jobId: number | undefined, browser: Browser) {
 
   // * Step 8: Send Image to Discord
   await pwPage.runStep("Step 8: Send Image to Discord", () =>
-    sendDiscordImage(outputLocation, playerData),
+    sendDiscordImage(outputLocation, playerData, rawImgGen),
   );
 }

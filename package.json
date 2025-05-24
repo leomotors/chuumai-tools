@@ -6,8 +6,8 @@
     "build": "turbo run build --continue=dependencies-successful",
     "dev": "turbo run dev",
     "check": "turbo run check --continue",
-    "lint": "turbo run lint --continue",
-    "format": "turbo run format --continue",
+    "lint": "turbo run lint --continue && eslint *.js",
+    "format": "turbo run format --continue && eslint *.js --fix",
     "test": "turbo run test --continue"
   },
   "devDependencies": {

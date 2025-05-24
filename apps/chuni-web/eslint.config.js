@@ -26,4 +26,10 @@ export default tseslint.config(
       },
     },
   },
+  {
+    files: ["**/*.ts", "**/*.svelte", "**/*.mts"],
+    rules: {
+      "no-undef": "off",
+    },
+  },
 );

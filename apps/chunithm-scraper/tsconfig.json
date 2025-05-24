@@ -6,6 +6,9 @@
     "noEmit": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "paths": {
+      "@/app/*": ["../../apps/*"]
+    }
   }
 }

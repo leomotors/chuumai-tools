@@ -16,6 +16,7 @@ const browser = await chromium.launch({
 const jobId = (await db?.insert(jobTable).values({}).returning())?.[0].id;
 
 try {
+  logger.log(`Starting scraper version: ${APP_VERSION}`);
   logger.log(`Created job with ID: ${jobId}`);
 
   await main(jobId, browser);
