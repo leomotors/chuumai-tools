@@ -99,6 +99,9 @@ export async function main(jobId: number | undefined, browser: Browser) {
 
       const res = await fetch(environment.IMAGE_GEN_URL + "/api/calcRating", {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
           data: imgGenInput,
           version: environment.VERSION,
@@ -106,9 +109,10 @@ export async function main(jobId: number | undefined, browser: Browser) {
       });
 
       if (!res.ok) {
-        throw new Error(
+        logger.error(
           `Failed to call calculate rating API: ${res.status} ${res.statusText} ${await res.text()}`,
         );
+        return undefined;
       }
 
       return (await res.json()) as RawImageGen;

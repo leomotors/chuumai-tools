@@ -34,7 +34,7 @@ export async function scrapeMusicRecord(page: Page) {
   await page.waitForURL(
     "https://chunithm-net-eng.com/mobile/home/playerData/ratingDetailBest/",
   );
-  await page.waitForTimeout(2000);
+  await page.waitForLoadState("networkidle");
 
   let totalHTML = "<!-- BEST -->\n";
 
@@ -57,7 +57,7 @@ export async function scrapeMusicRecord(page: Page) {
   await page.waitForURL(
     "https://chunithm-net-eng.com/mobile/home/playerData/ratingDetailRecent/",
   );
-  await page.waitForTimeout(2000);
+  await page.waitForLoadState("networkidle");
 
   // warning: error if no current songs
   const current = page.locator(".box05.w400");
@@ -78,7 +78,7 @@ export async function scrapeMusicRecord(page: Page) {
   await page.waitForURL(
     "https://chunithm-net-eng.com/mobile/home/playerData/ratingDetailNext/",
   );
-  await page.waitForTimeout(2000);
+  await page.waitForLoadState("networkidle");
 
   const selection = await page.locator(".w420.box01").all();
 
@@ -113,13 +113,13 @@ export async function scrapeMusicRecord(page: Page) {
   const allRecords = [] as Array<ReturnType<typeof parseRecord>>;
   await page.locator(".btn_record").click();
   await page.waitForURL("https://chunithm-net-eng.com/mobile/record/");
-  await page.waitForTimeout(1000);
+  await page.waitForLoadState("networkidle");
 
   await page.getByRole("link", { name: "RECORD BY MUSIC" }).click();
   await page.waitForURL(
     "https://chunithm-net-eng.com/mobile/record/musicGenre",
   );
-  await page.waitForTimeout(1000);
+  await page.waitForLoadState("networkidle");
 
   const btnClasses = [
     "btn_basic",
@@ -130,7 +130,7 @@ export async function scrapeMusicRecord(page: Page) {
   ];
   for (const btnClass of btnClasses) {
     await page.locator(`.${btnClass}`).click();
-    await page.waitForTimeout(5000);
+    await page.waitForLoadState("networkidle");
     const allCategories = await page.locator(".box05.w400").all();
 
     if (allCategories.length !== 7) {
