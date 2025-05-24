@@ -53,10 +53,20 @@
       <p>Lv.{profile.playerLevel}</p>
       <p class="font-bold">{profile.playerName}</p>
       {#if profile.classEmblem}
-        <img
-          src="/classemblem/medal_0{profile.classEmblem}.png"
-          alt="Class Emblem"
-        />
+        <div class="relative w-[94px] h-[46px]">
+          {#if profile.classBand}
+            <img
+              src="/classemblem/band_0{profile.classBand}.png"
+              alt="Class Band"
+              class="absolute top-0 left-0 w-full h-full"
+            />
+          {/if}
+          <img
+            src="/classemblem/medal_0{profile.classEmblem}.png"
+            alt="Class Emblem"
+            class="absolute top-0 left-0 w-full h-full"
+          />
+        </div>
       {:else}
         <div class="w-[94px] h-[46px]"></div>
       {/if}

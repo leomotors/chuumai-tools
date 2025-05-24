@@ -33,6 +33,8 @@ export const profileSchema = z.object({
 
   playerLevel: z.coerce.number(),
   playerName: z.string().nonempty(),
+  classBand: z.coerce.number().int().min(0).max(6).optional(),
+  // Actually classMedal (can't rename, it will be breaking change)
   classEmblem: z.coerce.number().int().min(0).max(6).optional(),
 
   rating: z.coerce.number(),

@@ -54,6 +54,7 @@
       honorRarity: "PLATINUM",
       playerLevel: 169,
       playerName: "MAFUYU",
+      classBand: 1,
       classEmblem: 6,
       rating: 16.39,
       overpowerValue: 69420.44,
