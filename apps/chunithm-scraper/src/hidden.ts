@@ -2,7 +2,7 @@ import fs from "node:fs/promises";
 
 import { z } from "zod";
 
-import { hiddenChartSchema } from "@repo/types-chuni";
+import { hiddenChartSchema } from "@repo/types/chuni";
 
 import { logger } from "./logger.js";
 

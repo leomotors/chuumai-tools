@@ -1,7 +1,13 @@
 {
-  "name": "@repo/types-chuni",
+  "name": "@repo/types",
   "private": true,
   "type": "module",
+  "exports": {
+    "./chuni": {
+      "types": "./src/chuni/index.ts",
+      "default": "./src/chuni/index.ts"
+    }
+  },
   "scripts": {
     "check": "tsc",
     "lint": "eslint src",

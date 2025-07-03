@@ -1,5 +1,5 @@
 import { ClearMark, stdChartDifficultyValues } from "@repo/db-chuni/schema";
-import { BaseChartSchema } from "@repo/types-chuni";
+import { BaseChartSchema } from "@repo/types/chuni";
 
 export function parseMusic(element: Element) {
   const musicTitle = element.querySelector(".music_title")!.textContent!;

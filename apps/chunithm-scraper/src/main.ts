@@ -2,7 +2,7 @@ import fs from "node:fs/promises";
 
 import { Browser } from "playwright";
 
-import { ImgGenInput } from "@repo/types-chuni";
+import { ImgGenInput } from "@repo/types/chuni";
 
 import type { RawImageGen } from "@/app/chuni-web/src/lib/types.js";
 

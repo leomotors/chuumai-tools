@@ -18,7 +18,7 @@
   },
   "devDependencies": {
     "@repo/db-chuni": "workspace:*",
-    "@repo/types-chuni": "workspace:*",
+    "@repo/types": "workspace:*",
     "@types/jsdom": "^21.1.7",
     "@vitest/coverage-v8": "^3.2.4",
     "discord-api-types": "^0.38.15",

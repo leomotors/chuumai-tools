@@ -127,9 +127,9 @@ importers:
       '@repo/db-chuni':
         specifier: workspace:*
         version: link:../../packages/db-chuni
-      '@repo/types-chuni':
+      '@repo/types':
         specifier: workspace:*
-        version: link:../../packages/types-chuni
+        version: link:../../packages/types
       '@repo/utils':
         specifier: workspace:*
         version: link:../../packages/utils
@@ -209,9 +209,9 @@ importers:
       '@repo/db-chuni':
         specifier: workspace:*
         version: link:../../packages/db-chuni
-      '@repo/types-chuni':
+      '@repo/types':
         specifier: workspace:*
-        version: link:../../packages/types-chuni
+        version: link:../../packages/types
       '@types/jsdom':
         specifier: ^21.1.7
         version: 21.1.7
@@ -268,7 +268,7 @@ importers:
         specifier: ^0.31.4
         version: 0.31.4
 
-  packages/types-chuni:
+  packages/types:
     dependencies:
       '@repo/db-chuni':
         specifier: workspace:*

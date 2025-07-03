@@ -2,7 +2,7 @@ import { JSDOM } from "jsdom";
 import { z } from "zod";
 
 import { RarityLevel, rarityLevelValues } from "@repo/db-chuni/schema";
-import { ImgGenInput } from "@repo/types-chuni";
+import { ImgGenInput } from "@repo/types/chuni";
 
 import { rarityFromUrl } from "./imageUrl";
 import { parseCurrentRating } from "./playerRating";

@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 import type { musicDataTable, musicLevelTable } from "@repo/db-chuni/schema";
-import { chartSchema, profileSchema } from "@repo/types-chuni";
+import { chartSchema, profileSchema } from "@repo/types/chuni";
 
 export const chartForRenderSchema = chartSchema.extend({
   constant: z.number(),

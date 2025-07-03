@@ -14,7 +14,7 @@
     type HiddenChart,
     type ImgGenInput,
     imgGenInputSchema,
-  } from "@repo/types-chuni";
+  } from "@repo/types/chuni";
 
   import Render from "./Render.svelte";
 

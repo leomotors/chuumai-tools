@@ -13,7 +13,7 @@ import {
   type BaseChartSchema,
   type HiddenChart,
   imgGenInputSchema,
-} from "@repo/types-chuni";
+} from "@repo/types/chuni";
 import {
   calculateRating,
   constantFromLevel,
