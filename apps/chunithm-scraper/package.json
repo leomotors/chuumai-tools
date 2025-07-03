@@ -14,21 +14,21 @@
   "license": "MIT",
   "dependencies": {
     "jsdom": "^26.1.0",
-    "playwright": "^1.52.0"
+    "playwright": "^1.53.2"
   },
   "devDependencies": {
     "@repo/db-chuni": "workspace:*",
     "@repo/types-chuni": "workspace:*",
     "@types/jsdom": "^21.1.7",
-    "@vitest/coverage-v8": "^3.1.4",
-    "discord-api-types": "^0.38.8",
+    "@vitest/coverage-v8": "^3.2.4",
+    "discord-api-types": "^0.38.15",
     "dotenv-cli": "^8.0.0",
-    "drizzle-orm": "^0.43.1",
+    "drizzle-orm": "^0.44.2",
     "papaparse": "^5.5.3",
     "postgres": "^3.4.7",
     "tsup": "^8.5.0",
     "typescript": "^5.8.3",
-    "vitest": "^3.1.4",
-    "zod": "^3.25.28"
+    "vitest": "^3.2.4",
+    "zod": "^3.25.71"
   }
 }

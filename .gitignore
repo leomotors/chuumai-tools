@@ -36,5 +36,7 @@ yarn-error.log*
 .DS_Store
 *.pem
 
+.idea
+
 # Temp
 packages/db-chuni-old

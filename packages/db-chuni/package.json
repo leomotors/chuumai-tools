@@ -16,12 +16,12 @@
   },
   "dependencies": {
     "@repo/utils-chuni": "workspace:*",
-    "drizzle-orm": "^0.43.1",
+    "drizzle-orm": "^0.44.2",
     "postgres": "^3.4.7",
-    "zod": "^3.25.28"
+    "zod": "^3.25.71"
   },
   "devDependencies": {
     "dotenv-cli": "^8.0.0",
-    "drizzle-kit": "^0.31.1"
+    "drizzle-kit": "^0.31.4"
   }
 }
