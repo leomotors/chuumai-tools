@@ -137,7 +137,7 @@
         {#if enabledVersions.length === 0}
           <option value="" disabled>Error: No versions available</option>
         {/if}
-        {#each enabledVersions as version}
+        {#each enabledVersions as version (version)}
           <option value={version}>{version}</option>
         {/each}
       </select>
