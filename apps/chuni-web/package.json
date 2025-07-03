@@ -1,7 +1,7 @@
 {
   "name": "chuni-web",
   "private": true,
-  "version": "1.6.0",
+  "version": "2.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite dev",
@@ -19,7 +19,7 @@
     "@lucide/svelte": "^0.525.0",
     "@repo/db-chuni": "workspace:*",
     "@repo/types-chuni": "workspace:*",
-    "@repo/utils-chuni": "workspace:*",
+    "@repo/utils": "workspace:*",
     "@sveltejs/adapter-node": "^5.2.12",
     "@sveltejs/kit": "^2.22.2",
     "@sveltejs/vite-plugin-svelte": "^5.1.0",

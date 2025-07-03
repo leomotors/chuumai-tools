@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.0.0] - 2025-07-03
+
+- breaking changes: env schema changed
+- feat: add support for new version
+- fix: hidden songs data not found
+- feat: now show `+` on level
+- feat: misc improvements and changes
+- feat: add caching on data when calculate rating
+
 ## [1.6.0] - 2025-05-24
 
 - feat: support for class emblem: band

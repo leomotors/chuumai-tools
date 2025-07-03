@@ -1,5 +1,6 @@
 import { z } from "zod";
 
+import type { musicDataTable, musicLevelTable } from "@repo/db-chuni/schema";
 import { chartSchema, profileSchema } from "@repo/types-chuni";
 
 export const chartForRenderSchema = chartSchema.extend({
@@ -23,3 +24,9 @@ export const rawImageGenSchema = z.object({
 });
 
 export type RawImageGen = z.infer<typeof rawImageGenSchema>;
+
+export type ChartConstantData = (typeof musicLevelTable.$inferSelect)[];
+export type MusicData = Pick<
+  typeof musicDataTable.$inferSelect,
+  "id" | "title" | "image"
+>[];

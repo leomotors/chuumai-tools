@@ -25,7 +25,7 @@ export const GET: RequestHandler = async ({ url }) => {
   return new Response(res.body, {
     headers: {
       "Content-Type": contentType,
-      "Cache-Control": "public, max-age=31536000",
+      "Cache-Control": "public, max-age=604800",
     },
   });
 };

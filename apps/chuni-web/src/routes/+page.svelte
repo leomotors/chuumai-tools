@@ -24,6 +24,9 @@
 
   let hiddenCharts = $state<HiddenChart[]>([]);
 
+  const enabledVersions = env.PUBLIC_ENABLED_VERSION?.split(",") || [];
+  let selectedVersion = $state<string>(enabledVersions[0]);
+
   async function parseFile(fileList: FileList) {
     const file = fileList[0];
 
@@ -65,7 +68,7 @@
             ...hiddenCharts.filter((chart) => chart.score > 0),
           ],
         },
-        version: "VRS",
+        version: selectedVersion,
       }),
     });
 
@@ -127,7 +130,18 @@
         Changelog
       </ExtLink>)
     </p>
-    <p>Chart Constant Version: {env.PUBLIC_VERSION || "???"}</p>
+
+    <div>
+      <label for="version">Chart Constant Version:</label>
+      <select id="version" bind:value={selectedVersion}>
+        {#if enabledVersions.length === 0}
+          <option value="" disabled>Error: No versions available</option>
+        {/if}
+        {#each enabledVersions as version}
+          <option value={version}>{version}</option>
+        {/each}
+      </select>
+    </div>
   </article>
 
   <div
@@ -314,7 +328,7 @@
   </button>
 
   {#if renderData}
-    <Render input={renderData} />
+    <Render input={renderData} version={selectedVersion} />
   {/if}
 </main>
 

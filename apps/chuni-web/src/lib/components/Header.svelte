@@ -1,15 +1,16 @@
 <script lang="ts">
-  import { Github, Twitter } from "@lucide/svelte";
+  import { Github, Globe, Twitter, Workflow } from "@lucide/svelte";
   import type { Snippet } from "svelte";
-
-  import { env } from "$env/dynamic/public";
 
   interface Props {
     children: Snippet;
     lastPlayed: Date;
+    version: string;
   }
 
-  let { children, lastPlayed }: Props = $props();
+  let { children, lastPlayed, version }: Props = $props();
+
+  const logo = version === "XVRS" ? "/xverse_logo.webp" : "/verse_logo-hq.webp";
 </script>
 
 <header class="flex justify-between gap-4 pb-2">
@@ -19,7 +20,14 @@
   <!-- Right -->
   <div class="flex gap-8">
     <div class="bg-white/60 rounded-lg p-4 self-end text-xl">
-      <p class="font-bold">Music for Rating Image Generator</p>
+      <div class="font-bold flex gap-2">
+        <p>Music for Rating Image Generator by</p>
+
+        <div class="flex gap-1 items-center font-normal">
+          <Twitter />
+          <p>@LeomotorsTH</p>
+        </div>
+      </div>
 
       <p>
         Last Played: {new Date(lastPlayed).toLocaleString()}
@@ -29,19 +37,22 @@
         Generated at: {new Date().toLocaleString()}
       </p>
 
-      <div class="flex gap-1 items-center font-normal">
+      <div class="flex gap-1 items-center font-normal text-slate-800">
         <Github />
         <p>leomotors/chuumai-tools</p>
       </div>
 
-      <div class="flex gap-1 items-center font-normal">
-        <Twitter />
-        <p>@LeomotorsTH</p>
+      <div class="flex gap-1 items-center font-normal text-slate-800">
+        <Workflow />
+        <p>Web Version: {WEB_VERSION}</p>
       </div>
 
-      <p>Web Version: {WEB_VERSION} @ {env.PUBLIC_VERSION || "???"}</p>
+      <div class="flex gap-1 items-center font-normal text-slate-800">
+        <Globe />
+        <p>https://chuni.wonderhoy.me</p>
+      </div>
     </div>
 
-    <img src="/verse_logo.webp" alt="Verse Logo" class="h-[217px]" />
+    <img src={logo} alt="Version {version} Logo" class="h-[217px] scale-125" />
   </div>
 </header>

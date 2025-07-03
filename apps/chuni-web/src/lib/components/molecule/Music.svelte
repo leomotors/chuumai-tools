@@ -4,7 +4,7 @@
 
   import type { ChartForRender } from "$lib/types";
 
-  import { getRank } from "@repo/utils-chuni";
+  import { getRank } from "@repo/utils/chuni";
 
   interface Props {
     music: ChartForRender;
@@ -67,7 +67,7 @@
 
     <!-- Right -->
     <p
-      class="p-1 font-helvetica bg-white rounded h-[36px] w-[50px] text-black flex justify-end items-baseline gap-1"
+      class="p-1 font-helvetica bg-white rounded h-[36px] w-[50px] text-black flex justify-end items-baseline gap-1 relative"
     >
       <span class="font-bold text-2xl text-[26px]">
         {Math.floor(music.constant)}
@@ -77,6 +77,14 @@
           ? Math.floor(((music.constant % 1) + Number.EPSILON * 100) * 10)
           : "?"}
       </span>
+
+      {#if music.constant % 1 >= 0.5}
+        <span
+          class="absolute -top-[0.375rem] right-[0.375rem] font-bold text-xl"
+        >
+          +
+        </span>
+      {/if}
     </p>
   </div>
 
@@ -97,7 +105,7 @@
       <div class="flex flex-col">
         <p class="text-sm text-nowrap">PLAY RATING</p>
         <p class="font-bold text-2xl">
-          {music.rating.toFixed(2)}
+          {music.rating.toFixed(2)}{#if !music.constantSure}?{/if}
         </p>
       </div>
     </div>

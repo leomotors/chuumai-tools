@@ -6,9 +6,10 @@
 
   interface Props {
     input: RawImageGen;
+    version: string;
   }
 
-  let { input }: Props = $props();
+  let { input, version }: Props = $props();
   let { profile, best, current, rating } = input;
 </script>
 
@@ -16,7 +17,7 @@
   class="w-[2560px] h-[1440px] bg-contain bg-no-repeat bg-center bg-[url(/verse_bg.webp)] flex-col gap-2 p-4 hidden"
   id="chart"
 >
-  <Header lastPlayed={new Date(profile.lastPlayed)}>
+  <Header lastPlayed={new Date(profile.lastPlayed)} {version}>
     <Profile {profile} calculatedRating={rating.totalAvg} />
   </Header>
 

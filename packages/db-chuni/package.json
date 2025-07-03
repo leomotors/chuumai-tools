@@ -15,7 +15,7 @@
     "./schema": "./src/schema/index.ts"
   },
   "dependencies": {
-    "@repo/utils-chuni": "workspace:*",
+    "@repo/utils": "workspace:*",
     "drizzle-orm": "^0.44.2",
     "postgres": "^3.4.7",
     "zod": "^3.25.71"

@@ -1,6 +1,6 @@
 import { expect, test } from "vitest";
 
-import { extractDigits } from "./decimal.js";
+import { extractDigits } from "./index.js";
 
 test("Extract Decimal Places", () => {
   for (let i = 0; i <= 99_9999; i++) {

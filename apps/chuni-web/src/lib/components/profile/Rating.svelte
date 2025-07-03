@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { extractDigits } from "@repo/utils-chuni";
+  import { extractDigits } from "@repo/utils";
 
   interface Props {
     rating: number;

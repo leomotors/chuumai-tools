@@ -1,31 +1,31 @@
 import { error, json } from "@sveltejs/kit";
-import { and, eq, inArray } from "drizzle-orm";
 
 import { env } from "$env/dynamic/public";
-import { db } from "$lib/db";
-import { type ChartForRender, rawImageGenSchema } from "$lib/types";
+import { getCachedChartConstantData, getCachedMusicData } from "$lib/cachedDb";
+import {
+  type ChartConstantData,
+  type ChartForRender,
+  type MusicData,
+  rawImageGenSchema,
+} from "$lib/types";
 
-import { musicDataTable, musicLevelTable } from "@repo/db-chuni/schema";
 import {
   type BaseChartSchema,
   type HiddenChart,
   imgGenInputSchema,
 } from "@repo/types-chuni";
-import { calculateRating, floorDecimalPlaces } from "@repo/utils-chuni";
+import {
+  calculateRating,
+  constantFromLevel,
+  floorDecimalPlaces,
+} from "@repo/utils/chuni";
 
 import type { RequestHandler } from "./$types";
 
-function constantFromLevel(level: string) {
-  if (level.endsWith("+")) {
-    return parseInt(level.slice(0, -1)) + 0.5;
-  }
-  return parseInt(level);
-}
-
 function addForRenderInfo(
   data: BaseChartSchema,
-  constantData: (typeof musicLevelTable.$inferSelect)[],
-  imageData: Pick<typeof musicDataTable.$inferSelect, "id" | "image">[],
+  constantData: ChartConstantData,
+  imageData: MusicData,
   version: string,
 ): ChartForRender {
   const chartLevel = constantData.find(
@@ -36,7 +36,10 @@ function addForRenderInfo(
   );
 
   if (!chartLevel) {
-    throw new Error("Chart constant not found");
+    error(
+      400,
+      `Chart Level Data not found for ${data.id} (${data.title}) at ${data.difficulty.toUpperCase()} on version ${version}`,
+    );
   }
 
   const constant = chartLevel.constant
@@ -58,10 +61,7 @@ function addForRenderInfo(
 
 function hiddenChartToData(
   data: HiddenChart,
-  chartData: Pick<
-    typeof musicDataTable.$inferSelect,
-    "id" | "title" | "image"
-  >[],
+  chartData: MusicData,
 ): BaseChartSchema {
   const chart = chartData.find(
     (c) =>
@@ -86,16 +86,23 @@ function hiddenChartToData(
 }
 
 export const POST: RequestHandler = async ({ request }) => {
-  if (!env.PUBLIC_VERSION) {
-    throw new Error("PUBLIC_VERSION is not set");
+  if (!env.PUBLIC_ENABLED_VERSION) {
+    throw new Error("PUBLIC_ENABLED_VERSION is not set");
   }
 
   const { data, version } = await request.json();
-
   const inputParseResult = imgGenInputSchema.safeParse(data);
 
-  if (typeof version !== "string" || !version) {
-    return new Response("Invalid version", { status: 400 });
+  const enabledVersions = env.PUBLIC_ENABLED_VERSION.split(",");
+  if (
+    typeof version !== "string" ||
+    !version ||
+    !enabledVersions.includes(version)
+  ) {
+    return new Response(
+      `Invalid version, valid versions are: ${enabledVersions.join(", ")}`,
+      { status: 400 },
+    );
   }
 
   if (!inputParseResult.success) {
@@ -107,26 +114,9 @@ export const POST: RequestHandler = async ({ request }) => {
 
   const { profile, best, current, hidden } = input;
 
-  const allIds = [...best.map((c) => c.id), ...current.map((c) => c.id)];
+  const chartConstantData = await getCachedChartConstantData(version);
 
-  const chartConstantData = await db
-    .select()
-    .from(musicLevelTable)
-    .where(
-      and(
-        eq(musicLevelTable.version, env.PUBLIC_VERSION),
-        inArray(musicLevelTable.musicId, allIds),
-      ),
-    );
-
-  const musicData = await db
-    .select({
-      id: musicDataTable.id,
-      title: musicDataTable.title,
-      image: musicDataTable.image,
-    })
-    .from(musicDataTable)
-    .where(inArray(musicDataTable.id, allIds));
+  const musicData = await getCachedMusicData();
 
   const bestWithRating = best
     .map((c) => addForRenderInfo(c, chartConstantData, musicData, version))

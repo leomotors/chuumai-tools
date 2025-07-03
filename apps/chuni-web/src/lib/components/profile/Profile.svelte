@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { ImgGenInput } from "@repo/types-chuni";
-  import { anotherRarity } from "@repo/utils-chuni";
+  import { anotherRarity } from "@repo/utils/chuni";
 
   import Rating from "./Rating.svelte";
 

@@ -1,6 +1,6 @@
 import { expect, test } from "vitest";
 
-import { calculateRating } from "./rating.js";
+import { calculateRating } from "./index.js";
 
 test("Calculate Rating", () => {
   const testCases: [number, number, number][] = [
