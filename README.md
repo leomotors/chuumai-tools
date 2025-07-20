@@ -21,7 +21,7 @@ docker run --rm \
  -e VERSION=VRS \
  -e TZ=Asia/Bangkok \
  -e LANG=th_TH.UTF-8 \
- ghcr.io/leomotors/chunithm-scraper:v4
+ ghcr.io/leomotors/chunithm-scraper:v5
 ```
 
 You will have to change `USERNAME` and `PASSWORD` to your own,
