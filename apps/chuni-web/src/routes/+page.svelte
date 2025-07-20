@@ -1,5 +1,14 @@
 <script lang="ts">
   import { toPng } from "html-to-image";
+  import {
+    Upload,
+    Download,
+    Plus,
+    X,
+    AlertCircle,
+    CheckCircle,
+    RotateCcw,
+  } from "@lucide/svelte";
 
   import { env } from "$env/dynamic/public";
   import ExtLink from "$lib/components/molecule/ExtLink.svelte";
@@ -116,239 +125,385 @@
   }
 </script>
 
-<main class="flex flex-col items-center w-screen px-4 py-8 gap-4 font-app">
-  <h1 class="font-bold text-3xl">Chunithm Music for Rating Image Generator</h1>
+<main
+  class="flex flex-col items-center w-screen px-4 py-8 gap-6 font-app min-h-screen bg-gray-50"
+>
+  <div class="w-full max-w-4xl">
+    <div class="text-center mb-8">
+      <h1 class="font-bold text-4xl mb-4 text-gray-800">
+        Chunithm Rating Image Generator
+      </h1>
 
-  <article class="flex flex-col items-center">
-    <p>
-      By <ExtLink href="https://github.com/leomotors">Leomotors</ExtLink>
-    </p>
-    <p>
-      Web Version: {WEB_VERSION} (<ExtLink
-        href="https://github.com/leomotors/chuumai-tools/blob/main/apps/chuni-web/CHANGELOG.md"
-      >
-        Changelog
-      </ExtLink>)
-    </p>
-
-    <div>
-      <label for="version">Chart Constant Version:</label>
-      <select id="version" bind:value={selectedVersion}>
-        {#if enabledVersions.length === 0}
-          <option value="" disabled>Error: No versions available</option>
-        {/if}
-        {#each enabledVersions as version (version)}
-          <option value={version}>{version}</option>
-        {/each}
-      </select>
+      <article class="space-y-2 text-gray-600">
+        <p>
+          By <ExtLink href="https://github.com/leomotors">Leomotors</ExtLink>
+        </p>
+        <p>
+          Web Version: {WEB_VERSION} (<ExtLink
+            href="https://github.com/leomotors/chuumai-tools/blob/main/apps/chuni-web/CHANGELOG.md"
+          >
+            Changelog
+          </ExtLink>)
+        </p>
+      </article>
     </div>
-  </article>
 
-  <div
-    class="flex flex-col items-center gap-2 p-4 bg-gradient-to-br from-blue-100 to-green-100 rounded-xl"
-  >
-    <label class="font-bold" for="fileInput">Upload JSON File</label>
-    <input
-      class="border border-black p-2 rounded-lg"
-      type="file"
-      accept=".json"
-      id="fileInput"
-      bind:files
-    />
+    <div class="bg-white rounded-lg shadow-lg p-6 space-y-6">
+      <!-- Version Selection -->
+      <div class="space-y-2">
+        <label for="version" class="block text-sm font-medium text-gray-700">
+          Chart Constant Version
+        </label>
+        <select
+          id="version"
+          bind:value={selectedVersion}
+          class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        >
+          {#if enabledVersions.length === 0}
+            <option value="" disabled>Error: No versions available</option>
+          {:else}
+            {#each enabledVersions as version (version)}
+              <option value={version}>{version}</option>
+            {/each}
+          {/if}
+        </select>
+      </div>
 
-    <p>
-      Please refer to
-      <ExtLink
-        href="https://github.com/leomotors/chuumai-tools?tab=readme-ov-file#chunithm"
-      >
-        GitHub
-      </ExtLink>
-      for the schema and how to get the JSON file.
-    </p>
-
-    <section class="flex flex-col items-center gap-2 w-full">
-      <p class="font-bold">Hidden Songs</p>
-
-      {#each hiddenCharts as chart, index (index)}
-        <div class="hiddenCharts">
-          <div>
-            <label for="rating-type-{index}">Type</label>
-            <select
-              name="rating-type-{index}"
-              id="rating-type-{index}"
-              bind:value={chart.ratingType}
+      <!-- File Upload Section -->
+      <div class="space-y-4">
+        <div class="space-y-2">
+          <label
+            for="fileInput"
+            class="block text-sm font-medium text-gray-700"
+          >
+            Upload JSON File
+          </label>
+          <div class="flex items-center justify-center w-full">
+            <label
+              for="fileInput"
+              class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors"
             >
-              <option
-                value={"CURRENT" satisfies RatingType}
-                selected={chart.ratingType === "CURRENT"}
+              <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                <Upload class="w-8 h-8 mb-2 text-gray-400" />
+                <p class="mb-2 text-sm text-gray-500">
+                  <span class="font-semibold">Click to upload</span> your JSON file
+                </p>
+                <p class="text-xs text-gray-500">JSON files only</p>
+              </div>
+              <input
+                class="hidden"
+                type="file"
+                accept=".json"
+                id="fileInput"
+                bind:files
+              />
+            </label>
+          </div>
+
+          {#if files && files.length > 0}
+            <div class="text-sm text-green-600 flex items-center gap-1">
+              <CheckCircle class="w-4 h-4" />
+              File uploaded: {files[0].name}
+            </div>
+          {/if}
+        </div>
+
+        <div class="bg-blue-50 border border-blue-200 rounded-md p-4">
+          <p class="text-sm text-blue-800">
+            Please refer to
+            <span class="font-medium underline">
+              <ExtLink
+                href="https://github.com/leomotors/chuumai-tools?tab=readme-ov-file#chunithm"
               >
-                CURRENT
-              </option>
-              <option
-                value={"BEST" satisfies RatingType}
-                selected={chart.ratingType === "BEST"}>BEST</option
-              >
-            </select>
-          </div>
-          <div>
-            <label for="search-{index}">Search</label>
-            <input
-              type="text"
-              bind:value={chart.search}
-              placeholder="Search"
-              id="search-{index}"
-            />
-          </div>
-          <div>
-            <label for="difficulty-{index}">Difficulty</label>
-            <select
-              name="difficulty-{index}"
-              id="difficulty-{index}"
-              bind:value={chart.difficulty}
-            >
-              {#each stdChartDifficultyValues as difficulty (difficulty)}
-                <option
-                  value={difficulty}
-                  selected={chart.difficulty === difficulty}
-                >
-                  {difficulty.toUpperCase()}
-                </option>
-              {/each}
-            </select>
-          </div>
-          <div>
-            <label for="score-{index}">Score</label>
-            <input
-              type="number"
-              bind:value={chart.score}
-              placeholder="Score"
-              id="score-{index}"
-            />
-          </div>
-          <div>
-            <label for="clearmark-{index}">Clear Mark</label>
-            <select
-              name="clearmark-{index}"
-              id="clearmark-{index}"
-              bind:value={chart.clearMark}
-            >
-              <option value={null} selected={!!chart.clearMark}>NONE</option>
-              {#each clearMarkValues as clearMark (clearMark)}
-                <option
-                  value={clearMark}
-                  selected={chart.clearMark === clearMark}
-                >
-                  {clearMark}
-                </option>
-              {/each}
-            </select>
-          </div>
-          <div>
-            <label for="fc-{index}">FC</label>
-            <input type="checkbox" id="fc-{index}" bind:checked={chart.fc} />
-          </div>
-          <div>
-            <label for="aj-{index}">AJ</label>
-            <input type="checkbox" id="aj-{index}" bind:checked={chart.aj} />
-          </div>
+                GitHub
+              </ExtLink>
+            </span>
+            for the schema and how to get the JSON file.
+          </p>
+        </div>
+      </div>
+
+      <!-- Hidden Songs Section -->
+      <div class="space-y-4">
+        <div class="flex items-center justify-between">
+          <h3 class="text-lg font-medium text-gray-800">Hidden Songs</h3>
           <button
-            class="bg-red-500 rounded-lg p-2 hover:bg-red-600 transition-colors text-white h-fit self-center"
+            class="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
             onclick={() => {
-              hiddenCharts = hiddenCharts.filter((_, i) => i !== index);
+              hiddenCharts = [
+                ...hiddenCharts,
+                {
+                  search: "",
+                  difficulty: "master",
+                  ratingType: "CURRENT",
+                  score: 0,
+                  clearMark: null,
+                  fc: false,
+                  aj: false,
+                },
+              ];
             }}
           >
-            RM
+            <Plus class="w-4 h-4 mr-1" />
+            Add Hidden Song
           </button>
         </div>
-      {/each}
 
+        {#if hiddenCharts.length === 0}
+          <div class="text-center py-8 text-gray-500">
+            <p>No hidden songs added yet.</p>
+            <p class="text-sm">Click "Add Hidden Song" to get started.</p>
+          </div>
+        {:else}
+          <div class="space-y-3">
+            {#each hiddenCharts as chart, index (index)}
+              <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                <div
+                  class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-end"
+                >
+                  <div class="space-y-1">
+                    <label
+                      for="rating-type-{index}"
+                      class="block text-xs font-medium text-gray-700"
+                      >Rating Type</label
+                    >
+                    <select
+                      name="rating-type-{index}"
+                      id="rating-type-{index}"
+                      bind:value={chart.ratingType}
+                      class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    >
+                      <option
+                        value={"CURRENT" satisfies RatingType}
+                        selected={chart.ratingType === "CURRENT"}
+                      >
+                        CURRENT
+                      </option>
+                      <option
+                        value={"BEST" satisfies RatingType}
+                        selected={chart.ratingType === "BEST"}
+                      >
+                        BEST
+                      </option>
+                    </select>
+                  </div>
+
+                  <div class="space-y-1">
+                    <label
+                      for="search-{index}"
+                      class="block text-xs font-medium text-gray-700"
+                      >Search</label
+                    >
+                    <input
+                      type="text"
+                      bind:value={chart.search}
+                      placeholder="Song title or artist"
+                      id="search-{index}"
+                      class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    />
+                  </div>
+
+                  <div class="space-y-1">
+                    <label
+                      for="difficulty-{index}"
+                      class="block text-xs font-medium text-gray-700"
+                      >Difficulty</label
+                    >
+                    <select
+                      name="difficulty-{index}"
+                      id="difficulty-{index}"
+                      bind:value={chart.difficulty}
+                      class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    >
+                      {#each stdChartDifficultyValues as diff (diff)}
+                        <option value={diff}>{diff.toUpperCase()}</option>
+                      {/each}
+                    </select>
+                  </div>
+
+                  <div class="space-y-1">
+                    <label
+                      for="score-{index}"
+                      class="block text-xs font-medium text-gray-700"
+                      >Score</label
+                    >
+                    <input
+                      type="number"
+                      bind:value={chart.score}
+                      placeholder="Score"
+                      id="score-{index}"
+                      min="0"
+                      max="1010000"
+                      class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    />
+                  </div>
+
+                  <div class="space-y-1">
+                    <label
+                      for="clear-mark-{index}"
+                      class="block text-xs font-medium text-gray-700"
+                      >Clear Mark</label
+                    >
+                    <select
+                      name="clear-mark-{index}"
+                      id="clear-mark-{index}"
+                      bind:value={chart.clearMark}
+                      class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    >
+                      <option value={null}>None</option>
+                      {#each clearMarkValues as mark (mark)}
+                        <option value={mark}>{mark}</option>
+                      {/each}
+                    </select>
+                  </div>
+
+                  <div class="flex items-center justify-center space-x-4">
+                    <div class="flex items-center space-x-1">
+                      <input
+                        type="checkbox"
+                        id="fc-{index}"
+                        bind:checked={chart.fc}
+                        class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                      />
+                      <label
+                        for="fc-{index}"
+                        class="text-xs font-medium text-gray-700">FC</label
+                      >
+                    </div>
+
+                    <div class="flex items-center space-x-1">
+                      <input
+                        type="checkbox"
+                        id="aj-{index}"
+                        bind:checked={chart.aj}
+                        class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                      />
+                      <label
+                        for="aj-{index}"
+                        class="text-xs font-medium text-gray-700">AJ</label
+                      >
+                    </div>
+                  </div>
+
+                  <div class="flex justify-end">
+                    <button
+                      class="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors"
+                      onclick={() => {
+                        hiddenCharts = hiddenCharts.filter(
+                          (_, i) => i !== index,
+                        );
+                      }}
+                    >
+                      <X class="w-4 h-4 mr-1" />
+                      Remove
+                    </button>
+                  </div>
+                </div>
+              </div>
+            {/each}
+          </div>
+        {/if}
+      </div>
+    </div>
+
+    <!-- Status Messages -->
+    <div class="space-y-4 my-6">
+      {#if userError}
+        <div class="bg-red-50 border border-red-200 rounded-md p-4">
+          <div class="flex items-center">
+            <AlertCircle class="w-5 h-5 text-red-400 mr-2" />
+            <h3 class="text-sm font-medium text-red-800">JSON Parse Error</h3>
+          </div>
+          <div class="mt-2 text-sm text-red-700">
+            <p class="mb-1">Error Parsing JSON File! Please check schema</p>
+            <pre
+              class="whitespace-pre-wrap font-mono text-xs bg-red-100 p-2 rounded overflow-x-auto">{userError}</pre>
+          </div>
+        </div>
+      {/if}
+
+      {#if userData}
+        <div class="bg-green-50 border border-green-200 rounded-md p-4">
+          <div class="flex items-center">
+            <CheckCircle class="w-5 h-5 text-green-400 mr-2" />
+            <h3 class="text-sm font-medium text-green-800">
+              File parsed successfully!
+            </h3>
+          </div>
+          <div class="mt-2 text-sm text-green-700">
+            <p>Player Name: {userData.profile.playerName}</p>
+            <p>Last Played: {userData.profile.lastPlayed}</p>
+          </div>
+        </div>
+      {/if}
+
+      {#if dataError}
+        <div class="bg-red-50 border border-red-200 rounded-md p-4">
+          <div class="flex items-center">
+            <AlertCircle class="w-5 h-5 text-red-400 mr-2" />
+            <h3 class="text-sm font-medium text-red-800">Rating Data Error</h3>
+          </div>
+          <div class="mt-2 text-sm text-red-700">
+            <p class="mb-1">Error Fetching Rating Data!</p>
+            <pre
+              class="whitespace-pre-wrap font-mono text-xs bg-red-100 p-2 rounded overflow-x-auto">{dataError}</pre>
+          </div>
+        </div>
+      {/if}
+
+      {#if renderData}
+        <div class="bg-green-50 border border-green-200 rounded-md p-4">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center">
+              <CheckCircle class="w-5 h-5 text-green-400 mr-2" />
+              <div>
+                <h3 class="text-sm font-medium text-green-800">
+                  Data fetched successfully, ready for render!
+                </h3>
+                <p class="text-sm text-green-700">
+                  Rating: {renderData.rating.totalAvg}
+                </p>
+              </div>
+            </div>
+            <button
+              class="inline-flex items-center px-3 py-2 border border-green-600 text-sm font-medium rounded-md text-green-700 bg-green-50 hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors"
+              onclick={() => {
+                renderData = undefined;
+                if (userData) getRatingData(userData);
+              }}
+            >
+              <RotateCcw class="w-4 h-4 mr-1" />
+              Reload
+            </button>
+          </div>
+        </div>
+      {/if}
+    </div>
+
+    <!-- Generate Button -->
+    <div class="flex justify-center">
       <button
-        class="self-end bg-blue-500 rounded-lg p-2 hover:bg-blue-600 transition-colors text-white"
-        onclick={() => {
-          hiddenCharts = [
-            ...hiddenCharts,
-            {
-              search: "",
-              difficulty: "master",
-              ratingType: "CURRENT",
-              score: 0,
-              clearMark: null,
-              fc: false,
-              aj: false,
-            },
-          ];
-        }}
+        class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+        onclick={handleDownload}
+        disabled={!renderData}
       >
-        Add
+        <Download class="w-5 h-5 mr-2" />
+        Generate and Download
       </button>
-    </section>
+    </div>
+
+    <!-- Render Component -->
+    {#if renderData}
+      <div class="mt-8">
+        <Render input={renderData} version={selectedVersion} />
+      </div>
+    {/if}
   </div>
-
-  {#if userError}
-    <p class="text-red-500">Error Parsing JSON File! Please check schema</p>
-    <p>{userError}</p>
-  {/if}
-
-  {#if userData}
-    <section class="flex flex-col items-center">
-      <p class="text-green-500">File parsed successfully!</p>
-      <p>Player Name: {userData.profile.playerName}</p>
-      <p>Last Played: {userData.profile.lastPlayed}</p>
-    </section>
-  {/if}
-
-  {#if dataError}
-    <p class="text-red-500">Error Fetching Rating Data!</p>
-    <p>{dataError}</p>
-  {/if}
-
-  {#if renderData}
-    <section class="flex flex-col items-center">
-      <p class="text-green-500">Data fetched successfully, ready for render!</p>
-      <p>Rating: {renderData.rating.totalAvg}</p>
-
-      <button
-        class="bg-blue-300 p-2 rounded-lg hover:bg-blue-400 transition-colors"
-        onclick={() => {
-          renderData = undefined;
-          if (userData) getRatingData(userData);
-        }}
-      >
-        Reload
-      </button>
-    </section>
-  {/if}
-
-  <button
-    class="bg-blue-300 rounded-lg p-2 disabled:bg-gray-300 hover:bg-blue-400 transition-colors disabled:cursor-not-allowed"
-    onclick={handleDownload}
-    disabled={!renderData}
-  >
-    Generate and Download
-  </button>
-
-  {#if renderData}
-    <Render input={renderData} version={selectedVersion} />
-  {/if}
 </main>
 
-<style lang="postcss">
-  @reference "tailwindcss";
-
-  .hiddenCharts {
-    @apply flex flex-row gap-2;
-
-    & > div {
-      @apply flex flex-col items-start gap-1;
-
-      & > input,
-      & > select {
-        @apply border border-black p-2 rounded-lg;
-      }
-
-      & > input[type="checkbox"] {
-        @apply w-6 h-6;
-      }
-    }
+<style>
+  pre {
+    word-break: break-all;
+    white-space: pre-wrap;
   }
 </style>
