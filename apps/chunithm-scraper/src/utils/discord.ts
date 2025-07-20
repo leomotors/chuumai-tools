@@ -1,7 +1,7 @@
 import { Routes } from "discord-api-types/v10";
 
 import { Environment, environment } from "../environment.js";
-import { logger } from "../logger.js";
+import { logger } from "./logger.js";
 
 const endpoint = "https://discord.com/api/v10";
 
@@ -38,11 +38,12 @@ function getHeaders(
   }
 }
 
-export async function sendImage(
-  content: string,
-  blob: Blob,
-  fileName = "image.jpg",
-) {
+export type BlobFileList = Array<{
+  blob: Blob;
+  fileName?: string;
+}>;
+
+export async function sendFiles(content: string, files: BlobFileList) {
   if (!webhookEnabled(environment) && !discordBotEnabled(environment)) {
     logger.warn(
       "Neither Discord Webhook nor Discord Bot is enabled. Skipping Discord image sending.",
@@ -50,13 +51,17 @@ export async function sendImage(
     return;
   }
 
+  const sizeOfEachFileKbs = files.map((f) => f.blob.size / 1024);
+
   logger.log(
-    `Sending message and image with size of ${(blob.size / 1024).toFixed(3)} kB to Discord using ${webhookEnabled(environment) ? "Webhook" : "Discord Bot"}`,
+    `Sending message and files with size of ${sizeOfEachFileKbs.map((s) => s.toFixed(3)).join(", ")} kB to Discord using ${webhookEnabled(environment) ? "Webhook" : "Discord Bot"}`,
   );
 
   const formData = new FormData();
   formData.append("content", content);
-  formData.append("files", blob, fileName);
+  files.forEach(({ blob, fileName }) => {
+    formData.append("files", blob, fileName);
+  });
 
   const res = await fetch(getURL(environment), {
     method: "POST",

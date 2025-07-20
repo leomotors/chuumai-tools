@@ -64,4 +64,9 @@ export const imgGenInputSchema = z.object({
   hidden: z.array(hiddenChartSchema).optional(),
 });
 
+export const fullPlayDataInputSchema = imgGenInputSchema.extend({
+  allRecords: z.array(chartSchema),
+});
+
 export type ImgGenInput = z.infer<typeof imgGenInputSchema>;
+export type FullPlayDataInput = z.infer<typeof fullPlayDataInputSchema>;

@@ -4,8 +4,8 @@ import { chromium } from "playwright";
 import { jobTable } from "@repo/db-chuni/schema";
 
 import { db } from "./db.js";
-import { logger } from "./logger.js";
 import { main } from "./main.js";
+import { logger } from "./utils/logger.js";
 
 const browser = await chromium.launch({
   headless: !process.env.DEBUG,

@@ -3,8 +3,8 @@ import fs from "node:fs/promises";
 import type { RawImageGen } from "@/app/chuni-web/src/lib/types.js";
 
 import { environment } from "../environment.js";
-import { logger } from "../logger.js";
-import { sendImage } from "../utils/discord.js";
+import { sendFiles } from "../utils/discord.js";
+import { logger } from "../utils/logger.js";
 import type { scrapePlayerData } from "./2-playerdata.js";
 
 export async function sendDiscordImage(
@@ -30,11 +30,12 @@ export async function sendDiscordImage(
 **Rating**: ${playerData.rating.toFixed(2)}${rawImgGen ? ` (${rawImgGen.rating.totalAvg.toFixed(4)})` : ""}
 **Last Played**: ${playerData.lastPlayed}`;
 
-  await sendImage(
-    message,
-    blob,
-    imageLocation.split("/").pop() || "image.png",
-  ).catch((err) => {
+  await sendFiles(message, [
+    {
+      blob,
+      fileName: imageLocation.split("/").pop() || "image.png",
+    },
+  ]).catch((err) => {
     logger.error(`Discord API Error: ${err}`);
   });
 }

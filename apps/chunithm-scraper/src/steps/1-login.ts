@@ -14,4 +14,8 @@ export async function login(page: Page) {
   await page.getByRole("button", { name: "Login" }).click();
 
   await page.waitForURL("https://chunithm-net-eng.com/mobile/home/");
+
+  const cookies = await page.context().cookies();
+
+  return cookies.filter((c) => ["userId", "friendCodeList"].includes(c.name));
 }

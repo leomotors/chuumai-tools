@@ -4,7 +4,7 @@ import { z } from "zod";
 
 import { hiddenChartSchema } from "@repo/types/chuni";
 
-import { logger } from "./logger.js";
+import { logger } from "./utils/logger.js";
 
 export async function readHiddenCharts() {
   try {

@@ -1,5 +1,4 @@
 import { JSDOM } from "jsdom";
-import { Page } from "playwright";
 
 import {
   parseBottomData,
@@ -8,9 +7,18 @@ import {
   parseRightData,
 } from "../parser/playerData.js";
 
-export async function scrapePlayerData(page: Page) {
-  const pageData = page.locator(".frame01_inside.w460");
-  const pageDataHTML = await pageData.innerHTML();
+export async function scrapePlayerData(html: string) {
+  const page = new JSDOM(html).window.document;
+
+  const pageData = page.querySelector(".frame01_inside.w460");
+
+  if (!pageData) {
+    throw new Error(
+      `Player data not found in the provided HTML. HTML: ${html}`,
+    );
+  }
+
+  const pageDataHTML = pageData.innerHTML;
   const pageDataDom = new JSDOM(pageDataHTML);
 
   const possession = parsePossession(pageDataDom);

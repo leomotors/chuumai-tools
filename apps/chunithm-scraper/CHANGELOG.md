@@ -2,6 +2,11 @@
 
 For changelog before V4: [here](https://github.com/leomotors/chunithm-net-scraper/blob/main/CHANGELOG.md)
 
+## [5.0.0] - 2025-07-20
+
+- refactor: optimize by using fetch instead of whole browser
+- feat: now outputs json of all scores
+
 ## [4.3.0] - 2025-05-24
 
 - feat: support for class emblem: band

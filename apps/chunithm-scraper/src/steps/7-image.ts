@@ -1,7 +1,7 @@
 import { Page } from "playwright";
 
 import { environment } from "../environment.js";
-import { logger } from "../logger.js";
+import { logger } from "../utils/logger.js";
 
 export async function generateImage(page: Page, inputFileName: string) {
   if (!environment.IMAGE_GEN_URL) {

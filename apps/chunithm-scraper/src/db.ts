@@ -1,7 +1,7 @@
 import { createClient } from "@repo/db-chuni/client";
 
 import { environment } from "./environment.js";
-import { logger } from "./logger.js";
+import { logger } from "./utils/logger.js";
 
 if (!environment.DATABASE_URL) {
   logger.warn("Database Mode disabled");
