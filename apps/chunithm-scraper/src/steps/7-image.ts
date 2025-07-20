@@ -11,6 +11,8 @@ export async function generateImage(page: Page, inputFileName: string) {
 
   await page.goto(environment.IMAGE_GEN_URL, { waitUntil: "load" });
 
+  await page.selectOption("#version", environment.VERSION);
+
   await page
     .getByLabel("Upload JSON File")
     .setInputFiles(`outputs/${inputFileName}`);

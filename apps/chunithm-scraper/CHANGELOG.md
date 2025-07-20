@@ -6,6 +6,7 @@ For changelog before V4: [here](https://github.com/leomotors/chunithm-net-scrape
 
 - refactor: optimize by using fetch instead of whole browser
 - feat: now outputs json of all scores
+- feat: support selecting version (feature of chuni-web v2)
 
 ## [4.3.0] - 2025-05-24
 

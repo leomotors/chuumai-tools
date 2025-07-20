@@ -3,6 +3,7 @@
 ## [2.1.0] - 2025-07-20
 
 - feat: preview best ratings of next version feature (not enabled yet)
+- refactor: new UI by sonnet 4
 
 ## [2.0.0] - 2025-07-03
 

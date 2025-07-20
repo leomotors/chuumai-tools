@@ -59,8 +59,8 @@ export async function sendFiles(content: string, files: BlobFileList) {
 
   const formData = new FormData();
   formData.append("content", content);
-  files.forEach(({ blob, fileName }) => {
-    formData.append("files", blob, fileName);
+  files.forEach(({ blob, fileName }, index) => {
+    formData.append(`files[${index}]`, blob, fileName);
   });
 
   const res = await fetch(getURL(environment), {
