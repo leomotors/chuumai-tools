@@ -16,9 +16,9 @@
   },
   "dependencies": {
     "@repo/utils": "workspace:*",
-    "drizzle-orm": "^0.44.2",
+    "drizzle-orm": "^0.44.3",
     "postgres": "^3.4.7",
-    "zod": "^3.25.71"
+    "zod": "^4.0.5"
   },
   "devDependencies": {
     "dotenv-cli": "^8.0.0",

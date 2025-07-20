@@ -16,6 +16,6 @@
   "main": "./src/index.ts",
   "dependencies": {
     "@repo/db-chuni": "workspace:*",
-    "zod": "^3.25.71"
+    "zod": "^4.0.5"
   }
 }
