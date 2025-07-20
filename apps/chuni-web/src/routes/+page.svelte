@@ -186,6 +186,28 @@
                   Override
                 </ExtLink> as sometime source is not complete
               </p>
+              <p>
+                Inspired by <ExtLink href="https://reiwa.f5.si">
+                  https://reiwa.f5.si
+                </ExtLink>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Info Box 2 -->
+      <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+        <div class="flex items-start">
+          <InfoIcon class="w-5 h-5 text-blue-400 mt-0.5 mr-3 flex-shrink-0" />
+          <div>
+            <h3 class="text-sm font-medium text-blue-800 mb-2">Note</h3>
+            <div class="text-sm text-blue-700 space-y-2">
+              <p>
+                This tool is designed for International Version. Data in this
+                website might not be up-to-date which can cause problem for
+                Japanese Version.
+              </p>
             </div>
           </div>
         </div>
