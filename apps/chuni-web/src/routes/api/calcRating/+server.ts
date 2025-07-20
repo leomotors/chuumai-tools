@@ -2,62 +2,17 @@ import { error, json } from "@sveltejs/kit";
 
 import { env } from "$env/dynamic/public";
 import { getCachedChartConstantData, getCachedMusicData } from "$lib/cachedDb";
-import {
-  type ChartConstantData,
-  type ChartForRender,
-  type MusicData,
-  rawImageGenSchema,
-} from "$lib/types";
+import { addForRenderInfo } from "$lib/calculation";
+import { type MusicData, rawImageGenSchema } from "$lib/types";
 
 import {
   type BaseChartSchema,
   type HiddenChart,
   imgGenInputSchema,
 } from "@repo/types/chuni";
-import {
-  calculateRating,
-  constantFromLevel,
-  floorDecimalPlaces,
-} from "@repo/utils/chuni";
+import { floorDecimalPlaces } from "@repo/utils/chuni";
 
 import type { RequestHandler } from "./$types";
-
-function addForRenderInfo(
-  data: BaseChartSchema,
-  constantData: ChartConstantData,
-  imageData: MusicData,
-  version: string,
-): ChartForRender {
-  const chartLevel = constantData.find(
-    (c) =>
-      c.musicId === data.id &&
-      c.difficulty === data.difficulty &&
-      c.version === version,
-  );
-
-  if (!chartLevel) {
-    error(
-      400,
-      `Chart Level Data not found for ${data.id} (${data.title}) at ${data.difficulty.toUpperCase()} on version ${version}`,
-    );
-  }
-
-  const constant = chartLevel.constant
-    ? +chartLevel.constant
-    : constantFromLevel(chartLevel.level);
-
-  const rating = calculateRating(data.score, constant);
-
-  const image = imageData.find((c) => c.id === data.id)!.image;
-
-  return {
-    ...data,
-    constant,
-    constantSure: !!chartLevel.constant,
-    rating,
-    image,
-  };
-}
 
 function hiddenChartToData(
   data: HiddenChart,
@@ -91,7 +46,6 @@ export const POST: RequestHandler = async ({ request }) => {
   }
 
   const { data, version } = await request.json();
-  const inputParseResult = imgGenInputSchema.safeParse(data);
 
   const enabledVersions = env.PUBLIC_ENABLED_VERSION.split(",");
   if (
@@ -104,6 +58,8 @@ export const POST: RequestHandler = async ({ request }) => {
       { status: 400 },
     );
   }
+
+  const inputParseResult = imgGenInputSchema.safeParse(data);
 
   if (!inputParseResult.success) {
     return new Response(JSON.stringify(inputParseResult.error), {

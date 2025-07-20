@@ -14,8 +14,11 @@
 </script>
 
 <div
-  class="w-[2560px] h-[1440px] bg-contain bg-no-repeat bg-center bg-[url(/verse_bg.webp)] flex-col gap-2 p-4 hidden"
+  class="w-[2560px] h-[1440px] bg-contain bg-no-repeat bg-center flex-col gap-2 p-4 hidden"
   id="chart"
+  style="background-image: url({version === 'XVRS'
+    ? '/xverse_bg.webp'
+    : '/verse_bg.webp'})"
 >
   <Header lastPlayed={new Date(profile.lastPlayed)} {version}>
     <Profile {profile} calculatedRating={rating.totalAvg} />

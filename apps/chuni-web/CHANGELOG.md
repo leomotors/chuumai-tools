@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.1.0] - 2025-07-20
+
+- feat: preview best ratings of next version feature (not enabled yet)
+
 ## [2.0.0] - 2025-07-03
 
 - breaking changes: env schema changed
