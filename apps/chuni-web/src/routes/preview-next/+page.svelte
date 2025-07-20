@@ -1,9 +1,15 @@
 <script lang="ts">
-  import { Upload, Download, AlertCircle } from "@lucide/svelte";
+  import { AlertCircle, Download, Upload } from "@lucide/svelte";
+
   import { env } from "$env/dynamic/public";
 
+  import {
+    type FullPlayDataInput,
+    fullPlayDataInputSchema,
+  } from "@repo/types/chuni";
+
   let files = $state<FileList>();
-  let jsonData = $state<any>();
+  let jsonData = $state<FullPlayDataInput>();
   let parseError = $state<string>();
   let submissionError = $state<string>();
   let isSubmitting = $state(false);
@@ -16,7 +22,7 @@
 
     try {
       const content = await file.text();
-      jsonData = JSON.parse(content);
+      jsonData = fullPlayDataInputSchema.parse(JSON.parse(content));
       parseError = undefined;
     } catch (error) {
       jsonData = undefined;
