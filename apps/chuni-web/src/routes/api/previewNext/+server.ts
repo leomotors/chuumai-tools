@@ -9,6 +9,7 @@ import {
   fullPlayDataInputSchema,
   type ImgGenInput,
 } from "@repo/types/chuni";
+import { floorDecimalPlaces } from "@repo/utils/chuni";
 
 import type { RequestHandler } from "./$types";
 
@@ -55,12 +56,19 @@ export const POST: RequestHandler = async ({ request }) => {
   const best30 = processed
     .filter((c) => c !== null)
     .sort((a, b) => b.rating - a.rating)
-    .slice(0, 30)
-    .map((d) => chartSchema.parse(d));
+    .slice(0, 30);
+
+  const newRating = floorDecimalPlaces(
+    best30.reduce((acc, cur) => acc + cur.rating, 0) / 50,
+    4,
+  );
 
   return json({
-    profile,
-    best: best30,
+    profile: {
+      ...profile,
+      rating: newRating,
+    },
+    best: best30.map((d) => chartSchema.parse(d)),
     current: [],
   } satisfies ImgGenInput);
 };

@@ -1,5 +1,9 @@
 # Changelog
 
+## [next] - 2025-07-21
+
+- fix: preview next small fix
+
 ## [2.1.0] - 2025-07-20
 
 - feat: preview best ratings of next version feature (not enabled yet)
