@@ -40,3 +40,4 @@ yarn-error.log*
 
 # Temp
 packages/db-chuni-old
+temp
