@@ -1,20 +1,14 @@
-import {
-  boolean,
-  decimal,
-  integer,
-  pgTable,
-  text,
-  timestamp,
-  unique,
-} from "drizzle-orm/pg-core";
+import { integer, pgTable, text, unique } from "drizzle-orm/pg-core";
 
 import { jobTable } from "@repo/db-shared";
 
 import {
-  clearMarkType,
+  chartType,
+  comboMarkType,
   rarityLevelType,
   ratingType,
   stdChartDifficultyType,
+  syncMarkType,
 } from "./types";
 
 export { jobTable };
@@ -29,40 +23,21 @@ export const playerDataTable = pgTable("player_data", {
 
   // Home Page
   // From left to right, top to bottom
-  characterRarity: rarityLevelType("character_rarity").notNull(),
   characterImage: text("character_image").notNull(),
 
-  teamName: text("team_name"),
-  teamEmblem: rarityLevelType("team_emblem"), // null for no team
+  honorText: text("honor_text").notNull(),
+  honorRarity: rarityLevelType("honor_rarity").notNull(),
 
-  mainHonorText: text("main_honor_text").notNull(),
-  mainHonorRarity: rarityLevelType("main_honor_rarity").notNull(),
-  subHonor1Text: text("sub_honor1_text"),
-  subHonor1Rarity: rarityLevelType("sub_honor1_rarity"),
-  subHonor2Text: text("sub_honor2_text"),
-  subHonor2Rarity: rarityLevelType("sub_honor2_rarity"),
-
-  playerLevel: integer("player_level").notNull(),
   playerName: text("player_name").notNull(),
-  classBand: integer("class_band"),
-  classEmblem: integer("class_emblem"),
 
-  rating: decimal({ precision: 4, scale: 2 }).notNull(),
-  calculatedRating: decimal("calculated_rating", {
-    precision: 6,
-    scale: 4,
-  }),
+  // Not planned: Course Rank and オトモダチ Class
 
-  overpowerValue: decimal("overpower_value", { scale: 2 }).notNull(),
-  overpowerPercent: decimal("overpower_percent", { scale: 2 }).notNull(),
+  rating: integer("rating").notNull(),
 
-  lastPlayed: timestamp("last_played").notNull(),
+  star: integer().notNull(),
 
-  // Page Player Data
-  currentCurrency: integer("current_currency").notNull(),
-  totalCurrency: integer("total_currency").notNull(),
-
-  playCount: integer("play_count").notNull(),
+  playCountCurrent: integer("play_count_current").notNull(),
+  playCountTotal: integer("play_count_total").notNull(),
 });
 
 /**
@@ -76,26 +51,25 @@ export const musicRecordTable = pgTable(
 
     jobId: integer("job_id").references(() => jobTable.id),
 
-    musicId: integer("music_id").notNull(),
+    musicTitle: text("music_title").notNull(),
+
+    chartType: chartType("chart_type").notNull(),
     difficulty: stdChartDifficultyType().notNull(),
 
     score: integer().notNull(),
 
-    clearMark: clearMarkType("clear_mark"),
-    fc: boolean().notNull(),
-    aj: boolean().notNull(),
-    fullChain: integer("full_chain").notNull(),
+    comboMark: comboMarkType("combo_mark").notNull(),
+    syncMark: syncMarkType("sync_mark").notNull(),
   },
   (t) => [
     unique("music_record_unique")
       .on(
-        t.musicId,
+        t.musicTitle,
+        t.chartType,
         t.difficulty,
         t.score,
-        t.clearMark,
-        t.fc,
-        t.aj,
-        t.fullChain,
+        t.comboMark,
+        t.syncMark,
       )
       .nullsNotDistinct(),
   ],
@@ -109,7 +83,7 @@ export const forRatingTable = pgTable("for_rating", {
 
   jobId: integer("job_id").references(() => jobTable.id),
 
-  musicId: integer("music_id").notNull(),
+  musicTitle: text("music_title").notNull(),
   recordId: integer("record_id").notNull(),
 
   ratingType: ratingType("rating_type").notNull(),

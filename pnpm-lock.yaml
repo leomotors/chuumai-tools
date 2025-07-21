@@ -282,6 +282,9 @@ importers:
 
   packages/db-chuni:
     dependencies:
+      '@repo/db-shared':
+        specifier: workspace:*
+        version: link:../db-shared
       '@repo/utils':
         specifier: workspace:*
         version: link:../utils
@@ -301,6 +304,46 @@ importers:
       drizzle-kit:
         specifier: ^0.31.4
         version: 0.31.4
+
+  packages/db-maimai:
+    dependencies:
+      '@repo/db-shared':
+        specifier: workspace:*
+        version: link:../db-shared
+      '@repo/utils':
+        specifier: workspace:*
+        version: link:../utils
+      drizzle-orm:
+        specifier: ^0.44.3
+        version: 0.44.3(postgres@3.4.7)
+      postgres:
+        specifier: ^3.4.7
+        version: 3.4.7
+      zod:
+        specifier: ^4.0.5
+        version: 4.0.5
+    devDependencies:
+      dotenv-cli:
+        specifier: ^8.0.0
+        version: 8.0.0
+      drizzle-kit:
+        specifier: ^0.31.4
+        version: 0.31.4
+
+  packages/db-shared:
+    dependencies:
+      '@repo/utils':
+        specifier: workspace:*
+        version: link:../utils
+      drizzle-orm:
+        specifier: ^0.44.3
+        version: 0.44.3(postgres@3.4.7)
+      postgres:
+        specifier: ^3.4.7
+        version: 3.4.7
+      zod:
+        specifier: ^4.0.5
+        version: 4.0.5
 
   packages/types:
     dependencies:

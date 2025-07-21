@@ -1,0 +1,17 @@
+{
+  "name": "@repo/db-shared",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "tsc",
+    "lint": "eslint src",
+    "format": "eslint src --fix"
+  },
+  "main": "src/index.ts",
+  "dependencies": {
+    "@repo/utils": "workspace:*",
+    "drizzle-orm": "^0.44.3",
+    "postgres": "^3.4.7",
+    "zod": "^4.0.5"
+  }
+}
