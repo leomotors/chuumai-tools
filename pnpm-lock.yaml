@@ -39,6 +39,9 @@ importers:
       '@repo/db-chuni':
         specifier: workspace:*
         version: link:../../packages/db-chuni
+      '@repo/utils':
+        specifier: workspace:*
+        version: link:../../packages/utils
       '@types/cli-progress':
         specifier: ^3.11.6
         version: 3.11.6
@@ -355,6 +358,10 @@ importers:
         version: 4.0.5
 
   packages/utils:
+    dependencies:
+      '@aws-sdk/client-s3':
+        specifier: ^3.848.0
+        version: 3.848.0
     devDependencies:
       '@vitest/coverage-v8':
         specifier: ^3.2.4

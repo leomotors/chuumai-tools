@@ -1,12 +1,9 @@
-import {
-  ListObjectsV2Command,
-  PutObjectCommand,
-  S3Client,
-} from "@aws-sdk/client-s3";
+import { S3Client } from "@aws-sdk/client-s3";
 import cliProgress from "cli-progress";
 import { PgInsertValue } from "drizzle-orm/pg-core";
 
 import { musicDataTable, musicLevelTable } from "@repo/db-chuni/schema";
+import { downloadImage, listFilesInFolder, uploadImage } from "@repo/utils/s3";
 
 import { db } from "../db.js";
 import { environment } from "../environment.js";
@@ -16,48 +13,25 @@ import { updateMusicConstant } from "./utils/music-constant.js";
 const url = "https://chunithm.sega.jp/storage/json/music.json";
 const s3Folder = "musicImages";
 
-async function uploadImage(s3: S3Client, image: string) {
-  const downloadUrl = `https://new.chunithm-net.com/chuni-mobile/html/mobile/img/${image}`;
+// async function uploadImage(s3: S3Client, image: string) {
+//   const downloadUrl = `https://new.chunithm-net.com/chuni-mobile/html/mobile/img/${image}`;
 
-  const response = await fetch(downloadUrl);
-  if (!response.ok) {
-    throw new Error(`Failed to fetch image from ${downloadUrl}`);
-  }
-  const imageBuffer = await response.arrayBuffer();
+//   const response = await fetch(downloadUrl);
+//   if (!response.ok) {
+//     throw new Error(`Failed to fetch image from ${downloadUrl}`);
+//   }
+//   const imageBuffer = await response.arrayBuffer();
 
-  const uploadParams = {
-    Bucket: environment.AWS_BUCKET_NAME,
-    Key: `${s3Folder}/${image}`,
-    Body: Buffer.from(imageBuffer),
-    ContentType: "image/jpeg",
-  };
+//   const uploadParams = {
+//     Bucket: environment.AWS_BUCKET_NAME,
+//     Key: `${s3Folder}/${image}`,
+//     Body: Buffer.from(imageBuffer),
+//     ContentType: "image/jpeg",
+//   };
 
-  const command = new PutObjectCommand(uploadParams);
-  await s3.send(command);
-}
-
-async function listFilesInFolder(s3: S3Client, folder: string) {
-  const files: string[] = [];
-  let continuationToken: string | undefined;
-
-  do {
-    const command = new ListObjectsV2Command({
-      Bucket: environment.AWS_BUCKET_NAME,
-      Prefix: folder,
-      ContinuationToken: continuationToken,
-    });
-
-    const response = await s3.send(command);
-
-    if (response.Contents) {
-      files.push(...response.Contents.map((item) => item.Key!).filter(Boolean));
-    }
-
-    continuationToken = response.NextContinuationToken;
-  } while (continuationToken);
-
-  return files;
-}
+//   const command = new PutObjectCommand(uploadParams);
+//   await s3.send(command);
+// }
 
 export async function downloadMusicData(version: string) {
   const response = await fetch(url);
@@ -98,7 +72,11 @@ export async function downloadMusicData(version: string) {
   }
 
   // List all objects from folder `s3Folder`
-  const contents = await listFilesInFolder(s3, s3Folder);
+  const contents = await listFilesInFolder(
+    s3,
+    environment.AWS_BUCKET_NAME,
+    s3Folder,
+  );
   const existingImages = contents.map((item) => item.split("/").pop()!);
   const newImages = stdMusicData
     .map((m) => m.image)
@@ -112,7 +90,17 @@ export async function downloadMusicData(version: string) {
   progress.start(newImages.length, 0);
 
   for (let i = 0; i < newImages.length; i++) {
-    await uploadImage(s3, newImages[i]);
+    const imageBuffer = await downloadImage(
+      `https://new.chunithm-net.com/chuni-mobile/html/mobile/img/${newImages[i]}`,
+    );
+    await uploadImage({
+      s3,
+      bucketName: environment.AWS_BUCKET_NAME,
+      folder: s3Folder,
+      imageName: newImages[i],
+      buffer: Buffer.from(imageBuffer),
+      contentType: "image/jpeg",
+    });
     progress.update(i + 1);
   }
 

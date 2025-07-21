@@ -11,6 +11,10 @@
     "./chuni": {
       "types": "./src/chuni/index.ts",
       "default": "./src/chuni/index.ts"
+    },
+    "./s3": {
+      "types": "./src/s3/index.ts",
+      "default": "./src/s3/index.ts"
     }
   },
   "scripts": {
@@ -22,5 +26,8 @@
   "devDependencies": {
     "@vitest/coverage-v8": "^3.2.4",
     "vitest": "^3.2.4"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.848.0"
   }
 }

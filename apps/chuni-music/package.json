@@ -15,6 +15,7 @@
   "devDependencies": {
     "@aws-sdk/client-s3": "^3.848.0",
     "@repo/db-chuni": "workspace:*",
+    "@repo/utils": "workspace:*",
     "@types/cli-progress": "^3.11.6",
     "@vitest/coverage-v8": "^3.2.4",
     "dotenv-cli": "^8.0.0",
