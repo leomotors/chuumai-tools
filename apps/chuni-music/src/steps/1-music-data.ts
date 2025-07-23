@@ -8,30 +8,9 @@ import { downloadImage, listFilesInFolder, uploadImage } from "@repo/utils/s3";
 import { db } from "../db.js";
 import { environment } from "../environment.js";
 import { musicJsonSchema } from "../types.js";
-import { updateMusicConstant } from "./utils/music-constant.js";
 
 const url = "https://chunithm.sega.jp/storage/json/music.json";
 const s3Folder = "musicImages";
-
-// async function uploadImage(s3: S3Client, image: string) {
-//   const downloadUrl = `https://new.chunithm-net.com/chuni-mobile/html/mobile/img/${image}`;
-
-//   const response = await fetch(downloadUrl);
-//   if (!response.ok) {
-//     throw new Error(`Failed to fetch image from ${downloadUrl}`);
-//   }
-//   const imageBuffer = await response.arrayBuffer();
-
-//   const uploadParams = {
-//     Bucket: environment.AWS_BUCKET_NAME,
-//     Key: `${s3Folder}/${image}`,
-//     Body: Buffer.from(imageBuffer),
-//     ContentType: "image/jpeg",
-//   };
-
-//   const command = new PutObjectCommand(uploadParams);
-//   await s3.send(command);
-// }
 
 export async function downloadMusicData(version: string) {
   const response = await fetch(url);
@@ -141,7 +120,7 @@ export async function downloadMusicData(version: string) {
     if (result) {
       if (result.level !== p.level) {
         console.log(
-          `Warning: Level mismatch for musicId ${p.musicId} and difficulty ${p.difficulty}. Existing level: ${result.level}, New level: ${p.level}`,
+          `Warning: Level mismatch for musicId ${p.musicId} and difficulty ${p.difficulty}. Existing level: ${result.level}, New level: ${p.level}. (Remain as-is)`,
         );
       }
     }
@@ -150,9 +129,4 @@ export async function downloadMusicData(version: string) {
   if (payload.length > 0) {
     await db.insert(musicLevelTable).values(payload).onConflictDoNothing();
   }
-
-  // Section: Chart Constant
-  await updateMusicConstant(version);
-
-  await db.$client.end();
 }

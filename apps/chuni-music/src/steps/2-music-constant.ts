@@ -3,8 +3,8 @@ import { and, eq } from "drizzle-orm";
 
 import { musicDataTable, musicLevelTable } from "@repo/db-chuni/schema";
 
-import { db } from "../../db.js";
-import { zSchema } from "../../types.js";
+import { db } from "../db.js";
+import { zSchema } from "../types.js";
 
 const url = "https://dp4p6x0xfi5o9.cloudfront.net/chunithm/data.json";
 
