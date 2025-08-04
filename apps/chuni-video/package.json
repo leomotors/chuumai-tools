@@ -15,23 +15,23 @@
     "*.css"
   ],
   "dependencies": {
-    "@remotion/cli": "4.0.325",
-    "@remotion/tailwind-v4": "4.0.325",
-    "@remotion/zod-types": "4.0.325",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0",
-    "remotion": "4.0.325",
+    "@remotion/cli": "4.0.331",
+    "@remotion/tailwind-v4": "4.0.331",
+    "@remotion/zod-types": "4.0.331",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "remotion": "4.0.331",
     "tailwindcss": "^4.1.11",
-    "zod": "^4.0.5"
+    "zod": "^4.0.14"
   },
   "devDependencies": {
     "@fontsource-variable/noto-sans-jp": "^5.2.6",
-    "@remotion/eslint-config-flat": "4.0.325",
-    "@types/react": "^19.1.8",
-    "eslint": "^9.31.0",
+    "@remotion/eslint-config-flat": "4.0.331",
+    "@types/react": "^19.1.9",
+    "eslint": "^9.32.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.3",
     "prettier": "^3.6.2",
-    "typescript": "^5.8.3"
+    "typescript": "^5.9.2"
   }
 }

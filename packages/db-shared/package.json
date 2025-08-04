@@ -10,8 +10,8 @@
   "main": "src/index.ts",
   "dependencies": {
     "@repo/utils": "workspace:*",
-    "drizzle-orm": "^0.44.3",
+    "drizzle-orm": "^0.44.4",
     "postgres": "^3.4.7",
-    "zod": "^4.0.5"
+    "zod": "^4.0.14"
   }
 }
