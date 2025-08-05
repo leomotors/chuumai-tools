@@ -1,6 +1,6 @@
 import fs from "node:fs/promises";
 
-import { Browser } from "playwright";
+import { Page } from "playwright";
 
 import { FullPlayDataInput, ImgGenInput } from "@repo/types/chuni";
 
@@ -22,21 +22,11 @@ import { sendFiles } from "./utils/discord.js";
 import { downloadImageAsBase64 } from "./utils/image.js";
 import { logger } from "./utils/logger.js";
 
-export async function main(jobId: number | undefined, browser: Browser) {
+export async function main(jobId: number | undefined, page: Page) {
   // * Step 0: Preparation
   const hiddenCharts = await readHiddenCharts();
 
-  const page = await browser.newPage();
   const runner = new Runner();
-
-  // Create folder "outputs" if not exists
-  try {
-    await fs.mkdir("outputs");
-  } catch (err) {
-    if ((err as NodeJS.ErrnoException)?.code !== "EEXIST") {
-      throw err;
-    }
-  }
 
   // * Step 1: Login
   await runner.runStep(

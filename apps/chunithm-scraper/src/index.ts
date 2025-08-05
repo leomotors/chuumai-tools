@@ -1,8 +1,12 @@
+import { existsSync } from "node:fs";
+import { mkdir } from "node:fs/promises";
+
 import { eq } from "drizzle-orm";
 import { chromium } from "playwright";
 
 import { jobTable } from "@repo/db-chuni/schema";
 
+import { stateStoragePath } from "./constants.js";
 import { db } from "./db.js";
 import { main } from "./main.js";
 import { logger } from "./utils/logger.js";
@@ -19,7 +23,28 @@ try {
   logger.log(`Starting scraper version: ${APP_VERSION}`);
   logger.log(`Created job with ID: ${jobId}`);
 
-  await main(jobId, browser);
+  // Create folder "outputs" if not exists
+  try {
+    await mkdir("outputs");
+  } catch (err) {
+    if ((err as NodeJS.ErrnoException)?.code !== "EEXIST") {
+      throw err;
+    }
+  }
+
+  const options = existsSync(stateStoragePath)
+    ? { storageState: stateStoragePath }
+    : undefined;
+
+  if (options) {
+    logger.log(`Using existing state storage: ${stateStoragePath}`);
+  }
+
+  const page = await browser.newPage(options);
+
+  await main(jobId, page);
+
+  await page.context().storageState({ path: stateStoragePath });
 } catch (err) {
   await db
     ?.update(jobTable)

@@ -1,11 +1,29 @@
 import { Page } from "playwright";
 
+import { mobileBaseURL } from "../constants.js";
 import { environment } from "../environment.js";
+import { logger } from "../utils/logger.js";
 
 export async function login(page: Page) {
-  await page.goto(
-    "https://lng-tgk-aime-gw.am-all.net/common_auth/login?site_id=chuniex&redirect_url=https://chunithm-net-eng.com/mobile/&back_url=https://chunithm.sega.com/",
-  );
+  await page.goto(mobileBaseURL);
+  await page.waitForLoadState("networkidle");
+
+  if (page.url() === `${mobileBaseURL}home/`) {
+    // Already logged in
+    logger.log("Already logged in, using existing session.");
+    return await page.context().cookies();
+  }
+
+  if (!page.url().includes("lng-tgk-aime-gw.am-all.net")) {
+    throw new Error(`Login failed: Unexpected URL ${page.url()}`);
+  }
+
+  // Session reset, perform login
+  logger.log("Session is not found or expired, performing login...");
+
+  await page
+    .getByRole("checkbox", { name: "Agree to the terms of use for" })
+    .check();
   await page.getByRole("term").getByText("SEGA ID").click();
   await page.locator("#sid").click();
   await page.locator("#sid").fill(environment.USERNAME);

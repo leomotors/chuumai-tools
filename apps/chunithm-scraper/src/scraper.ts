@@ -1,6 +1,6 @@
 import { Page } from "playwright";
 
-const baseURL = "https://chunithm-net-eng.com/mobile/";
+import { mobileBaseURL } from "./constants.js";
 
 export async function fetchPath(
   page: Page,
@@ -25,7 +25,7 @@ export async function fetchPath(
         text,
       };
     },
-    { fetchPath: `${baseURL}${path}`, method, headers, body },
+    { fetchPath: `${mobileBaseURL}${path}`, method, headers, body },
   );
 
   if (!response.ok) {

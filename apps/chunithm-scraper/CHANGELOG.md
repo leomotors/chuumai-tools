@@ -2,6 +2,11 @@
 
 For changelog before V4: [here](https://github.com/leomotors/chunithm-net-scraper/blob/main/CHANGELOG.md)
 
+## [5.1.0] - 2025-08-05
+
+- fix: update scraper to support new checkbox in login page
+- feat: support saving state to reduce number of logins
+
 ## [5.0.0] - 2025-07-20
 
 - refactor: optimize by using fetch instead of whole browser

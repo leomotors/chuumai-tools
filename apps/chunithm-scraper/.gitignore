@@ -1,3 +1,4 @@
 outputs
 output-*.json
 hidden.json
+state.json
