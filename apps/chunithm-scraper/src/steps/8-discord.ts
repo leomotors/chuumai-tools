@@ -20,7 +20,7 @@ export async function sendDiscordImage(
   }
 
   const image = await fs.readFile(imageLocation);
-  const blob = new Blob([image], { type: "image/png" });
+  const blob = new Blob([new Uint8Array(image)], { type: "image/png" });
 
   const message = `## Your Music for Rating Image is here!
 **Scraper Version**: ${APP_VERSION} @ ${environment.VERSION}

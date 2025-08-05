@@ -30,7 +30,9 @@ export async function handlePwError(
       fileName: `error-page-${Date.now()}.html`,
     });
     files.push({
-      blob: new Blob([await page.screenshot()], { type: "image/png" }),
+      blob: new Blob([new Uint8Array(await page.screenshot())], {
+        type: "image/png",
+      }),
       fileName: `error-screenshot-${Date.now()}.png`,
     });
     errorMessage += ` on page ${page.url()}`;
