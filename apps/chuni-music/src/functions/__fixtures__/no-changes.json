@@ -1,0 +1,34 @@
+{
+  "existingData": [
+    {
+      "id": 100,
+      "category": "POPS & ANIME",
+      "title": "Same Title",
+      "artist": "Same Artist",
+      "image": "same.jpg"
+    }
+  ],
+  "newData": [
+    {
+      "id": 100,
+      "catname": "POPS & ANIME",
+      "title": "Same Title",
+      "artist": "Same Artist",
+      "image": "same.jpg",
+      "newflag": 0,
+      "reading": "セイムタイトル",
+      "lev_bas": "3",
+      "lev_adv": "6",
+      "lev_exp": "9",
+      "lev_mas": "12",
+      "lev_ult": "",
+      "we_kanji": "",
+      "we_star": ""
+    }
+  ],
+  "expected": {
+    "newRecords": 0,
+    "updatedRecords": 0,
+    "removedRecords": 0
+  }
+}

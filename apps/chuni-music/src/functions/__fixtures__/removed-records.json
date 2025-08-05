@@ -1,0 +1,42 @@
+{
+  "existingData": [
+    {
+      "id": 100,
+      "category": "POPS & ANIME",
+      "title": "Test Song 1",
+      "artist": "Test Artist 1",
+      "image": "test1.jpg"
+    },
+    {
+      "id": 200,
+      "category": "ORIGINAL",
+      "title": "Removed Song",
+      "artist": "Removed Artist",
+      "image": "removed.jpg"
+    }
+  ],
+  "newData": [
+    {
+      "id": 100,
+      "catname": "POPS & ANIME",
+      "title": "Test Song 1",
+      "artist": "Test Artist 1",
+      "image": "test1.jpg",
+      "newflag": 0,
+      "reading": "テストソング1",
+      "lev_bas": "3",
+      "lev_adv": "6",
+      "lev_exp": "9",
+      "lev_mas": "12",
+      "lev_ult": "",
+      "we_kanji": "",
+      "we_star": ""
+    }
+  ],
+  "expected": {
+    "newRecords": 0,
+    "updatedRecords": 0,
+    "removedRecords": 1,
+    "removedRecordIds": [200]
+  }
+}

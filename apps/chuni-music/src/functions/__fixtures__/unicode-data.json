@@ -1,0 +1,39 @@
+{
+  "existingData": [
+    {
+      "id": 1,
+      "category": "東方Project",
+      "title": "原曲：東方風神録　～ Mountain of Faith",
+      "artist": "ZUN / 上海アリス幻樂団",
+      "image": "touhou.jpg"
+    }
+  ],
+  "newData": [
+    {
+      "id": 1,
+      "catname": "東方Project",
+      "title": "原曲：東方風神録　～ Mountain of Faith (Remastered)",
+      "artist": "ZUN / 上海アリス幻樂団",
+      "image": "touhou_remastered.jpg",
+      "newflag": 0,
+      "reading": "ゲンキョクトウホウフウジンロクマウンテンオブフェイス",
+      "lev_bas": "4",
+      "lev_adv": "7",
+      "lev_exp": "10+",
+      "lev_mas": "13+",
+      "lev_ult": "",
+      "we_kanji": "",
+      "we_star": ""
+    }
+  ],
+  "expected": {
+    "newRecords": 0,
+    "updatedRecords": 1,
+    "removedRecords": 0,
+    "expectedUpdate": {
+      "id": 1,
+      "title": "原曲：東方風神録　～ Mountain of Faith (Remastered)",
+      "image": "touhou_remastered.jpg"
+    }
+  }
+}

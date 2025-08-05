@@ -1,4 +1,3 @@
-import { S3Client } from "@aws-sdk/client-s3";
 import cliProgress from "cli-progress";
 import { PgInsertValue } from "drizzle-orm/pg-core";
 
@@ -7,6 +6,7 @@ import { downloadImage, listFilesInFolder, uploadImage } from "@repo/utils/s3";
 
 import { db } from "../db.js";
 import { environment } from "../environment.js";
+import { s3 } from "../s3.js";
 import { musicJsonSchema } from "../types.js";
 
 const url = "https://chunithm.sega.jp/storage/json/music.json";
@@ -25,17 +25,6 @@ export async function downloadMusicData(version: string) {
   const existingIdSet = new Set(existingMusicData.map((m) => m.id));
 
   const newMusicData = stdMusicData.filter((m) => !existingIdSet.has(m.id));
-
-  const s3 = new S3Client({
-    endpoint: environment.AWS_ENDPOINT,
-    region: environment.AWS_REGION,
-    credentials: {
-      accessKeyId: environment.AWS_ACCESS_KEY_ID,
-      secretAccessKey: environment.AWS_SECRET_ACCESS_KEY,
-    },
-    // minio
-    forcePathStyle: true,
-  });
 
   if (newMusicData.length > 0) {
     await db.insert(musicDataTable).values(

@@ -1,0 +1,64 @@
+{
+  "existingData": [
+    {
+      "id": 100,
+      "category": "POPS & ANIME",
+      "title": "Old Title",
+      "artist": "Old Artist",
+      "image": "old.jpg"
+    },
+    {
+      "id": 200,
+      "category": "ORIGINAL",
+      "title": "Test Song 2",
+      "artist": "Test Artist 2",
+      "image": "test2.jpg"
+    }
+  ],
+  "newData": [
+    {
+      "id": 100,
+      "catname": "niconico",
+      "title": "New Title",
+      "artist": "New Artist",
+      "image": "new.jpg",
+      "newflag": 0,
+      "reading": "ニュータイトル",
+      "lev_bas": "3",
+      "lev_adv": "6",
+      "lev_exp": "9",
+      "lev_mas": "12",
+      "lev_ult": "",
+      "we_kanji": "",
+      "we_star": ""
+    },
+    {
+      "id": 200,
+      "catname": "ORIGINAL",
+      "title": "Test Song 2",
+      "artist": "Test Artist 2",
+      "image": "test2.jpg",
+      "newflag": 0,
+      "reading": "テストソング2",
+      "lev_bas": "4",
+      "lev_adv": "7",
+      "lev_exp": "10",
+      "lev_mas": "13",
+      "lev_ult": "",
+      "we_kanji": "",
+      "we_star": ""
+    }
+  ],
+  "expected": {
+    "newRecords": 0,
+    "updatedRecords": 1,
+    "removedRecords": 0,
+    "expectedUpdate": {
+      "id": 100,
+      "catname": "niconico",
+      "title": "New Title",
+      "artist": "New Artist",
+      "image": "new.jpg"
+    }
+  }
+}

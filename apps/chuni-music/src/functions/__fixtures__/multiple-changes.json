@@ -1,0 +1,90 @@
+{
+  "existingData": [
+    {
+      "id": 100,
+      "category": "POPS & ANIME",
+      "title": "Update Me",
+      "artist": "Old Artist",
+      "image": "old.jpg"
+    },
+    {
+      "id": 200,
+      "category": "ORIGINAL",
+      "title": "Remove Me",
+      "artist": "Remove Artist",
+      "image": "remove.jpg"
+    },
+    {
+      "id": 300,
+      "category": "niconico",
+      "title": "Keep Me Same",
+      "artist": "Same Artist",
+      "image": "same.jpg"
+    }
+  ],
+  "newData": [
+    {
+      "id": 100,
+      "catname": "niconico",
+      "title": "Updated Title",
+      "artist": "New Artist",
+      "image": "new.jpg",
+      "newflag": 0,
+      "reading": "アップデートタイトル",
+      "lev_bas": "3",
+      "lev_adv": "6",
+      "lev_exp": "9",
+      "lev_mas": "12",
+      "lev_ult": "",
+      "we_kanji": "",
+      "we_star": ""
+    },
+    {
+      "id": 300,
+      "catname": "niconico",
+      "title": "Keep Me Same",
+      "artist": "Same Artist",
+      "image": "same.jpg",
+      "newflag": 0,
+      "reading": "キープミーセイム",
+      "lev_bas": "2",
+      "lev_adv": "5",
+      "lev_exp": "8",
+      "lev_mas": "11",
+      "lev_ult": "",
+      "we_kanji": "",
+      "we_star": ""
+    },
+    {
+      "id": 400,
+      "catname": "VARIETY",
+      "title": "Brand New Song",
+      "artist": "Brand New Artist",
+      "image": "brand_new.jpg",
+      "newflag": 1,
+      "reading": "ブランドニューソング",
+      "lev_bas": "4",
+      "lev_adv": "7",
+      "lev_exp": "10",
+      "lev_mas": "13+",
+      "lev_ult": "",
+      "we_kanji": "",
+      "we_star": ""
+    }
+  ],
+  "expected": {
+    "newRecords": 1,
+    "updatedRecords": 1,
+    "removedRecords": 1,
+    "newRecordIds": [400],
+    "updatedRecordIds": [100],
+    "removedRecordIds": [200],
+    "expectedUpdate": {
+      "id": 100,
+      "catname": "niconico",
+      "title": "Updated Title",
+      "artist": "New Artist",
+      "image": "new.jpg"
+    }
+  }
+}

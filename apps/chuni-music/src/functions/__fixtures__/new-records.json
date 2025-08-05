@@ -1,0 +1,74 @@
+{
+  "existingData": [
+    {
+      "id": 100,
+      "category": "POPS & ANIME",
+      "title": "Test Song 1",
+      "artist": "Test Artist 1",
+      "image": "test1.jpg"
+    },
+    {
+      "id": 200,
+      "category": "ORIGINAL",
+      "title": "Test Song 2",
+      "artist": "Test Artist 2",
+      "image": "test2.jpg"
+    }
+  ],
+  "newData": [
+    {
+      "id": 100,
+      "catname": "POPS & ANIME",
+      "title": "Test Song 1",
+      "artist": "Test Artist 1",
+      "image": "test1.jpg",
+      "newflag": 0,
+      "reading": "テストソング1",
+      "lev_bas": "3",
+      "lev_adv": "6",
+      "lev_exp": "9",
+      "lev_mas": "12",
+      "lev_ult": "",
+      "we_kanji": "",
+      "we_star": ""
+    },
+    {
+      "id": 200,
+      "catname": "ORIGINAL",
+      "title": "Test Song 2",
+      "artist": "Test Artist 2",
+      "image": "test2.jpg",
+      "newflag": 0,
+      "reading": "テストソング2",
+      "lev_bas": "4",
+      "lev_adv": "7",
+      "lev_exp": "10",
+      "lev_mas": "13",
+      "lev_ult": "",
+      "we_kanji": "",
+      "we_star": ""
+    },
+    {
+      "id": 300,
+      "catname": "niconico",
+      "title": "New Song",
+      "artist": "New Artist",
+      "image": "new.jpg",
+      "newflag": 1,
+      "reading": "ニューソング",
+      "lev_bas": "2",
+      "lev_adv": "5",
+      "lev_exp": "8",
+      "lev_mas": "11",
+      "lev_ult": "",
+      "we_kanji": "",
+      "we_star": ""
+    }
+  ],
+  "expected": {
+    "newRecords": 1,
+    "updatedRecords": 0,
+    "removedRecords": 0,
+    "newRecordIds": [300]
+  }
+}

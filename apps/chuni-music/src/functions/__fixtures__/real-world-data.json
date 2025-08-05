@@ -1,0 +1,109 @@
+{
+  "existingData": [
+    {
+      "id": 2757,
+      "category": "POPS & ANIME",
+      "title": "殺屋中毒",
+      "artist": "cresc.",
+      "image": "c00eb22b0a233bc5.jpg"
+    },
+    {
+      "id": 2753,
+      "category": "POPS & ANIME",
+      "title": "ONLY YOUR STARS!（Trickstar Ver.）",
+      "artist": "歌：Trickstar 作詞：松井洋平　作曲/編曲：中土智博（APDREAM）",
+      "image": "7492410b6f7c1b4c.jpg"
+    },
+    {
+      "id": 2820,
+      "category": "POPS & ANIME",
+      "title": "モエチャッカファイア",
+      "artist": "弌誠「ゲーム『ゼンレスゾーンゼロ』エレン・ジョー 同人イメージソング」",
+      "image": "4995a362b07802c4.jpg"
+    }
+  ],
+  "newData": [
+    {
+      "id": 2757,
+      "catname": "POPS & ANIME",
+      "title": "殺屋中毒",
+      "artist": "cresc.",
+      "image": "updated_c00eb22b0a233bc5.jpg",
+      "newflag": 0,
+      "reading": "コロシヤチュウドク",
+      "lev_bas": "3",
+      "lev_adv": "6",
+      "lev_exp": "9",
+      "lev_mas": "12",
+      "lev_ult": "",
+      "we_kanji": "",
+      "we_star": ""
+    },
+    {
+      "id": 2820,
+      "catname": "niconico",
+      "title": "モエチャッカファイア (Updated Version)",
+      "artist": "弌誠「ゲーム『ゼンレスゾーンゼロ』エレン・ジョー 同人イメージソング」",
+      "image": "4995a362b07802c4.jpg",
+      "newflag": 0,
+      "reading": "モエチヤツカフアイア",
+      "lev_bas": "3",
+      "lev_adv": "6",
+      "lev_exp": "9+",
+      "lev_mas": "12+",
+      "lev_ult": "14+",
+      "we_kanji": "",
+      "we_star": ""
+    },
+    {
+      "id": 2893,
+      "catname": "POPS & ANIME",
+      "title": "ぎゅむ！",
+      "artist": "ぷにる（CV：篠原 侑）「ぷにるはかわいいスライム」",
+      "image": "c1d0d1c58257d3ce.jpg",
+      "newflag": 1,
+      "reading": "キユム",
+      "lev_bas": "3",
+      "lev_adv": "5",
+      "lev_exp": "9+",
+      "lev_mas": "13",
+      "lev_ult": "",
+      "we_kanji": "",
+      "we_star": ""
+    },
+    {
+      "id": 2819,
+      "catname": "POPS & ANIME",
+      "title": "TAIDADA",
+      "artist": "ずっと真夜中でいいのに。",
+      "image": "86a52dcd3a3c1190.jpg",
+      "newflag": 1,
+      "reading": "TAIDADA",
+      "lev_bas": "2",
+      "lev_adv": "5",
+      "lev_exp": "9",
+      "lev_mas": "13",
+      "lev_ult": "",
+      "we_kanji": "",
+      "we_star": ""
+    }
+  ],
+  "expected": {
+    "newRecords": 2,
+    "updatedRecords": 2,
+    "removedRecords": 1,
+    "newRecordIds": [2819, 2893],
+    "removedRecordIds": [2753],
+    "expectedUpdates": [
+      {
+        "id": 2757,
+        "image": "updated_c00eb22b0a233bc5.jpg"
+      },
+      {
+        "id": 2820,
+        "catname": "niconico",
+        "title": "モエチャッカファイア (Updated Version)"
+      }
+    ]
+  }
+}
