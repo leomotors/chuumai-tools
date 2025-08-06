@@ -5,7 +5,7 @@ import { describe, expect, it } from "vitest";
 
 import { musicDataTable } from "@repo/db-chuni/schema";
 
-import { diffInMusicData } from "./music-data";
+import { diffInMusicData } from "./diff-in-music-data";
 
 // Types based on the database schema and JSON schema
 type ExistingData = (typeof musicDataTable.$inferSelect)[];

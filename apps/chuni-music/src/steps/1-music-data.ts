@@ -6,6 +6,7 @@ import { downloadImage, listFilesInFolder, uploadImage } from "@repo/utils/s3";
 
 import { db } from "../db.js";
 import { environment } from "../environment.js";
+import { diffInMusicData } from "../functions/diff-in-music-data.js";
 import { s3 } from "../s3.js";
 import { musicJsonSchema } from "../types.js";
 
@@ -13,6 +14,7 @@ const url = "https://chunithm.sega.jp/storage/json/music.json";
 const s3Folder = "musicImages";
 
 export async function downloadMusicData(version: string) {
+  console.log("Step 1: Downloading current music data from official source");
   const response = await fetch(url);
   if (!response.ok) {
     throw new Error("Failed to fetch music data");
@@ -21,14 +23,13 @@ export async function downloadMusicData(version: string) {
 
   const stdMusicData = musicJsonSchema.parse(data).filter((m) => m.lev_bas);
 
+  console.log("Step 2: Compare with existing music data in the database");
   const existingMusicData = await db.select().from(musicDataTable);
-  const existingIdSet = new Set(existingMusicData.map((m) => m.id));
+  const { newRecords } = diffInMusicData(existingMusicData, stdMusicData);
 
-  const newMusicData = stdMusicData.filter((m) => !existingIdSet.has(m.id));
-
-  if (newMusicData.length > 0) {
+  if (newRecords.length > 0) {
     await db.insert(musicDataTable).values(
-      newMusicData.map((m) => ({
+      newRecords.map((m) => ({
         id: m.id,
         category: m.catname,
         title: m.title,
@@ -36,7 +37,7 @@ export async function downloadMusicData(version: string) {
         image: m.image,
       })),
     );
-    console.log(`Successfully inserted ${newMusicData.length} new music data`);
+    console.log(`Successfully inserted ${newRecords.length} new music data`);
   }
 
   // List all objects from folder `s3Folder`
