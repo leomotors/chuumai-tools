@@ -1,12 +1,11 @@
-import cliProgress from "cli-progress";
 import { PgInsertValue } from "drizzle-orm/pg-core";
 
 import { musicDataTable, musicLevelTable } from "@repo/db-chuni/schema";
-import { downloadImage, listFilesInFolder, uploadImage } from "@repo/utils/s3";
 
 import { db } from "../db.js";
 import { environment } from "../environment.js";
 import { diffInMusicData } from "../functions/diff-in-music-data.js";
+import { uploadMissingMusicImages } from "../functions/upload-music-images.js";
 import { s3 } from "../s3.js";
 import { musicJsonSchema } from "../types.js";
 
@@ -40,40 +39,18 @@ export async function downloadMusicData(version: string) {
     console.log(`Successfully inserted ${newRecords.length} new music data`);
   }
 
-  // List all objects from folder `s3Folder`
-  const contents = await listFilesInFolder(
+  console.log("Step 3: Upload missing music images to S3");
+  const uploadResult = await uploadMissingMusicImages(
     s3,
     environment.AWS_BUCKET_NAME,
     s3Folder,
+    stdMusicData,
   );
-  const existingImages = contents.map((item) => item.split("/").pop()!);
-  const newImages = stdMusicData
-    .map((m) => m.image)
-    .filter((image) => !existingImages.includes(image));
-  console.log(`New images count: ${newImages.length}`);
 
-  const progress = new cliProgress.SingleBar(
-    {},
-    cliProgress.Presets.shades_classic,
+  console.log(
+    `Image upload summary: ${uploadResult.uploadedCount} uploaded, ${uploadResult.skippedCount} skipped` +
+      (uploadResult.failedCount ? `, ${uploadResult.failedCount} failed` : ""),
   );
-  progress.start(newImages.length, 0);
-
-  for (let i = 0; i < newImages.length; i++) {
-    const imageBuffer = await downloadImage(
-      `https://new.chunithm-net.com/chuni-mobile/html/mobile/img/${newImages[i]}`,
-    );
-    await uploadImage({
-      s3,
-      bucketName: environment.AWS_BUCKET_NAME,
-      folder: s3Folder,
-      imageName: newImages[i],
-      buffer: Buffer.from(imageBuffer),
-      contentType: "image/jpeg",
-    });
-    progress.update(i + 1);
-  }
-
-  progress.stop();
 
   // Section: Chart Level
   const existingChartLevel = await db.select().from(musicLevelTable);
