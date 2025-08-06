@@ -1,0 +1,102 @@
+{
+  "existingMusicLevels": [
+    {
+      "id": 20,
+      "musicId": 500,
+      "difficulty": "basic",
+      "level": "3",
+      "constant": "3.0",
+      "version": "VRS"
+    },
+    {
+      "id": 21,
+      "musicId": 500,
+      "difficulty": "advanced",
+      "level": "6",
+      "constant": "6.0",
+      "version": "VRS"
+    },
+    {
+      "id": 22,
+      "musicId": 500,
+      "difficulty": "expert",
+      "level": "9",
+      "constant": "9.0",
+      "version": "VRS"
+    },
+    {
+      "id": 23,
+      "musicId": 500,
+      "difficulty": "master",
+      "level": "12",
+      "constant": "12.0",
+      "version": "VRS"
+    },
+    {
+      "id": 24,
+      "musicId": 600,
+      "difficulty": "basic",
+      "level": "2",
+      "constant": "2.0",
+      "version": "XVRS"
+    },
+    {
+      "id": 25,
+      "musicId": 600,
+      "difficulty": "advanced",
+      "level": "5",
+      "constant": "5.0",
+      "version": "XVRS"
+    },
+    {
+      "id": 26,
+      "musicId": 600,
+      "difficulty": "expert",
+      "level": "8",
+      "constant": "8.0",
+      "version": "XVRS"
+    },
+    {
+      "id": 27,
+      "musicId": 600,
+      "difficulty": "master",
+      "level": "11",
+      "constant": "11.0",
+      "version": "XVRS"
+    }
+  ],
+  "musicData": [
+    {
+      "id": 500,
+      "catname": "POPS & ANIME",
+      "title": "Level Changed Song",
+      "artist": "Test Artist",
+      "image": "changed.jpg",
+      "newflag": 0,
+      "reading": "レベルチェンジ",
+      "lev_bas": "3",
+      "lev_adv": "6",
+      "lev_exp": "9",
+      "lev_mas": "13",
+      "lev_ult": "",
+      "we_kanji": "",
+      "we_star": ""
+    },
+    {
+      "id": 600,
+      "catname": "ORIGINAL",
+      "title": "Version Mismatch Song",
+      "artist": "Version Artist",
+      "image": "version.jpg",
+      "newflag": 0,
+      "reading": "バージョンミスマッチ",
+      "lev_bas": "2",
+      "lev_adv": "5",
+      "lev_exp": "8",
+      "lev_mas": "11",
+      "lev_ult": "",
+      "we_kanji": "",
+      "we_star": ""
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "existingMusicLevels": [
+    {
+      "id": 10,
+      "musicId": 300,
+      "difficulty": "basic",
+      "level": "4",
+      "constant": "4.0",
+      "version": "VRS"
+    },
+    {
+      "id": 11,
+      "musicId": 300,
+      "difficulty": "advanced",
+      "level": "7",
+      "constant": "7.0",
+      "version": "VRS"
+    },
+    {
+      "id": 12,
+      "musicId": 300,
+      "difficulty": "expert",
+      "level": "10",
+      "constant": "10.0",
+      "version": "VRS"
+    },
+    {
+      "id": 13,
+      "musicId": 300,
+      "difficulty": "master",
+      "level": "13",
+      "constant": "13.0",
+      "version": "VRS"
+    }
+  ],
+  "musicData": [
+    {
+      "id": 300,
+      "catname": "niconico",
+      "title": "New Song",
+      "artist": "New Artist",
+      "image": "new.jpg",
+      "newflag": 1,
+      "reading": "ニューソング",
+      "lev_bas": "4",
+      "lev_adv": "7",
+      "lev_exp": "10",
+      "lev_mas": "13",
+      "lev_ult": "15",
+      "we_kanji": "",
+      "we_star": ""
+    },
+    {
+      "id": 400,
+      "catname": "VARIETY",
+      "title": "Another New Song",
+      "artist": "Another Artist",
+      "image": "another.jpg",
+      "newflag": 1,
+      "reading": "アナザーソング",
+      "lev_bas": "1",
+      "lev_adv": "4",
+      "lev_exp": "7",
+      "lev_mas": "10",
+      "lev_ult": "",
+      "we_kanji": "",
+      "we_star": ""
+    }
+  ]
+}

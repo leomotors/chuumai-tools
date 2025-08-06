@@ -1,10 +1,9 @@
-import { PgInsertValue } from "drizzle-orm/pg-core";
-
 import { musicDataTable, musicLevelTable } from "@repo/db-chuni/schema";
 
 import { db } from "../db.js";
 import { environment } from "../environment.js";
 import { diffInMusicData } from "../functions/diff-in-music-data.js";
+import { processMusicLevels } from "../functions/process-music-levels.js";
 import { uploadMissingMusicImages } from "../functions/upload-music-images.js";
 import { s3 } from "../s3.js";
 import { musicJsonSchema } from "../types.js";
@@ -52,48 +51,34 @@ export async function downloadMusicData(version: string) {
       (uploadResult.failedCount ? `, ${uploadResult.failedCount} failed` : ""),
   );
 
-  // Section: Chart Level
+  console.log("Step 4: Process music level data");
   const existingChartLevel = await db.select().from(musicLevelTable);
+  const levelResult = processMusicLevels(
+    stdMusicData,
+    existingChartLevel,
+    version,
+  );
 
-  const payload = [] as PgInsertValue<typeof musicLevelTable>[];
-  for (const music of stdMusicData) {
-    const levels = [
-      { difficulty: "basic" as const, level: music.lev_bas },
-      { difficulty: "advanced" as const, level: music.lev_adv },
-      { difficulty: "expert" as const, level: music.lev_exp },
-      { difficulty: "master" as const, level: music.lev_mas },
-      { difficulty: "ultima" as const, level: music.lev_ult },
-    ];
-
-    for (const l of levels) {
-      if (l.level) {
-        payload.push({
-          musicId: music.id,
-          difficulty: l.difficulty,
-          level: l.level,
-          version,
-        });
-      }
-    }
-  }
-
-  for (const p of payload) {
-    const result = existingChartLevel.find(
-      (c) =>
-        c.musicId === p.musicId &&
-        c.difficulty === p.difficulty &&
-        c.version === version,
+  // Log warnings for level mismatches
+  for (const warning of levelResult.warnings) {
+    console.log(
+      `Warning: Level mismatch for musicId ${warning.musicId} and difficulty ${warning.difficulty}. Existing level: ${warning.existingLevel}, New level: ${warning.newLevel}. (Remain as-is)`,
     );
-    if (result) {
-      if (result.level !== p.level) {
-        console.log(
-          `Warning: Level mismatch for musicId ${p.musicId} and difficulty ${p.difficulty}. Existing level: ${result.level}, New level: ${p.level}. (Remain as-is)`,
-        );
-      }
-    }
   }
 
-  if (payload.length > 0) {
-    await db.insert(musicLevelTable).values(payload).onConflictDoNothing();
+  if (levelResult.payload.length > 0) {
+    await db
+      .insert(musicLevelTable)
+      .values(levelResult.payload)
+      .onConflictDoNothing();
+    console.log(
+      `Successfully inserted ${levelResult.payload.length} new music level records`,
+    );
+  }
+
+  if (levelResult.skippedCount > 0) {
+    console.log(
+      `Skipped ${levelResult.skippedCount} existing music level records`,
+    );
   }
 }
