@@ -21,7 +21,10 @@ export async function downloadMusicData(version: string) {
 
   const stdMusicData = musicJsonSchema.parse(data).filter((m) => m.lev_bas);
 
-  console.log("Step 2: Compare with existing music data in the database");
+  console.log(`Found ${stdMusicData.length} standard music records`);
+
+  console.log("\nStep 2: Compare with existing music data in the database");
+
   const existingMusicData = await db.select().from(musicDataTable);
   const { newRecords } = diffInMusicData(existingMusicData, stdMusicData);
 
@@ -36,9 +39,11 @@ export async function downloadMusicData(version: string) {
       })),
     );
     console.log(`Successfully inserted ${newRecords.length} new music data`);
+  } else {
+    console.log("No new music data to insert");
   }
 
-  console.log("Step 3: Upload missing music images to S3");
+  console.log("\nStep 3: Upload missing music images to S3");
   const uploadResult = await uploadMissingMusicImages(
     s3,
     environment.AWS_BUCKET_NAME,
@@ -51,7 +56,7 @@ export async function downloadMusicData(version: string) {
       (uploadResult.failedCount ? `, ${uploadResult.failedCount} failed` : ""),
   );
 
-  console.log("Step 4: Process music level data");
+  console.log("\nStep 4: Process music level data");
   const existingChartLevel = await db.select().from(musicLevelTable);
   const levelResult = processMusicLevels(
     stdMusicData,

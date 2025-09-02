@@ -1,0 +1,37 @@
+[
+  {
+    "id": 2684,
+    "category": "POPS & ANIME",
+    "title": "晴る",
+    "artist": "ヨルシカ",
+    "image": "83f11dae7ed803cd.jpg"
+  },
+  {
+    "id": 2686,
+    "category": "POPS & ANIME",
+    "title": "ビビデバ",
+    "artist": "星街すいせい（ホロライブ）",
+    "image": "2f51ff590b2f98e1.jpg"
+  },
+  {
+    "id": 999,
+    "category": "ORIGINAL",
+    "title": "Duplicate Title",
+    "artist": "Test Artist 1",
+    "image": "test1.jpg"
+  },
+  {
+    "id": 1000,
+    "category": "ORIGINAL",
+    "title": "Duplicate Title",
+    "artist": "Test Artist 2",
+    "image": "test2.jpg"
+  },
+  {
+    "id": 1001,
+    "category": "VARIETY",
+    "title": "Null Constants Song",
+    "artist": "Null Artist",
+    "image": "null.jpg"
+  }
+]

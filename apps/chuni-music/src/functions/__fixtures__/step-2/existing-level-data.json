@@ -1,0 +1,130 @@
+[
+  {
+    "id": 50,
+    "musicId": 2684,
+    "difficulty": "basic",
+    "level": "2",
+    "constant": "2.0",
+    "version": "VRS"
+  },
+  {
+    "id": 51,
+    "musicId": 2684,
+    "difficulty": "advanced",
+    "level": "5",
+    "constant": "5.0",
+    "version": "VRS"
+  },
+  {
+    "id": 52,
+    "musicId": 2684,
+    "difficulty": "expert",
+    "level": "8+",
+    "constant": "8.5",
+    "version": "VRS"
+  },
+  {
+    "id": 53,
+    "musicId": 2684,
+    "difficulty": "master",
+    "level": "11+",
+    "constant": "11.9",
+    "version": "VRS"
+  },
+  {
+    "id": 54,
+    "musicId": 2684,
+    "difficulty": "ultima",
+    "level": "14",
+    "constant": "14.1",
+    "version": "VRS"
+  },
+  {
+    "id": 17945,
+    "musicId": 2684,
+    "difficulty": "basic",
+    "level": "2",
+    "constant": "2.0",
+    "version": "XVRS"
+  },
+  {
+    "id": 17946,
+    "musicId": 2684,
+    "difficulty": "advanced",
+    "level": "5",
+    "constant": "5.0",
+    "version": "XVRS"
+  },
+  {
+    "id": 17947,
+    "musicId": 2684,
+    "difficulty": "expert",
+    "level": "8+",
+    "constant": "8.5",
+    "version": "XVRS"
+  },
+  {
+    "id": 17948,
+    "musicId": 2684,
+    "difficulty": "master",
+    "level": "11+",
+    "constant": "11.9",
+    "version": "XVRS"
+  },
+  {
+    "id": 17949,
+    "musicId": 2684,
+    "difficulty": "ultima",
+    "level": "14",
+    "constant": "14.1",
+    "version": "XVRS"
+  },
+  {
+    "id": 55,
+    "musicId": 2686,
+    "difficulty": "basic",
+    "level": "3",
+    "constant": "3.0",
+    "version": "VRS"
+  },
+  {
+    "id": 56,
+    "musicId": 2686,
+    "difficulty": "advanced",
+    "level": "6",
+    "constant": "6.0",
+    "version": "VRS"
+  },
+  {
+    "id": 57,
+    "musicId": 2686,
+    "difficulty": "expert",
+    "level": "9+",
+    "constant": "9.5",
+    "version": "VRS"
+  },
+  {
+    "id": 58,
+    "musicId": 2686,
+    "difficulty": "master",
+    "level": "12+",
+    "constant": null,
+    "version": "VRS"
+  },
+  {
+    "id": 59,
+    "musicId": 1001,
+    "difficulty": "basic",
+    "level": "1",
+    "constant": null,
+    "version": "VRS"
+  },
+  {
+    "id": 60,
+    "musicId": 1001,
+    "difficulty": "advanced",
+    "level": "5",
+    "constant": "5.0",
+    "version": "VRS"
+  }
+]

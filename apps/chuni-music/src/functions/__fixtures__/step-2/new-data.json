@@ -1,0 +1,106 @@
+[
+  {
+    "title": "晴る",
+    "sheets": [
+      {
+        "type": "std",
+        "difficulty": "basic",
+        "internalLevel": "2.0"
+      },
+      {
+        "type": "std",
+        "difficulty": "advanced",
+        "internalLevel": "5.0"
+      },
+      {
+        "type": "std",
+        "difficulty": "expert",
+        "internalLevel": "8.5"
+      },
+      {
+        "type": "std",
+        "difficulty": "master",
+        "internalLevel": "11.9"
+      },
+      {
+        "type": "std",
+        "difficulty": "ultima",
+        "internalLevel": "14.2"
+      }
+    ]
+  },
+  {
+    "title": "ビビデバ",
+    "sheets": [
+      {
+        "type": "std",
+        "difficulty": "basic",
+        "internalLevel": "3.0"
+      },
+      {
+        "type": "std",
+        "difficulty": "advanced",
+        "internalLevel": "6.0"
+      },
+      {
+        "type": "std",
+        "difficulty": "expert",
+        "internalLevel": "9.5"
+      },
+      {
+        "type": "std",
+        "difficulty": "master",
+        "internalLevel": "12.5"
+      },
+      {
+        "type": "we",
+        "difficulty": "world_end"
+      }
+    ]
+  },
+  {
+    "title": "Missing Song",
+    "sheets": [
+      {
+        "type": "std",
+        "difficulty": "basic",
+        "internalLevel": "1.0"
+      }
+    ]
+  },
+  {
+    "title": "Duplicate Title",
+    "sheets": [
+      {
+        "type": "std",
+        "difficulty": "basic",
+        "internalLevel": "2.0"
+      }
+    ]
+  },
+  {
+    "title": "Duplicate Title",
+    "sheets": [
+      {
+        "type": "std",
+        "difficulty": "advanced",
+        "internalLevel": "5.0"
+      }
+    ]
+  },
+  {
+    "title": "Null Constants Song",
+    "sheets": [
+      {
+        "type": "std",
+        "difficulty": "basic",
+        "internalLevel": null
+      },
+      {
+        "type": "std",
+        "difficulty": "advanced",
+        "internalLevel": "5.0"
+      }
+    ]
+  }
+]
