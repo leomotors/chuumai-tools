@@ -1,0 +1,44 @@
+[
+  {
+    "title": "君の知らない物語",
+    "sort": 100,
+    "category": "POPS&アニメ",
+    "artist": "supercell「化物語」",
+    "image": "b9d06643b0f9db1f154aad251470631bb688d1b5fb36566738d2c1f3cd488566.png"
+  },
+  {
+    "title": "True Love Song",
+    "sort": 1036,
+    "category": "maimai",
+    "artist": "Kai/クラシック「G線上のアリア」",
+    "image": "c7cfd8a91e0436ac.png"
+  },
+  {
+    "title": "Future",
+    "sort": 91,
+    "category": "POPS&アニメ",
+    "artist": "★STAR GUiTAR [cover]",
+    "image": "507c390321c312eb.png"
+  },
+  {
+    "title": "Duplicate Title",
+    "sort": 2000,
+    "category": "maimai",
+    "artist": "Test Artist",
+    "image": "test.png"
+  },
+  {
+    "title": "Duplicate Title",
+    "sort": 2001,
+    "category": "maimai",
+    "artist": "Test Artist 2",
+    "image": "test2.png"
+  },
+  {
+    "title": "Null Constants Song",
+    "sort": 3000,
+    "category": "maimai",
+    "artist": "Test Artist 3",
+    "image": "test3.png"
+  }
+]

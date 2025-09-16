@@ -1,0 +1,124 @@
+{
+  "songs": [
+    {
+      "title": "君の知らない物語",
+      "sheets": [
+        {
+          "type": "dx",
+          "difficulty": "basic",
+          "internalLevel": null
+        },
+        {
+          "type": "dx",
+          "difficulty": "advanced",
+          "internalLevel": "6.2"
+        },
+        {
+          "type": "dx",
+          "difficulty": "expert",
+          "internalLevel": "10.5"
+        },
+        {
+          "type": "dx",
+          "difficulty": "master",
+          "internalLevel": "12.4"
+        }
+      ]
+    },
+    {
+      "title": "True Love Song",
+      "sheets": [
+        {
+          "type": "std",
+          "difficulty": "basic",
+          "internalLevel": "5.0"
+        },
+        {
+          "type": "std",
+          "difficulty": "advanced",
+          "internalLevel": "7.3"
+        },
+        {
+          "type": "std",
+          "difficulty": "expert",
+          "internalLevel": "10.0"
+        },
+        {
+          "type": "std",
+          "difficulty": "master",
+          "internalLevel": "12.1"
+        }
+      ]
+    },
+    {
+      "title": "Future",
+      "sheets": [
+        {
+          "type": "std",
+          "difficulty": "basic",
+          "internalLevel": "7.0"
+        },
+        {
+          "type": "std",
+          "difficulty": "advanced",
+          "internalLevel": "7.7"
+        },
+        {
+          "type": "std",
+          "difficulty": "expert",
+          "internalLevel": "9.2"
+        },
+        {
+          "type": "std",
+          "difficulty": "master",
+          "internalLevel": "10.8"
+        },
+        {
+          "type": "std",
+          "difficulty": "remaster",
+          "internalLevel": "12.7"
+        }
+      ]
+    },
+    {
+      "title": "Null Constants Song",
+      "sheets": [
+        {
+          "type": "std",
+          "difficulty": "basic",
+          "internalLevel": null
+        },
+        {
+          "type": "dx",
+          "difficulty": "advanced",
+          "internalLevel": null
+        }
+      ]
+    },
+    {
+      "title": "New Song 1",
+      "sheets": [
+        {
+          "type": "std",
+          "difficulty": "basic",
+          "internalLevel": "3.0"
+        },
+        {
+          "type": "std",
+          "difficulty": "advanced",
+          "internalLevel": "5.2"
+        },
+        {
+          "type": "std",
+          "difficulty": "expert",
+          "internalLevel": "8.5"
+        },
+        {
+          "type": "std",
+          "difficulty": "master",
+          "internalLevel": "11.3"
+        }
+      ]
+    }
+  ]
+}

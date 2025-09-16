@@ -1,0 +1,137 @@
+[
+  {
+    "id": 1,
+    "musicTitle": "君の知らない物語",
+    "chartType": "dx",
+    "difficulty": "basic",
+    "level": "3",
+    "constant": "3.0",
+    "version": "PLUS"
+  },
+  {
+    "id": 2,
+    "musicTitle": "君の知らない物語",
+    "chartType": "dx",
+    "difficulty": "advanced",
+    "level": "6",
+    "constant": "6.2",
+    "version": "PLUS"
+  },
+  {
+    "id": 3,
+    "musicTitle": "君の知らない物語",
+    "chartType": "dx",
+    "difficulty": "expert",
+    "level": "10",
+    "constant": "10.5",
+    "version": "PLUS"
+  },
+  {
+    "id": 4,
+    "musicTitle": "君の知らない物語",
+    "chartType": "dx",
+    "difficulty": "master",
+    "level": "12+",
+    "constant": null,
+    "version": "PLUS"
+  },
+  {
+    "id": 5,
+    "musicTitle": "True Love Song",
+    "chartType": "std",
+    "difficulty": "basic",
+    "level": "5",
+    "constant": "5.0",
+    "version": "PLUS"
+  },
+  {
+    "id": 6,
+    "musicTitle": "True Love Song",
+    "chartType": "std",
+    "difficulty": "advanced",
+    "level": "7",
+    "constant": "7.3",
+    "version": "PLUS"
+  },
+  {
+    "id": 7,
+    "musicTitle": "True Love Song",
+    "chartType": "std",
+    "difficulty": "expert",
+    "level": "10",
+    "constant": "10.0",
+    "version": "PLUS"
+  },
+  {
+    "id": 8,
+    "musicTitle": "True Love Song",
+    "chartType": "std",
+    "difficulty": "master",
+    "level": "12",
+    "constant": "12.1",
+    "version": "PLUS"
+  },
+  {
+    "id": 9,
+    "musicTitle": "Future",
+    "chartType": "std",
+    "difficulty": "basic",
+    "level": "7",
+    "constant": "7.0",
+    "version": "PLUS"
+  },
+  {
+    "id": 10,
+    "musicTitle": "Future",
+    "chartType": "std",
+    "difficulty": "advanced",
+    "level": "7+",
+    "constant": "7.7",
+    "version": "PLUS"
+  },
+  {
+    "id": 11,
+    "musicTitle": "Future",
+    "chartType": "std",
+    "difficulty": "expert",
+    "level": "9",
+    "constant": "9.2",
+    "version": "PLUS"
+  },
+  {
+    "id": 12,
+    "musicTitle": "Future",
+    "chartType": "std",
+    "difficulty": "master",
+    "level": "10+",
+    "constant": "10.8",
+    "version": "PLUS"
+  },
+  {
+    "id": 13,
+    "musicTitle": "Future",
+    "chartType": "std",
+    "difficulty": "remaster",
+    "level": "12+",
+    "constant": "12.7",
+    "version": "PLUS"
+  },
+  {
+    "id": 14,
+    "musicTitle": "Null Constants Song",
+    "chartType": "std",
+    "difficulty": "basic",
+    "level": "1",
+    "constant": null,
+    "version": "PLUS"
+  },
+  {
+    "id": 15,
+    "musicTitle": "Null Constants Song",
+    "chartType": "dx",
+    "difficulty": "advanced",
+    "level": "3",
+    "constant": null,
+    "version": "PLUS"
+  }
+]

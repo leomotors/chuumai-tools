@@ -1,6 +1,10 @@
 import { z } from "zod";
 
-import { stdChartDifficultyValues } from "@repo/db-chuni/schema";
+import {
+  categoryValues,
+  chartTypeValues,
+  stdChartDifficultyValues,
+} from "@repo/db-maimai/schema";
 
 /*
 Examples:
@@ -66,8 +70,9 @@ Both Versions
 // Only field we need
 export const musicSchema = z.object({
   title: z.string(),
+  sort: z.coerce.number(),
   artist: z.string(),
-  catcode: z.string(),
+  catcode: z.enum(categoryValues),
   image_url: z.string(),
 
   // STD
@@ -90,13 +95,9 @@ export const musicJsonSchema = z.array(musicSchema);
 // Using only field we need, from: https://arcade-songs.zetaraku.dev/maimai/
 const zSheet = z.discriminatedUnion("type", [
   z.object({
-    type: z.literal("std"),
+    type: z.enum(chartTypeValues),
     difficulty: z.enum(stdChartDifficultyValues),
     internalLevel: z.string().nullable(),
-  }),
-  z.object({
-    type: z.literal("we"),
-    difficulty: z.string(),
   }),
 ]);
 
