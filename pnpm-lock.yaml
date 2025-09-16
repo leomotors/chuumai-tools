@@ -264,6 +264,9 @@ importers:
       '@repo/db-maimai':
         specifier: workspace:*
         version: link:../../packages/db-maimai
+      '@repo/utils':
+        specifier: workspace:*
+        version: link:../../packages/utils
       '@types/cli-progress':
         specifier: ^3.11.6
         version: 3.11.6

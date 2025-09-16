@@ -6,16 +6,16 @@ import { db } from "../db.js";
 import { updateMusicConstant as updateMusicConstantLogic } from "../functions/update-music-constant.js";
 import { zSchema } from "../types.js";
 
+const url = "https://dp4p6x0xfi5o9.cloudfront.net/maimai/data.json";
+
 export async function updateMusicConstant(version: string) {
-  console.log("Step 2: Loading external music constant data");
+  console.log("\nFinal Step: Updating music constants in the database");
 
-  // Read from temp/data.json (zetaraku format)
-  const fs = await import("node:fs");
-  const path = await import("node:path");
-
-  const tempDataPath = path.join(process.cwd(), "temp", "data.json");
-  const rawData = fs.readFileSync(tempDataPath, "utf8");
-  const data = JSON.parse(rawData);
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error("Failed to fetch music data");
+  }
+  const data = await response.json();
 
   const musicData = zSchema.parse(data).songs;
 

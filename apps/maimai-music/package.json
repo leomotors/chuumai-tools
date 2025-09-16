@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "preview": "dotenv -- node ./dist/index.js",
+    "preview": "dotenv -v NODE_EXTRA_CA_CERTS=gsrsaovsslca2018.pem -- node ./dist/index.js",
     "build": "tsup",
     "check": "tsc",
     "lint": "eslint src *.ts",
@@ -16,6 +16,7 @@
   "devDependencies": {
     "@aws-sdk/client-s3": "^3.859.0",
     "@repo/db-maimai": "workspace:*",
+    "@repo/utils": "workspace:*",
     "@types/cli-progress": "^3.11.6",
     "@vitest/coverage-v8": "^3.2.4",
     "dotenv-cli": "^10.0.0",

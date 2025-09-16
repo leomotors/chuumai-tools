@@ -1,0 +1,3 @@
+# Certificate for GlobalSign RSA OV SSL CA 2018
+# Used to connect to https://maimaidx.jp (Server not sending intermediate certs)
+!gsrsaovsslca2018.pem
