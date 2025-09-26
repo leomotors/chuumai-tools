@@ -17,12 +17,12 @@
   "dependencies": {
     "@repo/db-shared": "workspace:*",
     "@repo/utils": "workspace:*",
-    "drizzle-orm": "^0.44.4",
+    "drizzle-orm": "^0.44.5",
     "postgres": "^3.4.7",
-    "zod": "^4.0.14"
+    "zod": "^4.1.11"
   },
   "devDependencies": {
     "dotenv-cli": "^10.0.0",
-    "drizzle-kit": "^0.31.4"
+    "drizzle-kit": "^0.31.5"
   }
 }
