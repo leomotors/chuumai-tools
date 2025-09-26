@@ -12,7 +12,7 @@ const url = "https://chunithm.sega.jp/storage/json/music.json";
 const s3Folder = "musicImages";
 
 export async function downloadMusicData(version: string) {
-  console.log("Step 1: Downloading current music data from official source");
+  console.log("Step 1.1: Downloading current music data from official source");
   const response = await fetch(url);
   if (!response.ok) {
     throw new Error("Failed to fetch music data");
@@ -23,7 +23,7 @@ export async function downloadMusicData(version: string) {
 
   console.log(`Found ${stdMusicData.length} standard music records`);
 
-  console.log("\nStep 2: Compare with existing music data in the database");
+  console.log("\nStep 1.2: Compare with existing music data in the database");
 
   const existingMusicData = await db.select().from(musicDataTable);
   const { newRecords } = diffInMusicData(existingMusicData, stdMusicData);
@@ -43,7 +43,7 @@ export async function downloadMusicData(version: string) {
     console.log("No new music data to insert");
   }
 
-  console.log("\nStep 3: Upload missing music images to S3");
+  console.log("\nStep 1.3: Upload missing music images to S3");
   const uploadResult = await uploadMissingMusicImages(
     s3,
     environment.AWS_BUCKET_NAME,
@@ -56,7 +56,7 @@ export async function downloadMusicData(version: string) {
       (uploadResult.failedCount ? `, ${uploadResult.failedCount} failed` : ""),
   );
 
-  console.log("\nStep 4: Process music level data");
+  console.log("\nStep 1.4: Process music level data");
   const existingChartLevel = await db.select().from(musicLevelTable);
   const levelResult = processMusicLevels(
     stdMusicData,

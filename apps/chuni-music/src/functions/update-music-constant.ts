@@ -1,4 +1,3 @@
-import cliProgress from "cli-progress";
 import z from "zod";
 
 import {
@@ -6,6 +5,7 @@ import {
   musicLevelTable,
   StdChartDifficulty,
 } from "@repo/db-chuni/schema";
+import { forWithProgressBar } from "@repo/utils";
 
 import { zSchema } from "../types";
 
@@ -15,12 +15,6 @@ export async function updateMusicConstant(
   existingLevelData: (typeof musicLevelTable.$inferSelect)[],
   newData: z.infer<typeof zSchema>["songs"],
 ) {
-  const progress = new cliProgress.SingleBar(
-    {},
-    cliProgress.Presets.shades_classic,
-  );
-  progress.start(newData.length, 0);
-
   let nullsCount = 0;
   const nullsTitle: string[] = [];
   let warnings = "";
@@ -31,19 +25,19 @@ export async function updateMusicConstant(
     newConstant: string;
   }> = [];
 
-  for (let i = 0; i < newData.length; i++) {
+  await forWithProgressBar(newData.length, (i) => {
     const song = newData[i];
     const foundSong = existingMusicData.filter((m) => m.title === song.title);
 
     if (foundSong.length === 0) {
       // Song might be deleted
-      continue;
+      return;
     }
 
     if (foundSong.length > 1) {
       warnings += `Multiple songs found in DB: ${song.title}, you have to manually set chart constant value!\n`;
 
-      continue;
+      return;
     }
 
     const songId = foundSong[0].id;
@@ -92,10 +86,7 @@ export async function updateMusicConstant(
         }
       }
     }
-
-    progress.update(i + 1);
-  }
-  progress.stop();
+  });
 
   return {
     nullsCount,

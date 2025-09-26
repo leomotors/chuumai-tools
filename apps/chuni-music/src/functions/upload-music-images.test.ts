@@ -13,15 +13,15 @@ vi.mock("@repo/utils/s3", () => ({
 }));
 
 // Mock cli-progress to avoid console output during tests
-vi.mock("cli-progress", () => ({
+vi.mock("@leomotors/cli-progress", () => ({
   default: {
     SingleBar: vi.fn().mockImplementation(() => ({
       start: vi.fn(),
       update: vi.fn(),
       stop: vi.fn(),
     })),
-    Presets: {
-      shades_classic: {},
+    Preset: {
+      shadesClassic: {},
     },
   },
 }));

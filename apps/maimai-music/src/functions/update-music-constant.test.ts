@@ -45,15 +45,15 @@ vi.mock("node:console", () => ({
   },
 }));
 
-vi.mock("cli-progress", () => ({
+vi.mock("@leomotors/cli-progress", () => ({
   default: {
     SingleBar: vi.fn().mockImplementation(() => ({
       start: vi.fn(),
       update: vi.fn(),
       stop: vi.fn(),
     })),
-    Presets: {
-      shades_classic: {},
+    Preset: {
+      shadesClassic: {},
     },
   },
 }));

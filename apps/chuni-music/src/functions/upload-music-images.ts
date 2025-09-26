@@ -1,7 +1,7 @@
 import type { S3Client } from "@aws-sdk/client-s3";
-import cliProgress from "cli-progress";
 import z from "zod";
 
+import { forWithProgressBar } from "@repo/utils";
 import { downloadImage, listFilesInFolder, uploadImage } from "@repo/utils/s3";
 
 import type { musicJsonSchema } from "../types.js";
@@ -26,16 +26,10 @@ export async function uploadMissingMusicImages(
     return { uploadedCount: 0, skippedCount: musicData.length };
   }
 
-  const progress = new cliProgress.SingleBar(
-    {},
-    cliProgress.Presets.shades_classic,
-  );
-  progress.start(newImages.length, 0);
-
   let uploadedCount = 0;
   const errors: Array<{ imageName: string; error: Error }> = [];
 
-  for (let i = 0; i < newImages.length; i++) {
+  await forWithProgressBar(newImages.length, async (i) => {
     try {
       const imageBuffer = await downloadImage(
         `https://new.chunithm-net.com/chuni-mobile/html/mobile/img/${newImages[i]}`,
@@ -56,10 +50,7 @@ export async function uploadMissingMusicImages(
         error: error instanceof Error ? error : new Error(String(error)),
       });
     }
-    progress.update(i + 1);
-  }
-
-  progress.stop();
+  });
 
   console.log(
     `Image upload completed: ${uploadedCount} uploaded, ${errors.length} failed`,

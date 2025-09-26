@@ -67,16 +67,26 @@ Both Versions
 },
  */
 
+const categoryEnum = z.preprocess(
+  (val) => {
+    if (typeof val === "string") {
+      return val.replace("＆", "&");
+    }
+    return val;
+  },
+  z.enum(categoryValues, {
+    error: (issue) => {
+      return `Invalid category ${issue.input}`;
+    },
+  }),
+);
+
 // Only field we need
 export const musicSchema = z.object({
   title: z.string(),
   sort: z.coerce.number(),
   artist: z.string(),
-  catcode: z.enum(categoryValues, {
-    error: (issue) => {
-      return `Invalid category ${issue.input}`;
-    },
-  }),
+  catcode: categoryEnum,
   image_url: z.string(),
 
   // STD
@@ -107,6 +117,7 @@ const zSheet = z.discriminatedUnion("type", [
 
 const zSong = z.object({
   title: z.string(),
+  category: categoryEnum,
   sheets: z.array(zSheet),
 });
 

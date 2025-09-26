@@ -28,10 +28,6 @@ importers:
         version: 5.9.2
 
   apps/chuni-music:
-    dependencies:
-      cli-progress:
-        specifier: ^3.12.0
-        version: 3.12.0
     devDependencies:
       '@aws-sdk/client-s3':
         specifier: ^3.859.0
@@ -42,9 +38,6 @@ importers:
       '@repo/utils':
         specifier: workspace:*
         version: link:../../packages/utils
-      '@types/cli-progress':
-        specifier: ^3.11.6
-        version: 3.11.6
       '@vitest/coverage-v8':
         specifier: ^3.2.4
         version: 3.2.4(vitest@3.2.4(@types/node@22.17.0)(jiti@2.5.1)(jsdom@26.1.0)(lightningcss@1.30.1)(sass-embedded@1.89.2)(terser@5.43.1))
@@ -253,10 +246,6 @@ importers:
         version: 4.0.14
 
   apps/maimai-music:
-    dependencies:
-      cli-progress:
-        specifier: ^3.12.0
-        version: 3.12.0
     devDependencies:
       '@aws-sdk/client-s3':
         specifier: ^3.859.0
@@ -267,9 +256,6 @@ importers:
       '@repo/utils':
         specifier: workspace:*
         version: link:../../packages/utils
-      '@types/cli-progress':
-        specifier: ^3.11.6
-        version: 3.11.6
       '@vitest/coverage-v8':
         specifier: ^3.2.4
         version: 3.2.4(vitest@3.2.4(@types/node@22.17.0)(jiti@2.5.1)(jsdom@26.1.0)(lightningcss@1.30.1)(sass-embedded@1.89.2)(terser@5.43.1))
@@ -371,6 +357,9 @@ importers:
       '@aws-sdk/client-s3':
         specifier: ^3.859.0
         version: 3.859.0
+      '@leomotors/cli-progress':
+        specifier: ^4.0.3
+        version: 4.0.3
     devDependencies:
       '@vitest/coverage-v8':
         specifier: ^3.2.4
@@ -1366,6 +1355,10 @@ packages:
   '@jridgewell/trace-mapping@0.3.29':
     resolution: {integrity: sha512-uw6guiW/gcAGPDhLmd77/6lW8QLeiV5RUTsAX46Db6oLhGaVj4lhnPwb184s1bkc8kdVg/+h988dro8GRDpmYQ==}
 
+  '@leomotors/cli-progress@4.0.3':
+    resolution: {integrity: sha512-+bebEjlqjcUrv1n/3tD1h5mhLUXZn0OQPZwoCkROAdKM3KsNsv5CTj8vHiCGI1hYMDf316NibTQC48aUWI2Wxg==}
+    engines: {node: '>=22'}
+
   '@leomotors/config@1.0.1':
     resolution: {integrity: sha512-2mN3Mj/PvM7/Bbwjxl4ynfBUWhKUveS098+LaBXgkA1agP6EDmXeyN+63sjB4EAHSd2oDggCcCWmbYJGn1GZpg==}
 
@@ -2056,9 +2049,6 @@ packages:
   '@types/chai@5.2.2':
     resolution: {integrity: sha512-8kB30R7Hwqf40JPiKhVzodJs2Qc1ZJ5zuT3uzw5Hq/dhNCl3G3l83jfpdI1e20BP348+fV7VIL/+FxaXkqBmWg==}
 
-  '@types/cli-progress@3.11.6':
-    resolution: {integrity: sha512-cE3+jb9WRlu+uOSAugewNpITJDt1VF8dHOopPO4IABFc3SXYL5WE/+PTz/FCdZRRfIujiWW3n3aMbv1eIGVRWA==}
-
   '@types/cookie@0.6.0':
     resolution: {integrity: sha512-4Kh9a6B2bQciAhf7FSuMRRkUWecJgJu9nPnx3yzpsfXX/c50REIqpHY4C82bXP90qrLtXtkDxTZosYO3UpOwlA==}
 
@@ -2452,10 +2442,6 @@ packages:
   chrome-trace-event@1.0.4:
     resolution: {integrity: sha512-rNjApaLzuwaOTjCiT8lSDdGN1APCiqkChLMJxJPWLunPAt5fy8xgU9/jNOchV84wfIxrA0lRQB7oCT8jrn/wrQ==}
     engines: {node: '>=6.0'}
-
-  cli-progress@3.12.0:
-    resolution: {integrity: sha512-tRkV3HJ1ASwm19THiiLIXLO7Im7wlTuKnvkYaTkyoAPefqjNg7W7DHKUlGRxy9vxDvbyCYQkQozvptuMkGCg8A==}
-    engines: {node: '>=4'}
 
   clsx@2.1.1:
     resolution: {integrity: sha512-eYm0QWBtUrBWZWG0d386OGAw16Z995PiOVo2B7bjWSbHedGl5e0ZWaq65kOGgUSNesEIDkB9ISbTg/JK9dhCZA==}
@@ -2978,6 +2964,10 @@ packages:
 
   function-bind@1.1.2:
     resolution: {integrity: sha512-7XHNxH7qX9xG5mIwxkhumTox/MIRNcOgDrxWsMt2pAr23WHp6MrRlN7FBSFpCpr+oVO0F744iUgR82nJMfG2SA==}
+
+  get-east-asian-width@1.4.0:
+    resolution: {integrity: sha512-QZjmEOC+IT1uk6Rx0sX22V6uHWVwbdbxf1faPqJ1QhLdGgsRGCZoyaQBm/piRdJy/D2um6hM1UP7ZEeQ4EkP+Q==}
+    engines: {node: '>=18'}
 
   get-stream@5.2.0:
     resolution: {integrity: sha512-nBF+F1rAZVCu/p7rjzgA+Yb4lfYXrpl7a6VmJrU8wF9I1CKvP/QwPNZHnOlwbTkY6dvtFIzFMSyQXbLoTQPRpA==}
@@ -4149,6 +4139,10 @@ packages:
   string-width@5.1.2:
     resolution: {integrity: sha512-HnLOCR3vjcY8beoNLtcjZ5/nxn2afmME6lhrDrebokqMap+XbeW8n9TXpPDOqdGK5qcI3oT0GKTW6wC7EMiVqA==}
     engines: {node: '>=12'}
+
+  string-width@8.1.0:
+    resolution: {integrity: sha512-Kxl3KJGb/gxkaUMOjRsQ8IrXiGW75O4E3RPjFIINOVH8AMl2SQ/yWdTzWwF3FevIX9LcMAjJW+GRwAlAbTSXdg==}
+    engines: {node: '>=20'}
 
   strip-ansi@6.0.1:
     resolution: {integrity: sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==}
@@ -5742,6 +5736,10 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.4
 
+  '@leomotors/cli-progress@4.0.3':
+    dependencies:
+      string-width: 8.1.0
+
   '@leomotors/config@1.0.1(@types/eslint@9.6.1)(@typescript-eslint/eslint-plugin@8.39.0(@typescript-eslint/parser@8.39.0(eslint@9.32.0(jiti@2.5.1))(typescript@5.9.2))(eslint@9.32.0(jiti@2.5.1))(typescript@5.9.2))(jiti@2.5.1)(typescript@5.9.2)':
     dependencies:
       '@eslint/js': 9.32.0
@@ -6605,10 +6603,6 @@ snapshots:
     dependencies:
       '@types/deep-eql': 4.0.2
 
-  '@types/cli-progress@3.11.6':
-    dependencies:
-      '@types/node': 22.17.0
-
   '@types/cookie@0.6.0': {}
 
   '@types/deep-eql@4.0.2': {}
@@ -7104,10 +7098,6 @@ snapshots:
 
   chrome-trace-event@1.0.4: {}
 
-  cli-progress@3.12.0:
-    dependencies:
-      string-width: 4.2.3
-
   clsx@2.1.1: {}
 
   color-convert@2.0.1:
@@ -7599,6 +7589,8 @@ snapshots:
     optional: true
 
   function-bind@1.1.2: {}
+
+  get-east-asian-width@1.4.0: {}
 
   get-stream@5.2.0:
     dependencies:
@@ -8690,6 +8682,11 @@ snapshots:
     dependencies:
       eastasianwidth: 0.2.0
       emoji-regex: 9.2.2
+      strip-ansi: 7.1.0
+
+  string-width@8.1.0:
+    dependencies:
+      get-east-asian-width: 1.4.0
       strip-ansi: 7.1.0
 
   strip-ansi@6.0.1:
