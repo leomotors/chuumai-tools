@@ -6,8 +6,8 @@ import { chartSchema, profileSchema } from "@repo/types/chuni";
 export const chartForRenderSchema = chartSchema.extend({
   constant: z.number(),
   constantSure: z.boolean(),
-  rating: z.number(),
-  image: z.string(),
+  rating: z.number().nullable(),
+  image: z.string().nullable(),
 });
 
 export type ChartForRender = z.infer<typeof chartForRenderSchema>;

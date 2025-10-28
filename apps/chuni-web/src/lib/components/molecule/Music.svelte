@@ -70,7 +70,7 @@
       class="p-1 font-helvetica bg-white rounded h-[36px] w-[50px] text-black flex justify-end items-baseline gap-1 relative"
     >
       <span class="font-bold text-2xl text-[26px]">
-        {Math.floor(music.constant)}
+        {music.constant < 1 ? "?" : Math.floor(music.constant)}
       </span>
       <span class="-ml-1">
         .{music.constantSure
@@ -91,7 +91,9 @@
   <!-- Mid -->
   <div class="px-2 flex gap-2">
     <img
-      src="/api/imageProxy?img={music.image}"
+      src={music.image
+        ? `/api/imageProxy?img=${music.image}`
+        : "/placeholder.svg"}
       alt="Jacket"
       class="w-[100px] h-[100px]"
     />
@@ -105,7 +107,11 @@
       <div class="flex flex-col">
         <p class="text-sm text-nowrap">PLAY RATING</p>
         <p class="font-bold text-2xl">
-          {music.rating.toFixed(2)}{#if !music.constantSure}?{/if}
+          {#if !music.rating}
+            --.--
+          {:else}
+            {music.rating.toFixed(2)}{#if !music.constantSure}?{/if}
+          {/if}
         </p>
       </div>
     </div>

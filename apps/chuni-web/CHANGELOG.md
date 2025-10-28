@@ -1,8 +1,10 @@
 # Changelog
 
-## [next] - 2025-07-21
+## [2.2.0] - 2025-10-29
 
 - fix: preview next small fix
+- feat: for music that does not exist, it will return empty/placeholder value instead of failing the render
+- feat: node 24 (lts)
 
 ## [2.1.0] - 2025-07-20
 

@@ -1,5 +1,3 @@
-import { error } from "@sveltejs/kit";
-
 import type { BaseChartSchema } from "@repo/types/chuni";
 import { calculateRating, constantFromLevel } from "@repo/utils/chuni";
 
@@ -19,10 +17,13 @@ export function addForRenderInfo(
   );
 
   if (!chartLevel) {
-    error(
-      400,
-      `Chart Level Data not found for ${data.id} (${data.title}) at ${data.difficulty.toUpperCase()} on version ${version}`,
-    );
+    return {
+      ...data,
+      constant: 0,
+      constantSure: false,
+      rating: null,
+      image: null,
+    };
   }
 
   const constant = chartLevel.constant
