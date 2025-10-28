@@ -1,4 +1,4 @@
-FROM node:22-bookworm AS base
+FROM node:24-bookworm AS base
 
 WORKDIR /app
 
@@ -15,7 +15,7 @@ RUN pnpm install --frozen-lockfile
 RUN pnpm --filter=chunithm-scraper build
 
 
-FROM node:22-bookworm AS runner
+FROM node:24-bookworm AS runner
 
 WORKDIR /app
 

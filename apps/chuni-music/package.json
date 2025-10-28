@@ -11,15 +11,16 @@
     "test": "vitest run"
   },
   "devDependencies": {
-    "@aws-sdk/client-s3": "^3.896.0",
+    "@aws-sdk/client-s3": "^3.918.0",
     "@repo/db-chuni": "workspace:*",
     "@repo/utils": "workspace:*",
-    "@vitest/coverage-v8": "^3.2.4",
+    "@vitest/coverage-v8": "^4.0.4",
     "dotenv-cli": "^10.0.0",
-    "drizzle-orm": "^0.44.5",
+    "drizzle-orm": "^0.44.7",
+    "esbuild": "^0.25.11",
     "tsup": "^8.5.0",
-    "typescript": "^5.9.2",
-    "vitest": "^3.2.4",
-    "zod": "^4.1.11"
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.4",
+    "zod": "^4.1.12"
   }
 }

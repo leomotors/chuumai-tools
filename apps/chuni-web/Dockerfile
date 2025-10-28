@@ -1,4 +1,4 @@
-FROM node:22-alpine AS base
+FROM node:24-alpine AS base
 
 WORKDIR /app
 
@@ -20,7 +20,7 @@ ENV MUSIC_IMAGE_URL=http://mock:3000/value
 RUN pnpm --filter=chuni-web build
 
 
-FROM node:22-alpine AS runner
+FROM node:24-alpine AS runner
 
 WORKDIR /app
 
