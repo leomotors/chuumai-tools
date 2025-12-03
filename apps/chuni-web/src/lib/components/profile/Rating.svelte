@@ -8,7 +8,7 @@
 
   let { rating, calculatedRating }: Props = $props();
 
-  let ratingLevel =
+  let ratingLevel = $derived(
     rating >= 17
       ? "kiwami"
       : rating >= 16
@@ -27,7 +27,8 @@
                     ? "red"
                     : rating >= 4
                       ? "orange"
-                      : "green";
+                      : "green",
+  );
 
   let {
     tens: tensOri,

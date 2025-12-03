@@ -10,7 +10,7 @@
   }
 
   let { input, version }: Props = $props();
-  let { profile, best, current, rating } = input;
+  let { profile, best, current, rating } = $derived(input);
 </script>
 
 <div
@@ -44,7 +44,7 @@
     </aside>
 
     <!-- Separator -->
-    <div class="bg-gray-100/30 rounded-full w-[8px]"></div>
+    <div class="bg-gray-100/30 rounded-full w-2"></div>
 
     <aside class="flex flex-col gap-4">
       <p class="font-bold text-3xl font-helvetica">

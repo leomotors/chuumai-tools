@@ -10,7 +10,9 @@
 
   let { children, lastPlayed, version }: Props = $props();
 
-  const logo = version === "XVRS" ? "/xverse_logo.webp" : "/verse_logo-hq.webp";
+  const logo = $derived(
+    version === "XVRS" ? "/xverse_logo.webp" : "/verse_logo-hq.webp",
+  );
 </script>
 
 <header class="flex justify-between gap-4 pb-2">

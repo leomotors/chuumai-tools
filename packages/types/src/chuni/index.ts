@@ -5,6 +5,7 @@ import {
   rarityLevelValues,
   ratingTypeValues,
   stdChartDifficultyValues,
+  teamRarityLevelValues,
 } from "@repo/db-chuni/schema";
 
 export const chartSchema = z.object({
@@ -26,7 +27,7 @@ export const profileSchema = z.object({
   characterRarity: z.enum(rarityLevelValues),
 
   teamName: z.string().nullish(),
-  teamEmblem: z.enum(rarityLevelValues).nullish(),
+  teamEmblem: z.enum(teamRarityLevelValues).nullish(),
 
   honorText: z.string().nonempty(),
   honorRarity: z.enum(rarityLevelValues),

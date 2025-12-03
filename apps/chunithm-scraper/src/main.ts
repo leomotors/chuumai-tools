@@ -18,18 +18,19 @@ import { scrapeMusicRecord } from "./steps/3-music.js";
 import { saveToDatabase } from "./steps/6-savedb.js";
 import { generateImage } from "./steps/7-image.js";
 import { sendDiscordImage } from "./steps/8-discord.js";
-import { sendFiles } from "./utils/discord.js";
 import { downloadImageAsBase64 } from "./utils/image.js";
 import { logger } from "./utils/logger.js";
 
 export async function main(jobId: number | undefined, page: Page) {
+  const start = performance.now();
+
   // * Step 0: Preparation
   const hiddenCharts = await readHiddenCharts();
 
   const runner = new Runner();
 
   // * Step 1: Login
-  await runner.runStep(
+  const { cached } = await runner.runStep(
     "Step 1: Login",
     () => login(page),
     (ctx) => handlePwError(ctx, page),
@@ -132,26 +133,16 @@ export async function main(jobId: number | undefined, page: Page) {
 
   // * Step 6: Save data to DB
   if (db) {
-    await runner
-      .runStep("Step 6: Save to DB", async () => {
-        await saveToDatabase(jobId!, db!, {
-          playerData,
-          recordData,
-          playerDataHtml,
-          allMusicRecordHtml: recordHtml,
-          imgGenInput,
-          calculatedRating: rawImgGen?.rating.totalAvg,
-        });
-      })
-      .catch((err) => {
-        logger.error(`Step 6 Error: ${err}`);
-        sendFiles("Step 6 Error: Failed saving to database", [
-          {
-            blob: new Blob([`${err}`], { type: "text/plain" }),
-            fileName: `error-step6-${Date.now()}.txt`,
-          },
-        ]);
+    await runner.runStep("Step 6: Save to DB", async () => {
+      await saveToDatabase(jobId!, db!, {
+        playerData,
+        recordData,
+        playerDataHtml,
+        allMusicRecordHtml: recordHtml,
+        imgGenInput,
+        calculatedRating: rawImgGen?.rating.totalAvg,
       });
+    });
   } else {
     logger.warn("Database Mode disabled, skipped saving to DB");
   }
@@ -165,6 +156,6 @@ export async function main(jobId: number | undefined, page: Page) {
 
   // * Step 8: Send Image to Discord
   await runner.runStep("Step 8: Send Image to Discord", () =>
-    sendDiscordImage(outputLocation, playerData, rawImgGen),
+    sendDiscordImage(outputLocation, playerData, rawImgGen, cached, start),
   );
 }

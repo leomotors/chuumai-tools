@@ -11,7 +11,10 @@ export async function login(page: Page) {
   if (page.url() === `${mobileBaseURL}home/`) {
     // Already logged in
     logger.log("Already logged in, using existing session.");
-    return await page.context().cookies();
+    return {
+      cached: true,
+      cookies: await page.context().cookies(),
+    };
   }
 
   if (!page.url().includes("lng-tgk-aime-gw.am-all.net")) {
@@ -35,5 +38,10 @@ export async function login(page: Page) {
 
   const cookies = await page.context().cookies();
 
-  return cookies.filter((c) => ["userId", "friendCodeList"].includes(c.name));
+  return {
+    cached: false,
+    cookies: cookies.filter((c) =>
+      ["userId", "friendCodeList"].includes(c.name),
+    ),
+  };
 }

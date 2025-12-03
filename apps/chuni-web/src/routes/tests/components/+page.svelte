@@ -66,6 +66,50 @@
   />
   <p>I forgor to handle player reborn (Lv 100+) 💀</p>
 
+  <p>Purple Team</p>
+  <Profile
+    profile={{
+      characterImage: "/mafuyu-bnw.png",
+      characterRarity: "HOLOGRAPHIC",
+      teamName: "Team Name",
+      teamEmblem: "PURPLE",
+      honorText: "創 -汝ら新世界へ歩む者なり-",
+      honorRarity: "PLATINUM",
+      playerLevel: 6767,
+      playerName: "MAFUYU",
+      classBand: 6,
+      classEmblem: 6,
+      rating: 17.27,
+      overpowerValue: 67697.27,
+      overpowerPercent: 99.99,
+      lastPlayed: new Date("2025-12-31T00:00:00Z"),
+      playCount: 1333,
+    }}
+    calculatedRating={17.2767}
+  />
+
+  <p>Yellow Team</p>
+  <Profile
+    profile={{
+      characterImage: "/mafuyu-bnw.png",
+      characterRarity: "RAINBOW",
+      teamName: "Team Name",
+      teamEmblem: "YELLOW",
+      honorText: "祈 -我ら神祖と共に歩む者なり-",
+      honorRarity: "PLATINUM",
+      playerLevel: 169,
+      playerName: "MAFUYU",
+      classBand: 1,
+      classEmblem: 6,
+      rating: 16.39,
+      overpowerValue: 69420.44,
+      overpowerPercent: 69.69,
+      lastPlayed: new Date("2025-05-05T00:00:00Z"),
+      playCount: 999,
+    }}
+    calculatedRating={16.3999}
+  />
+
   <p>No Team?</p>
   <Profile
     profile={{

@@ -43,7 +43,10 @@ export type BlobFileList = Array<{
   fileName?: string;
 }>;
 
-export async function sendFiles(content: string, files: BlobFileList) {
+export async function sendFiles(
+  content: string | undefined,
+  files: BlobFileList,
+) {
   if (!webhookEnabled(environment) && !discordBotEnabled(environment)) {
     logger.warn(
       "Neither Discord Webhook nor Discord Bot is enabled. Skipping Discord image sending.",
@@ -58,7 +61,11 @@ export async function sendFiles(content: string, files: BlobFileList) {
   );
 
   const formData = new FormData();
-  formData.append("content", content);
+
+  if (content) {
+    formData.append("content", content);
+  }
+
   files.forEach(({ blob, fileName }, index) => {
     formData.append(`files[${index}]`, blob, fileName);
   });

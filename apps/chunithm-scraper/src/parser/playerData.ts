@@ -1,7 +1,12 @@
 import { JSDOM } from "jsdom";
 import { z } from "zod";
 
-import { RarityLevel, rarityLevelValues } from "@repo/db-chuni/schema";
+import {
+  RarityLevel,
+  rarityLevelValues,
+  TeamRarityLevel,
+  teamRarityLevelValues,
+} from "@repo/db-chuni/schema";
 import { ImgGenInput } from "@repo/types/chuni";
 
 import { rarityFromUrl } from "./imageUrl";
@@ -57,7 +62,7 @@ export function parseCharacter(
 }
 
 const rightDataSchema = z.object({
-  teamEmblem: z.enum(rarityLevelValues).optional(),
+  teamEmblem: z.enum(teamRarityLevelValues).optional(),
   teamName: z.string().optional(),
 
   mainHonorRarity: z.enum(rarityLevelValues),
@@ -87,18 +92,23 @@ export function parseRightData(dom: JSDOM) {
   )! as HTMLDivElement;
 
   // Team Information
-  let teamEmblem: RarityLevel | undefined = undefined;
+  let teamEmblem: TeamRarityLevel | undefined = undefined;
 
   if (rightData.querySelector(".player_team_emblem_rainbow") !== null) {
     teamEmblem = "RAINBOW";
-  }
-  if (rightData.querySelector(".player_team_emblem_gold") !== null) {
+  } else if (rightData.querySelector(".player_team_emblem_gold") !== null) {
     teamEmblem = "GOLD";
-  }
-  if (rightData.querySelector(".player_team_emblem_silver") !== null) {
+  } else if (rightData.querySelector(".player_team_emblem_silver") !== null) {
     teamEmblem = "SILVER";
-  }
-  if (rightData.querySelector(".player_team_emblem_normal") !== null) {
+  } else if (rightData.querySelector(".player_team_emblem_purple") !== null) {
+    teamEmblem = "PURPLE";
+  } else if (rightData.querySelector(".player_team_emblem_red") !== null) {
+    teamEmblem = "RED";
+  } else if (rightData.querySelector(".player_team_emblem_yellow") !== null) {
+    teamEmblem = "YELLOW";
+  } else if (rightData.querySelector(".player_team_emblem_green") !== null) {
+    teamEmblem = "GREEN";
+  } else if (rightData.querySelector(".player_team_emblem_normal") !== null) {
     teamEmblem = "NORMAL";
   }
 

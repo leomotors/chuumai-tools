@@ -35,7 +35,7 @@ async function insertRating(
     return;
   }
 
-  await db!.insert(forRatingTable).values(
+  await db.insert(forRatingTable).values(
     records.map((record, index) => {
       const recordId = allRecords.find(
         (r) =>

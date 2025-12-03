@@ -2,6 +2,11 @@
 
 For changelog before V4: [here](https://github.com/leomotors/chunithm-net-scraper/blob/main/CHANGELOG.md)
 
+## [5.2.0] - 2025-12-03
+
+- feat: support for X-VERSE team colours
+- feat: update result text to add more information including taken time
+
 ## [5.1.0] - 2025-08-05
 
 - fix: update scraper to support new checkbox in login page

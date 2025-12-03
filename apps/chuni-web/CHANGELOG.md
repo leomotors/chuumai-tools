@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.3.0] - 2025-12-03
+
+- feat: support for X-VERSE team colours
+
 ## [2.2.0] - 2025-10-29
 
 - fix: preview next small fix

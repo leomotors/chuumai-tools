@@ -15,6 +15,7 @@ import {
   rarityLevelType,
   ratingType,
   stdChartDifficultyType,
+  teamRarityLevelType,
 } from "./types";
 
 export { jobTable };
@@ -33,7 +34,7 @@ export const playerDataTable = pgTable("player_data", {
   characterImage: text("character_image").notNull(),
 
   teamName: text("team_name"),
-  teamEmblem: rarityLevelType("team_emblem"), // null for no team
+  teamEmblem: teamRarityLevelType("team_emblem"), // null for no team
 
   mainHonorText: text("main_honor_text").notNull(),
   mainHonorRarity: rarityLevelType("main_honor_rarity").notNull(),

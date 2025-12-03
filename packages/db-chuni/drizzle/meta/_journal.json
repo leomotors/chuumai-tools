@@ -29,6 +29,13 @@
       "when": 1764750231662,
       "tag": "0003_add-version-to-music-data",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1764776515293,
+      "tag": "0004_team-rarity",
+      "breakpoints": true
     }
   ]
 }

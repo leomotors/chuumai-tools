@@ -1,10 +1,10 @@
 {
   "name": "chunithm-scraper",
-  "version": "5.1.0",
+  "version": "5.2.0",
   "private": true,
   "scripts": {
     "build": "tsdown",
-    "preview": "dotenv -- node --enable-source-maps dist/index.js",
+    "preview": "dotenv -- node --enable-source-maps dist/index.mjs",
     "check": "tsc",
     "lint": "eslint src *.ts",
     "format": "eslint src *.ts --fix",
@@ -17,6 +17,7 @@
     "playwright": "^1.57.0"
   },
   "devDependencies": {
+    "@discordjs/builders": "^1.13.1",
     "@repo/db-chuni": "workspace:*",
     "@repo/types": "workspace:*",
     "@types/jsdom": "^27.0.0",

@@ -1,0 +1,1 @@
+ALTER TABLE "player_data" ALTER COLUMN "team_emblem" SET DATA TYPE "public"."team_rarity_level" USING "team_emblem"::text::"public"."team_rarity_level";

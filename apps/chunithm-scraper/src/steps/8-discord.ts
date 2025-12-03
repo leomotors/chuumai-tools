@@ -11,6 +11,8 @@ export async function sendDiscordImage(
   imageLocation: string | undefined,
   playerData: Awaited<ReturnType<typeof scrapePlayerData>>["playerData"],
   rawImgGen: RawImageGen | undefined,
+  loginCached: boolean,
+  startTime: number,
 ) {
   if (!imageLocation) {
     logger.warn(
@@ -23,12 +25,11 @@ export async function sendDiscordImage(
   const blob = new Blob([new Uint8Array(image)], { type: "image/png" });
 
   const message = `## Your Music for Rating Image is here!
-**Scraper Version**: ${APP_VERSION} @ ${environment.VERSION}
-**Name**: ${playerData.playerName}
-**Level**: ${playerData.playerLevel}
-**Play Count**: ${playerData.playCount}
-**Rating**: ${playerData.rating.toFixed(2)}${rawImgGen ? ` (${rawImgGen.rating.totalAvg.toFixed(4)})` : ""}
-**Last Played**: ${playerData.lastPlayed}`;
+**Scraper Version**: ${APP_VERSION} @ ${environment.VERSION}\t\t**Cached Login**: ${loginCached ? "Yes" : "No"}
+**Player Name**: ${playerData.playerName}\t\t**Rating**: ${playerData.rating.toFixed(2)}${rawImgGen ? ` (${rawImgGen.rating.totalAvg.toFixed(4)})` : ""}
+**Level**: ${playerData.playerLevel}\t\t**Play Count**: ${playerData.playCount}
+**Last Played**: <t:${Math.floor(playerData.lastPlayed.getTime() / 1000)}:F>
+**Time Taken**: ${((performance.now() - startTime) / 1000).toFixed(3)}s`;
 
   await sendFiles(message, [
     {

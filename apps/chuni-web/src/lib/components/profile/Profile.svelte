@@ -30,7 +30,7 @@
   <!-- Right -->
   <div class="-mt-2">
     <div
-      class="w-[400px] h-[56px] bg-contain bg-no-repeat bg-center flex items-center justify-center"
+      class="w-[400px] h-14 bg-contain bg-no-repeat bg-center flex items-center justify-center"
       style="background-image: url(/team_bg/{profile.teamEmblem?.toLowerCase() ??
         'normal'}.png)"
     >
