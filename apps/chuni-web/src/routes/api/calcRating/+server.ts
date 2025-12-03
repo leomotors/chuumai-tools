@@ -108,16 +108,20 @@ export const POST: RequestHandler = async ({ request }) => {
 
   const rating = {
     bestAvg: floorDecimalPlaces(
-      bestWithRating.reduce((prev, curr) => prev + curr.rating, 0) / 30,
+      bestWithRating.reduce((prev, curr) => prev + (curr.rating ?? 0), 0) / 30,
       4,
     ),
     currentAvg: floorDecimalPlaces(
-      currentWithRating.reduce((prev, curr) => prev + curr.rating, 0) / 20,
+      currentWithRating.reduce((prev, curr) => prev + (curr.rating ?? 0), 0) /
+        20,
       4,
     ),
     totalAvg: floorDecimalPlaces(
-      (bestWithRating.reduce((prev, curr) => prev + curr.rating, 0) +
-        currentWithRating.reduce((prev, curr) => prev + curr.rating, 0)) /
+      (bestWithRating.reduce((prev, curr) => prev + (curr.rating ?? 0), 0) +
+        currentWithRating.reduce(
+          (prev, curr) => prev + (curr.rating ?? 0),
+          0,
+        )) /
         50,
       4,
     ),

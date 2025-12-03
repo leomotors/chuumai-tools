@@ -55,11 +55,11 @@ export const POST: RequestHandler = async ({ request }) => {
 
   const best30 = processed
     .filter((c) => c !== null)
-    .sort((a, b) => b.rating - a.rating)
+    .sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0))
     .slice(0, 30);
 
   const newRating = floorDecimalPlaces(
-    best30.reduce((acc, cur) => acc + cur.rating, 0) / 50,
+    best30.reduce((acc, cur) => acc + (cur.rating ?? 0), 0) / 50,
     4,
   );
 
