@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build": "tsdown",
-    "preview": "dotenv -- node dist/index.js",
+    "preview": "dotenv -- node --enable-source-maps dist/index.js",
     "check": "tsc",
     "lint": "eslint src *.ts",
     "format": "eslint src *.ts --fix",

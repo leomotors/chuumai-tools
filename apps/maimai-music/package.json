@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "preview": "dotenv -v NODE_EXTRA_CA_CERTS=gsrsaovsslca2018.pem -- node ./dist/index.mjs",
+    "preview": "dotenv -v NODE_EXTRA_CA_CERTS=gsrsaovsslca2018.pem -- node --enable-source-maps ./dist/index.mjs",
     "build": "tsdown",
     "check": "tsc",
     "lint": "eslint src *.ts",

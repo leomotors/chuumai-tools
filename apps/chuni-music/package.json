@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "preview": "dotenv -- node ./dist/index.mjs",
+    "preview": "dotenv -- node --enable-source-maps ./dist/index.mjs",
     "build": "tsdown",
     "check": "tsc",
     "lint": "eslint src *.ts",

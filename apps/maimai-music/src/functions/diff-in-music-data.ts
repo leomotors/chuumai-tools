@@ -19,7 +19,6 @@ export function diffInMusicData(
       const existing = existingDataMap.get(m.title)!;
       const changes: Partial<typeof m> = { title: m.title };
 
-      if (existing.sort !== m.sort) changes.sort = m.sort;
       if (existing.category !== m.catcode) changes.catcode = m.catcode;
       if (existing.artist !== m.artist) changes.artist = m.artist;
       if (existing.image !== m.image_url) changes.image_url = m.image_url;

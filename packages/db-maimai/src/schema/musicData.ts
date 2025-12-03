@@ -4,10 +4,10 @@ import { categoryType, chartType, stdChartDifficultyType } from "./types";
 
 export const musicDataTable = pgTable("music_data", {
   title: text().notNull().primaryKey(),
-  sort: integer().notNull().unique(),
   category: categoryType().notNull(),
   artist: text().notNull(),
   image: text().notNull(),
+  version: text(),
 });
 
 export const musicLevelTable = pgTable(

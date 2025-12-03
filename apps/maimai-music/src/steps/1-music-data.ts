@@ -42,10 +42,10 @@ export async function downloadMusicData(version: string) {
     await db.insert(musicDataTable).values(
       newRecords.map((m) => ({
         title: m.title,
-        sort: m.sort,
         category: m.catcode,
         artist: m.artist,
         image: m.image_url,
+        // todo version field after first seed
       })),
     );
     console.log(`Successfully inserted ${newRecords.length} new music data`);

@@ -39,6 +39,22 @@ export const rarityLevelValues = [
 export type RarityLevel = (typeof rarityLevelValues)[number];
 export const rarityLevelType = pgEnum("rarity_level", rarityLevelValues);
 
+export const teamRarityLevelValues = [
+  "NORMAL",
+  "GREEN",
+  "YELLOW",
+  "RED",
+  "PURPLE",
+  "SILVER",
+  "GOLD",
+  "RAINBOW",
+] as const;
+export type TeamRarityLevel = (typeof teamRarityLevelValues)[number];
+export const teamRarityLevelType = pgEnum(
+  "team_rarity_level",
+  teamRarityLevelValues,
+);
+
 export const ranksType = pgEnum("ranks", ranks);
 
 export const clearMarkValues = [

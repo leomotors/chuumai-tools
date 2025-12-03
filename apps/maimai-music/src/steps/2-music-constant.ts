@@ -7,23 +7,19 @@ import { db } from "../db.js";
 import { updateMusicConstant as updateMusicConstantLogic } from "../functions/update-music-constant.js";
 import { zSchema } from "../types.js";
 
-// const url = "https://dp4p6x0xfi5o9.cloudfront.net/maimai/data.json";
+const url = "https://dp4p6x0xfi5o9.cloudfront.net/maimai/data.json";
 
 export async function updateMusicConstant(version: string) {
-  // console.log("\nFinal Step: Updating music constants in the database");
+  console.log("\nFinal Step: Updating music constants in the database");
 
-  // const response = await fetch(url);
-  // if (!response.ok) {
-  //   throw new Error("Failed to fetch music data");
-  // }
-  // const data = await response.json();
-
-  // Temporary during Intl = PRiSM+ (but JP = CiRCLE)
-  // Local Snapshot of data before CiRCLE
-  const data = await (await import("node:fs/promises"))
-    .readFile("./temp/data.json", "utf-8")
-    .then((r) => JSON.parse(r));
-
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error("Failed to fetch music data");
+  }
+  const data = await response.json();
+  data.songs = (data.songs as Array<{ category: string }>).filter(
+    (song) => song.category !== "宴会場",
+  );
   const musicData = zSchema.parse(data).songs;
 
   const existingMusicData = await db.select().from(musicDataTable);

@@ -8,6 +8,20 @@
       "when": 1758005139205,
       "tag": "0000_tricky_vision",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1764755255404,
+      "tag": "0001_add-version-to-music-data",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1764755381175,
+      "tag": "0002_drop-column-sort",
+      "breakpoints": true
     }
   ]
 }

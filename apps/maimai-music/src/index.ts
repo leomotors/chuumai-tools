@@ -13,7 +13,9 @@ if (command === "music") {
   const version = process.argv[3];
   await downloadMusicData(version);
   await updateMusicConstant(version);
+  console.log("\n✅ All steps completed\n");
   await db.$client.end();
+  console.log("✅ Database connection closed");
 } else {
   console.log(`Unknown Command: ${command}`);
   process.exit(1);
