@@ -2,6 +2,10 @@
 
 For changelog before V4: [here](https://github.com/leomotors/chunithm-net-scraper/blob/main/CHANGELOG.md)
 
+## [5.2.1] - 2025-12-04
+
+- fix: wrong entrypoint
+
 ## [5.2.0] - 2025-12-03
 
 - feat: support for X-VERSE team colours

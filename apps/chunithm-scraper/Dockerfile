@@ -31,4 +31,4 @@ COPY --from=base --chown=node:node /app/apps/chunithm-scraper/dist/ ./dist/
 
 ENV NODE_ENV=production
 
-CMD ["node", "--enable-source-maps", "dist/index.js"]
+CMD ["node", "--enable-source-maps", "dist/index.mjs"]
