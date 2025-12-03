@@ -3,7 +3,7 @@
   "version": "5.1.0",
   "private": true,
   "scripts": {
-    "build": "tsup",
+    "build": "tsdown",
     "preview": "dotenv -- node dist/index.js",
     "check": "tsc",
     "lint": "eslint src *.ts",
@@ -13,22 +13,22 @@
   "type": "module",
   "license": "MIT",
   "dependencies": {
-    "jsdom": "^27.0.1",
-    "playwright": "^1.56.1"
+    "jsdom": "^27.2.0",
+    "playwright": "^1.57.0"
   },
   "devDependencies": {
     "@repo/db-chuni": "workspace:*",
     "@repo/types": "workspace:*",
     "@types/jsdom": "^27.0.0",
-    "@vitest/coverage-v8": "^4.0.4",
-    "discord-api-types": "^0.38.31",
-    "dotenv-cli": "^10.0.0",
+    "@vitest/coverage-v8": "^4.0.15",
+    "discord-api-types": "^0.38.36",
+    "dotenv-cli": "^11.0.0",
     "drizzle-orm": "^0.44.7",
     "papaparse": "^5.5.3",
     "postgres": "^3.4.7",
-    "tsup": "^8.5.0",
+    "tsdown": "^0.16.8",
     "typescript": "^5.9.3",
-    "vitest": "^4.0.4",
-    "zod": "^4.1.12"
+    "vitest": "^4.0.15",
+    "zod": "^4.1.13"
   }
 }

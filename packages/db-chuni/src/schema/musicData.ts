@@ -8,6 +8,7 @@ export const musicDataTable = pgTable("music_data", {
   title: text().notNull(),
   artist: text().notNull(),
   image: text().notNull(),
+  version: text(),
 });
 
 export const musicLevelTable = pgTable(

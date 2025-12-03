@@ -3,23 +3,23 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "preview": "dotenv -v NODE_EXTRA_CA_CERTS=gsrsaovsslca2018.pem -- node ./dist/index.js",
-    "build": "tsup",
+    "preview": "dotenv -v NODE_EXTRA_CA_CERTS=gsrsaovsslca2018.pem -- node ./dist/index.mjs",
+    "build": "tsdown",
     "check": "tsc",
     "lint": "eslint src *.ts",
     "format": "eslint src *.ts --fix",
     "test": "vitest run"
   },
   "devDependencies": {
-    "@aws-sdk/client-s3": "^3.918.0",
+    "@aws-sdk/client-s3": "^3.943.0",
     "@repo/db-maimai": "workspace:*",
     "@repo/utils": "workspace:*",
-    "@vitest/coverage-v8": "^4.0.4",
-    "dotenv-cli": "^10.0.0",
+    "@vitest/coverage-v8": "^4.0.15",
+    "dotenv-cli": "^11.0.0",
     "drizzle-orm": "^0.44.7",
-    "tsup": "^8.5.0",
+    "tsdown": "^0.16.8",
     "typescript": "^5.9.3",
-    "vitest": "^4.0.4",
-    "zod": "^4.1.12"
+    "vitest": "^4.0.15",
+    "zod": "^4.1.13"
   }
 }

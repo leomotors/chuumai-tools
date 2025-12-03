@@ -21,7 +21,9 @@ export async function downloadMusicData(version: string) {
 
   const stdMusicData = musicJsonSchema.parse(data).filter((m) => m.lev_bas);
 
-  console.log(`Found ${stdMusicData.length} standard music records`);
+  console.log(
+    `Found ${stdMusicData.length} standard (non-WE) music records from official source`,
+  );
 
   console.log("\nStep 1.2: Compare with existing music data in the database");
 
@@ -36,6 +38,7 @@ export async function downloadMusicData(version: string) {
         title: m.title,
         artist: m.artist,
         image: m.image,
+        version,
       })),
     );
     console.log(`Successfully inserted ${newRecords.length} new music data`);

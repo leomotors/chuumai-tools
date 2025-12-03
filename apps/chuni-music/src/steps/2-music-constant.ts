@@ -60,7 +60,7 @@ export async function updateMusicConstant(version: string) {
 
   if (result.nullsTitle.length > 0) {
     console.log(
-      `Songs with null constants (Update from other source required):\n${result.nullsTitle.join(", ")}`,
+      `Songs with null constants (Update from other source required): ${result.nullsTitle.join(", ")}`,
     );
   }
 }

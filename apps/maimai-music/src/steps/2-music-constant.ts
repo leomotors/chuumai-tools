@@ -1,21 +1,28 @@
 import { and, eq } from "drizzle-orm";
 
 import { musicDataTable, musicLevelTable } from "@repo/db-maimai/schema";
+import { forInRangeWithProgressBar } from "@repo/utils";
 
 import { db } from "../db.js";
 import { updateMusicConstant as updateMusicConstantLogic } from "../functions/update-music-constant.js";
 import { zSchema } from "../types.js";
 
-const url = "https://dp4p6x0xfi5o9.cloudfront.net/maimai/data.json";
+// const url = "https://dp4p6x0xfi5o9.cloudfront.net/maimai/data.json";
 
 export async function updateMusicConstant(version: string) {
-  console.log("\nFinal Step: Updating music constants in the database");
+  // console.log("\nFinal Step: Updating music constants in the database");
 
-  const response = await fetch(url);
-  if (!response.ok) {
-    throw new Error("Failed to fetch music data");
-  }
-  const data = await response.json();
+  // const response = await fetch(url);
+  // if (!response.ok) {
+  //   throw new Error("Failed to fetch music data");
+  // }
+  // const data = await response.json();
+
+  // Temporary during Intl = PRiSM+ (but JP = CiRCLE)
+  // Local Snapshot of data before CiRCLE
+  const data = await (await import("node:fs/promises"))
+    .readFile("./temp/data.json", "utf-8")
+    .then((r) => JSON.parse(r));
 
   const musicData = zSchema.parse(data).songs;
 
@@ -36,25 +43,29 @@ export async function updateMusicConstant(version: string) {
   }
 
   // Apply the database updates
-  for (const update of result.payload) {
-    await db
-      .update(musicLevelTable)
-      .set({ constant: update.newConstant })
-      .where(
-        and(
-          eq(musicLevelTable.musicTitle, update.musicTitle),
-          eq(musicLevelTable.chartType, update.chartType),
-          eq(musicLevelTable.difficulty, update.difficulty),
-          eq(musicLevelTable.version, update.version),
+  await forInRangeWithProgressBar(
+    result.payload,
+    async (update) =>
+      await db
+        .update(musicLevelTable)
+        .set({ constant: update.newConstant })
+        .where(
+          and(
+            eq(musicLevelTable.musicTitle, update.musicTitle),
+            eq(musicLevelTable.chartType, update.chartType),
+            eq(musicLevelTable.difficulty, update.difficulty),
+            eq(musicLevelTable.version, update.version),
+          ),
         ),
-      );
-  }
+  );
 
   console.log(
     `UpdateMusicConstant: Applied ${result.payload.length} updates, found ${result.nullsCount} nulls, you will have to manually update from other source`,
   );
 
   if (result.nullsTitle.length > 0) {
-    console.log(`Songs with null constants: ${result.nullsTitle.join(", ")}`);
+    console.log(
+      `Songs with null constants (Update from other source required): ${result.nullsTitle.join(", ")}`,
+    );
   }
 }

@@ -21,7 +21,7 @@ describe("Chuni Level Utils", () => {
     expect(constantFromLevel("0+")).toBe(0.5);
 
     for (let i = 0; i <= 99; i++) {
-      expect(constantFromLevel(`${i}+`)).toBe(i + 0.5);
+      expect(constantFromLevel(`${i}+`)).toBe(+`${i}.5`);
     }
   });
 });
