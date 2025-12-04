@@ -26,6 +26,10 @@ coverage
 out/
 build
 dist
+.vercel
+.netlify
+.wrangler
+.svelte-kit
 
 # Debug
 npm-debug.log*

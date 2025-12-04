@@ -1,10 +1,15 @@
 <script lang="ts">
+  import Music from "$lib/components/molecule/Music.svelte";
   import Profile from "$lib/components/profile/Profile.svelte";
   import Rating from "$lib/components/profile/Rating.svelte";
+
+  import { Button } from "@repo/ui/atom/button";
 </script>
 
 <main class="p-8">
   <h1 class="font-bold text-xl">Rating Components</h1>
+
+  <Button>Shadcn Button</Button>
 
   <p>Rating = 14.6800</p>
 
@@ -129,5 +134,23 @@
       playCount: 999,
     }}
     calculatedRating={16.3999}
+  />
+
+  <Music
+    index={1}
+    music={{
+      id: 2817,
+      title: "Unwelcome School",
+      difficulty: "ultima",
+      score: 1002300,
+      clearMark: "HARD",
+      fc: false,
+      aj: false,
+      isHidden: false,
+      constant: 15.0,
+      constantSure: true,
+      rating: 16.23,
+      image: "7c236c814e236d39.jpg",
+    }}
   />
 </main>

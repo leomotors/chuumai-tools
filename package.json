@@ -11,7 +11,7 @@
     "test": "turbo run test --continue"
   },
   "devDependencies": {
-    "@leomotors/config": "^1.0.1",
+    "@repo/config": "workspace:*",
     "@types/node": "^24.10.1",
     "eslint": "^9.39.1",
     "prettier": "^3.7.4",
