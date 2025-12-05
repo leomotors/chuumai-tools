@@ -126,9 +126,7 @@
   }
 </script>
 
-<main
-  class="flex flex-col items-center w-screen px-4 py-8 gap-6 font-app min-h-screen bg-gray-50"
->
+<main class="flex flex-col items-center w-screen px-4 py-8 gap-6 font-app">
   <div class="w-full max-w-4xl">
     <div class="text-center mb-8">
       <h1 class="font-bold text-4xl mb-4 text-gray-800">

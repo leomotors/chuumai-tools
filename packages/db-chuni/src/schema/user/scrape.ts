@@ -16,7 +16,7 @@ import {
   ratingType,
   stdChartDifficultyType,
   teamRarityLevelType,
-} from "./types";
+} from "../types";
 
 export { jobTable };
 

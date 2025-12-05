@@ -1,4 +1,10 @@
-import { integer, numeric, pgTable, timestamp } from "drizzle-orm/pg-core";
+import {
+  integer,
+  numeric,
+  pgTable,
+  text,
+  timestamp,
+} from "drizzle-orm/pg-core";
 
 /**
  * Table for storing manually inserted rating data,
@@ -6,6 +12,8 @@ import { integer, numeric, pgTable, timestamp } from "drizzle-orm/pg-core";
  */
 export const manualRatingTable = pgTable("manual_rating", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
+  userId: text("user_id"),
+
   rating: numeric({ precision: 4, scale: 2 }).notNull(),
   timestamp: timestamp().notNull(),
 });

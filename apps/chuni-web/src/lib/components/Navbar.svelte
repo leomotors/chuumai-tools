@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Session } from "@auth/sveltekit";
   import { signIn, signOut } from "@auth/sveltekit/client";
-  import { LogOut } from "@lucide/svelte";
+  import { Gauge, House, LogOut } from "@lucide/svelte";
 
   import { Button } from "@repo/ui/atom/button";
   import * as Popover from "@repo/ui/atom/popover";
@@ -54,6 +54,14 @@
               </p>
             </div>
             <hr class="border-gray-200/50" />
+            <Button
+              href="/dashboard"
+              variant="ghost"
+              class="w-full justify-start gap-2 text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+            >
+              <Gauge class="size-4" />
+              Dashboard
+            </Button>
             <Button
               onclick={() => signOut()}
               variant="ghost"

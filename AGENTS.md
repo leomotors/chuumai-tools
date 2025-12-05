@@ -20,3 +20,11 @@ located in `src/components/ui` which is not expected location.
 Please move it to under either `src/atom` or `src/molecule` etc to match the design system structure.
 Then make sure you fix the utils imports (`$lib/utils.js` should be `@repo/ui/utils`).
 Finally, cleanup empty `src/components` folder.
+
+## Database Schema
+
+`apps/chuni-*` will uses `packages/db-chuni` as database schema.
+
+Database is PostgreSQL with Drizzle ORM.
+
+Please note that it may import and re-export some of shared table in `packages/db-shared`.

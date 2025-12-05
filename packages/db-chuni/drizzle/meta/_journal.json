@@ -36,6 +36,20 @@
       "when": 1764776515293,
       "tag": "0004_team-rarity",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1764918680406,
+      "tag": "0005_add-user-association",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1764924738391,
+      "tag": "0006_fix-userid-type",
+      "breakpoints": true
     }
   ]
 }
