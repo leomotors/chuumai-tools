@@ -44,19 +44,13 @@
           </span>
         </Popover.Trigger>
         <Popover.Content
-          class="w-64 rounded-xl border border-gray-200/50 bg-white/70 p-4 shadow-lg backdrop-blur-md"
+          class="w-64 rounded-xl border border-gray-200/50 bg-white/50 p-4 shadow-lg backdrop-blur-md"
         >
           <div class="space-y-3">
             <div class="space-y-1">
               <p class="text-xs text-gray-500">User ID</p>
               <p class="truncate text-sm font-medium text-gray-700">
                 {session.user.id ?? "N/A"}
-              </p>
-            </div>
-            <div class="space-y-1">
-              <p class="text-xs text-gray-500">Email</p>
-              <p class="truncate text-sm font-medium text-gray-700">
-                {session.user.email ?? "N/A"}
               </p>
             </div>
             <hr class="border-gray-200/50" />
@@ -72,13 +66,30 @@
         </Popover.Content>
       </Popover.Root>
     {:else}
-      <Button
-        onclick={() => signIn("discord")}
-        class="bg-[#5865f2] text-white hover:bg-[#4752c4]"
-      >
-        Sign in with
-        <Discord class="size-5" />
-      </Button>
+      <Popover.Root>
+        <Popover.Trigger
+          class="inline-flex h-9 shrink-0 items-center justify-center gap-2 rounded-md bg-[#5865f2] px-4 py-2 text-sm font-medium text-white shadow-xs transition-all hover:bg-[#4752c4]"
+        >
+          Sign In
+        </Popover.Trigger>
+        <Popover.Content
+          class="w-72 rounded-xl border border-gray-200/50 bg-white/70 p-4 shadow-lg backdrop-blur-md"
+        >
+          <div class="space-y-4">
+            <Button
+              onclick={() => signIn("discord")}
+              class="w-full bg-[#5865f2] text-white hover:bg-[#4752c4]"
+            >
+              Sign in with
+              <Discord class="size-5" />
+            </Button>
+            <p class="text-center text-xs text-gray-500">
+              When you sign in, only your Discord user ID is stored in the
+              database.
+            </p>
+          </div>
+        </Popover.Content>
+      </Popover.Root>
     {/if}
   </div>
 </nav>

@@ -1,7 +1,7 @@
 <script lang="ts">
   import {
-    AlertCircle,
-    CheckCircle,
+    CircleAlert,
+    CircleCheck,
     Download,
     InfoIcon,
     Plus,
@@ -168,7 +168,7 @@
       <!-- Info Box 1 -->
       <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
         <div class="flex items-start">
-          <InfoIcon class="w-5 h-5 text-blue-400 mt-0.5 mr-3 flex-shrink-0" />
+          <InfoIcon class="w-5 h-5 text-blue-400 mt-0.5 mr-3 shrink-0" />
           <div>
             <h3 class="text-sm font-medium text-blue-800 mb-2">
               Information Source
@@ -199,7 +199,7 @@
       <!-- Info Box 2 -->
       <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
         <div class="flex items-start">
-          <InfoIcon class="w-5 h-5 text-blue-400 mt-0.5 mr-3 flex-shrink-0" />
+          <InfoIcon class="w-5 h-5 text-blue-400 mt-0.5 mr-3 shrink-0" />
           <div>
             <h3 class="text-sm font-medium text-blue-800 mb-2">Note</h3>
             <div class="text-sm text-blue-700 space-y-2">
@@ -216,9 +216,7 @@
       <!-- Disclaimer Box -->
       <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
         <div class="flex items-start">
-          <AlertCircle
-            class="w-5 h-5 text-yellow-400 mt-0.5 mr-3 flex-shrink-0"
-          />
+          <CircleAlert class="w-5 h-5 text-yellow-400 mt-0.5 mr-3 shrink-0" />
           <div>
             <h3 class="text-sm font-medium text-yellow-800 mb-2">Disclaimer</h3>
             <div class="text-sm text-yellow-700 space-y-2">
@@ -311,7 +309,7 @@
 
           {#if files && files.length > 0}
             <div class="text-sm text-green-600 flex items-center gap-1">
-              <CheckCircle class="w-4 h-4" />
+              <CircleCheck class="w-4 h-4" />
               File uploaded: {files[0].name}
             </div>
           {/if}
@@ -506,7 +504,7 @@
       {#if userError}
         <div class="bg-red-50 border border-red-200 rounded-md p-4">
           <div class="flex items-center">
-            <AlertCircle class="w-5 h-5 text-red-400 mr-2" />
+            <CircleAlert class="w-5 h-5 text-red-400 mr-2" />
             <h3 class="text-sm font-medium text-red-800">JSON Parse Error</h3>
           </div>
           <div class="mt-2 text-sm text-red-700">
@@ -520,7 +518,7 @@
       {#if userData}
         <div class="bg-green-50 border border-green-200 rounded-md p-4">
           <div class="flex items-center">
-            <CheckCircle class="w-5 h-5 text-green-400 mr-2" />
+            <CircleCheck class="w-5 h-5 text-green-400 mr-2" />
             <h3 class="text-sm font-medium text-green-800">
               File parsed successfully!
             </h3>
@@ -535,7 +533,7 @@
       {#if dataError}
         <div class="bg-red-50 border border-red-200 rounded-md p-4">
           <div class="flex items-center">
-            <AlertCircle class="w-5 h-5 text-red-400 mr-2" />
+            <CircleAlert class="w-5 h-5 text-red-400 mr-2" />
             <h3 class="text-sm font-medium text-red-800">Rating Data Error</h3>
           </div>
           <div class="mt-2 text-sm text-red-700">
@@ -550,7 +548,7 @@
         <div class="bg-green-50 border border-green-200 rounded-md p-4">
           <div class="flex items-center justify-between">
             <div class="flex items-center">
-              <CheckCircle class="w-5 h-5 text-green-400 mr-2" />
+              <CircleCheck class="w-5 h-5 text-green-400 mr-2" />
               <div>
                 <h3 class="text-sm font-medium text-green-800">
                   Data fetched successfully, ready for render!

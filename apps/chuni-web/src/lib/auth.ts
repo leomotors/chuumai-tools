@@ -8,6 +8,7 @@ export const { handle, signIn, signOut } = SvelteKitAuth({
       if (account && profile) {
         token.id = profile.id;
       }
+      delete token.email;
       return token;
     },
     session({ session, token }) {
