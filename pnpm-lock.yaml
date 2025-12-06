@@ -217,6 +217,9 @@ importers:
       '@repo/types':
         specifier: workspace:*
         version: link:../../packages/types
+      '@repo/utils':
+        specifier: workspace:*
+        version: link:../../packages/utils
       '@types/jsdom':
         specifier: ^27.0.0
         version: 27.0.0
@@ -378,6 +381,9 @@ importers:
       '@repo/db-chuni':
         specifier: workspace:*
         version: link:../db-chuni
+      '@repo/utils':
+        specifier: workspace:*
+        version: link:../utils
       zod:
         specifier: ^4.1.13
         version: 4.1.13
@@ -433,12 +439,18 @@ importers:
 
   packages/utils:
     dependencies:
+      '@asteasolutions/zod-to-openapi':
+        specifier: ^8.1.0
+        version: 8.1.0(zod@4.1.13)
       '@aws-sdk/client-s3':
         specifier: ^3.943.0
         version: 3.943.0
       '@leomotors/cli-progress':
         specifier: ^4.0.3
         version: 4.0.3
+      zod:
+        specifier: ^4.1.13
+        version: 4.1.13
     devDependencies:
       '@vitest/coverage-v8':
         specifier: ^4.0.15

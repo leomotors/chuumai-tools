@@ -1,5 +1,6 @@
 import type { OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
-import { z } from "zod";
+
+import { z } from "@repo/utils/zod";
 
 import { imageProxyQuerySchema } from "../schemas/image";
 

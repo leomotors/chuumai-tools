@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@repo/db-chuni": "workspace:*",
+    "@repo/utils": "workspace:*",
     "zod": "^4.1.13"
   }
 }

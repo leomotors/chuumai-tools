@@ -9,8 +9,11 @@ import {
   imgGenInputSchema,
   profileSchema,
 } from "@repo/types/chuni";
+import { z } from "@repo/utils/zod";
 
-import { z } from "./openapi-zod";
+// ============================================================================
+// Schemas defined in this file
+// ============================================================================
 
 // CalcRating Request schema
 export const calcRatingRequestSchema = z
@@ -43,20 +46,21 @@ export const previewNextResponseSchema = z
 
 export type PreviewNextResponse = z.infer<typeof previewNextResponseSchema>;
 
+// ============================================================================
 // Registration function - called only when generating docs
+// ============================================================================
 export function registerRatingSchemas(registry: OpenAPIRegistry) {
-  registry.register("Chart", chartSchema.openapi("Chart"));
-  registry.register("Profile", profileSchema.openapi("Profile"));
-  registry.register("HiddenChart", hiddenChartSchema.openapi("HiddenChart"));
-  registry.register(
-    "ChartForRender",
-    chartForRenderSchema.openapi("ChartForRender"),
-  );
+  // Imported from @repo/types/chuni
+  registry.register("Chart", chartSchema);
+  registry.register("Profile", profileSchema);
+  registry.register("HiddenChart", hiddenChartSchema);
+
+  // Imported from $lib/types
+  registry.register("ChartForRender", chartForRenderSchema);
+  registry.register("CalcRatingResponse", rawImageGenSchema);
+
+  // Defined in this file
   registry.register("CalcRatingRequest", calcRatingRequestSchema);
-  registry.register(
-    "CalcRatingResponse",
-    rawImageGenSchema.openapi("CalcRatingResponse"),
-  );
   registry.register("PreviewNextRequest", previewNextRequestSchema);
   registry.register("PreviewNextResponse", previewNextResponseSchema);
 }

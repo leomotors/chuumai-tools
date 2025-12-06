@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from "@repo/utils/zod";
 
 const environmentSchema = z.object({
   DATABASE_URL: z.string().nonempty(),

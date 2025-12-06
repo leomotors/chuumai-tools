@@ -32,7 +32,7 @@ export function registerRatingRoutes(registry: OpenAPIRegistry) {
         description: "Successfully calculated rating",
         content: {
           "application/json": {
-            schema: rawImageGenSchema.openapi("CalcRatingResponse"),
+            schema: rawImageGenSchema,
           },
         },
       },

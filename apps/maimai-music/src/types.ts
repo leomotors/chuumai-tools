@@ -1,10 +1,9 @@
-import { z } from "zod";
-
 import {
   categoryValues,
   chartTypeValues,
   stdChartDifficultyValues,
 } from "@repo/db-maimai/schema";
+import { z } from "@repo/utils/zod";
 
 /*
 Examples:

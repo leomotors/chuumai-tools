@@ -1,6 +1,6 @@
 import type { OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
 
-import { z } from "./openapi-zod";
+import { z } from "@repo/utils/zod";
 
 // Common error schema used across all endpoints
 export const errorSchema = z

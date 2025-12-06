@@ -1,5 +1,4 @@
 import { JSDOM } from "jsdom";
-import { z } from "zod";
 
 import {
   RarityLevel,
@@ -8,6 +7,7 @@ import {
   teamRarityLevelValues,
 } from "@repo/db-chuni/schema";
 import { ImgGenInput } from "@repo/types/chuni";
+import { z } from "@repo/utils/zod";
 
 import { rarityFromUrl } from "./imageUrl";
 import { parseCurrentRating } from "./playerRating";

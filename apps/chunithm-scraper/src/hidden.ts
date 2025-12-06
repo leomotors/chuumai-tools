@@ -1,8 +1,7 @@
 import fs from "node:fs/promises";
 
-import { z } from "zod";
-
 import { hiddenChartSchema } from "@repo/types/chuni";
+import { z } from "@repo/utils/zod";
 
 import { logger } from "./utils/logger.js";
 

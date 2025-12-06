@@ -15,6 +15,10 @@
     "./s3": {
       "types": "./src/s3/index.ts",
       "default": "./src/s3/index.ts"
+    },
+    "./zod": {
+      "types": "./src/zod/index.ts",
+      "default": "./src/zod/index.ts"
     }
   },
   "scripts": {
@@ -28,7 +32,9 @@
     "vitest": "^4.0.15"
   },
   "dependencies": {
+    "@asteasolutions/zod-to-openapi": "^8.1.0",
     "@aws-sdk/client-s3": "^3.943.0",
-    "@leomotors/cli-progress": "^4.0.3"
+    "@leomotors/cli-progress": "^4.0.3",
+    "zod": "^4.1.13"
   }
 }
