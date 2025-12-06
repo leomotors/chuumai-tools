@@ -30,6 +30,7 @@
     "drizzle-orm": "^0.44.7",
     "eslint": "^9.39.1",
     "html-to-image": "^1.11.13",
+    "nanoid": "^5.1.6",
     "postgres": "^3.4.7",
     "prettier": "^3.7.4",
     "prettier-plugin-svelte": "^3.4.0",

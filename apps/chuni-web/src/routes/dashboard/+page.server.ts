@@ -1,11 +1,12 @@
-import { error } from "@sveltejs/kit";
+import { error, fail } from "@sveltejs/kit";
 import { count, eq } from "drizzle-orm";
+import { nanoid } from "nanoid";
 
 import { db } from "$lib/db";
 
-import { jobTable } from "@repo/db-chuni/schema";
+import { apiKey, jobTable } from "@repo/db-chuni/schema";
 
-import type { PageServerLoad } from "./$types";
+import type { Actions, PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async ({ parent }) => {
   const { session } = await parent();
@@ -14,10 +15,16 @@ export const load: PageServerLoad = async ({ parent }) => {
     error(401, "Unauthorized");
   }
 
-  const result = await db
-    .select({ count: count() })
-    .from(jobTable)
-    .where(eq(jobTable.userId, session.user.id));
+  const [jobResult, apiKeyResult] = await Promise.all([
+    db
+      .select({ count: count() })
+      .from(jobTable)
+      .where(eq(jobTable.userId, session.user.id)),
+    db
+      .select({ apiKey: apiKey.apiKey, createdAt: apiKey.createdAt })
+      .from(apiKey)
+      .where(eq(apiKey.userId, session.user.id)),
+  ]);
 
   return {
     user: {
@@ -25,6 +32,36 @@ export const load: PageServerLoad = async ({ parent }) => {
       name: session.user.name,
       image: session.user.image,
     },
-    jobCount: result[0]?.count,
+    jobCount: jobResult[0]?.count,
+    apiKey: apiKeyResult[0]?.apiKey ?? null,
+    apiKeyCreatedAt: apiKeyResult[0]?.createdAt ?? null,
   };
+};
+
+export const actions: Actions = {
+  generateApiKey: async ({ locals }) => {
+    const session = await locals.auth();
+
+    if (!session?.user?.id) {
+      return fail(401, { error: "Unauthorized" });
+    }
+
+    const newApiKey = nanoid(32);
+
+    await db
+      .insert(apiKey)
+      .values({
+        userId: session.user.id,
+        apiKey: newApiKey,
+      })
+      .onConflictDoUpdate({
+        target: apiKey.userId,
+        set: {
+          apiKey: newApiKey,
+          createdAt: new Date(),
+        },
+      });
+
+    return { success: true, apiKey: newApiKey };
+  },
 };
