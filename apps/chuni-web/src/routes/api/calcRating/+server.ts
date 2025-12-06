@@ -1,15 +1,12 @@
 import { error, json } from "@sveltejs/kit";
 
 import { env } from "$env/dynamic/public";
+import { calcRatingRequestSchema } from "$lib/api/schemas";
 import { getCachedChartConstantData, getCachedMusicData } from "$lib/cachedDb";
 import { addForRenderInfo } from "$lib/calculation";
 import { type MusicData, rawImageGenSchema } from "$lib/types";
 
-import {
-  type BaseChartSchema,
-  type HiddenChart,
-  imgGenInputSchema,
-} from "@repo/types/chuni";
+import { type BaseChartSchema, type HiddenChart } from "@repo/types/chuni";
 import { floorDecimalPlaces } from "@repo/utils/chuni";
 
 import type { RequestHandler } from "./$types";
@@ -42,33 +39,29 @@ function hiddenChartToData(
 
 export const POST: RequestHandler = async ({ request }) => {
   if (!env.PUBLIC_ENABLED_VERSION) {
-    throw new Error("PUBLIC_ENABLED_VERSION is not set");
+    error(503, "PUBLIC_ENABLED_VERSION is not set");
   }
 
-  const { data, version } = await request.json();
+  const body = await request.json();
+  const parseResult = calcRatingRequestSchema.safeParse(body);
+
+  if (!parseResult.success) {
+    return new Response(JSON.stringify(parseResult.error), {
+      status: 400,
+    });
+  }
+
+  const { data, version } = parseResult.data;
 
   const enabledVersions = env.PUBLIC_ENABLED_VERSION.split(",");
-  if (
-    typeof version !== "string" ||
-    !version ||
-    !enabledVersions.includes(version)
-  ) {
+  if (!enabledVersions.includes(version)) {
     return new Response(
       `Invalid version, valid versions are: ${enabledVersions.join(", ")}`,
       { status: 400 },
     );
   }
 
-  const inputParseResult = imgGenInputSchema.safeParse(data);
-
-  if (!inputParseResult.success) {
-    return new Response(JSON.stringify(inputParseResult.error), {
-      status: 400,
-    });
-  }
-  const input = inputParseResult.data;
-
-  const { profile, best, current, hidden } = input;
+  const { profile, best, current, hidden } = data;
 
   const chartConstantData = await getCachedChartConstantData(version);
 

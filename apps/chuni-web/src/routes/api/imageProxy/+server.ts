@@ -1,16 +1,18 @@
 import { env } from "$env/dynamic/private";
+import { imageProxyQuerySchema } from "$lib/api/schemas";
 
 import type { RequestHandler } from "./$types";
 
 export const GET: RequestHandler = async ({ url }) => {
-  const img = url.searchParams.get("img");
-  if (
-    !img ||
-    typeof img !== "string" ||
-    !/^[a-zA-Z0-9]+\.(jpg|png)$/.test(img)
-  ) {
+  const parseResult = imageProxyQuerySchema.safeParse({
+    img: url.searchParams.get("img"),
+  });
+
+  if (!parseResult.success) {
     return new Response("Bad Request", { status: 400 });
   }
+
+  const { img } = parseResult.data;
 
   const res = await fetch(`${env.MUSIC_IMAGE_URL}/${img}`);
   if (!res.ok) {

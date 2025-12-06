@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Session } from "@auth/sveltekit";
   import { signIn, signOut } from "@auth/sveltekit/client";
-  import { Gauge, House, LogOut } from "@lucide/svelte";
+  import { Gauge, LogOut } from "@lucide/svelte";
 
   import { Button } from "@repo/ui/atom/button";
   import * as Popover from "@repo/ui/atom/popover";

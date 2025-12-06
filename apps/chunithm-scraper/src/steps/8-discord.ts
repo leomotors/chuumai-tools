@@ -25,7 +25,7 @@ export async function sendDiscordImage(
   const blob = new Blob([new Uint8Array(image)], { type: "image/png" });
 
   const message = `## Your Music for Rating Image is here!
-**Scraper Version**: ${APP_VERSION} @ ${environment.VERSION}\t\t**Cached Login**: ${loginCached ? "Yes" : "No"}
+**Scraper Version**: ${APP_VERSION} @ ${environment.VERSION}\t\t**Cached Login**: ${loginCached ? "Yes :white_check_mark:" : "No :arrows_clockwise:"}
 **Player Name**: ${playerData.playerName}\t\t**Rating**: ${playerData.rating.toFixed(2)}${rawImgGen ? ` (${rawImgGen.rating.totalAvg.toFixed(4)})` : ""}
 **Level**: ${playerData.playerLevel}\t\t**Play Count**: ${playerData.playCount}
 **Last Played**: <t:${Math.floor(playerData.lastPlayed.getTime() / 1000)}:F>

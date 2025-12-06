@@ -1,14 +1,11 @@
 import { json } from "@sveltejs/kit";
 
 import { env } from "$env/dynamic/public";
+import { previewNextRequestSchema } from "$lib/api/schemas";
 import { getCachedChartConstantData, getCachedMusicData } from "$lib/cachedDb";
 import { addForRenderInfo } from "$lib/calculation";
 
-import {
-  chartSchema,
-  fullPlayDataInputSchema,
-  type ImgGenInput,
-} from "@repo/types/chuni";
+import { chartSchema, type ImgGenInput } from "@repo/types/chuni";
 import { floorDecimalPlaces } from "@repo/utils/chuni";
 
 import type { RequestHandler } from "./$types";
@@ -18,32 +15,29 @@ export const POST: RequestHandler = async ({ request }) => {
     throw new Error("PUBLIC_ENABLED_VERSION is not set");
   }
 
-  const { data, version } = await request.json();
-
-  const enabledVersions = env.PUBLIC_ENABLED_VERSION.split(",");
-  if (
-    typeof version !== "string" ||
-    !version ||
-    !enabledVersions.includes(version)
-  ) {
-    return new Response(
-      `Invalid version, valid versions are: ${enabledVersions.join(", ")}`,
-      { status: 400 },
-    );
-  }
-
-  const parseResult = fullPlayDataInputSchema.safeParse(data);
+  const body = await request.json();
+  const parseResult = previewNextRequestSchema.safeParse(body);
 
   if (!parseResult.success) {
     return new Response(JSON.stringify(parseResult.error), {
       status: 400,
     });
   }
-  const input = parseResult.data;
+
+  const { data, version } = parseResult.data;
+
+  const enabledVersions = env.PUBLIC_ENABLED_VERSION.split(",");
+  if (!enabledVersions.includes(version)) {
+    return new Response(
+      `Invalid version, valid versions are: ${enabledVersions.join(", ")}`,
+      { status: 400 },
+    );
+  }
+
   const chartConstantData = await getCachedChartConstantData(version);
   const musicData = await getCachedMusicData();
 
-  const { profile, allRecords } = input;
+  const { profile, allRecords } = data;
 
   const processed = allRecords.map((record) => {
     try {

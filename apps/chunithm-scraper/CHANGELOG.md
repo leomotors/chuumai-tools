@@ -2,6 +2,10 @@
 
 For changelog before V4: [here](https://github.com/leomotors/chunithm-net-scraper/blob/main/CHANGELOG.md)
 
+## [next] - Unreleased
+
+- update discord notification message text (add some emojis)
+
 ## [5.2.1] - 2025-12-04
 
 - fix: wrong entrypoint

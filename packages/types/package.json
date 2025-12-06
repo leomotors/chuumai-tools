@@ -13,7 +13,6 @@
     "lint": "eslint src",
     "format": "eslint src --fix"
   },
-  "main": "./src/index.ts",
   "dependencies": {
     "@repo/db-chuni": "workspace:*",
     "zod": "^4.1.13"
