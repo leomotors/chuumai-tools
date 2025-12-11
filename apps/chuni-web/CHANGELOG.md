@@ -1,6 +1,6 @@
 # Changelog
 
-## [3.0.0] - 2025-12-12
+## [3.0.1] - 2025-12-12
 
 - feat: support for X-VERSE-X
 - feat: new /data page that show all data
