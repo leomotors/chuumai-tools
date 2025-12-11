@@ -1,10 +1,11 @@
 <script lang="ts">
   import type { chartLevelSchema } from "$lib/functions/musicData";
+
   import { cn } from "@repo/ui/utils";
   import { constantFromLevel } from "@repo/utils/chuni";
   import { z } from "@repo/utils/zod";
 
-  interface Props extends z.infer<typeof chartLevelSchema> {}
+  type Props = z.infer<typeof chartLevelSchema>;
 
   let { level, constant }: Props = $props();
   let mayHasConstant = $derived(constantFromLevel(level) >= 10);

@@ -1,48 +1,34 @@
 <script lang="ts">
-  import { env } from "$env/dynamic/public";
-  import { Search } from "@lucide/svelte";
+  import { LoaderCircle, Search } from "@lucide/svelte";
 
+  import { env } from "$env/dynamic/public";
+  import { getBackgroundMapping, getVersionNameMapping } from "$lib/constants";
   import type { MusicDataViewSchema } from "$lib/functions/musicData";
 
-  import { constantFromLevel } from "@repo/utils/chuni";
   import { Button } from "@repo/ui/atom/button";
+  import { Checkbox } from "@repo/ui/atom/checkbox";
+  import { Label } from "@repo/ui/atom/label";
   import * as Select from "@repo/ui/atom/select";
   import * as Table from "@repo/ui/atom/table";
   import { SortableHeader } from "@repo/ui/molecule/sortable-header";
+  import { constantFromLevel } from "@repo/utils/chuni";
+
   import ChartLevelCell from "./ChartLevelCell.svelte";
-  import { getBackgroundMapping, getVersionNameMapping } from "$lib/constants";
 
   let selectedVersion = $state<string>("");
   let searchQuery = $state<string>("");
   let debouncedSearchQuery = $state<string>("");
-  let sortField = $state<
-    | keyof MusicDataViewSchema
-    | "basic"
-    | "advanced"
-    | "expert"
-    | "master"
-    | "ultima"
-  >("id");
+  let sortField = $state<keyof MusicDataViewSchema>("id");
   let sortDirection = $state<"asc" | "desc">("desc");
   let currentPage = $state<number>(1);
+  let filterNullConstant = $state<boolean>(false);
+
   let musicData = $state<MusicDataViewSchema[]>([]);
   let loading = $state<boolean>(false);
   let error = $state<string>("");
 
   const pageSize = 50;
   const enabledVersions = env.PUBLIC_ENABLED_VERSION?.split(",") || [];
-
-  // Debounce search query
-  let debounceTimer: ReturnType<typeof setTimeout> | undefined;
-  $effect(() => {
-    if (debounceTimer) clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(() => {
-      debouncedSearchQuery = searchQuery;
-    }, 300);
-    return () => {
-      if (debounceTimer) clearTimeout(debounceTimer);
-    };
-  });
 
   // Auto-select first version if available
   $effect(() => {
@@ -87,8 +73,25 @@
     }
   }
 
+  // Debounce search query
+  let debounceTimeout: NodeJS.Timeout;
+  let debouncePending = $state<boolean>(false);
+  function handleInputChange() {
+    debouncePending = true;
+
+    if (debounceTimeout) {
+      clearTimeout(debounceTimeout);
+    }
+
+    debounceTimeout = setTimeout(() => {
+      debouncedSearchQuery = searchQuery;
+      currentPage = 1; // Reset to first page on new search
+      debouncePending = false;
+    }, 300);
+  }
+
   // Client-side filtering and sorting
-  let filteredAndSortedData = $derived(() => {
+  let filteredAndSortedData = $derived.by(() => {
     let result = [...musicData];
 
     // Filter by search query
@@ -102,10 +105,22 @@
       );
     }
 
+    // Filter null constants
+    if (filterNullConstant) {
+      result = result.filter(
+        (item) =>
+          item.basic?.constant == null ||
+          item.advanced?.constant == null ||
+          item.expert?.constant == null ||
+          item.master?.constant == null ||
+          (item.ultima && item.ultima.constant == null),
+      );
+    }
+
     // Sort
     result.sort((a, b) => {
-      let aVal: any;
-      let bVal: any;
+      let aVal: unknown;
+      let bVal: unknown;
 
       // Handle difficulty columns
       if (
@@ -147,15 +162,13 @@
   });
 
   // Pagination
-  let paginatedData = $derived(() => {
-    const data = filteredAndSortedData();
+  let paginatedData = $derived.by(() => {
+    const data = filteredAndSortedData;
     const start = (currentPage - 1) * pageSize;
     return data.slice(start, start + pageSize);
   });
 
-  let totalPages = $derived(
-    Math.ceil(filteredAndSortedData().length / pageSize),
-  );
+  let totalPages = $derived(Math.ceil(filteredAndSortedData.length / pageSize));
 
   function handleSort(
     field:
@@ -201,7 +214,7 @@
               {getVersionNameMapping(selectedVersion) || "Select version"}
             </Select.Trigger>
             <Select.Content class="bg-white/95 backdrop-blur-md">
-              {#each enabledVersions as version}
+              {#each enabledVersions as version (version)}
                 <Select.Item value={version}>
                   {getVersionNameMapping(version)}
                 </Select.Item>
@@ -220,29 +233,50 @@
           </label>
           <div class="relative">
             <Search
-              class="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-gray-900"
+              class="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-gray-900 z-10"
             />
             <input
               id="search"
               type="text"
               bind:value={searchQuery}
+              oninput={handleInputChange}
               placeholder="Search by title, artist, or ID..."
-              class="w-full rounded-md border border-white/20 bg-white/90 py-2 pl-10 pr-4 backdrop-blur-sm focus:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/20"
+              class="w-full rounded-md border border-white/20 bg-white/90 py-2 pl-10 pr-4 {debouncePending
+                ? 'pr-10'
+                : ''} backdrop-blur-sm focus:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/20"
             />
+            {#if debouncePending}
+              <LoaderCircle
+                class="absolute right-3 top-1/2 size-4 -translate-y-1/2 text-gray-900 z-10 animate-spin"
+              />
+            {/if}
           </div>
         </div>
+      </div>
+
+      <!-- Null Filter -->
+      <div class="mt-4 flex items-center gap-3">
+        <Checkbox
+          id="null-filter"
+          class="bg-white"
+          bind:checked={filterNullConstant}
+        />
+        <Label for="null-filter">Show songs with missing constant data</Label>
       </div>
 
       <!-- Stats -->
       <div class="mt-4 text-sm text-gray-700">
         {#if !loading && musicData.length > 0}
-          Showing {paginatedData().length} of {filteredAndSortedData().length} songs
-          {#if filteredAndSortedData().length !== musicData.length}
-            (filtered from {musicData.length} total)
-          {/if}
+          <p>
+            Showing {paginatedData.length} of {filteredAndSortedData.length} songs
+            {#if filteredAndSortedData.length !== musicData.length}
+              (filtered from {musicData.length} total)
+            {/if}
+          </p>
         {:else}
-          Showing 0 of 0 songs
+          <p>Showing 0 of 0 songs</p>
         {/if}
+        <p>"-" means no data</p>
       </div>
     </div>
 
@@ -309,6 +343,9 @@
                     Artist
                   </SortableHeader>
                 </Table.Head>
+                <Table.Head class="text-center text-gray-900">
+                  Version
+                </Table.Head>
                 <Table.Head
                   class="cursor-pointer text-center text-gray-900 hover:text-gray-700"
                   onclick={() => handleSort("basic")}
@@ -372,8 +409,8 @@
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              {#each paginatedData() as song}
-                <Table.Row class="border-white/20 hover:bg-white/5">
+              {#each paginatedData as song (song.id)}
+                <Table.Row class="border-white/20">
                   <Table.Cell class="font-medium text-gray-900">
                     {song.id}
                   </Table.Cell>
@@ -391,6 +428,9 @@
                   </Table.Cell>
                   <Table.Cell class="max-w-xs whitespace-normal text-gray-900">
                     {song.artist}
+                  </Table.Cell>
+                  <Table.Cell class="font-medium text-gray-900 text-center">
+                    {getVersionNameMapping(song.releasedVersion ?? "-")}
                   </Table.Cell>
                   <Table.Cell class="text-gray-700 bg-green-500/20">
                     {#if song.basic}
@@ -424,14 +464,14 @@
         </div>
 
         <!-- Pagination -->
-        {#if totalPages > 1}
-          <div
-            class="flex items-center justify-between border-t border-white/20 px-6 py-4"
-          >
-            <div class="text-sm text-gray-700">
-              Page {currentPage} of {totalPages}
-            </div>
-            <div class="flex gap-2">
+        <div
+          class="flex items-center justify-between border-t border-white/20 px-6 py-4"
+        >
+          <div class="text-sm text-gray-700">
+            Page {currentPage} of {totalPages}
+          </div>
+          <div class="flex gap-2">
+            {#if totalPages > 1}
               <Button
                 variant="outline"
                 size="sm"
@@ -468,9 +508,9 @@
               >
                 Last
               </Button>
-            </div>
+            {/if}
           </div>
-        {/if}
+        </div>
       </div>
     {/if}
   </div>
