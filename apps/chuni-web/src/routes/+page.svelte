@@ -12,8 +12,9 @@
   import { toPng } from "html-to-image";
 
   import ExtLink from "$lib/components/molecule/ExtLink.svelte";
+  import { getVersionNameMapping } from "$lib/constants";
   import { type RawImageGen } from "$lib/types";
-  import { getEnabledVersions } from "$lib/version";
+  import { getDefaultVersion, getEnabledVersions } from "$lib/version";
 
   import {
     clearMarkValues,
@@ -35,7 +36,7 @@
   let hiddenCharts = $state<HiddenChart[]>([]);
 
   const enabledVersions = getEnabledVersions();
-  let selectedVersion = $state<string>(enabledVersions[0]);
+  let selectedVersion = $state<string>(getDefaultVersion());
 
   async function parseFile(fileList: FileList) {
     const file = fileList[0];
@@ -270,7 +271,7 @@
             <option value="" disabled>Error: No versions available</option>
           {:else}
             {#each enabledVersions as version (version)}
-              <option value={version}>{version}</option>
+              <option value={version}>{getVersionNameMapping(version)}</option>
             {/each}
           {/if}
         </select>

@@ -2,6 +2,8 @@
   import { Github, Globe, Twitter, Workflow } from "@lucide/svelte";
   import type { Snippet } from "svelte";
 
+  import { getLogoMapping } from "$lib/constants";
+
   interface Props {
     children: Snippet;
     lastPlayed: Date;
@@ -10,9 +12,7 @@
 
   let { children, lastPlayed, version }: Props = $props();
 
-  const logo = $derived(
-    version === "XVRS" ? "/xverse_logo.webp" : "/verse_logo-hq.webp",
-  );
+  const logo = $derived(getLogoMapping(version));
 </script>
 
 <header class="flex justify-between gap-4 pb-2">

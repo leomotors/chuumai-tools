@@ -1,7 +1,8 @@
 <script lang="ts">
-  import { AlertCircle, Download, Upload } from "@lucide/svelte";
+  import { CircleAlert, Download, Upload } from "@lucide/svelte";
 
-  import { getDefaultVersion, getEnabledVersions } from "$lib/version";
+  import { getVersionNameMapping } from "$lib/constants";
+  import { getEnabledVersions } from "$lib/version";
 
   import {
     type FullPlayDataInput,
@@ -15,7 +16,7 @@
   let isSubmitting = $state(false);
 
   const enabledVersions = getEnabledVersions();
-  let selectedVersion = $state<string>(getDefaultVersion());
+  let selectedVersion = $state<string>(enabledVersions[0]);
 
   async function parseFile(fileList: FileList) {
     const file = fileList[0];
@@ -99,7 +100,7 @@
 </script>
 
 <main
-  class="flex flex-col items-center w-screen px-4 py-8 gap-6 font-app min-h-screen bg-gray-50"
+  class="flex flex-col items-center w-screen px-4 pb-16 pt-32 gap-6 font-app min-h-screen bg-gray-50"
 >
   <div class="w-full max-w-2xl">
     <h1 class="font-bold text-3xl text-center mb-2 text-gray-800">
@@ -124,7 +125,7 @@
             <option value="" disabled>Error: No versions available</option>
           {:else}
             {#each enabledVersions as version (version)}
-              <option value={version}>{version}</option>
+              <option value={version}>{getVersionNameMapping(version)}</option>
             {/each}
           {/if}
         </select>
@@ -168,7 +169,7 @@
       {#if parseError}
         <div class="bg-red-50 border border-red-200 rounded-md p-4">
           <div class="flex items-center">
-            <AlertCircle class="w-5 h-5 text-red-400 mr-2" />
+            <CircleAlert class="w-5 h-5 text-red-400 mr-2" />
             <h3 class="text-sm font-medium text-red-800">JSON Parse Error</h3>
           </div>
           <div class="mt-2 text-sm text-red-700">
@@ -182,7 +183,7 @@
       {#if submissionError}
         <div class="bg-red-50 border border-red-200 rounded-md p-4">
           <div class="flex items-center">
-            <AlertCircle class="w-5 h-5 text-red-400 mr-2" />
+            <CircleAlert class="w-5 h-5 text-red-400 mr-2" />
             <h3 class="text-sm font-medium text-red-800">Submission Error</h3>
           </div>
           <div class="mt-2 text-sm text-red-700">

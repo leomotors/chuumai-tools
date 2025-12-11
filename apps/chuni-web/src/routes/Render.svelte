@@ -2,6 +2,7 @@
   import Header from "$lib/components/Header.svelte";
   import Music from "$lib/components/molecule/Music.svelte";
   import Profile from "$lib/components/profile/Profile.svelte";
+  import { getBackgroundMapping } from "$lib/constants";
   import type { RawImageGen } from "$lib/types";
 
   interface Props {
@@ -16,9 +17,7 @@
 <div
   class="w-[2560px] h-[1440px] bg-contain bg-no-repeat bg-center flex-col gap-2 p-4 hidden"
   id="chart"
-  style="background-image: url({version === 'XVRS'
-    ? '/xverse_bg.webp'
-    : '/verse_bg.webp'})"
+  style="background-image: url({getBackgroundMapping(version)})"
 >
   <Header lastPlayed={new Date(profile.lastPlayed)} {version}>
     <Profile {profile} calculatedRating={rating.totalAvg} />
