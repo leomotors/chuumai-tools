@@ -1,14 +1,12 @@
 import { error, json } from "@sveltejs/kit";
 
-import { env } from "$env/dynamic/public";
 import { getMusicDataCached } from "$lib/functions/musicData";
+import { getEnabledVersions } from "$lib/version";
 
 import type { RequestHandler } from "./$types";
 
 export const GET: RequestHandler = async ({ url }) => {
-  if (!env.PUBLIC_ENABLED_VERSION) {
-    error(503, "PUBLIC_ENABLED_VERSION is not set");
-  }
+  const enabledVersions = getEnabledVersions();
 
   const version = url.searchParams.get("version");
 
@@ -16,7 +14,6 @@ export const GET: RequestHandler = async ({ url }) => {
     error(400, "Version parameter is required");
   }
 
-  const enabledVersions = env.PUBLIC_ENABLED_VERSION.split(",");
   if (!enabledVersions.includes(version)) {
     error(
       400,

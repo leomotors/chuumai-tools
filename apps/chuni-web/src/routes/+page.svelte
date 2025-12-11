@@ -11,9 +11,9 @@
   } from "@lucide/svelte";
   import { toPng } from "html-to-image";
 
-  import { env } from "$env/dynamic/public";
   import ExtLink from "$lib/components/molecule/ExtLink.svelte";
   import { type RawImageGen } from "$lib/types";
+  import { getEnabledVersions } from "$lib/version";
 
   import {
     clearMarkValues,
@@ -34,7 +34,7 @@
 
   let hiddenCharts = $state<HiddenChart[]>([]);
 
-  const enabledVersions = env.PUBLIC_ENABLED_VERSION?.split(",") || [];
+  const enabledVersions = getEnabledVersions();
   let selectedVersion = $state<string>(enabledVersions[0]);
 
   async function parseFile(fileList: FileList) {

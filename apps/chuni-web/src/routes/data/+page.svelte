@@ -1,9 +1,9 @@
 <script lang="ts">
   import { LoaderCircle, Search } from "@lucide/svelte";
 
-  import { env } from "$env/dynamic/public";
   import { getBackgroundMapping, getVersionNameMapping } from "$lib/constants";
   import type { MusicDataViewSchema } from "$lib/functions/musicData";
+  import { getDefaultVersion, getEnabledVersions } from "$lib/version";
 
   import { Button } from "@repo/ui/atom/button";
   import { Checkbox } from "@repo/ui/atom/checkbox";
@@ -28,12 +28,11 @@
   let error = $state<string>("");
 
   const pageSize = 50;
-  const enabledVersions = env.PUBLIC_ENABLED_VERSION?.split(",") || [];
+  const enabledVersions = getEnabledVersions();
 
-  // Auto-select first version if available
   $effect(() => {
     if (enabledVersions.length > 0 && !selectedVersion) {
-      selectedVersion = enabledVersions[0];
+      selectedVersion = getDefaultVersion();
     }
   });
 

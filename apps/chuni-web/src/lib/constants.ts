@@ -1,7 +1,6 @@
-import { env } from "$env/dynamic/public";
+import { getDefaultVersion } from "./version";
 
-export const defaultVersion =
-  env.PUBLIC_ENABLED_VERSION.split(",")[0] || "XVRSX";
+export const defaultVersion = getDefaultVersion();
 
 export const backgroundMapping = {
   VRS: "/verse_bg.webp",

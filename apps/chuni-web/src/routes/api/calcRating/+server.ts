@@ -1,10 +1,10 @@
 import { error, json } from "@sveltejs/kit";
 
-import { env } from "$env/dynamic/public";
 import { calcRatingRequestSchema } from "$lib/api/schemas";
 import { getCachedChartConstantData, getCachedMusicData } from "$lib/cachedDb";
 import { addForRenderInfo } from "$lib/calculation";
 import { type MusicData, rawImageGenSchema } from "$lib/types";
+import { getEnabledVersions } from "$lib/version";
 
 import { type BaseChartSchema, type HiddenChart } from "@repo/types/chuni";
 import { floorDecimalPlaces } from "@repo/utils/chuni";
@@ -38,9 +38,7 @@ function hiddenChartToData(
 }
 
 export const POST: RequestHandler = async ({ request }) => {
-  if (!env.PUBLIC_ENABLED_VERSION) {
-    error(503, "PUBLIC_ENABLED_VERSION is not set");
-  }
+  const enabledVersions = getEnabledVersions();
 
   const body = await request.json();
   const parseResult = calcRatingRequestSchema.safeParse(body);
@@ -53,7 +51,6 @@ export const POST: RequestHandler = async ({ request }) => {
 
   const { data, version } = parseResult.data;
 
-  const enabledVersions = env.PUBLIC_ENABLED_VERSION.split(",");
   if (!enabledVersions.includes(version)) {
     return new Response(
       `Invalid version, valid versions are: ${enabledVersions.join(", ")}`,

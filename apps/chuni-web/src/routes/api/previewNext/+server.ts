@@ -1,9 +1,9 @@
 import { json } from "@sveltejs/kit";
 
-import { env } from "$env/dynamic/public";
 import { previewNextRequestSchema } from "$lib/api/schemas";
 import { getCachedChartConstantData, getCachedMusicData } from "$lib/cachedDb";
 import { addForRenderInfo } from "$lib/calculation";
+import { getEnabledVersions } from "$lib/version";
 
 import { chartSchema, type ImgGenInput } from "@repo/types/chuni";
 import { floorDecimalPlaces } from "@repo/utils/chuni";
@@ -11,9 +11,7 @@ import { floorDecimalPlaces } from "@repo/utils/chuni";
 import type { RequestHandler } from "./$types";
 
 export const POST: RequestHandler = async ({ request }) => {
-  if (!env.PUBLIC_ENABLED_VERSION) {
-    throw new Error("PUBLIC_ENABLED_VERSION is not set");
-  }
+  const enabledVersions = getEnabledVersions();
 
   const body = await request.json();
   const parseResult = previewNextRequestSchema.safeParse(body);
@@ -26,7 +24,6 @@ export const POST: RequestHandler = async ({ request }) => {
 
   const { data, version } = parseResult.data;
 
-  const enabledVersions = env.PUBLIC_ENABLED_VERSION.split(",");
   if (!enabledVersions.includes(version)) {
     return new Response(
       `Invalid version, valid versions are: ${enabledVersions.join(", ")}`,

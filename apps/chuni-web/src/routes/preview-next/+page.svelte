@@ -1,7 +1,7 @@
 <script lang="ts">
   import { AlertCircle, Download, Upload } from "@lucide/svelte";
 
-  import { env } from "$env/dynamic/public";
+  import { getDefaultVersion, getEnabledVersions } from "$lib/version";
 
   import {
     type FullPlayDataInput,
@@ -14,8 +14,8 @@
   let submissionError = $state<string>();
   let isSubmitting = $state(false);
 
-  const enabledVersions = env.PUBLIC_ENABLED_VERSION?.split(",") || [];
-  let selectedVersion = $state<string>(enabledVersions[0]);
+  const enabledVersions = getEnabledVersions();
+  let selectedVersion = $state<string>(getDefaultVersion());
 
   async function parseFile(fileList: FileList) {
     const file = fileList[0];
