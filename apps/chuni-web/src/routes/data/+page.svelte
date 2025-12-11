@@ -54,16 +54,6 @@
       }
       musicData = await response.json();
 
-      // Filter all null data
-      musicData = musicData.filter(
-        (item) =>
-          item.basic ||
-          item.advanced ||
-          item.expert ||
-          item.master ||
-          item.ultima,
-      );
-
       currentPage = 1; // Reset to first page
     } catch (e) {
       error = e instanceof Error ? e.message : "Unknown error";
@@ -269,7 +259,7 @@
         {#if !loading && musicData.length > 0}
           <p>
             Showing {paginatedData.length} of {filteredAndSortedData.length} songs
-            {#if filteredAndSortedData.length !== musicData.length}
+            {#if debouncedSearchQuery.trim() || filterNullConstant}
               (filtered from {musicData.length} total)
             {/if}
           </p>

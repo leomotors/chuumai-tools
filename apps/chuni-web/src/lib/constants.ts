@@ -1,3 +1,8 @@
+import { env } from "$env/dynamic/public";
+
+export const defaultVersion =
+  env.PUBLIC_ENABLED_VERSION.split(",")[0] || "XVRSX";
+
 export const backgroundMapping = {
   VRS: "/verse_bg.webp",
   XVRS: "/xverse_bg.webp",
@@ -7,7 +12,7 @@ export const backgroundMapping = {
 export function getBackgroundMapping(version: string) {
   return (
     backgroundMapping[version as keyof typeof backgroundMapping] ||
-    backgroundMapping.XVRSX
+    backgroundMapping[defaultVersion as keyof typeof backgroundMapping]
   );
 }
 
@@ -18,7 +23,10 @@ export const logoMapping = {
 };
 
 export function getLogoMapping(version: string) {
-  return logoMapping[version as keyof typeof logoMapping] || logoMapping.XVRSX;
+  return (
+    logoMapping[version as keyof typeof logoMapping] ||
+    logoMapping[defaultVersion as keyof typeof logoMapping]
+  );
 }
 
 export const versionNameMapping = {

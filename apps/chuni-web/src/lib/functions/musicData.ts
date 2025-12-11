@@ -47,7 +47,7 @@ export async function getMusicData(version: string) {
       constant: musicLevelTable.constant,
     })
     .from(musicDataTable)
-    .leftJoin(
+    .innerJoin(
       musicLevelTable,
       and(
         eq(musicDataTable.id, musicLevelTable.musicId),
