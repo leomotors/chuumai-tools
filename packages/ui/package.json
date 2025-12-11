@@ -16,6 +16,11 @@
       "svelte": "./src/atom/*/index.ts",
       "default": "./src/atom/*/index.ts"
     },
+    "./molecule/*": {
+      "types": "./src/molecule/*/index.ts",
+      "svelte": "./src/molecule/*/index.ts",
+      "default": "./src/molecule/*/index.ts"
+    },
     "./icons/*": {
       "types": "./src/icons/*",
       "svelte": "./src/icons/*",
