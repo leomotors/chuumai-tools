@@ -1,5 +1,6 @@
 import {
   categoryValues,
+  StdChartDifficulty,
   stdChartDifficultyValues,
 } from "@repo/db-chuni/schema";
 import { z } from "@repo/utils/zod";
@@ -43,4 +44,34 @@ const zSong = z.object({
 
 export const zSchema = z.object({
   songs: z.array(zSong),
+});
+
+export const threeAlphaDiffValues = [
+  "BAS",
+  "ADV",
+  "EXP",
+  "MAS",
+  "ULT",
+] as const;
+export type ThreeAlphaDiff = (typeof threeAlphaDiffValues)[number];
+
+export const diffMapping: Record<ThreeAlphaDiff, StdChartDifficulty> = {
+  BAS: "basic",
+  ADV: "advanced",
+  EXP: "expert",
+  MAS: "master",
+  ULT: "ultima",
+};
+
+// https://chuni-penguin.beerpsi.cc/developer/api/
+// Only field I use
+export const beerSchema = z.object({
+  id: z.number(),
+  title: z.string(),
+  charts: z.array(
+    z.object({
+      difficulty: z.enum([...threeAlphaDiffValues, "WE"]),
+      const: z.number().nullable(),
+    }),
+  ),
 });

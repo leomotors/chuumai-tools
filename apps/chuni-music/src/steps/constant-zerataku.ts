@@ -9,10 +9,8 @@ import { zSchema } from "../types.js";
 
 const url = "https://dp4p6x0xfi5o9.cloudfront.net/chunithm/data.json";
 
-export async function updateMusicConstant(version: string) {
-  console.log(
-    "Step 2.1: Downloading chart constant data from community source",
-  );
+export async function updateMusicConstantZerataku(version: string) {
+  console.log("Step 1: Downloading chart constant data from community source");
 
   const response = await fetch(url);
   if (!response.ok) {
@@ -22,7 +20,7 @@ export async function updateMusicConstant(version: string) {
 
   const musicData = zSchema.parse(data).songs;
 
-  console.log("\nStep 2.2: Compare with existing data in the database");
+  console.log("\nStep 2: Compare with existing data in the database");
   const existingMusicData = await db.select().from(musicDataTable);
   const existingLevelData = await db.select().from(musicLevelTable);
 
@@ -39,7 +37,14 @@ export async function updateMusicConstant(version: string) {
     console.log(result.warnings.trim());
   }
 
-  console.log(`\nStep 2.3: Applying updates to the database`);
+  // Dry run
+  if (process.env.DRY_RUN) {
+    console.log("Dry Run enabled - no database updates will be applied");
+    console.log(result.payload);
+    return;
+  }
+
+  console.log(`\nStep 3: Applying updates to the database`);
   // Apply the database updates
   await forInRangeWithProgressBar(result.payload, async (update) => {
     await db

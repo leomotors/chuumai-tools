@@ -15,6 +15,7 @@
     "@repo/db-chuni": "workspace:*",
     "@repo/utils": "workspace:*",
     "@vitest/coverage-v8": "^4.0.15",
+    "csv-parse": "^6.1.0",
     "dotenv-cli": "^11.0.0",
     "drizzle-orm": "^0.44.7",
     "tsdown": "^0.16.8",
