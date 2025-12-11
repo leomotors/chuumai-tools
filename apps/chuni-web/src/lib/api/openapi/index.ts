@@ -8,6 +8,7 @@ import {
   registerImageSchemas,
   registerRatingSchemas,
 } from "../schemas";
+import { registerDataRoutes } from "./data";
 import { registerImageRoutes } from "./image";
 import { registerRatingRoutes } from "./rating";
 
@@ -23,6 +24,7 @@ export function generateOpenApiDocument(version: string) {
   // Register all routes
   registerRatingRoutes(registry);
   registerImageRoutes(registry);
+  registerDataRoutes(registry);
 
   // Generate the document
   const generator = new OpenApiGeneratorV3(registry.definitions);
@@ -48,6 +50,10 @@ export function generateOpenApiDocument(version: string) {
       {
         name: "Images",
         description: "Endpoints related to image proxying",
+      },
+      {
+        name: "Data",
+        description: "Endpoints for game data retrieval",
       },
     ],
   });

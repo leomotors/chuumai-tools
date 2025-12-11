@@ -4,7 +4,9 @@
   import { Button } from "@repo/ui/atom/button";
 </script>
 
-<main class="flex min-h-[60vh] items-center justify-center px-4 py-8 font-app">
+<main
+  class="flex min-h-screen bg-gray-50 items-center justify-center px-4 py-8 font-app"
+>
   <div class="mx-auto max-w-md text-center w-full">
     <div
       class="rounded-xl border border-red-200 bg-red-50/70 p-8 shadow-lg backdrop-blur-md"

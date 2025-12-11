@@ -11,6 +11,8 @@
   let { children, data }: { children: Snippet; data: LayoutData } = $props();
 </script>
 
-<Navbar session={data.session} />
+<div class="fixed top-0 z-50 w-full">
+  <Navbar session={data.session} />
+</div>
 
 {@render children()}

@@ -9,7 +9,20 @@ export const errorSchema = z
   })
   .openapi("Error");
 
+// Version query schema for endpoints that accept version parameter
+export const versionQuerySchema = z
+  .object({
+    version: z.string().openapi({
+      examples: ["XVRS", "VRS"],
+      description: "Game version identifier",
+    }),
+  })
+  .openapi("VersionQuery");
+
+export type VersionQuery = z.infer<typeof versionQuerySchema>;
+
 // Registration function - called only when generating docs
 export function registerCommonSchemas(registry: OpenAPIRegistry) {
   registry.register("Error", errorSchema);
+  registry.register("VersionQuery", versionQuerySchema);
 }

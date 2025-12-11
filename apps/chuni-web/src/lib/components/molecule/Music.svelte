@@ -28,12 +28,12 @@
   <!-- Order -->
   <div
     class={twMerge(
-      "absolute rounded-full -top-[10px] -left-[10px] p-1 w-8 h-8 flex justify-center items-center",
+      "absolute rounded-full -top-2.5 -left-2.5 p-1 w-8 h-8 flex justify-center items-center",
       music.isHidden ? "bg-red-500 text-white" : "bg-white text-black",
     )}
   >
     {#if music.isHidden}
-      <Lock class="w-[20px] h-[20px]" />
+      <Lock class="w-5 h-5" />
     {:else}
       <p class="text-xl font-bold">{index + 1}</p>
     {/if}
@@ -67,7 +67,7 @@
 
     <!-- Right -->
     <p
-      class="p-1 font-helvetica bg-white rounded h-[36px] w-[50px] text-black flex justify-end items-baseline gap-1 relative"
+      class="p-1 font-helvetica bg-white rounded h-9 w-[50px] text-black flex justify-end items-baseline gap-1 relative"
     >
       <span class="font-bold text-2xl text-[26px]">
         {music.constant < 1 ? "?" : Math.floor(music.constant)}
@@ -79,11 +79,7 @@
       </span>
 
       {#if music.constant % 1 >= 0.5}
-        <span
-          class="absolute -top-[0.375rem] right-[0.375rem] font-bold text-xl"
-        >
-          +
-        </span>
+        <span class="absolute -top-1.5 right-1.5 font-bold text-xl"> + </span>
       {/if}
     </p>
   </div>
@@ -125,7 +121,7 @@
         alt="Clear Mark"
       />
     {:else}
-      <div class="w-[64px] h-[18px] border-2 border-gray-300 bg-gray-200"></div>
+      <div class="w-16 h-[18px] border-2 border-gray-300 bg-gray-200"></div>
     {/if}
 
     <img src="/rankmark/{getRank(music.score)}.png" alt="Rank Mark" />
@@ -137,7 +133,7 @@
     {:else if music.fc}
       <img src="/lampmark/fc.png" alt="FC Mark" />
     {:else}
-      <div class="w-[64px] h-[18px] border-2 border-gray-300 bg-gray-200"></div>
+      <div class="w-16 h-[18px] border-2 border-gray-300 bg-gray-200"></div>
     {/if}
   </div>
 </div>
