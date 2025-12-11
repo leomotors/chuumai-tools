@@ -5,6 +5,7 @@ For changelog before V4: [here](https://github.com/leomotors/chunithm-net-scrape
 ## [next] - Unreleased
 
 - update discord notification message text (add some emojis)
+- bump deps as always
 
 ## [5.2.1] - 2025-12-04
 

@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Session } from "@auth/sveltekit";
   import { signIn, signOut } from "@auth/sveltekit/client";
-  import { Gauge, LogOut } from "@lucide/svelte";
+  import { ChevronDown, Gauge, LogOut } from "@lucide/svelte";
 
   import { Button } from "@repo/ui/atom/button";
   import * as Popover from "@repo/ui/atom/popover";
@@ -13,13 +13,54 @@
 <nav
   class="mx-auto mt-4 max-w-3xl rounded-full border border-gray-200/50 bg-white/20 px-6 py-3 shadow-lg backdrop-blur-xs"
 >
-  <div class="flex items-center gap-6">
+  <div class="flex items-center justify-between gap-6">
     <a
       href="/"
       class="flex-1 text-lg font-bold text-gray-800 transition-colors hover:text-pink-600"
     >
       Uni
     </a>
+
+    <div class="flex items-center gap-4">
+      <Popover.Root>
+        <Popover.Trigger
+          class="flex items-center gap-1 text-sm font-medium text-gray-700 transition-colors hover:text-pink-600"
+        >
+          Tools
+          <ChevronDown class="size-4" />
+        </Popover.Trigger>
+        <Popover.Content
+          class="w-48 rounded-xl border border-gray-200/50 bg-white/70 p-2 shadow-lg backdrop-blur-md"
+        >
+          <a
+            href="/tools/preview-next"
+            class="block rounded-lg px-3 py-2 text-sm text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-900"
+          >
+            Preview Next
+          </a>
+          <a
+            href="/tools/chart-constant"
+            class="block rounded-lg px-3 py-2 text-sm text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-900"
+          >
+            Chart Constant
+          </a>
+        </Popover.Content>
+      </Popover.Root>
+
+      <a
+        href="/data"
+        class="text-sm font-medium text-gray-700 transition-colors hover:text-pink-600"
+      >
+        Data
+      </a>
+
+      <a
+        href="/api/docs/index.html"
+        class="text-sm font-medium text-gray-700 transition-colors hover:text-pink-600"
+      >
+        API
+      </a>
+    </div>
 
     {#if session?.user}
       <Popover.Root>

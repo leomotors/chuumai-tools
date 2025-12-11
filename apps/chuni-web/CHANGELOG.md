@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.0.0] - 2025-12-12
+
+- feat: support for X-VERSE-X
+- feat: new /data page that show all data
+- feat: API with OpenAPI docs
+- misc refactor for consistency
+- feat: login with discord (no usecase yet, coming soon...)
+
 ## [2.3.0] - 2025-12-03
 
 - feat: support for X-VERSE team colours

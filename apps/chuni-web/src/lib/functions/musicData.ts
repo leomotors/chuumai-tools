@@ -24,11 +24,11 @@ export const musicDataViewSchema = z
     artist: z.string(),
     image: z.string(),
     releasedVersion: z.string().nullable(),
-    basic: chartLevelSchema.nullable(),
-    advanced: chartLevelSchema.nullable(),
-    expert: chartLevelSchema.nullable(),
-    master: chartLevelSchema.nullable(),
-    ultima: chartLevelSchema.nullable(),
+    basic: chartLevelSchema.optional(),
+    advanced: chartLevelSchema.optional(),
+    expert: chartLevelSchema.optional(),
+    master: chartLevelSchema.optional(),
+    ultima: chartLevelSchema.optional(),
   })
   .openapi("MusicDataView");
 
@@ -64,11 +64,11 @@ export async function getMusicData(version: string) {
           artist: item.artist,
           image: item.image,
           releasedVersion: item.releasedVersion,
-          basic: null,
-          advanced: null,
-          expert: null,
-          master: null,
-          ultima: null,
+          basic: undefined,
+          advanced: undefined,
+          expert: undefined,
+          master: undefined,
+          ultima: undefined,
         };
       }
 

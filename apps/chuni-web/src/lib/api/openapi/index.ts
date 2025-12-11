@@ -5,6 +5,7 @@ import {
 
 import {
   registerCommonSchemas,
+  registerDataSchemas,
   registerImageSchemas,
   registerRatingSchemas,
 } from "../schemas";
@@ -18,6 +19,7 @@ export function generateOpenApiDocument(version: string) {
 
   // Register all schemas
   registerCommonSchemas(registry);
+  registerDataSchemas(registry);
   registerRatingSchemas(registry);
   registerImageSchemas(registry);
 
