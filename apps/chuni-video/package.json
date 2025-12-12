@@ -18,8 +18,8 @@
     "@remotion/cli": "4.0.386",
     "@remotion/tailwind-v4": "4.0.386",
     "@remotion/zod-types": "4.0.386",
-    "react": "^19.2.1",
-    "react-dom": "^19.2.1",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
     "remotion": "4.0.386",
     "tailwindcss": "^4.1.18",
     "zod": "^4.1.13"
