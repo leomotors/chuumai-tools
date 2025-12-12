@@ -2,7 +2,7 @@ import "./index.css";
 
 import { Composition } from "remotion";
 
-import { HelloWorld } from "./HelloWorld";
+import { RecordView, recordViewSchema } from "./RecordView";
 
 // Each <Composition> is an entry in the sidebar!
 
@@ -12,19 +12,32 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         // You can take the "id" to render a video:
         // npx remotion render src/index.ts <id> out/video.mp4
-        id="HelloWorld"
-        component={HelloWorld}
+        id="RecordView"
+        component={RecordView}
         durationInFrames={600}
         fps={60}
         width={1920}
         height={1080}
         // You can override these props for each render:
         // https://www.remotion.dev/docs/parametrized-rendering
+        schema={recordViewSchema}
         defaultProps={{
-          titleText: "Welcome to Remotion",
-          titleColor: "#000000",
-          logoColor1: "#91EAE4",
-          logoColor2: "#86A8E7",
+          version: "XVRS",
+          chart: {
+            id: 0,
+            title: "Forsaken Tale",
+            artist: "t+pazolite",
+            difficulty: "master",
+            score: 1010000,
+            clearMark: "BRAVE",
+            fc: true,
+            aj: true,
+            isHidden: false,
+            constant: 15.7,
+            constantSure: true,
+            rating: 17.85,
+            image: "0e32fa085f54f59c.jpg",
+          },
         }}
       />
 

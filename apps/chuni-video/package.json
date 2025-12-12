@@ -27,6 +27,9 @@
   "devDependencies": {
     "@fontsource-variable/noto-sans-jp": "^5.2.9",
     "@remotion/eslint-config-flat": "4.0.386",
+    "@repo/types": "workspace:*",
+    "@repo/ui": "workspace:*",
+    "@repo/utils": "workspace:*",
     "@types/react": "^19.2.7",
     "eslint": "^9.39.1",
     "eslint-config-prettier": "^10.1.8",

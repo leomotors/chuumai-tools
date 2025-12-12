@@ -2,9 +2,8 @@
   import { Lock } from "@lucide/svelte";
   import { twMerge } from "tailwind-merge";
 
-  import type { ChartForRender } from "$lib/types";
-
-  import { getRank } from "@repo/utils/chuni";
+  import type { ChartForRender } from "@repo/types/chuni";
+  import { difficultyColorMap, getLamp, getRank } from "@repo/utils/chuni";
 
   interface Props {
     music: ChartForRender;
@@ -12,11 +11,13 @@
   }
 
   let { music, index }: Props = $props();
+
+  let lamp = getLamp(music.score, music.fc, music.aj);
 </script>
 
 <div
   class={twMerge(
-    "rounded-lg w-[220px] h-[200px] flex flex-col gap-2 relative",
+    "rounded-lg w-55 h-50 flex flex-col gap-2 relative",
     music.difficulty === "basic" && "bg-green-400/60",
     music.difficulty === "advanced" && "bg-orange-400/60",
     music.difficulty === "expert" && "bg-red-400/60",
@@ -43,11 +44,7 @@
   <div
     class={twMerge(
       "flex justify-between px-2 pt-2 rounded-t-lg",
-      music.difficulty === "basic" && "bg-[#1eb393]",
-      music.difficulty === "advanced" && "bg-[#ff7e00]",
-      music.difficulty === "expert" && "bg-[#e35454]",
-      music.difficulty === "master" && "bg-[#bf6aff]",
-      music.difficulty === "ultima" && "bg-[#232323] text-white",
+      difficultyColorMap[music.difficulty],
     )}
   >
     <!-- Left -->
@@ -126,12 +123,8 @@
 
     <img src="/rankmark/{getRank(music.score)}.png" alt="Rank Mark" />
 
-    {#if music.score === 1010000}
-      <img src="/lampmark/ajc.png" alt="AJC Mark" />
-    {:else if music.aj}
-      <img src="/lampmark/aj.png" alt="AJ Mark" />
-    {:else if music.fc}
-      <img src="/lampmark/fc.png" alt="FC Mark" />
+    {#if lamp}
+      <img src="/lampmark/{lamp}.png" alt="{lamp} Mark" />
     {:else}
       <div class="w-16 h-[18px] border-2 border-gray-300 bg-gray-200"></div>
     {/if}

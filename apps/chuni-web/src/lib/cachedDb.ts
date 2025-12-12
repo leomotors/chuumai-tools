@@ -1,10 +1,10 @@
 import { and, eq } from "drizzle-orm";
 
 import { musicDataTable, musicLevelTable } from "@repo/db-chuni/schema";
+import type { ChartConstantData, MusicData } from "@repo/types/chuni";
 import { SimpleCache } from "@repo/utils";
 
 import { db } from "./db";
-import type { ChartConstantData, MusicData } from "./types";
 
 // Create cache instances
 export const chartConstantCache = new SimpleCache<ChartConstantData>(50);

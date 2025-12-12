@@ -2,8 +2,9 @@
   import Header from "$lib/components/Header.svelte";
   import Music from "$lib/components/molecule/Music.svelte";
   import Profile from "$lib/components/profile/Profile.svelte";
-  import { getBackgroundMapping } from "$lib/constants";
-  import type { RawImageGen } from "$lib/types";
+  import { getBackgroundMapping } from "$lib/constants/index";
+
+  import type { RawImageGen } from "@repo/types/chuni";
 
   interface Props {
     input: RawImageGen;

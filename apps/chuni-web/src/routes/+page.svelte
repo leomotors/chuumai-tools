@@ -12,8 +12,7 @@
   import { toPng } from "html-to-image";
 
   import ExtLink from "$lib/components/molecule/ExtLink.svelte";
-  import { getVersionNameMapping } from "$lib/constants";
-  import { type RawImageGen } from "$lib/types";
+  import { getVersionNameMapping } from "$lib/constants/index";
   import { getDefaultVersion, getEnabledVersions } from "$lib/version";
 
   import {
@@ -21,6 +20,7 @@
     type RatingType,
     stdChartDifficultyValues,
   } from "@repo/db-chuni/schema";
+  import { type RawImageGen } from "@repo/types/chuni";
   import {
     type HiddenChart,
     type ImgGenInput,

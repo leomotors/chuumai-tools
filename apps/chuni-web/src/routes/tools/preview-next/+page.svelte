@@ -1,7 +1,7 @@
 <script lang="ts">
   import { CircleAlert, Download, Upload } from "@lucide/svelte";
 
-  import { getVersionNameMapping } from "$lib/constants";
+  import { getVersionNameMapping } from "$lib/constants/index";
   import { getEnabledVersions } from "$lib/version";
 
   import {

@@ -3,6 +3,7 @@ import { count, eq } from "drizzle-orm";
 import { nanoid } from "nanoid";
 
 import { db } from "$lib/db";
+import { getUserStats } from "$lib/functions/userStats";
 
 import { apiKey, jobTable } from "@repo/db-chuni/schema";
 
@@ -15,7 +16,7 @@ export const load: PageServerLoad = async ({ parent }) => {
     error(401, "Unauthorized");
   }
 
-  const [jobResult, apiKeyResult] = await Promise.all([
+  const [jobResult, apiKeyResult, userStats] = await Promise.all([
     db
       .select({ count: count() })
       .from(jobTable)
@@ -24,6 +25,7 @@ export const load: PageServerLoad = async ({ parent }) => {
       .select({ apiKey: apiKey.apiKey, createdAt: apiKey.createdAt })
       .from(apiKey)
       .where(eq(apiKey.userId, session.user.id)),
+    getUserStats(session.user.id),
   ]);
 
   return {
@@ -35,6 +37,7 @@ export const load: PageServerLoad = async ({ parent }) => {
     jobCount: jobResult[0]?.count,
     apiKey: apiKeyResult[0]?.apiKey ?? null,
     apiKeyCreatedAt: apiKeyResult[0]?.createdAt ?? null,
+    userStats,
   };
 };
 

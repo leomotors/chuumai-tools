@@ -2,7 +2,7 @@
   import { Github, Globe, Twitter, Workflow } from "@lucide/svelte";
   import type { Snippet } from "svelte";
 
-  import { getLogoMapping } from "$lib/constants";
+  import { getLogoMapping } from "$lib/constants/index";
 
   interface Props {
     children: Snippet;

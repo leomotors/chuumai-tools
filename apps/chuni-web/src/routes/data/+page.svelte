@@ -1,7 +1,10 @@
 <script lang="ts">
   import { LoaderCircle, Search } from "@lucide/svelte";
 
-  import { getBackgroundMapping, getVersionNameMapping } from "$lib/constants";
+  import {
+    getBackgroundMapping,
+    getVersionNameMapping,
+  } from "$lib/constants/index";
   import type { MusicDataViewSchema } from "$lib/functions/musicData";
   import { getDefaultVersion, getEnabledVersions } from "$lib/version";
 

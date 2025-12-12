@@ -1,13 +1,13 @@
 import type { OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
 
-import { chartForRenderSchema, rawImageGenSchema } from "$lib/types";
-
 import {
+  chartForRenderSchema,
   chartSchema,
   fullPlayDataInputSchema,
   hiddenChartSchema,
   imgGenInputSchema,
   profileSchema,
+  rawImageGenSchema,
 } from "@repo/types/chuni";
 import { z } from "@repo/utils/zod";
 
@@ -55,7 +55,7 @@ export function registerRatingSchemas(registry: OpenAPIRegistry) {
   registry.register("Profile", profileSchema);
   registry.register("HiddenChart", hiddenChartSchema);
 
-  // Imported from $lib/types
+  // Imported from @repo/types/chuni
   registry.register("ChartForRender", chartForRenderSchema);
   registry.register("CalcRatingResponse", rawImageGenSchema);
 

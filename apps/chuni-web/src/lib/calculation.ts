@@ -1,7 +1,10 @@
-import type { BaseChartSchema } from "@repo/types/chuni";
+import type {
+  BaseChartSchema,
+  ChartConstantData,
+  ChartForRender,
+  MusicData,
+} from "@repo/types/chuni";
 import { calculateRating, constantFromLevel } from "@repo/utils/chuni";
-
-import type { ChartConstantData, ChartForRender, MusicData } from "./types";
 
 export function addForRenderInfo(
   data: BaseChartSchema,

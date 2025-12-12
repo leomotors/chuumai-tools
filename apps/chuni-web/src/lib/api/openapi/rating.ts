@@ -1,6 +1,7 @@
 import type { OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
 
-import { rawImageGenSchema } from "../../types";
+import { rawImageGenSchema } from "@repo/types/chuni";
+
 import { errorSchema } from "../schemas/common";
 import {
   calcRatingRequestSchema,

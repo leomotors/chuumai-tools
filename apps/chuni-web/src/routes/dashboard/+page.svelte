@@ -2,6 +2,7 @@
   import { Eye, EyeOff, Key, RefreshCw } from "@lucide/svelte";
 
   import { enhance } from "$app/forms";
+  import StatsChart from "$lib/components/StatsChart.svelte";
 
   let { data, form } = $props();
 
@@ -17,7 +18,7 @@
 <main
   class="flex flex-col items-center w-screen px-4 pb-16 pt-32 gap-6 font-app min-h-screen bg-gray-50"
 >
-  <div class="mx-auto max-w-2xl">
+  <div class="mx-auto max-w-2xl w-full">
     <!-- User Profile Card -->
     <div
       class="rounded-xl border border-gray-200/50 bg-white/70 p-6 shadow-lg backdrop-blur-md"
@@ -156,5 +157,12 @@
         your account.
       </p>
     </div>
+
+    <!-- Stats Chart Section -->
+    {#if data.userStats && data.userStats.length > 0}
+      <div class="mt-6">
+        <StatsChart userStats={data.userStats} />
+      </div>
+    {/if}
   </div>
 </main>
