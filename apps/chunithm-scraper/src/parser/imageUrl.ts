@@ -1,4 +1,4 @@
-import { RarityLevel } from "@repo/db-chuni/schema";
+import { RarityLevel } from "@repo/types/chuni";
 
 export function rarityFromUrl(url: string): RarityLevel | null {
   if (url.includes("_holographic")) {

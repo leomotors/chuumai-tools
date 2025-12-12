@@ -18,9 +18,9 @@
   },
   "devDependencies": {
     "@discordjs/builders": "^1.13.1",
+    "@repo/core": "workspace:*",
     "@repo/db-chuni": "workspace:*",
     "@repo/types": "workspace:*",
-    "@repo/utils": "workspace:*",
     "@types/jsdom": "^27.0.0",
     "@vitest/coverage-v8": "^4.0.15",
     "discord-api-types": "^0.38.37",

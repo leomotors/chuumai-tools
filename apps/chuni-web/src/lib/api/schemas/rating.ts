@@ -9,7 +9,7 @@ import {
   profileSchema,
   rawImageGenSchema,
 } from "@repo/types/chuni";
-import { z } from "@repo/utils/zod";
+import { z } from "@repo/types/zod";
 
 // ============================================================================
 // Schemas defined in this file

@@ -1,6 +1,6 @@
 import { pgEnum } from "drizzle-orm/pg-core";
 
-import { ranks } from "@repo/utils/chuni";
+import { ranks } from "@repo/types/chuni";
 
 export const categoryValues = [
   "POPS&アニメ",

@@ -1,10 +1,10 @@
 <script lang="ts">
+  import { calculateRating } from "@repo/core/chuni";
   import { Button } from "@repo/ui/atom/button";
   import * as Card from "@repo/ui/atom/card";
   import { Input } from "@repo/ui/atom/input";
   import { Label } from "@repo/ui/atom/label";
   import * as Tabs from "@repo/ui/atom/tabs";
-  import { calculateRating } from "@repo/utils/chuni";
 
   let overpower = $state<string>("");
   let offset = $state<string>("");

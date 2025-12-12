@@ -32,12 +32,15 @@ importers:
       '@aws-sdk/client-s3':
         specifier: ^3.948.0
         version: 3.948.0
+      '@repo/core':
+        specifier: workspace:*
+        version: link:../../packages/core
       '@repo/db-chuni':
         specifier: workspace:*
         version: link:../../packages/db-chuni
-      '@repo/utils':
+      '@repo/types':
         specifier: workspace:*
-        version: link:../../packages/utils
+        version: link:../../packages/types
       '@vitest/coverage-v8':
         specifier: ^4.0.15
         version: 4.0.15(vitest@4.0.15(@types/node@25.0.1)(jiti@2.6.1)(jsdom@27.3.0(postcss@8.5.6))(lightningcss@1.30.2)(sass-embedded@1.96.0)(sass@1.96.0)(terser@5.44.1)(yaml@2.8.2))
@@ -65,9 +68,6 @@ importers:
 
   apps/chuni-video:
     dependencies:
-      '@remotion/bundler':
-        specifier: ^4.0.387
-        version: 4.0.387(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       '@remotion/renderer':
         specifier: 4.0.387
         version: 4.0.387(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
@@ -87,6 +87,9 @@ importers:
       '@remotion/zod-types':
         specifier: 4.0.387
         version: 4.0.387(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(zod@3.22.3)
+      '@repo/core':
+        specifier: workspace:*
+        version: link:../../packages/core
       '@repo/db-chuni':
         specifier: workspace:*
         version: link:../../packages/db-chuni
@@ -96,9 +99,6 @@ importers:
       '@repo/ui':
         specifier: workspace:*
         version: link:../../packages/ui
-      '@repo/utils':
-        specifier: workspace:*
-        version: link:../../packages/utils
       '@types/js-yaml':
         specifier: ^4.0.9
         version: 4.0.9
@@ -159,6 +159,9 @@ importers:
       '@repo/config':
         specifier: workspace:*
         version: link:../../packages/config
+      '@repo/core':
+        specifier: workspace:*
+        version: link:../../packages/core
       '@repo/db-chuni':
         specifier: workspace:*
         version: link:../../packages/db-chuni
@@ -168,9 +171,6 @@ importers:
       '@repo/ui':
         specifier: workspace:*
         version: link:../../packages/ui
-      '@repo/utils':
-        specifier: workspace:*
-        version: link:../../packages/utils
       '@sveltejs/adapter-node':
         specifier: ^5.4.0
         version: 5.4.0(@sveltejs/kit@2.49.2(@sveltejs/vite-plugin-svelte@6.2.1(svelte@5.45.10)(vite@7.2.7(@types/node@25.0.1)(jiti@2.6.1)(lightningcss@1.30.2)(sass-embedded@1.96.0)(sass@1.96.0)(terser@5.44.1)(yaml@2.8.2)))(svelte@5.45.10)(vite@7.2.7(@types/node@25.0.1)(jiti@2.6.1)(lightningcss@1.30.2)(sass-embedded@1.96.0)(sass@1.96.0)(terser@5.44.1)(yaml@2.8.2)))
@@ -253,15 +253,15 @@ importers:
       '@discordjs/builders':
         specifier: ^1.13.1
         version: 1.13.1
+      '@repo/core':
+        specifier: workspace:*
+        version: link:../../packages/core
       '@repo/db-chuni':
         specifier: workspace:*
         version: link:../../packages/db-chuni
       '@repo/types':
         specifier: workspace:*
         version: link:../../packages/types
-      '@repo/utils':
-        specifier: workspace:*
-        version: link:../../packages/utils
       '@types/jsdom':
         specifier: ^27.0.0
         version: 27.0.0
@@ -301,12 +301,15 @@ importers:
       '@aws-sdk/client-s3':
         specifier: ^3.948.0
         version: 3.948.0
+      '@repo/core':
+        specifier: workspace:*
+        version: link:../../packages/core
       '@repo/db-maimai':
         specifier: workspace:*
         version: link:../../packages/db-maimai
-      '@repo/utils':
+      '@repo/types':
         specifier: workspace:*
-        version: link:../../packages/utils
+        version: link:../../packages/types
       '@vitest/coverage-v8':
         specifier: ^4.0.15
         version: 4.0.15(vitest@4.0.15(@types/node@25.0.1)(jiti@2.6.1)(jsdom@27.3.0(postcss@8.5.6))(lightningcss@1.30.2)(sass-embedded@1.96.0)(sass@1.96.0)(terser@5.44.1)(yaml@2.8.2))
@@ -353,14 +356,42 @@ importers:
         specifier: ^8.49.0
         version: 8.49.0(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3)
 
+  packages/core:
+    dependencies:
+      '@asteasolutions/zod-to-openapi':
+        specifier: ^8.2.0
+        version: 8.2.0(zod@4.1.13)
+      '@aws-sdk/client-s3':
+        specifier: ^3.948.0
+        version: 3.948.0
+      '@leomotors/cli-progress':
+        specifier: ^4.0.3
+        version: 4.0.3
+      '@repo/types':
+        specifier: workspace:*
+        version: link:../types
+      zod:
+        specifier: ^4.1.13
+        version: 4.1.13
+    devDependencies:
+      '@repo/db-chuni':
+        specifier: workspace:*
+        version: link:../db-chuni
+      '@vitest/coverage-v8':
+        specifier: ^4.0.15
+        version: 4.0.15(vitest@4.0.15(@types/node@25.0.1)(jiti@2.6.1)(jsdom@27.3.0(postcss@8.5.6))(lightningcss@1.30.2)(sass-embedded@1.96.0)(sass@1.96.0)(terser@5.44.1)(yaml@2.8.2))
+      vitest:
+        specifier: ^4.0.15
+        version: 4.0.15(@types/node@25.0.1)(jiti@2.6.1)(jsdom@27.3.0(postcss@8.5.6))(lightningcss@1.30.2)(sass-embedded@1.96.0)(sass@1.96.0)(terser@5.44.1)(yaml@2.8.2)
+
   packages/db-chuni:
     dependencies:
       '@repo/db-shared':
         specifier: workspace:*
         version: link:../db-shared
-      '@repo/utils':
+      '@repo/types':
         specifier: workspace:*
-        version: link:../utils
+        version: link:../types
       drizzle-orm:
         specifier: ^0.45.1
         version: 0.45.1(postgres@3.4.7)
@@ -380,12 +411,15 @@ importers:
 
   packages/db-maimai:
     dependencies:
+      '@repo/core':
+        specifier: workspace:*
+        version: link:../core
       '@repo/db-shared':
         specifier: workspace:*
         version: link:../db-shared
-      '@repo/utils':
+      '@repo/types':
         specifier: workspace:*
-        version: link:../utils
+        version: link:../types
       drizzle-orm:
         specifier: ^0.45.1
         version: 0.45.1(postgres@3.4.7)
@@ -405,9 +439,6 @@ importers:
 
   packages/db-shared:
     dependencies:
-      '@repo/utils':
-        specifier: workspace:*
-        version: link:../utils
       drizzle-orm:
         specifier: ^0.45.1
         version: 0.45.1(postgres@3.4.7)
@@ -420,12 +451,9 @@ importers:
 
   packages/types:
     dependencies:
-      '@repo/db-chuni':
-        specifier: workspace:*
-        version: link:../db-chuni
-      '@repo/utils':
-        specifier: workspace:*
-        version: link:../utils
+      '@asteasolutions/zod-to-openapi':
+        specifier: ^8.2.0
+        version: 8.2.0(zod@4.1.13)
       zod:
         specifier: ^4.1.13
         version: 4.1.13
@@ -484,31 +512,6 @@ importers:
       typescript:
         specifier: ^5.9.3
         version: 5.9.3
-
-  packages/utils:
-    dependencies:
-      '@asteasolutions/zod-to-openapi':
-        specifier: ^8.2.0
-        version: 8.2.0(zod@4.1.13)
-      '@aws-sdk/client-s3':
-        specifier: ^3.948.0
-        version: 3.948.0
-      '@leomotors/cli-progress':
-        specifier: ^4.0.3
-        version: 4.0.3
-      zod:
-        specifier: ^4.1.13
-        version: 4.1.13
-    devDependencies:
-      '@repo/db-chuni':
-        specifier: workspace:*
-        version: link:../db-chuni
-      '@vitest/coverage-v8':
-        specifier: ^4.0.15
-        version: 4.0.15(vitest@4.0.15(@types/node@25.0.1)(jiti@2.6.1)(jsdom@27.3.0(postcss@8.5.6))(lightningcss@1.30.2)(sass-embedded@1.96.0)(sass@1.96.0)(terser@5.44.1)(yaml@2.8.2))
-      vitest:
-        specifier: ^4.0.15
-        version: 4.0.15(@types/node@25.0.1)(jiti@2.6.1)(jsdom@27.3.0(postcss@8.5.6))(lightningcss@1.30.2)(sass-embedded@1.96.0)(sass@1.96.0)(terser@5.44.1)(yaml@2.8.2)
 
 packages:
 

@@ -1,24 +1,4 @@
-export const ranks = [
-  "D",
-  "C",
-  "B",
-  "BB",
-  "BBB",
-  "A",
-  "AA",
-  "AAA",
-  "S",
-  "S+",
-  "SS",
-  "SS+",
-  "SSS",
-  "SSS+",
-] as const;
-
-export const rankCutoffs = [
-  0, 500000, 600000, 700000, 800000, 900000, 925000, 950000, 975000, 990000,
-  1000000, 1005000, 1007500, 1009000,
-];
+import { rankCutoffs, ranks } from "@repo/types/chuni";
 
 /**
  * @param score Score

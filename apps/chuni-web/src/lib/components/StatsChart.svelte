@@ -1,12 +1,13 @@
 <script lang="ts">
-  import { browser } from "$app/environment";
   import { scaleLinear, scaleTime } from "d3-scale";
   import type { LineChart as LineChartType } from "layerchart";
+  import type { Snippet } from "svelte";
+  import { SvelteDate } from "svelte/reactivity";
 
+  import { browser } from "$app/environment";
   import type { UserStats } from "$lib/functions/userStats";
 
   import * as Tabs from "@repo/ui/atom/tabs";
-  import type { Snippet } from "svelte";
 
   // Dynamically import LayerChart only on client side
   let LineChart = $state<typeof LineChartType | null>(null);
@@ -61,7 +62,7 @@
     if (xAxisMode === "time") {
       // Filter by time range if set
       if (timeRange > 0) {
-        const cutoffDate = new Date();
+        const cutoffDate = new SvelteDate();
         cutoffDate.setDate(cutoffDate.getDate() - timeRange);
         return sorted.filter((s) => new Date(s.lastPlayed) >= cutoffDate);
       }

@@ -8,13 +8,13 @@
   import type { MusicDataViewSchema } from "$lib/functions/musicData";
   import { getDefaultVersion, getEnabledVersions } from "$lib/version";
 
+  import { constantFromLevel } from "@repo/core/chuni";
   import { Button } from "@repo/ui/atom/button";
   import { Checkbox } from "@repo/ui/atom/checkbox";
   import { Label } from "@repo/ui/atom/label";
   import * as Select from "@repo/ui/atom/select";
   import * as Table from "@repo/ui/atom/table";
   import { SortableHeader } from "@repo/ui/molecule/sortable-header";
-  import { constantFromLevel } from "@repo/utils/chuni";
 
   import ChartLevelCell from "./ChartLevelCell.svelte";
 

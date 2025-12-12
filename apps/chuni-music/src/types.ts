@@ -2,8 +2,8 @@ import {
   categoryValues,
   StdChartDifficulty,
   stdChartDifficultyValues,
-} from "@repo/db-chuni/schema";
-import { z } from "@repo/utils/zod";
+} from "@repo/types/chuni";
+import { z } from "@repo/types/zod";
 
 export const musicSchema = z.object({
   id: z.coerce.number(),

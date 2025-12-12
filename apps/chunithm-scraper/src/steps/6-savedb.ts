@@ -2,10 +2,13 @@ import {
   forRatingTable,
   musicRecordTable,
   playerDataTable,
-  RatingType,
   rawScrapeDataTable,
 } from "@repo/db-chuni/schema";
-import type { BaseChartSchema, ImgGenInput } from "@repo/types/chuni";
+import type {
+  BaseChartSchema,
+  ImgGenInput,
+  RatingType,
+} from "@repo/types/chuni";
 
 import type { Db } from "../db.js";
 import { environment } from "../environment.js";

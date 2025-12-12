@@ -1,4 +1,4 @@
-import { ClearMark, stdChartDifficultyValues } from "@repo/db-chuni/schema";
+import { ClearMark, stdChartDifficultyValues } from "@repo/types/chuni";
 import { BaseChartSchema } from "@repo/types/chuni";
 
 export function parseMusic(element: Element) {

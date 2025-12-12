@@ -3,7 +3,8 @@ import path from "node:path";
 
 import { describe, expect, it } from "vitest";
 
-import { musicLevelTable } from "../../../../packages/db-chuni/src/schema/musicData";
+import { musicLevelTable } from "@repo/db-chuni/schema";
+
 import { processMusicLevels } from "./process-music-levels";
 
 // Helper function to load fixture data

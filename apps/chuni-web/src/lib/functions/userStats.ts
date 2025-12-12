@@ -3,7 +3,7 @@ import { desc, eq } from "drizzle-orm";
 import { db } from "$lib/db";
 
 import { jobTable, playerDataTable } from "@repo/db-chuni/schema";
-import { z } from "@repo/utils/zod";
+import { z } from "@repo/types/zod";
 
 /**
  * Schema for user stats response

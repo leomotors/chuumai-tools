@@ -2,8 +2,8 @@
   import { Lock } from "@lucide/svelte";
   import { twMerge } from "tailwind-merge";
 
+  import { difficultyColorMap, getLamp, getRank } from "@repo/core/chuni";
   import type { ChartForRender } from "@repo/types/chuni";
-  import { difficultyColorMap, getLamp, getRank } from "@repo/utils/chuni";
 
   interface Props {
     music: ChartForRender;
@@ -12,7 +12,7 @@
 
   let { music, index }: Props = $props();
 
-  let lamp = getLamp(music.score, music.fc, music.aj);
+  let lamp = $derived(getLamp(music.score, music.fc, music.aj));
 </script>
 
 <div

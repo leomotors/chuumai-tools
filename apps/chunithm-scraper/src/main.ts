@@ -2,9 +2,11 @@ import fs from "node:fs/promises";
 
 import { Page } from "playwright";
 
-import { FullPlayDataInput, ImgGenInput } from "@repo/types/chuni";
-
-import type { RawImageGen } from "@/app/chuni-web/src/lib/types.js";
+import {
+  FullPlayDataInput,
+  ImgGenInput,
+  type RawImageGen,
+} from "@repo/types/chuni";
 
 import { db } from "./db.js";
 import { environment } from "./environment.js";

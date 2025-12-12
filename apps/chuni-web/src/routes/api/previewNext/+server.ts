@@ -5,8 +5,8 @@ import { getCachedChartConstantData, getCachedMusicData } from "$lib/cachedDb";
 import { addForRenderInfo } from "$lib/calculation";
 import { getEnabledVersions } from "$lib/version";
 
+import { floorDecimalPlaces } from "@repo/core/chuni";
 import { chartSchema, type ImgGenInput } from "@repo/types/chuni";
-import { floorDecimalPlaces } from "@repo/utils/chuni";
 
 import type { RequestHandler } from "./$types";
 

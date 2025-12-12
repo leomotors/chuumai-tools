@@ -12,8 +12,9 @@
   },
   "devDependencies": {
     "@aws-sdk/client-s3": "^3.948.0",
+    "@repo/core": "workspace:*",
     "@repo/db-chuni": "workspace:*",
-    "@repo/utils": "workspace:*",
+    "@repo/types": "workspace:*",
     "@vitest/coverage-v8": "^4.0.15",
     "csv-parse": "^6.1.0",
     "dotenv-cli": "^11.0.0",

@@ -1,4 +1,4 @@
-import type { stdChartDifficultyValues } from "@repo/db-chuni/schema";
+import type { stdChartDifficultyValues } from "@repo/types/chuni";
 
 export const difficultyColorMap: Record<
   (typeof stdChartDifficultyValues)[number],

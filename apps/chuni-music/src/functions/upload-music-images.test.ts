@@ -1,12 +1,12 @@
 import type { S3Client } from "@aws-sdk/client-s3";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { downloadImage, listFilesInFolder, uploadImage } from "@repo/utils/s3";
+import { downloadImage, listFilesInFolder, uploadImage } from "@repo/core/s3";
 
 import { uploadMissingMusicImages } from "./upload-music-images";
 
 // Mock the S3 utilities
-vi.mock("@repo/utils/s3", () => ({
+vi.mock("@repo/core/s3", () => ({
   downloadImage: vi.fn(),
   listFilesInFolder: vi.fn(),
   uploadImage: vi.fn(),

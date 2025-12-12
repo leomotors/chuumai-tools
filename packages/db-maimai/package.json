@@ -15,8 +15,9 @@
     "./schema": "./src/schema/index.ts"
   },
   "dependencies": {
+    "@repo/core": "workspace:*",
     "@repo/db-shared": "workspace:*",
-    "@repo/utils": "workspace:*",
+    "@repo/types": "workspace:*",
     "drizzle-orm": "^0.45.1",
     "postgres": "^3.4.7",
     "zod": "^4.1.13"

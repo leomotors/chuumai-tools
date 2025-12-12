@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { extractDigits } from "@repo/utils";
+  import { extractDigits } from "@repo/core";
 
   interface Props {
     rating: number;

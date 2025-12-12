@@ -1,12 +1,12 @@
 import z from "zod";
 
+import { forWithProgressBar } from "@repo/core";
 import {
   type ChartType,
   musicDataTable,
   musicLevelTable,
   type StdChartDifficulty,
 } from "@repo/db-maimai/schema";
-import { forWithProgressBar } from "@repo/utils";
 
 import { zSchema } from "../types.js";
 

@@ -1,8 +1,8 @@
 import type { S3Client } from "@aws-sdk/client-s3";
 import z from "zod";
 
-import { forWithProgressBar } from "@repo/utils";
-import { downloadImage, listFilesInFolder, uploadImage } from "@repo/utils/s3";
+import { forWithProgressBar } from "@repo/core";
+import { downloadImage, listFilesInFolder, uploadImage } from "@repo/core/s3";
 
 import type { musicJsonSchema } from "../types.js";
 

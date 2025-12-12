@@ -14,11 +14,8 @@ import {
 import { FC } from "react";
 import { z } from "zod";
 import { cn } from "@repo/ui/utils";
-import { difficultyColorMap, getLamp, getRank } from "@repo/utils/chuni";
-import {
-  clearMarkValues,
-  stdChartDifficultyValues,
-} from "@repo/db-chuni/schema";
+import { difficultyColorMap, getLamp, getRank } from "@repo/core/chuni";
+import { clearMarkValues, stdChartDifficultyValues } from "@repo/types/chuni";
 
 // Remotion only supports zod v3
 export const chartForVideoSchemaZod3 = z.object({

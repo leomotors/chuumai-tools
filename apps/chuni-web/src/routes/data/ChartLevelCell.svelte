@@ -1,9 +1,9 @@
 <script lang="ts">
   import type { chartLevelSchema } from "$lib/functions/musicData";
 
+  import { constantFromLevel } from "@repo/core/chuni";
+  import { z } from "@repo/types/zod";
   import { cn } from "@repo/ui/utils";
-  import { constantFromLevel } from "@repo/utils/chuni";
-  import { z } from "@repo/utils/zod";
 
   type Props = z.infer<typeof chartLevelSchema>;
 

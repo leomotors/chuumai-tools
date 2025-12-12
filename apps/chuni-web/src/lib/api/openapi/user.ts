@@ -2,7 +2,7 @@ import type { OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
 
 import { userStatsSchema } from "$lib/functions/userStats";
 
-import { z } from "@repo/utils/zod";
+import { z } from "@repo/types/zod";
 
 import { errorSchema } from "../schemas/common";
 

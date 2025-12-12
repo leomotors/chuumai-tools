@@ -3,7 +3,7 @@ import path from "node:path";
 
 import { describe, expect, it, vi } from "vitest";
 
-import { z } from "@repo/utils/zod";
+import { z } from "@repo/types/zod";
 
 import { zSchema } from "../types.js";
 import { updateMusicConstant } from "./update-music-constant.js";

@@ -3,7 +3,6 @@
     CircleAlert,
     CircleCheck,
     Download,
-    InfoIcon,
     Plus,
     RotateCcw,
     Upload,
@@ -19,7 +18,7 @@
     clearMarkValues,
     type RatingType,
     stdChartDifficultyValues,
-  } from "@repo/db-chuni/schema";
+  } from "@repo/types/chuni";
   import { type RawImageGen } from "@repo/types/chuni";
   import {
     type HiddenChart,

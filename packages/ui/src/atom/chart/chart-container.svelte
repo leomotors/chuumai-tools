@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
-  import type { HTMLAttributes } from "svelte/elements";
   import { setContext } from "svelte";
+  import type { HTMLAttributes } from "svelte/elements";
 
   import { cn } from "@repo/ui/utils";
 

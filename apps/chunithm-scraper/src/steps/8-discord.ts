@@ -1,6 +1,6 @@
 import fs from "node:fs/promises";
 
-import type { RawImageGen } from "@/app/chuni-web/src/lib/types.js";
+import type { RawImageGen } from "@repo/types/chuni";
 
 import { environment } from "../environment.js";
 import { sendFiles } from "../utils/discord.js";

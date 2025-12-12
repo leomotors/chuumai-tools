@@ -6,6 +6,10 @@
     "./chuni": {
       "types": "./src/chuni/index.ts",
       "default": "./src/chuni/index.ts"
+    },
+    "./zod": {
+      "types": "./src/zod/index.ts",
+      "default": "./src/zod/index.ts"
     }
   },
   "scripts": {
@@ -14,8 +18,7 @@
     "format": "eslint src --fix"
   },
   "dependencies": {
-    "@repo/db-chuni": "workspace:*",
-    "@repo/utils": "workspace:*",
+    "@asteasolutions/zod-to-openapi": "^8.2.0",
     "zod": "^4.1.13"
   }
 }

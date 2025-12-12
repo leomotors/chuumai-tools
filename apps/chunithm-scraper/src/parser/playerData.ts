@@ -5,9 +5,9 @@ import {
   rarityLevelValues,
   TeamRarityLevel,
   teamRarityLevelValues,
-} from "@repo/db-chuni/schema";
+} from "@repo/types/chuni";
 import { ImgGenInput } from "@repo/types/chuni";
-import { z } from "@repo/utils/zod";
+import { z } from "@repo/types/zod";
 
 import { rarityFromUrl } from "./imageUrl";
 import { parseCurrentRating } from "./playerRating";

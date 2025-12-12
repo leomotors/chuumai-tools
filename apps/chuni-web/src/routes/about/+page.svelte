@@ -1,6 +1,7 @@
 <script lang="ts">
-  import ExtLink from "$lib/components/molecule/ExtLink.svelte";
   import { CircleAlert, InfoIcon } from "@lucide/svelte";
+
+  import ExtLink from "$lib/components/molecule/ExtLink.svelte";
 </script>
 
 <main

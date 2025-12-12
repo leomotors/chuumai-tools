@@ -3,7 +3,7 @@ import {
   chartTypeValues,
   stdChartDifficultyValues,
 } from "@repo/db-maimai/schema";
-import { z } from "@repo/utils/zod";
+import { z } from "@repo/types/zod";
 
 /*
 Examples:

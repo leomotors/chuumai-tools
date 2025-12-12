@@ -3,8 +3,8 @@ import fs from "node:fs/promises";
 import { and, eq } from "drizzle-orm";
 import z from "zod";
 
+import { forInRangeWithProgressBar } from "@repo/core";
 import { musicDataTable, musicLevelTable } from "@repo/db-chuni/schema";
-import { forInRangeWithProgressBar } from "@repo/utils";
 
 import { db } from "../db";
 import { updateMusicConstant as updateMusicConstantLogic } from "../functions/update-music-constant.js";
