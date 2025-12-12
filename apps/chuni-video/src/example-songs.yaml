@@ -1,0 +1,44 @@
+songs:
+  - version: XVRS
+    chart:
+      id: 2652
+      title: Forsaken Tale
+      artist: t+pazolite
+      difficulty: master
+      score: 1010000
+      clearMark: BRAVE
+      fc: true
+      aj: true
+      constant: 15.7
+      constantSure: true
+      rating: 17.85
+      image: 0e32fa085f54f59c.jpg
+    detail:
+      comment: เพลงนี้ดีมาก
+      rankType: Best
+      rankInType: 2
+      rankTotal: 3
+  - version: XVRS
+    chart:
+      id: 2652
+      title: Forsaken Tale 2
+      artist: t+pazolite
+      difficulty: master
+      score: 1010000
+      clearMark: CLEAR
+      fc: true
+      aj: true
+      constant: 15.7
+      constantSure: true
+      rating: 17.85
+      image: 0e32fa085f54f59c.jpg
+    detail:
+      comment: เพลงนี้ดีมาก 2
+      rankType: Best
+      rankInType: 1
+      rankTotal: 2
+videoMapping:
+  - id: 2652
+    title: Forsaken Tale
+    url: rickroll.webm
+    offset: 50

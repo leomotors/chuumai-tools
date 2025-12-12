@@ -3,6 +3,12 @@ import "./index.css";
 import { Composition } from "remotion";
 
 import { RecordView, recordViewSchema } from "./RecordView";
+import {
+  RecordSequence,
+  RecordSequenceProps,
+  recordSequenceSchema,
+} from "./RecordSequence";
+import { exampleData, exampleDataNoVideo } from "./example";
 
 // Each <Composition> is an entry in the sidebar!
 
@@ -21,23 +27,34 @@ export const RemotionRoot: React.FC = () => {
         // You can override these props for each render:
         // https://www.remotion.dev/docs/parametrized-rendering
         schema={recordViewSchema}
+        defaultProps={exampleData}
+      />
+
+      <Composition
+        id="RecordSequence"
+        component={RecordSequence}
+        calculateMetadata={({ props }) => {
+          const fps = 60;
+          const typedProps = props as RecordSequenceProps;
+
+          return {
+            durationInFrames: typedProps.songs.length * fps * 10,
+          };
+        }}
+        fps={60}
+        width={1920}
+        height={1080}
+        schema={recordSequenceSchema}
         defaultProps={{
-          version: "XVRS",
-          chart: {
-            id: 0,
-            title: "Forsaken Tale",
-            artist: "t+pazolite",
-            difficulty: "master",
-            score: 1010000,
-            clearMark: "BRAVE",
-            fc: true,
-            aj: true,
-            isHidden: false,
-            constant: 15.7,
-            constantSure: true,
-            rating: 17.85,
-            image: "0e32fa085f54f59c.jpg",
-          },
+          songs: [exampleDataNoVideo, exampleDataNoVideo],
+          videoMapping: [
+            {
+              id: 2652,
+              title: "Forsaken Tale",
+              url: "rickroll.webm",
+              offset: 50,
+            },
+          ],
         }}
       />
 

@@ -13,18 +13,59 @@ import {
 
 import { FC } from "react";
 import { z } from "zod";
-import { chartForVideoSchema } from "@repo/types/chuni";
 import { cn } from "@repo/ui/utils";
 import { difficultyColorMap, getLamp, getRank } from "@repo/utils/chuni";
+import {
+  clearMarkValues,
+  stdChartDifficultyValues,
+} from "@repo/db-chuni/schema";
 
-export const recordViewSchema = z.object({
+// Remotion only supports zod v3
+export const chartForVideoSchemaZod3 = z.object({
+  id: z.coerce.number(),
+  title: z.string().nonempty(),
+  artist: z.string(),
+  difficulty: z.enum(stdChartDifficultyValues),
+  score: z.coerce.number().int().min(0).max(1010000),
+  clearMark: z.enum(clearMarkValues).nullish(),
+  fc: z.boolean().default(false),
+  aj: z.boolean().default(false),
+  constant: z.number(),
+  constantSure: z.boolean(),
+  rating: z.number().nullable(),
+  image: z.string().nullable(),
+});
+
+export const videoSchema = z.object({
+  url: z.string(),
+  offset: z.number(),
+});
+
+export const detailSchema = z.object({
+  comment: z.string(),
+  rankType: z.enum(["Best", "Current"]),
+  rankInType: z.number(),
+  rankTotal: z.number(),
+});
+
+export const recordViewWithoutVideoSchema = z.object({
   version: z.string(),
-  chart: chartForVideoSchema,
+  chart: chartForVideoSchemaZod3,
+  detail: detailSchema,
+});
+
+export const recordViewSchema = recordViewWithoutVideoSchema.extend({
+  video: videoSchema,
 });
 
 type RecordViewProps = z.infer<typeof recordViewSchema>;
 
-export const RecordView: FC<RecordViewProps> = ({ version, chart }) => {
+export const RecordView: FC<RecordViewProps> = ({
+  version,
+  chart,
+  video,
+  detail,
+}) => {
   const frame = useCurrentFrame();
   const { durationInFrames } = useVideoConfig();
 
@@ -41,7 +82,7 @@ export const RecordView: FC<RecordViewProps> = ({ version, chart }) => {
   const versionLogo = staticFile(
     "chuni-web" + logoMapping[version as keyof typeof logoMapping],
   );
-  const rickroll = staticFile("rickroll.webm");
+  const rickroll = staticFile(video.url);
 
   const lamp = getLamp(chart.score, chart.fc, chart.aj);
 
@@ -56,18 +97,24 @@ export const RecordView: FC<RecordViewProps> = ({ version, chart }) => {
         style={{ opacity }}
       >
         <aside className="flex flex-col gap-8 flex-2/3">
-          <OffthreadVideo src={rickroll} volume={opacity} />
+          <OffthreadVideo
+            src={rickroll}
+            volume={opacity}
+            trimBefore={video.offset * 60}
+          />
 
           <div className="bg-white/40 p-16 flex-1">
-            <p className="text-6xl">เพลงนี้ดีมาก</p>
+            <p className="text-6xl">{detail.comment}</p>
           </div>
         </aside>
 
         <main className="flex flex-col gap-8 flex-1/3">
           <header className="flex justify-between bg-white/40">
             <div className="font-bold text-5xl flex flex-col gap-2 justify-evenly pl-8 py-8">
-              <p>Rating #3</p>
-              <p>Best #2</p>
+              <p>Rating #{detail.rankInType}</p>
+              <p>
+                {detail.rankType} #{detail.rankTotal}
+              </p>
             </div>
 
             <Img src={versionLogo} className="h-48 self-end" />
@@ -91,7 +138,9 @@ export const RecordView: FC<RecordViewProps> = ({ version, chart }) => {
                 </p>
 
                 <div className="bg-white p-2 flex-1 flex flex-col gap-2 font-helvetica">
-                  <p className="text-4xl font-bold text-center">LEVEL</p>
+                  <p className="text-4xl font-bold text-center text-black">
+                    LEVEL
+                  </p>
 
                   <div className="bg-[#042436] flex-1 flex items-center justify-center">
                     <p className="text-white font-bold">
@@ -110,7 +159,7 @@ export const RecordView: FC<RecordViewProps> = ({ version, chart }) => {
               </div>
             </section>
 
-            <section className="bg-white/80 flex-1 flex flex-col justify-between items-center p-4 gap-4 font-helvetica">
+            <section className="bg-white/80 flex-1 flex flex-col justify-between items-center p-4 gap-4 font-helvetica text-black">
               <div className="flex flex-col gap-2 items-center w-full">
                 <p className="text-5xl">{chart.title}</p>
                 <hr className="w-full" />

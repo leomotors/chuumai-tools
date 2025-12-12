@@ -2,39 +2,46 @@
   "name": "chuni-video",
   "version": "0.0.0",
   "private": true,
-  "description": "My Remotion video",
+  "type": "module",
   "scripts": {
-    "dev": "remotion studio",
-    "build": "remotion bundle",
+    "dev": "remotion studio video/index.ts",
+    "build": "remotion bundle video/index.ts && tsdown",
+    "render": "node dist/index.mjs",
+    "prepare": "remotion browser ensure",
     "upgrade": "remotion upgrade",
-    "lint": "eslint src",
-    "format": "eslint src --fix",
+    "lint": "eslint src video",
+    "format": "eslint src video --fix",
     "check": "tsc"
   },
   "sideEffects": [
     "*.css"
   ],
   "dependencies": {
-    "@remotion/cli": "4.0.386",
-    "@remotion/tailwind-v4": "4.0.386",
-    "@remotion/zod-types": "4.0.386",
-    "react": "^19.2.3",
-    "react-dom": "^19.2.3",
-    "remotion": "4.0.386",
-    "tailwindcss": "^4.1.18",
-    "zod": "^4.1.13"
+    "@remotion/renderer": "4.0.387"
   },
   "devDependencies": {
     "@fontsource-variable/noto-sans-jp": "^5.2.9",
-    "@remotion/eslint-config-flat": "4.0.386",
+    "@remotion/cli": "4.0.387",
+    "@remotion/eslint-config-flat": "4.0.387",
+    "@remotion/tailwind-v4": "4.0.387",
+    "@remotion/zod-types": "4.0.387",
+    "@repo/db-chuni": "workspace:*",
     "@repo/types": "workspace:*",
     "@repo/ui": "workspace:*",
     "@repo/utils": "workspace:*",
+    "@types/js-yaml": "^4.0.9",
     "@types/react": "^19.2.7",
     "eslint": "^9.39.1",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
+    "js-yaml": "^4.1.1",
     "prettier": "^3.7.4",
-    "typescript": "^5.9.3"
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "remotion": "4.0.387",
+    "tailwindcss": "^4.1.18",
+    "tsdown": "^0.17.3",
+    "typescript": "^5.9.3",
+    "zod": "3.22.3"
   }
 }

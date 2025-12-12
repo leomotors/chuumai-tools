@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@source "../../../packages/utils/src/chuni/color.ts";
 
 @font-face {
   font-family: "Helvetica Neue Cyr";
