@@ -5,9 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "remotion studio video/index.ts",
-    "build": "remotion bundle video/index.ts && tsdown",
+    "build": "remotion browser ensure && remotion bundle video/index.ts && tsdown",
     "render": "node dist/index.mjs",
-    "prepare": "remotion browser ensure",
     "upgrade": "remotion upgrade",
     "lint": "eslint src video",
     "format": "eslint src video --fix",
