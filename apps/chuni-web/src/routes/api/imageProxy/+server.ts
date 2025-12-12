@@ -28,6 +28,7 @@ export const GET: RequestHandler = async ({ url }) => {
     headers: {
       "Content-Type": contentType,
       "Cache-Control": "public, max-age=604800",
+      "Cross-Origin-Resource-Policy": "same-origin",
     },
   });
 };

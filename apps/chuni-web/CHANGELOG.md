@@ -1,5 +1,10 @@
 # Changelog
 
+## [3.1.0] - 2025-12-13
+
+- feat: play statistics in user profile and api endpoint to get them (no upload yet)
+- refactor website, adding about page
+
 ## [3.0.1] - 2025-12-12
 
 - feat: support for X-VERSE-X

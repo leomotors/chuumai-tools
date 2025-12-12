@@ -138,7 +138,9 @@
 
       <article class="space-y-2 text-gray-600">
         <p>
-          By <ExtLink href="https://github.com/leomotors">Leomotors</ExtLink>
+          GitHub: <ExtLink href="https://github.com/leomotors.chuumai-tools">
+            leomotors/chuumai-tools
+          </ExtLink>
         </p>
         <p>
           Web Version: {WEB_VERSION} (<ExtLink
@@ -150,99 +152,10 @@
       </article>
     </div>
 
-    <!-- About Section -->
-    <div class="bg-white rounded-lg shadow-lg p-6 space-y-4 mb-4">
-      <h2 class="text-2xl font-bold text-gray-800">About</h2>
-
-      <div class="prose prose-gray max-w-none">
-        <p class="text-gray-600">
-          This tool generates rating images for Chunithm players based on their
-          play data. Upload your JSON file containing your song records to
-          create a personalized rating visualization.
-        </p>
-
-        <p class="text-gray-600 font-bold">
-          Made with ❤️ by Chunithm players, for Chunithm players.
-        </p>
-      </div>
-
-      <!-- Info Box 1 -->
-      <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
-        <div class="flex items-start">
-          <InfoIcon class="w-5 h-5 text-blue-400 mt-0.5 mr-3 shrink-0" />
-          <div>
-            <h3 class="text-sm font-medium text-blue-800 mb-2">
-              Information Source
-            </h3>
-            <div class="text-sm text-blue-700 space-y-2">
-              <p>Music Information from Official Chunithm (JP) Website</p>
-              <p>
-                Chart Constant from <ExtLink
-                  href="https://arcade-songs.zetaraku.dev"
-                >
-                  https://arcade-songs.zetaraku.dev
-                </ExtLink> + Manual <ExtLink
-                  href="https://www.youtube.com/watch?v=LLjfal8jCYI"
-                >
-                  Override
-                </ExtLink> as sometime source is not complete
-              </p>
-              <p>
-                Inspired by <ExtLink href="https://reiwa.f5.si">
-                  https://reiwa.f5.si
-                </ExtLink>
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Info Box 2 -->
-      <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
-        <div class="flex items-start">
-          <InfoIcon class="w-5 h-5 text-blue-400 mt-0.5 mr-3 shrink-0" />
-          <div>
-            <h3 class="text-sm font-medium text-blue-800 mb-2">Note</h3>
-            <div class="text-sm text-blue-700 space-y-2">
-              <p>
-                This tool is designed for International Version. Data in this
-                website might not be up-to-date which can cause problem for
-                Japanese Version.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Disclaimer Box -->
-      <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-        <div class="flex items-start">
-          <CircleAlert class="w-5 h-5 text-yellow-400 mt-0.5 mr-3 shrink-0" />
-          <div>
-            <h3 class="text-sm font-medium text-yellow-800 mb-2">Disclaimer</h3>
-            <div class="text-sm text-yellow-700 space-y-2">
-              <p>
-                This tool is not officially affiliated with SEGA or Chunithm. (I
-                think you probably know this already)
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="prose max-w-none">
-        <p>
-          Questions or feedback? <ExtLink
-            href="https://github.com/leomotors/chuumai-tools/issues"
-            >GitHub Issue</ExtLink
-          >
-          or <ExtLink href="https://x.com/LeomotorsTH">X</ExtLink>
-        </p>
-      </div>
-    </div>
-
     <!-- Input Section -->
     <div class="bg-white rounded-lg shadow-lg p-6 space-y-6">
+      <h2 class="text-2xl font-bold text-gray-800">Render Input</h2>
+
       <div class="bg-blue-50 border border-blue-200 rounded-md p-4">
         <p class="text-sm text-blue-800">
           You can get JSON file by using my scraper. Please refer to
@@ -254,6 +167,16 @@
             </ExtLink>
           </span>
           for more information.
+        </p>
+
+        <p class="text-sm text-blue-800">
+          Third party data were used in this website. Please see details at <a
+            href="/about"
+            class="underline font-medium"
+          >
+            about
+          </a> page. This page also includes terms of service and privacy policy,
+          by using our service you agree to those terms.
         </p>
       </div>
 

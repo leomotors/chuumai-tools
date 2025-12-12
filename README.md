@@ -5,7 +5,7 @@ Collection of tools made by Chunithm and maimai players for Chunithm and maimai 
 ## Chunithm
 
 > [!NOTE]
-> These tools are made for International Version (It may work for Japanese Version with some tweaks)
+> These tools are made for International Version (It may work for Japanese Version with some tweaks such as login process)
 
 ### Requirements
 
@@ -47,9 +47,11 @@ You can follow instructions on the website in case you choose to manually upload
 - Add `-e DISCORD_WEBHOOK_URL=your_webhook_url` to send the rendered image to Discord, or send screenshot if the scraper ran into error.
 - Add `-e DATABASE_URL=postgres://USER:PASSWORD@HOST:PORT/DB` to save the scraped data into PostgreSQL database. You need to migrate database by cloning the repo and use `packages/db-chuni` (Seeding is not required).
 
-- If you made your own scraper, the JSON schema for the website is `imgGenInputSchema` in `packages/types-chuni/src/index.ts`.
+- If you made your own scraper, the JSON schema for the website is `imgGenInputSchema` in `packages/types/src/chuni/index.ts`.
 
 ### Technical Details
+
+outdated, will update soon
 
 packages:
 

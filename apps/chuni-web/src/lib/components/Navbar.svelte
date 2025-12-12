@@ -8,6 +8,9 @@
   import Discord from "@repo/ui/icons/Discord.svelte";
 
   let { session }: { session: Session | null } = $props();
+
+  let toolsOpen = $state(false);
+  let userOpen = $state(false);
 </script>
 
 <nav
@@ -18,11 +21,11 @@
       href="/"
       class="flex-1 text-lg font-bold text-gray-800 transition-colors hover:text-pink-600"
     >
-      Uni
+      Chuni Wonderhoy
     </a>
 
     <div class="flex items-center gap-4">
-      <Popover.Root>
+      <Popover.Root bind:open={toolsOpen}>
         <Popover.Trigger
           class="flex items-center gap-1 text-sm font-medium text-gray-700 transition-colors hover:text-pink-600"
         >
@@ -33,16 +36,18 @@
           class="w-48 rounded-xl border border-gray-200/50 bg-white/70 p-2 shadow-lg backdrop-blur-md"
         >
           <a
-            href="/tools/preview-next"
-            class="block rounded-lg px-3 py-2 text-sm text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-900"
-          >
-            Preview Next
-          </a>
-          <a
             href="/tools/chart-constant"
+            onclick={() => (toolsOpen = false)}
             class="block rounded-lg px-3 py-2 text-sm text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-900"
           >
             Chart Constant
+          </a>
+          <a
+            href="/tools/preview-next"
+            onclick={() => (toolsOpen = false)}
+            class="block rounded-lg px-3 py-2 text-sm text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-900"
+          >
+            Preview Next
           </a>
         </Popover.Content>
       </Popover.Root>
@@ -60,10 +65,17 @@
       >
         API
       </a>
+
+      <a
+        href="/about"
+        class="text-sm font-medium text-gray-700 transition-colors hover:text-pink-600"
+      >
+        About
+      </a>
     </div>
 
     {#if session?.user}
-      <Popover.Root>
+      <Popover.Root bind:open={userOpen}>
         <Popover.Trigger
           class="flex cursor-pointer items-center gap-2 rounded-full bg-gray-100 py-1 pl-1 pr-3 transition-colors hover:bg-gray-200"
         >
@@ -97,6 +109,7 @@
             <hr class="border-gray-200/50" />
             <Button
               href="/dashboard"
+              onclick={() => (userOpen = false)}
               variant="ghost"
               class="w-full justify-start gap-2 text-gray-700 hover:bg-gray-100 hover:text-gray-900"
             >
@@ -104,7 +117,10 @@
               Dashboard
             </Button>
             <Button
-              onclick={() => signOut()}
+              onclick={() => {
+                userOpen = false;
+                signOut();
+              }}
               variant="ghost"
               class="w-full justify-start gap-2 border-red-300 text-red-600 hover:border hover:bg-red-50 hover:text-red-700"
             >
@@ -133,8 +149,8 @@
               <Discord class="size-5" />
             </Button>
             <p class="text-center text-xs text-gray-500">
-              When you sign in, only your Discord user ID is stored in the
-              database.
+              By signing in, you agree to our terms of service and privacy
+              policy (See about page)
             </p>
           </div>
         </Popover.Content>

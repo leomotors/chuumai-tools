@@ -6,6 +6,7 @@
   import type { UserStats } from "$lib/functions/userStats";
 
   import * as Tabs from "@repo/ui/atom/tabs";
+  import type { Snippet } from "svelte";
 
   // Dynamically import LayerChart only on client side
   let LineChart = $state<typeof LineChartType | null>(null);
@@ -17,7 +18,12 @@
     }
   });
 
-  let { userStats }: { userStats: UserStats[] } = $props();
+  type StatsChartProps = {
+    userStats: UserStats[];
+    header: Snippet;
+  };
+
+  let { userStats, header }: StatsChartProps = $props();
 
   // Chart state
   let xAxisMode = $state<"time" | "playCount">("time");
@@ -99,9 +105,11 @@
 </script>
 
 <div
-  class="rounded-xl border border-gray-200/50 bg-white/70 p-6 shadow-lg backdrop-blur-md"
+  class="rounded-xl border border-gray-200/50 bg-white/70 p-6 shadow-lg backdrop-blur-md flex flex-col gap-4"
 >
-  <h2 class="mb-4 text-lg font-semibold text-gray-800">Play Statistics</h2>
+  <h2 class="text-lg font-semibold text-gray-800">Play Statistics</h2>
+
+  {@render header()}
 
   <!-- X-Axis Mode Tabs -->
   <Tabs.Root
@@ -252,7 +260,6 @@
             xScale={scaleTime()}
             series={chartSeries}
             axis
-            padding={{ left: 60, right: 20, top: 20, bottom: 40 }}
             props={{
               xAxis: {
                 format: (d: Date) =>

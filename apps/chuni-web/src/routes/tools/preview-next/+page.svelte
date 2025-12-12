@@ -107,7 +107,8 @@
       Preview Next Version
     </h1>
     <p class="text-gray-600 text-center mb-8">
-      Upload your play data JSON file and preview the next version calculations
+      Upload your "full" play data JSON file and preview your starting rating in
+      the next version. All scores will be treated as Best/Old songs.
     </p>
 
     <div class="bg-white rounded-lg shadow-md p-6 space-y-6">

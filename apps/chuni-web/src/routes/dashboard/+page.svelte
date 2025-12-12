@@ -147,21 +147,16 @@
       </p>
     </div>
 
-    <!-- Jobs Placeholder -->
-    <div
-      class="mt-6 rounded-xl border border-gray-200/50 bg-white/70 p-6 shadow-lg backdrop-blur-md"
-    >
-      <h2 class="mb-4 text-lg font-semibold text-gray-800">Your Jobs</h2>
-      <p class="text-gray-600">
-        You have <span class="font-bold">{data.jobCount}</span> jobs associated with
-        your account.
-      </p>
-    </div>
-
     <!-- Stats Chart Section -->
     {#if data.userStats && data.userStats.length > 0}
       <div class="mt-6">
-        <StatsChart userStats={data.userStats} />
+        {#snippet statsHeader()}
+          <p class="text-gray-600">
+            You have <span class="font-bold">{data.jobCount}</span> jobs associated
+            with your account.
+          </p>
+        {/snippet}
+        <StatsChart userStats={data.userStats} header={statsHeader} />
       </div>
     {/if}
   </div>
