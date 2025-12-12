@@ -6,7 +6,9 @@
   import { Button } from "@repo/ui/atom/button";
 </script>
 
-<main class="p-8">
+<main
+  class="flex flex-col items-start w-screen px-4 pb-16 pt-32 gap-6 font-app min-h-screen bg-gray-50"
+>
   <h1 class="font-bold text-xl">Rating Components</h1>
 
   <Button>Shadcn Button</Button>

@@ -12,6 +12,7 @@ import {
 import { registerDataRoutes } from "./data";
 import { registerImageRoutes } from "./image";
 import { registerRatingRoutes } from "./rating";
+import { registerUserRoutes, registerUserSchemas } from "./user";
 
 export function generateOpenApiDocument(version: string) {
   // Create a fresh registry for each generation
@@ -22,11 +23,13 @@ export function generateOpenApiDocument(version: string) {
   registerDataSchemas(registry);
   registerRatingSchemas(registry);
   registerImageSchemas(registry);
+  registerUserSchemas(registry);
 
   // Register all routes
   registerRatingRoutes(registry);
   registerImageRoutes(registry);
   registerDataRoutes(registry);
+  registerUserRoutes(registry);
 
   // Generate the document
   const generator = new OpenApiGeneratorV3(registry.definitions);
@@ -56,6 +59,11 @@ export function generateOpenApiDocument(version: string) {
       {
         name: "Data",
         description: "Endpoints for game data retrieval",
+      },
+      {
+        name: "Users",
+        description:
+          "Endpoints for user-specific data (requires authentication)",
       },
     ],
   });

@@ -14,7 +14,9 @@
   );
 </script>
 
-<main class="px-4 py-8 font-app">
+<main
+  class="flex flex-col items-center w-screen px-4 pb-16 pt-32 gap-6 font-app min-h-screen bg-gray-50"
+>
   <div class="mx-auto max-w-2xl">
     <!-- User Profile Card -->
     <div
