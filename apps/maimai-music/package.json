@@ -18,7 +18,7 @@
     "@vitest/coverage-v8": "^4.0.15",
     "dotenv-cli": "^11.0.0",
     "drizzle-orm": "^0.45.1",
-    "tsdown": "^0.17.3",
+    "tsdown": "^0.17.4",
     "typescript": "^5.9.3",
     "vitest": "^4.0.15",
     "zod": "^4.1.13"
