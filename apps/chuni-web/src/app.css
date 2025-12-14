@@ -32,3 +32,5 @@
   --font-app: Inter, "Noto Sans JP Variable", ui-sans-serif, system-ui;
   --font-helvetica: "Helvetica Neue Cyr", sans-serif;
 }
+
+@source "../../../packages/core/src/chuni/color.ts";

@@ -1,5 +1,9 @@
 # Changelog
 
+## [next] - 2025-12-14
+
+- fix: wrong styling in music tile
+
 ## [3.1.0] - 2025-12-13
 
 - feat: play statistics in user profile and api endpoint to get them (no upload yet)
