@@ -2,11 +2,10 @@
   import { CircleAlert, InfoIcon } from "@lucide/svelte";
 
   import ExtLink from "$lib/components/molecule/ExtLink.svelte";
+  import StandardPageLayout from "$lib/components/StandardPageLayout.svelte";
 </script>
 
-<main
-  class="flex flex-col items-center w-screen px-4 pb-16 pt-32 gap-6 font-app min-h-screen bg-gray-50"
->
+<StandardPageLayout>
   <div class="w-full max-w-4xl">
     <div class="text-center mb-8">
       <h1 class="font-bold text-4xl mb-4 text-gray-800">About Website</h1>
@@ -202,4 +201,4 @@
       </ul>
     </div>
   </div>
-</main>
+</StandardPageLayout>

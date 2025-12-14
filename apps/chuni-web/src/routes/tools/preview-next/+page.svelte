@@ -1,6 +1,7 @@
 <script lang="ts">
   import { CircleAlert, Download, Upload } from "@lucide/svelte";
 
+  import StandardPageLayout from "$lib/components/StandardPageLayout.svelte";
   import { getVersionNameMapping } from "$lib/constants/index";
   import { getEnabledVersions } from "$lib/version";
 
@@ -99,9 +100,7 @@
   }
 </script>
 
-<main
-  class="flex flex-col items-center w-screen px-4 pb-16 pt-32 gap-6 font-app min-h-screen bg-gray-50"
->
+<StandardPageLayout>
   <div class="w-full max-w-2xl">
     <h1 class="font-bold text-3xl text-center mb-2 text-gray-800">
       Preview Next Version
@@ -217,11 +216,11 @@
       </p>
     </div>
   </div>
-</main>
 
-<style>
-  pre {
-    word-break: break-all;
-    white-space: pre-wrap;
-  }
-</style>
+  <style>
+    pre {
+      word-break: break-all;
+      white-space: pre-wrap;
+    }
+  </style>
+</StandardPageLayout>

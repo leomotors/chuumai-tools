@@ -15,7 +15,7 @@
     sideOffset = 4,
     portalProps,
     children,
-    preventScroll = true,
+    preventScroll = false,
     ...restProps
   }: WithoutChild<SelectPrimitive.ContentProps> & {
     portalProps?: WithoutChildrenOrChild<ComponentProps<typeof SelectPortal>>;

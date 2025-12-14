@@ -3,6 +3,7 @@
 ## [next] - 2025-12-14
 
 - fix: wrong styling in music tile
+- fix all UI bug
 
 ## [3.1.0] - 2025-12-13
 

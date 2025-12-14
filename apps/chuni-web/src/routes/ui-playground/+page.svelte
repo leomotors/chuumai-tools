@@ -2,13 +2,12 @@
   import Music from "$lib/components/molecule/Music.svelte";
   import Profile from "$lib/components/profile/Profile.svelte";
   import Rating from "$lib/components/profile/Rating.svelte";
+  import StandardPageLayout from "$lib/components/StandardPageLayout.svelte";
 
   import { Button } from "@repo/ui/atom/button";
 </script>
 
-<main
-  class="flex flex-col items-start w-screen px-4 pb-16 pt-32 gap-6 font-app min-h-screen bg-gray-50"
->
+<StandardPageLayout alignItems="start">
   <h1 class="font-bold text-xl">Rating Components</h1>
 
   <Button>Shadcn Button</Button>
@@ -155,4 +154,4 @@
       image: "7c236c814e236d39.jpg",
     }}
   />
-</main>
+</StandardPageLayout>

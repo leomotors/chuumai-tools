@@ -1,4 +1,6 @@
 <script lang="ts">
+  import StandardPageLayout from "$lib/components/StandardPageLayout.svelte";
+
   import { calculateRating } from "@repo/core/chuni";
   import { Button } from "@repo/ui/atom/button";
   import * as Card from "@repo/ui/atom/card";
@@ -64,9 +66,7 @@ Rating Offset = ${ratingOffset}`;
   }
 </script>
 
-<main
-  class="flex min-h-screen w-screen flex-col items-center gap-6 bg-gray-50 px-4 pb-16 pt-32 font-app"
->
+<StandardPageLayout>
   <div class="w-full max-w-2xl">
     <h1 class="mb-2 text-center text-3xl font-bold text-gray-800">
       Chart Constant Calculator
@@ -170,4 +170,4 @@ Rating Offset = ${ratingOffset}`;
       </Card.Content>
     </Card.Root>
   </div>
-</main>
+</StandardPageLayout>

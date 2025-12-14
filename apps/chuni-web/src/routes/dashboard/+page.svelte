@@ -2,6 +2,7 @@
   import { Eye, EyeOff, Key, RefreshCw } from "@lucide/svelte";
 
   import { enhance } from "$app/forms";
+  import StandardPageLayout from "$lib/components/StandardPageLayout.svelte";
   import StatsChart from "$lib/components/StatsChart.svelte";
 
   let { data, form } = $props();
@@ -15,9 +16,7 @@
   );
 </script>
 
-<main
-  class="flex flex-col items-center w-screen px-4 pb-16 pt-32 gap-6 font-app min-h-screen bg-gray-50"
->
+<StandardPageLayout>
   <div class="mx-auto max-w-2xl w-full">
     <!-- User Profile Card -->
     <div
@@ -160,4 +159,4 @@
       </div>
     {/if}
   </div>
-</main>
+</StandardPageLayout>
