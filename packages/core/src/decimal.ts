@@ -15,3 +15,8 @@ export function extractDigits(n: number) {
     tenthousandths: +decPart[3],
   };
 }
+
+export function floor(n: number, decimalPlaces: number) {
+  const factor = 10 ** decimalPlaces;
+  return Math.floor(n * factor) / factor;
+}

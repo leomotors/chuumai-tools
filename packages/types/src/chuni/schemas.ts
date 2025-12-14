@@ -94,17 +94,21 @@ export const chartForVideoSchema = chartForRenderSchema
 
 export type ChartForRender = z.infer<typeof chartForRenderSchema>;
 
+export const ratingDetailSchema = z
+  .object({
+    bestAvg: z.number(),
+    currentAvg: z.number(),
+    totalAvg: z.number(),
+  })
+  .openapi("RatingDetail");
+
 export const rawImageGenSchema = z
   .object({
     profile: profileSchema,
     best: z.array(chartForRenderSchema),
     current: z.array(chartForRenderSchema),
-    rating: z.object({
-      bestAvg: z.number(),
-      currentAvg: z.number(),
-      totalAvg: z.number(),
-    }),
+    rating: ratingDetailSchema,
   })
-  .openapi("CalcRatingResponse");
+  .openapi("RawImageGen");
 
 export type RawImageGen = z.infer<typeof rawImageGenSchema>;

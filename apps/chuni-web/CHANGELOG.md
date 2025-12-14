@@ -1,9 +1,10 @@
 # Changelog
 
-## [next] - 2025-12-14
+## [3.2.0] - 2025-12-14
 
 - fix: wrong styling in music tile
 - fix all UI bug
+- feat: two api endpoints to get user data
 
 ## [3.1.0] - 2025-12-13
 

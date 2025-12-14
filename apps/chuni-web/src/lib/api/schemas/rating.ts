@@ -57,7 +57,7 @@ export function registerRatingSchemas(registry: OpenAPIRegistry) {
 
   // Imported from @repo/types/chuni
   registry.register("ChartForRender", chartForRenderSchema);
-  registry.register("CalcRatingResponse", rawImageGenSchema);
+  registry.register("RawImageGen", rawImageGenSchema);
 
   // Defined in this file
   registry.register("CalcRatingRequest", calcRatingRequestSchema);
