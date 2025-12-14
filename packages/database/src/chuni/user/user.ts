@@ -1,0 +1,1 @@
+export { apiKey } from "../../shared";

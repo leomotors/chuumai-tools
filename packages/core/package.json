@@ -28,7 +28,7 @@
     "test": "vitest run"
   },
   "devDependencies": {
-    "@repo/db-chuni": "workspace:*",
+    "@repo/database": "workspace:*",
     "@vitest/coverage-v8": "^4.0.15",
     "vitest": "^4.0.15"
   },

@@ -5,7 +5,7 @@ import { nanoid } from "nanoid";
 import { db } from "$lib/db";
 import { getUserStats } from "$lib/functions/userStats";
 
-import { apiKey, jobTable } from "@repo/db-chuni/schema";
+import { apiKey, jobTable } from "@repo/database/chuni";
 
 import type { Actions, PageServerLoad } from "./$types";
 

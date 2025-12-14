@@ -3,7 +3,7 @@ import { and, eq } from "drizzle-orm";
 import { db } from "$lib/db";
 
 import { SimpleCache } from "@repo/core";
-import { musicDataTable, musicLevelTable } from "@repo/db-chuni/schema";
+import { musicDataTable, musicLevelTable } from "@repo/database/chuni";
 import { stdChartDifficultyValues } from "@repo/types/chuni";
 import { z } from "@repo/types/zod";
 

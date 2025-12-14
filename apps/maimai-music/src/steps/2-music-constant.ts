@@ -1,7 +1,7 @@
 import { and, eq } from "drizzle-orm";
 
 import { forInRangeWithProgressBar } from "@repo/core";
-import { musicDataTable, musicLevelTable } from "@repo/db-maimai/schema";
+import { musicDataTable, musicLevelTable } from "@repo/database/maimai";
 
 import { db } from "../db.js";
 import { updateMusicConstant as updateMusicConstantLogic } from "../functions/update-music-constant.js";

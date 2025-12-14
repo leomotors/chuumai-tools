@@ -1,6 +1,6 @@
 import z from "zod";
 
-import { musicDataTable } from "@repo/db-maimai/schema";
+import { musicDataTable } from "@repo/database/maimai";
 
 import { musicJsonSchema } from "../types.js";
 

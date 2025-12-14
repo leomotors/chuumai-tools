@@ -1,6 +1,6 @@
 import z from "zod";
 
-import { musicDataTable } from "@repo/db-chuni/schema";
+import { musicDataTable } from "@repo/database/chuni";
 
 import { musicJsonSchema } from "../types";
 

@@ -1,4 +1,4 @@
-import { Category } from "@repo/db-maimai/schema";
+import { Category } from "@repo/database/maimai";
 
 export function mapMaimaiTitle(title: string, category: Category) {
   if (title !== "Link") {

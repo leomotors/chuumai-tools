@@ -25,7 +25,7 @@
     "@remotion/tailwind-v4": "4.0.388",
     "@remotion/zod-types": "4.0.388",
     "@repo/core": "workspace:*",
-    "@repo/db-chuni": "workspace:*",
+    "@repo/database": "workspace:*",
     "@repo/types": "workspace:*",
     "@repo/ui": "workspace:*",
     "@types/js-yaml": "^4.0.9",

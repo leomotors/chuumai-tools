@@ -1,22 +1,21 @@
 {
-  "name": "@repo/db-maimai",
+  "name": "@repo/database",
   "private": true,
   "type": "module",
   "scripts": {
     "check": "tsc",
     "lint": "eslint src *.ts",
     "format": "eslint src *.ts --fix",
-    "db:generate": "dotenv -- drizzle-kit generate",
-    "db:migrate": "dotenv -- drizzle-kit migrate",
-    "db:export": "dotenv -- drizzle-kit export"
+    "chuni:generate": "dotenv -- drizzle-kit --config drizzle.chuni.ts generate",
+    "chuni:migrate": "dotenv -- drizzle-kit --config drizzle.chuni.ts migrate",
+    "chuni:export": "dotenv -- drizzle-kit --config drizzle.chuni.ts export"
   },
   "exports": {
     "./client": "./src/client.ts",
-    "./schema": "./src/schema/index.ts"
+    "./chuni": "./src/chuni/index.ts",
+    "./maimai": "./src/maimai/index.ts"
   },
   "dependencies": {
-    "@repo/core": "workspace:*",
-    "@repo/db-shared": "workspace:*",
     "@repo/types": "workspace:*",
     "drizzle-orm": "^0.45.1",
     "postgres": "^3.4.7",

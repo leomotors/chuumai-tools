@@ -3,7 +3,7 @@ import path from "node:path";
 
 import { describe, expect, it } from "vitest";
 
-import { musicDataTable } from "@repo/db-chuni/schema";
+import { musicDataTable } from "@repo/database/chuni";
 
 import { diffInMusicData } from "./diff-in-music-data";
 

@@ -1,8 +1,8 @@
 import { and, eq } from "drizzle-orm";
 
 import { SimpleCache } from "@repo/core";
-import { musicDataTable, musicLevelTable } from "@repo/db-chuni/schema";
-import type { ChartConstantData, MusicData } from "@repo/db-chuni/types";
+import type { ChartConstantData, MusicData } from "@repo/database/chuni";
+import { musicDataTable, musicLevelTable } from "@repo/database/chuni";
 
 import { db } from "./db";
 

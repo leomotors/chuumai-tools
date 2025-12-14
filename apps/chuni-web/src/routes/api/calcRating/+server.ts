@@ -6,7 +6,7 @@ import { addForRenderInfo } from "$lib/calculation";
 import { getEnabledVersions } from "$lib/version";
 
 import { floorDecimalPlaces } from "@repo/core/chuni";
-import type { MusicData } from "@repo/db-chuni/types";
+import type { MusicData } from "@repo/database/chuni";
 import {
   type BaseChartSchema,
   type HiddenChart,

@@ -1,7 +1,7 @@
 import z from "zod";
 
 import { forWithProgressBar } from "@repo/core";
-import { musicDataTable, musicLevelTable } from "@repo/db-chuni/schema";
+import { musicDataTable, musicLevelTable } from "@repo/database/chuni";
 import { StdChartDifficulty } from "@repo/types/chuni";
 
 import { zSchema } from "../types";

@@ -1,7 +1,7 @@
 import { PgInsertValue } from "drizzle-orm/pg-core";
 import z from "zod";
 
-import { musicLevelTable } from "@repo/db-chuni/schema";
+import { musicLevelTable } from "@repo/database/chuni";
 
 import type { musicJsonSchema } from "../types.js";
 

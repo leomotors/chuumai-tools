@@ -1,4 +1,4 @@
-import { createClient } from "@repo/db-maimai/client";
+import { createClient } from "@repo/database/client";
 
 import { environment } from "./environment";
 

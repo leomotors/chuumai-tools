@@ -19,7 +19,7 @@
   "devDependencies": {
     "@discordjs/builders": "^1.13.1",
     "@repo/core": "workspace:*",
-    "@repo/db-chuni": "workspace:*",
+    "@repo/database": "workspace:*",
     "@repo/types": "workspace:*",
     "@types/jsdom": "^27.0.0",
     "@vitest/coverage-v8": "^4.0.15",

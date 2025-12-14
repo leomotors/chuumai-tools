@@ -3,7 +3,7 @@ import path from "node:path";
 
 import { describe, expect, it } from "vitest";
 
-import { musicLevelTable } from "@repo/db-chuni/schema";
+import { musicLevelTable } from "@repo/database/chuni";
 
 import { processMusicLevels } from "./process-music-levels";
 

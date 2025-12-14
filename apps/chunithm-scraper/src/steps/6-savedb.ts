@@ -3,7 +3,7 @@ import {
   musicRecordTable,
   playerDataTable,
   rawScrapeDataTable,
-} from "@repo/db-chuni/schema";
+} from "@repo/database/chuni";
 import type {
   BaseChartSchema,
   ImgGenInput,

@@ -1,5 +1,5 @@
 import { calculateRating, constantFromLevel } from "@repo/core/chuni";
-import type { ChartConstantData, MusicData } from "@repo/db-chuni/types";
+import type { ChartConstantData, MusicData } from "@repo/database/chuni";
 import type { BaseChartSchema, ChartForRender } from "@repo/types/chuni";
 
 export function addForRenderInfo(

@@ -4,7 +4,7 @@ import { mkdir } from "node:fs/promises";
 import { eq } from "drizzle-orm";
 import { chromium } from "playwright";
 
-import { jobTable } from "@repo/db-chuni/schema";
+import { jobTable } from "@repo/database/chuni";
 
 import { stateStoragePath } from "./constants.js";
 import { db } from "./db.js";

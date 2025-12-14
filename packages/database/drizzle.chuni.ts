@@ -1,10 +1,10 @@
 import { defineConfig } from "drizzle-kit";
 
 export default defineConfig({
-  out: "./drizzle",
-  schema: "./src/schema/index.ts",
+  out: "./drizzle/chuni",
+  schema: "./src/chuni/index.ts",
   dialect: "postgresql",
   dbCredentials: {
-    url: process.env.DATABASE_URL!,
+    url: process.env.CHUNI_DATABASE_URL!,
   },
 });

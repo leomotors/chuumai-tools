@@ -1,4 +1,4 @@
-import { musicDataTable, musicLevelTable } from "@repo/db-maimai/schema";
+import { musicDataTable, musicLevelTable } from "@repo/database/maimai";
 
 import { db } from "../db.js";
 import { mapMaimaiTitle } from "../duplicate-title.js";

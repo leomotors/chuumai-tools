@@ -1,4 +1,4 @@
-import { musicDataTable, musicLevelTable } from "@repo/db-chuni/schema";
+import { musicDataTable, musicLevelTable } from "@repo/database/chuni";
 
 import { db } from "../db.js";
 import { environment } from "../environment.js";

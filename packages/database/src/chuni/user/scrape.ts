@@ -8,15 +8,14 @@ import {
   unique,
 } from "drizzle-orm/pg-core";
 
-import { jobTable } from "@repo/db-shared";
-
+import { jobTable } from "../../shared";
 import {
   clearMarkType,
   rarityLevelType,
   ratingType,
   stdChartDifficultyType,
   teamRarityLevelType,
-} from "../types";
+} from "../enum";
 
 export { jobTable };
 

@@ -20,7 +20,7 @@
     "@lucide/svelte": "^0.561.0",
     "@repo/config": "workspace:*",
     "@repo/core": "workspace:*",
-    "@repo/db-chuni": "workspace:*",
+    "@repo/database": "workspace:*",
     "@repo/types": "workspace:*",
     "@repo/ui": "workspace:*",
     "@sveltejs/adapter-node": "^5.4.0",

@@ -1,4 +1,4 @@
-import { createClient } from "@repo/db-chuni/client";
+import { createClient } from "@repo/database/client";
 
 import { environment } from "./environment";
 

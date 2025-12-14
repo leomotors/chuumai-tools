@@ -3,7 +3,7 @@ import { eq } from "drizzle-orm";
 
 import { db } from "$lib/db";
 
-import { apiKey } from "@repo/db-chuni/schema";
+import { apiKey } from "@repo/database/chuni";
 
 /**
  * Get user ID from API key.

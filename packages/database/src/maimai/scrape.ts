@@ -1,7 +1,6 @@
 import { integer, pgTable, text, unique } from "drizzle-orm/pg-core";
 
-import { jobTable } from "@repo/db-shared";
-
+import { jobTable } from "../shared";
 import {
   chartType,
   comboMarkType,

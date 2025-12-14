@@ -2,7 +2,7 @@ import { desc, eq } from "drizzle-orm";
 
 import { db } from "$lib/db";
 
-import { jobTable, playerDataTable } from "@repo/db-chuni/schema";
+import { jobTable, playerDataTable } from "@repo/database/chuni";
 import { z } from "@repo/types/zod";
 
 /**

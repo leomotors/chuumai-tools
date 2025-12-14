@@ -6,7 +6,7 @@ import {
   musicDataTable,
   musicLevelTable,
   type StdChartDifficulty,
-} from "@repo/db-maimai/schema";
+} from "@repo/database/maimai";
 
 import { zSchema } from "../types.js";
 

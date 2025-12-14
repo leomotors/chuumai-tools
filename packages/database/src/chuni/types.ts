@@ -1,4 +1,4 @@
-import type { musicDataTable, musicLevelTable } from "./schema";
+import { musicDataTable, musicLevelTable } from "./musicData";
 
 export type ChartConstantData = (typeof musicLevelTable.$inferSelect)[];
 export type MusicData = Pick<
