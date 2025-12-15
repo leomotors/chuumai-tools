@@ -45,7 +45,10 @@ export async function render() {
   const composition = await selectComposition({
     serveUrl: "./build",
     id: compositionId,
-    inputProps: songsData,
+    inputProps: {
+      ...songsData,
+      generatorVersion: process.env.npm_package_version,
+    },
   });
 
   console.log(
@@ -63,7 +66,10 @@ export async function render() {
     serveUrl: "./build",
     codec: "h264",
     outputLocation,
-    inputProps: songsData,
+    inputProps: {
+      ...songsData,
+      generatorVersion: process.env.npm_package_version,
+    },
     imageFormat: "jpeg",
     overwrite: false,
     concurrency: 12,

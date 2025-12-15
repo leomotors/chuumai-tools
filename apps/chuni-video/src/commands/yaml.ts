@@ -42,9 +42,27 @@ export async function yaml() {
   const renderConfig = await getRenderYaml(false);
 
   const ratingSorted = [
-    ...data.best.map((r) => r.rating || 0),
-    ...data.current.map((r) => r.rating || 0),
-  ].sort((a, b) => b - a);
+    ...data.best.map((d, index) => ({
+      ...d,
+      type: "best" as const,
+      rankInType: index,
+    })),
+    ...data.current.map((d, index) => ({
+      ...d,
+      type: "current" as const,
+      rankInType: index,
+    })),
+  ].sort((a, b) => {
+    if (a.rating !== b.rating) {
+      return (b.rating || 0) - (a.rating || 0);
+    }
+
+    if (a.type !== b.type) {
+      return a.type === "best" ? -1 : 1; // Best ranks higher than Current if ratings are equal
+    }
+
+    return a.rankInType - b.rankInType; // Lower rankInType ranks higher
+  });
 
   renderConfig.songs = [
     ...data.best.map((entry, index) => ({
@@ -62,7 +80,10 @@ export async function yaml() {
           )?.detail.comment || "",
         rankType: "Best" as const,
         rankInType: index + 1,
-        rankTotal: ratingSorted.indexOf(entry.rating || 0) + 1,
+        rankTotal:
+          ratingSorted.findIndex(
+            (e) => e.id === entry.id && e.difficulty === entry.difficulty,
+          ) + 1,
       },
     })),
     ...data.current.map((entry, index) => ({
@@ -80,7 +101,10 @@ export async function yaml() {
           )?.detail.comment || "",
         rankType: "Current" as const,
         rankInType: index + 1,
-        rankTotal: ratingSorted.indexOf(entry.rating || 0) + 1,
+        rankTotal:
+          ratingSorted.findIndex(
+            (e) => e.id === entry.id && e.difficulty === entry.difficulty,
+          ) + 1,
       },
     })),
   ].reverse();
@@ -100,6 +124,7 @@ export async function yaml() {
         difficulty: d.difficulty,
         url: "",
         offset: 0,
+        volumeMultiplier: 0.5,
       })),
   ];
   renderConfig.videoMapping.sort((a, b) => a.id - b.id);

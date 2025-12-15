@@ -43,5 +43,6 @@ videoMapping:
     difficulty: master
     url: rickroll.webm
     offset: 50
+    volumeMultiplier: 0.5
 videoConfig:
   durationPerSong: 10

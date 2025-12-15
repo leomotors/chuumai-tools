@@ -52,6 +52,7 @@ export const exampleData = {
   video: {
     url: "rickroll.webm",
     offset: 50,
+    volumeMultiplier: 0.5,
   },
 } as const;
 
@@ -61,5 +62,6 @@ export const example2Data = {
   video: {
     url: "rickroll.webm",
     offset: 50,
+    volumeMultiplier: 0.5,
   },
 } as const;

@@ -20,6 +20,7 @@ export const chartForVideoSchemaZod3 = z.object({
 export const videoSchema = z.object({
   url: z.string(),
   offset: z.number(),
+  volumeMultiplier: z.number().default(0.5),
 });
 
 export const detailSchema = z.object({
@@ -47,6 +48,7 @@ export const videoMappingSchema = z.array(
     difficulty: z.enum(stdChartDifficultyValues),
     url: z.string(),
     offset: z.number(),
+    volumeMultiplier: z.number().default(0.5),
   }),
 );
 

@@ -12,5 +12,5 @@
     "forceConsistentCasingInFileNames": true,
     "noUnusedLocals": true
   },
-  "exclude": ["notremotion.config.ts"]
+  "include": ["src", "video"]
 }

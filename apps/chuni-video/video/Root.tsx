@@ -54,6 +54,7 @@ export const RemotionRoot: React.FC = () => {
               difficulty: "master",
               url: "rickroll.webm",
               offset: 50,
+              volumeMultiplier: 0.5,
             },
             {
               id: 1086,
@@ -61,6 +62,7 @@ export const RemotionRoot: React.FC = () => {
               difficulty: "master",
               url: "rickroll.webm",
               offset: 50,
+              volumeMultiplier: 0.5,
             },
           ],
           videoConfig: { durationPerSong: 10 },
