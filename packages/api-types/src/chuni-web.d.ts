@@ -414,11 +414,11 @@ export interface components {
       constant: number | null;
     };
     Chart: {
-      id: number | null;
+      id: number;
       title: string;
       /** @enum {string} */
       difficulty: "basic" | "advanced" | "expert" | "master" | "ultima";
-      score: number | null;
+      score: number;
       /** @enum {string|null} */
       clearMark?:
         | "CLEAR"
@@ -467,24 +467,24 @@ export interface components {
         | "PLATINUM"
         | "RAINBOW"
         | "HOLOGRAPHIC";
-      playerLevel: number | null;
+      playerLevel: number;
       playerName: string;
-      classBand?: number | null;
-      classEmblem?: number | null;
-      rating: number | null;
-      overpowerValue: number | null;
-      overpowerPercent: number | null;
+      classBand?: number;
+      classEmblem?: number;
+      rating: number;
+      overpowerValue: number;
+      overpowerPercent: number;
       /** Format: date */
       lastPlayed: string | null;
-      playCount: number | null;
+      playCount: number;
     };
     HiddenChart: {
-      search?: string | null;
+      search: string;
       /** @enum {string} */
       difficulty: "basic" | "advanced" | "expert" | "master" | "ultima";
       /** @enum {string} */
       ratingType: "BEST" | "CURRENT" | "SELECTION_BEST" | "SELECTION_CURRENT";
-      score: number | null;
+      score: number;
       /** @enum {string|null} */
       clearMark?:
         | "CLEAR"

@@ -1,5 +1,9 @@
 # Changelog
 
+## [next] - 2025-12-xx
+
+- refactor: remove coerce from zod to get accurate api docs
+
 ## [3.2.0] - 2025-12-14
 
 - fix: wrong styling in music tile

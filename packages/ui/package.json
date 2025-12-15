@@ -51,7 +51,7 @@
     "@tsconfig/svelte": "^5.0.6",
     "@types/node": "^24.10.4",
     "eslint": "^9.39.2",
-    "prettier-plugin-svelte": "^3.4.0",
+    "prettier-plugin-svelte": "^3.4.1",
     "svelte-check": "^4.3.4",
     "typescript": "^5.9.3"
   }

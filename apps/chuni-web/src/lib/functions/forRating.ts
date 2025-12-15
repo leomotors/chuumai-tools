@@ -135,10 +135,19 @@ export async function getForRating(userId: string) {
   const currentAvg = current.reduce((acc, cur) => acc + cur.rating, 0) / 20;
   const totalAvg = bestAvg * 0.6 + currentAvg * 0.4;
 
+  const profile = profileData[0];
+
   return {
     jobId,
     version,
-    profile: profileData[0],
+    profile: {
+      ...profile,
+      rating: Number(profile.rating),
+      overpowerValue: Number(profile.overpowerValue),
+      overpowerPercent: Number(profile.overpowerPercent),
+      classBand: profile.classBand ?? undefined,
+      classEmblem: profile.classEmblem ?? undefined,
+    },
     best,
     current,
     rating: {
@@ -146,5 +155,5 @@ export async function getForRating(userId: string) {
       currentAvg: floor(currentAvg, 4),
       totalAvg: floor(totalAvg, 4),
     },
-  };
+  } satisfies ForRating;
 }

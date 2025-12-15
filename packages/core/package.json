@@ -37,6 +37,6 @@
     "@aws-sdk/client-s3": "^3.948.0",
     "@leomotors/cli-progress": "^4.0.3",
     "@repo/types": "workspace:*",
-    "zod": "^4.1.13"
+    "zod": "^4.2.0"
   }
 }

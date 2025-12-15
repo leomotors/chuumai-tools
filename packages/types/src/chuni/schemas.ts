@@ -9,10 +9,10 @@ import {
 
 export const chartSchema = z
   .object({
-    id: z.coerce.number(),
+    id: z.number(),
     title: z.string().nonempty(),
     difficulty: z.enum(stdChartDifficultyValues),
-    score: z.coerce.number().int().min(0).max(1010000),
+    score: z.number().int().min(0).max(1010000),
     clearMark: z.enum(clearMarkValues).nullish(),
     fc: z.boolean().default(false),
     aj: z.boolean().default(false),
@@ -34,27 +34,27 @@ export const profileSchema = z
     honorText: z.string().nonempty(),
     honorRarity: z.enum(rarityLevelValues),
 
-    playerLevel: z.coerce.number(),
+    playerLevel: z.number(),
     playerName: z.string().nonempty(),
-    classBand: z.coerce.number().int().min(0).max(6).optional(),
+    classBand: z.number().int().min(0).max(6).optional(),
     // Actually classMedal (can't rename, it will be breaking change)
-    classEmblem: z.coerce.number().int().min(0).max(6).optional(),
+    classEmblem: z.number().int().min(0).max(6).optional(),
 
-    rating: z.coerce.number(),
-    overpowerValue: z.coerce.number(),
-    overpowerPercent: z.coerce.number(),
+    rating: z.number(),
+    overpowerValue: z.number(),
+    overpowerPercent: z.number(),
 
     lastPlayed: z.coerce.date(),
-    playCount: z.coerce.number(),
+    playCount: z.number(),
   })
   .openapi("Profile");
 
 export const hiddenChartSchema = z
   .object({
-    search: z.coerce.string().nonempty(),
+    search: z.string().nonempty(),
     difficulty: z.enum(stdChartDifficultyValues),
     ratingType: z.enum(ratingTypeValues),
-    score: z.coerce.number().int().min(0).max(1010000),
+    score: z.number().int().min(0).max(1010000),
     clearMark: z.enum(clearMarkValues).nullish(),
     fc: z.boolean().default(false),
     aj: z.boolean().default(false),

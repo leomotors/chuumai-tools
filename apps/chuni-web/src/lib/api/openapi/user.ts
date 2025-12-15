@@ -117,7 +117,7 @@ export function registerUserRoutes(registry: OpenAPIRegistry) {
     ],
     request: {
       query: z.object({
-        musicId: z.coerce.number().int().openapi({
+        musicId: z.number().int().openapi({
           description: "The music ID to retrieve records for",
           example: 2844,
         }),
