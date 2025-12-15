@@ -1,6 +1,6 @@
 # Changelog
 
-## [next] - 2025-12-xx
+## [3.3.0] - 2025-12-15
 
 - refactor: remove coerce from zod to get accurate api docs
 

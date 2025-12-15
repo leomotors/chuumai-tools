@@ -19,7 +19,7 @@
     "csv-parse": "^6.1.0",
     "dotenv-cli": "^11.0.0",
     "drizzle-orm": "^0.45.1",
-    "tsdown": "^0.17.4",
+    "tsdown": "^0.18.0",
     "typescript": "^5.9.3",
     "vitest": "^4.0.15",
     "zod": "^4.2.0"
