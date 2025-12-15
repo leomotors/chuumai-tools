@@ -1,20 +1,7 @@
 import { Sequence } from "remotion";
-import { RecordView, recordViewWithoutVideoSchema } from "./RecordView";
+import { RecordView } from "./RecordView";
 import { z } from "zod";
-
-export const videoMappingSchema = z.array(
-  z.object({
-    id: z.coerce.number(),
-    title: z.string(),
-    url: z.string(),
-    offset: z.number(),
-  }),
-);
-
-export const recordSequenceSchema = z.object({
-  songs: z.array(recordViewWithoutVideoSchema),
-  videoMapping: videoMappingSchema,
-});
+import { recordSequenceSchema } from "./types";
 
 export type RecordSequenceProps = z.infer<typeof recordSequenceSchema>;
 

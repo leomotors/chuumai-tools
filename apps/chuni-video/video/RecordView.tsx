@@ -15,45 +15,7 @@ import { FC } from "react";
 import { z } from "zod";
 import { cn } from "@repo/ui/utils";
 import { difficultyColorMap, getLamp, getRank } from "@repo/core/chuni";
-import { clearMarkValues, stdChartDifficultyValues } from "@repo/types/chuni";
-
-// Remotion only supports zod v3
-export const chartForVideoSchemaZod3 = z.object({
-  id: z.coerce.number(),
-  title: z.string().nonempty(),
-  artist: z.string(),
-  difficulty: z.enum(stdChartDifficultyValues),
-  score: z.coerce.number().int().min(0).max(1010000),
-  clearMark: z.enum(clearMarkValues).nullish(),
-  fc: z.boolean().default(false),
-  aj: z.boolean().default(false),
-  constant: z.number(),
-  constantSure: z.boolean(),
-  rating: z.number().nullable(),
-  image: z.string().nullable(),
-});
-
-export const videoSchema = z.object({
-  url: z.string(),
-  offset: z.number(),
-});
-
-export const detailSchema = z.object({
-  comment: z.string(),
-  rankType: z.enum(["Best", "Current"]),
-  rankInType: z.number(),
-  rankTotal: z.number(),
-});
-
-export const recordViewWithoutVideoSchema = z.object({
-  version: z.string(),
-  chart: chartForVideoSchemaZod3,
-  detail: detailSchema,
-});
-
-export const recordViewSchema = recordViewWithoutVideoSchema.extend({
-  video: videoSchema,
-});
+import { recordViewSchema } from "./types";
 
 type RecordViewProps = z.infer<typeof recordViewSchema>;
 

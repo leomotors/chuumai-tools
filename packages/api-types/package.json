@@ -1,0 +1,16 @@
+{
+  "name": "@repo/api-types",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "scripts": {
+    "lint": "eslint .",
+    "format": "eslint . --fix",
+    "check": "tsc --noEmit",
+    "codegen": "rm -rf \"src/*.d.ts\" && sh ./ts-codegen.sh && pnpm format"
+  },
+  "devDependencies": {
+    "eslint": "^9.39.2",
+    "openapi-typescript": "^7.10.1"
+  }
+}
