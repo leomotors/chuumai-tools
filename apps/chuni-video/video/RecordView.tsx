@@ -19,6 +19,36 @@ import { recordViewSchema } from "./types";
 
 type RecordViewProps = z.infer<typeof recordViewSchema>;
 
+const getWeightedLength = (text: string): number => {
+  let weight = 0;
+  for (const char of text) {
+    const code = char.charCodeAt(0);
+    // Japanese characters (Hiragana, Katakana, Kanji, Full-width)
+    // U+3000-U+30FF: Japanese punctuation, Hiragana, Katakana
+    // U+4E00-U+9FFF: CJK Unified Ideographs (Kanji)
+    // U+FF00-U+FFEF: Full-width characters
+    if (
+      (code >= 0x3000 && code <= 0x30ff) ||
+      (code >= 0x4e00 && code <= 0x9fff) ||
+      (code >= 0xff00 && code <= 0xffef)
+    ) {
+      weight += 1.8; // Japanese characters take more space
+    } else {
+      weight += 1; // Roman characters
+    }
+  }
+  return weight;
+};
+
+const getResponsiveFontSize = (text: string): string => {
+  const weightedLength = getWeightedLength(text);
+
+  // Smooth transition based on weighted text length
+  if (weightedLength <= 20) return "text-5xl";
+  if (weightedLength <= 30) return "text-4xl";
+  return "text-3xl";
+};
+
 export const RecordView: FC<RecordViewProps> = ({
   version,
   chart,
@@ -44,6 +74,10 @@ export const RecordView: FC<RecordViewProps> = ({
   const videoUrl = staticFile("files/" + video.url);
 
   const lamp = getLamp(chart.score, chart.fc, chart.aj);
+
+  // Dynamic font sizes for title and artist
+  const titleFontSize = getResponsiveFontSize(chart.title);
+  const artistFontSize = getResponsiveFontSize(chart.artist);
 
   // A <AbsoluteFill> is just a absolutely positioned <div>!
   return (
@@ -118,14 +152,18 @@ export const RecordView: FC<RecordViewProps> = ({
               </div>
             </section>
 
-            <section className="bg-white/80 flex-1 flex flex-col justify-between items-center p-4 gap-4 font-helvetica text-black">
-              <div className="flex flex-col gap-2 items-center w-full">
-                <p className="text-5xl">{chart.title}</p>
+            <section className="bg-white/80 flex-1 flex flex-col justify-between items-center p-4 gap-4 text-black overflow-hidden">
+              <div className="flex flex-col gap-2 items-center w-full overflow-hidden">
+                <p className={cn(titleFontSize, "line-clamp-2 text-center")}>
+                  {chart.title}
+                </p>
                 <hr className="w-full" />
-                <p className="text-5xl">{chart.artist}</p>
+                <p className={cn(artistFontSize, "line-clamp-2 text-center")}>
+                  {chart.artist}
+                </p>
               </div>
 
-              <div className="flex flex-col w-full gap-4">
+              <div className="flex flex-col w-full gap-4 font-helvetica">
                 <p className="font-bold text-5xl self-start">
                   SCORE {chart.score.toLocaleString()}
                 </p>

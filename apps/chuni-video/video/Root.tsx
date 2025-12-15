@@ -4,7 +4,7 @@ import { Composition } from "remotion";
 
 import { RecordView } from "./RecordView";
 import { RecordSequence, RecordSequenceProps } from "./RecordSequence";
-import { exampleData, exampleDataNoVideo } from "./example";
+import { example2Data, example2NoVideo, exampleDataNoVideo } from "./example";
 import { recordSequenceSchema, recordViewSchema } from "./types";
 
 // Each <Composition> is an entry in the sidebar!
@@ -24,7 +24,7 @@ export const RemotionRoot: React.FC = () => {
         // You can override these props for each render:
         // https://www.remotion.dev/docs/parametrized-rendering
         schema={recordViewSchema}
-        defaultProps={exampleData}
+        defaultProps={example2Data}
       />
 
       <Composition
@@ -46,11 +46,18 @@ export const RemotionRoot: React.FC = () => {
         height={1080}
         schema={recordSequenceSchema}
         defaultProps={{
-          songs: [exampleDataNoVideo, exampleDataNoVideo],
+          songs: [exampleDataNoVideo, example2NoVideo],
           videoMapping: [
             {
               id: 2652,
               title: "Forsaken Tale",
+              difficulty: "master",
+              url: "rickroll.webm",
+              offset: 50,
+            },
+            {
+              id: 1086,
+              title: "祈 -我ら神祖と共に歩む者なり-",
               difficulty: "master",
               url: "rickroll.webm",
               offset: 50,
