@@ -2,13 +2,10 @@ import "./index.css";
 
 import { Composition } from "remotion";
 
-import { RecordView, recordViewSchema } from "./RecordView";
-import {
-  RecordSequence,
-  RecordSequenceProps,
-  recordSequenceSchema,
-} from "./RecordSequence";
+import { RecordView } from "./RecordView";
+import { RecordSequence, RecordSequenceProps } from "./RecordSequence";
 import { exampleData, exampleDataNoVideo } from "./example";
+import { recordSequenceSchema, recordViewSchema } from "./types";
 
 // Each <Composition> is an entry in the sidebar!
 
@@ -38,7 +35,10 @@ export const RemotionRoot: React.FC = () => {
           const typedProps = props as RecordSequenceProps;
 
           return {
-            durationInFrames: typedProps.songs.length * fps * 10,
+            durationInFrames:
+              typedProps.songs.length *
+              fps *
+              typedProps.videoConfig.durationPerSong,
           };
         }}
         fps={60}
@@ -51,10 +51,12 @@ export const RemotionRoot: React.FC = () => {
             {
               id: 2652,
               title: "Forsaken Tale",
+              difficulty: "master",
               url: "rickroll.webm",
               offset: 50,
             },
           ],
+          videoConfig: { durationPerSong: 10 },
         }}
       />
 

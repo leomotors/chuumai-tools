@@ -8,5 +8,6 @@ out
 
 build
 
-# Temp
-public/*.webm
+# Heavy files, ignore folder but not its symlink
+files
+!public/files

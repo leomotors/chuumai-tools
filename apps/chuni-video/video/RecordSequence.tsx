@@ -8,8 +8,9 @@ export type RecordSequenceProps = z.infer<typeof recordSequenceSchema>;
 export const RecordSequence: React.FC<RecordSequenceProps> = ({
   songs,
   videoMapping,
+  videoConfig,
 }) => {
-  const durationPerSong = 600; // 10 seconds at 60fps
+  const durationPerSong = videoConfig.durationPerSong * 60;
 
   return (
     <>
@@ -21,7 +22,13 @@ export const RecordSequence: React.FC<RecordSequenceProps> = ({
         >
           <RecordView
             {...song}
-            video={videoMapping.find((v) => v.id === song.chart.id)!}
+            video={
+              videoMapping.find(
+                (v) =>
+                  v.id === song.chart.id &&
+                  v.difficulty === song.chart.difficulty,
+              )!
+            }
           />
         </Sequence>
       ))}

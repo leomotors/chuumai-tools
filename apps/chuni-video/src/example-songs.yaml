@@ -40,5 +40,8 @@ songs:
 videoMapping:
   - id: 2652
     title: Forsaken Tale
+    difficulty: master
     url: rickroll.webm
     offset: 50
+videoConfig:
+  durationPerSong: 10

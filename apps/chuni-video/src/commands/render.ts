@@ -1,23 +1,42 @@
 import { renderMedia, selectComposition } from "@remotion/renderer";
-import fs from "node:fs/promises";
-import { load } from "js-yaml";
 import readline from "node:readline";
-import { recordSequenceSchema } from "../../video/types";
+import fs from "node:fs/promises";
+import { getRenderYaml } from "../shared";
 
 export async function render() {
   const start = Date.now();
   console.log("Starting render process...");
 
   // Load songs from YAML
-  const songsYaml = await fs.readFile("temp/songs.yaml", "utf-8");
-  const songsData = recordSequenceSchema.parse(load(songsYaml));
-  console.log(`Loaded ${songsData.songs.length} songs`);
+  const songsData = await getRenderYaml();
 
   for (const song of songsData.songs) {
-    if (!songsData.videoMapping.find((v) => v.id === song.chart.id)?.url) {
+    const videoMapping = songsData.videoMapping.find(
+      (v) => v.id === song.chart.id && v.difficulty === song.chart.difficulty,
+    );
+
+    if (!videoMapping?.url) {
       throw new Error(
-        `No video mapping found for song ID ${song.chart.id} (${song.chart.title})`,
+        `No video mapping found for song ID ${song.chart.id} (${song.chart.title} ${song.chart.difficulty})`,
       );
+    }
+
+    // Check if video file exists and is not empty
+    const videoPath = `build/public/files/${videoMapping.url}`;
+    try {
+      const stats = await fs.stat(videoPath);
+      if (stats.size === 0) {
+        throw new Error(
+          `Video file is empty: ${videoPath} for song ${song.chart.title} ${song.chart.difficulty}`,
+        );
+      }
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException).code === "ENOENT") {
+        throw new Error(
+          `Video file not found: ${videoPath} for song ${song.chart.title} ${song.chart.difficulty}`,
+        );
+      }
+      throw error;
     }
   }
 
@@ -45,7 +64,7 @@ export async function render() {
     codec: "h264",
     outputLocation,
     inputProps: songsData,
-    imageFormat: "png",
+    imageFormat: "jpeg",
     overwrite: false,
     concurrency: 12,
     onProgress: ({ progress, renderedFrames, encodedFrames }) => {

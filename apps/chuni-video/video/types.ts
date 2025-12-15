@@ -44,12 +44,18 @@ export const videoMappingSchema = z.array(
   z.object({
     id: z.coerce.number(),
     title: z.string(),
+    difficulty: z.enum(stdChartDifficultyValues),
     url: z.string(),
     offset: z.number(),
   }),
 );
 
+export const videoConfigSchema = z.object({
+  durationPerSong: z.number().int().min(1),
+});
+
 export const recordSequenceSchema = z.object({
   songs: z.array(recordViewWithoutVideoSchema),
   videoMapping: videoMappingSchema,
+  videoConfig: videoConfigSchema,
 });

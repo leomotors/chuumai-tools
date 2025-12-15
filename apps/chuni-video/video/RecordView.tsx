@@ -41,7 +41,7 @@ export const RecordView: FC<RecordViewProps> = ({
   const versionLogo = staticFile(
     "chuni-web" + logoMapping[version as keyof typeof logoMapping],
   );
-  const rickroll = staticFile(video.url);
+  const videoUrl = staticFile("files/" + video.url);
 
   const lamp = getLamp(chart.score, chart.fc, chart.aj);
 
@@ -57,7 +57,7 @@ export const RecordView: FC<RecordViewProps> = ({
       >
         <aside className="flex flex-col gap-8 flex-2/3">
           <OffthreadVideo
-            src={rickroll}
+            src={videoUrl}
             volume={opacity}
             trimBefore={video.offset * 60}
           />
@@ -70,9 +70,9 @@ export const RecordView: FC<RecordViewProps> = ({
         <main className="flex flex-col gap-8 flex-1/3">
           <header className="flex justify-between bg-white/40">
             <div className="font-bold text-5xl flex flex-col gap-2 justify-evenly pl-8 py-8">
-              <p>Rating #{detail.rankInType}</p>
-              <p>
-                {detail.rankType} #{detail.rankTotal}
+              <p>Rating #{detail.rankTotal}</p>
+              <p className="text-4xl">
+                {detail.rankType} #{detail.rankInType}
               </p>
             </div>
 
