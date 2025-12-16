@@ -26,6 +26,9 @@ jobs:
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Install Playwright for Unit Test
+        run: pnpm exec playwright install chromium
+
       - name: Run Lint
         run: pnpm lint
 
