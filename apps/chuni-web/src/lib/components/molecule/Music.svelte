@@ -25,6 +25,7 @@
     music.difficulty === "ultima" &&
       "bg-gray-900/60 text-white outline-solid outline-[#ff3a3a]",
   )}
+  data-testid="music-card-{music.id}"
 >
   <!-- Order -->
   <div

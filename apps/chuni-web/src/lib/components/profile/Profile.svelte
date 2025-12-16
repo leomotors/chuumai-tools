@@ -12,7 +12,7 @@
   let { profile, calculatedRating }: Props = $props();
 </script>
 
-<div class="bg-white/60 rounded-xl p-2 flex gap-2">
+<div class="bg-white/60 rounded-xl p-2 flex gap-2" data-testid="profile-header">
   <!-- Left -->
   <div
     class="bg-contain bg-no-repeat bg-center w-[200px] h-[200px] relative"
