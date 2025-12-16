@@ -20,7 +20,7 @@ export default defineConfig(({ command }) => ({
           name: "client",
 
           browser: {
-            enabled: true,
+            enabled: !process.env.DISABLE_BROWSER_TESTS,
             provider: playwright(),
             instances: [{ browser: "chromium", headless: true }],
           },
