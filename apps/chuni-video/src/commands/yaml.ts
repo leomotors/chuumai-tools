@@ -107,7 +107,7 @@ export async function yaml() {
           ) + 1,
       },
     })),
-  ].reverse();
+  ].sort((a, b) => b.detail.rankTotal - a.detail.rankTotal);
 
   renderConfig.videoMapping = [
     ...renderConfig.videoMapping,
