@@ -1,5 +1,9 @@
 # Changelog
 
+## [3.4.0] - 2025-12-29
+
+- feat: new page /dashboard/musicRecord/{musicId}
+
 ## [3.3.0] - 2025-12-15
 
 - refactor: remove coerce from zod to get accurate api docs

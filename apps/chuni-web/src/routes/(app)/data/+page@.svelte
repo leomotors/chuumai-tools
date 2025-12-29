@@ -18,6 +18,8 @@
 
   import ChartLevelCell from "./ChartLevelCell.svelte";
 
+  let { data } = $props();
+
   let selectedVersion = $state<string>("");
   let searchQuery = $state<string>("");
   let debouncedSearchQuery = $state<string>("");
@@ -32,6 +34,7 @@
 
   const pageSize = 50;
   const enabledVersions = getEnabledVersions();
+  const isLoggedIn = $derived(!!data.session?.user?.id);
 
   $effect(() => {
     if (enabledVersions.length > 0 && !selectedVersion) {
@@ -412,11 +415,20 @@
                         ? `/api/imageProxy?img=${song.image}`
                         : "/placeholder.svg"}
                       alt="Jacket"
-                      class="w-20 h-20"
+                      class="w-14 h-14 min-w-14 sm:w-20 sm:h-20 sm:min-w-20"
                     />
                   </Table.Cell>
                   <Table.Cell class="max-w-xs whitespace-normal text-gray-900">
-                    {song.title}
+                    {#if isLoggedIn}
+                      <a
+                        href="/dashboard/musicRecord/{song.id}"
+                        class="text-blue-600 hover:text-blue-800 hover:underline"
+                      >
+                        {song.title}
+                      </a>
+                    {:else}
+                      {song.title}
+                    {/if}
                   </Table.Cell>
                   <Table.Cell class="max-w-xs whitespace-normal text-gray-900">
                     {song.artist}
