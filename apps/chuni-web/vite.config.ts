@@ -4,6 +4,8 @@ import { playwright } from "@vitest/browser-playwright";
 import devtoolsJson from "vite-plugin-devtools-json";
 import { defineConfig } from "vitest/config";
 
+const disableBrowserTests = process.env.DISABLE_BROWSER_TESTS === "true";
+
 export default defineConfig(({ command }) => ({
   plugins: [tailwindcss(), sveltekit(), devtoolsJson()],
   define: {
@@ -12,23 +14,28 @@ export default defineConfig(({ command }) => ({
     ),
   },
   test: {
+    passWithNoTests: true,
     projects: [
-      {
-        extends: "./vite.config.ts",
+      ...(disableBrowserTests
+        ? []
+        : [
+            {
+              extends: "./vite.config.ts",
 
-        test: {
-          name: "client",
+              test: {
+                name: "client",
 
-          browser: {
-            enabled: !process.env.DISABLE_BROWSER_TESTS,
-            provider: playwright(),
-            instances: [{ browser: "chromium", headless: true }],
-          },
+                browser: {
+                  enabled: true,
+                  provider: playwright(),
+                  instances: [{ browser: "chromium", headless: true }],
+                },
 
-          include: ["src/**/*.svelte.{test,spec}.{js,ts}"],
-          exclude: ["src/lib/server/**"],
-        },
-      },
+                include: ["src/**/*.svelte.{test,spec}.{js,ts}"],
+                exclude: ["src/lib/server/**"],
+              },
+            },
+          ]),
 
       {
         extends: "./vite.config.ts",
@@ -38,6 +45,7 @@ export default defineConfig(({ command }) => ({
           environment: "node",
           include: ["src/**/*.{test,spec}.{js,ts}"],
           exclude: ["src/**/*.svelte.{test,spec}.{js,ts}"],
+          passWithNoTests: true,
         },
       },
     ],

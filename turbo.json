@@ -20,7 +20,8 @@
       "cache": false
     },
     "test": {
-      "cache": false
+      "cache": false,
+      "env": ["DISABLE_BROWSER_TESTS"]
     },
     "dev": {
       "cache": false,
