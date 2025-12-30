@@ -1,8 +1,8 @@
 import { error } from "@sveltejs/kit";
 
-import { PUBLIC_DEFAULT_VERSION } from "$env/static/public";
 import { getMusicDataCached } from "$lib/functions/musicData";
 import { getMusicRecord } from "$lib/functions/musicRecord";
+import { getDefaultVersion } from "$lib/version";
 
 import type { StdChartDifficulty } from "@repo/types/chuni";
 
@@ -26,7 +26,7 @@ export const load: PageServerLoad = async ({ params, parent }) => {
 
   // Get music data from cache and filter for this specific music
   // Note: getMusicDataCached returns all music, but it's cached in memory
-  const musicDataList = await getMusicDataCached(PUBLIC_DEFAULT_VERSION);
+  const musicDataList = await getMusicDataCached(getDefaultVersion());
   const musicData = musicDataList.find((m) => m.id === musicId);
 
   if (!musicData) {
