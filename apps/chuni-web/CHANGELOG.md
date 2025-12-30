@@ -1,6 +1,6 @@
 # Changelog
 
-## [3.4.0] - 2025-12-29
+## [3.4.0] - 2025-12-30
 
 - feat: new page /dashboard/musicRecord/{musicId}
 

@@ -11,17 +11,17 @@
     "test": "vitest run"
   },
   "devDependencies": {
-    "@aws-sdk/client-s3": "^3.948.0",
+    "@aws-sdk/client-s3": "^3.958.0",
     "@repo/core": "workspace:*",
     "@repo/database": "workspace:*",
     "@repo/types": "workspace:*",
-    "@vitest/coverage-v8": "^4.0.15",
+    "@vitest/coverage-v8": "^4.0.16",
     "csv-parse": "^6.1.0",
     "dotenv-cli": "^11.0.0",
     "drizzle-orm": "^0.45.1",
-    "tsdown": "^0.18.0",
+    "tsdown": "^0.18.3",
     "typescript": "^5.9.3",
-    "vitest": "^4.0.15",
+    "vitest": "^4.0.16",
     "zod": "^4.2.0"
   }
 }

@@ -13,7 +13,7 @@
   "type": "module",
   "license": "MIT",
   "dependencies": {
-    "jsdom": "^27.3.0",
+    "jsdom": "^27.4.0",
     "playwright": "^1.57.0"
   },
   "devDependencies": {
@@ -22,15 +22,15 @@
     "@repo/database": "workspace:*",
     "@repo/types": "workspace:*",
     "@types/jsdom": "^27.0.0",
-    "@vitest/coverage-v8": "^4.0.15",
+    "@vitest/coverage-v8": "^4.0.16",
     "discord-api-types": "^0.38.37",
     "dotenv-cli": "^11.0.0",
     "drizzle-orm": "^0.45.1",
     "papaparse": "^5.5.3",
     "postgres": "^3.4.7",
-    "tsdown": "^0.18.0",
+    "tsdown": "^0.18.3",
     "typescript": "^5.9.3",
-    "vitest": "^4.0.15",
+    "vitest": "^4.0.16",
     "zod": "^4.2.0"
   }
 }
