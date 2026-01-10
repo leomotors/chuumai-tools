@@ -23,11 +23,11 @@ Finally, cleanup empty `src/components` folder.
 
 ## Database Schema
 
-`apps/chuni-*` will uses `packages/db-chuni` as database schema.
+`apps/chuni-*` will uses `packages/database/src/chuni` as database schema.
 
 Database is PostgreSQL with Drizzle ORM.
 
-Please note that it may import and re-export some of shared table in `packages/db-shared`.
+Please note that it may import and re-export some of shared table in `packages/database/src/shared`.
 
 ## Available MCP: Svelte
 

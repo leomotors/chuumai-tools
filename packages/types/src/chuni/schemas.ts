@@ -22,6 +22,17 @@ export const chartSchema = z
 
 export type BaseChartSchema = z.infer<typeof chartSchema>;
 
+export const chartSchemaWithFullChain = chartSchema
+  .extend({
+    fullChain: z.number().int().min(0).max(2).openapi({
+      description: "Full Chain Status (0: None, 1: Gold, 2: Platinum)",
+      example: 2,
+    }),
+  })
+  .openapi("ChartWithFullChain");
+
+export type ChartWithFullChain = z.infer<typeof chartSchemaWithFullChain>;
+
 export const profileSchema = z
   .object({
     // Must be data URL of base64 or URL from website without CORS

@@ -7,6 +7,8 @@ import {
   createJobResponseSchema,
   finishJobRequestSchema,
   finishJobResponseSchema,
+  saveJobDataRequestSchema,
+  saveJobDataResponseSchema,
 } from "../schemas/job";
 
 // Security scheme name for API key authentication
@@ -62,14 +64,14 @@ export function registerJobRoutes(registry: OpenAPIRegistry) {
     },
   });
 
-  // PUT /api/jobs/finish
+  // POST /api/jobs/finish
   registry.registerPath({
-    method: "put",
+    method: "post",
     path: "/api/jobs/finish",
     tags: ["Jobs"],
     summary: "Finish a scraping job",
     description:
-      "Updates a job entry to mark it as completed or failed. Use the 'success' status to record successful completion with logs, or 'failure' status to record errors. The status field acts as a discriminator. Requires API key authentication.",
+      "Finish a scraping job by adding log (or error message if failed). Requires API key authentication.",
     security: [{ [API_KEY_SECURITY_SCHEME]: [] }],
     request: {
       body: {
@@ -91,6 +93,61 @@ export function registerJobRoutes(registry: OpenAPIRegistry) {
       },
       400: {
         description: "Bad request - Invalid request body or job ID not found",
+        content: {
+          "application/json": {
+            schema: errorSchema,
+          },
+        },
+      },
+      401: {
+        description: "Unauthorized - Invalid or missing API key",
+        content: {
+          "application/json": {
+            schema: errorSchema,
+          },
+        },
+      },
+      500: {
+        description: "Internal server error",
+        content: {
+          "application/json": {
+            schema: errorSchema,
+          },
+        },
+      },
+    },
+  });
+
+  // POST /api/jobs/data
+  registry.registerPath({
+    method: "post",
+    path: "/api/jobs/data",
+    tags: ["Jobs"],
+    summary: "Save scraping data to database",
+    description:
+      "Saves all scraped data including player profile, music records, and rating breakdowns to the database. Requires API key authentication.",
+    security: [{ [API_KEY_SECURITY_SCHEME]: [] }],
+    request: {
+      body: {
+        content: {
+          "application/json": {
+            schema: saveJobDataRequestSchema,
+          },
+        },
+      },
+    },
+    responses: {
+      200: {
+        description: "Data saved successfully",
+        content: {
+          "application/json": {
+            schema: saveJobDataResponseSchema,
+          },
+        },
+      },
+      400: {
+        description:
+          "Bad request - Invalid request body, job not found, or job doesn't belong to user",
         content: {
           "application/json": {
             schema: errorSchema,

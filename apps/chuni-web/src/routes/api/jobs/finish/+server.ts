@@ -10,10 +10,10 @@ import { jobTable } from "@repo/database/chuni";
 import type { RequestHandler } from "./$types";
 
 /**
- * PUT /api/jobs/finish
+ * POST /api/jobs/finish
  * Mark a job as finished (success or failure)
  */
-export const PUT: RequestHandler = async ({ request }) => {
+export const POST: RequestHandler = async ({ request }) => {
   // Authenticate using API key
   const authHeader = request.headers.get("Authorization");
 
