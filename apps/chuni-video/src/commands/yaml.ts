@@ -10,7 +10,8 @@ export async function yaml() {
   }
 
   const client = createClient<ChuniWeb.Paths>({
-    baseUrl: "http://localhost:5173",
+    // baseUrl: "http://localhost:5173",
+    baseUrl: "https://chuni.wonderhoy.me",
     headers: {
       Authorization: `Bearer ${process.env.CHUNI_WEB_API_KEY}`,
     },

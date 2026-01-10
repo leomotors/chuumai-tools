@@ -16,15 +16,15 @@
     "*.css"
   ],
   "dependencies": {
-    "@remotion/renderer": "4.0.397"
+    "@remotion/renderer": "4.0.404"
   },
   "devDependencies": {
     "@fontsource-variable/noto-sans-jp": "^5.2.9",
-    "@remotion/cli": "4.0.397",
-    "@remotion/eslint-config-flat": "4.0.397",
-    "@remotion/media": "4.0.397",
-    "@remotion/tailwind-v4": "4.0.397",
-    "@remotion/zod-types": "4.0.397",
+    "@remotion/cli": "4.0.404",
+    "@remotion/eslint-config-flat": "4.0.404",
+    "@remotion/media": "4.0.404",
+    "@remotion/tailwind-v4": "4.0.404",
+    "@remotion/zod-types": "4.0.404",
     "@repo/api-types": "workspace:*",
     "@repo/core": "workspace:*",
     "@repo/database": "workspace:*",
@@ -41,10 +41,10 @@
     "prettier": "^3.7.4",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
-    "remotion": "4.0.397",
+    "remotion": "4.0.404",
     "tailwindcss": "^4.1.18",
-    "tsdown": "^0.18.3",
+    "tsdown": "^0.19.0",
     "typescript": "^5.9.3",
-    "zod": "3.22.3"
+    "zod": "4.3.5"
   }
 }
