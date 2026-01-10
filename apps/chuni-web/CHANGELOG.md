@@ -1,5 +1,9 @@
 # Changelog
 
+## [3.5.0] - xxx
+
+- feat: endpoint for uploading scraping job result
+
 ## [3.4.0] - 2025-12-30
 
 - feat: new page /dashboard/musicRecord/{musicId}

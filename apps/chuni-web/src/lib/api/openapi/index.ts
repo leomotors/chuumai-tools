@@ -7,10 +7,12 @@ import {
   registerCommonSchemas,
   registerDataSchemas,
   registerImageSchemas,
+  registerJobSchemas,
   registerRatingSchemas,
 } from "../schemas";
 import { registerDataRoutes } from "./data";
 import { registerImageRoutes } from "./image";
+import { registerJobRoutes } from "./job";
 import { registerRatingRoutes } from "./rating";
 import { registerUserRoutes, registerUserSchemas } from "./user";
 
@@ -23,12 +25,14 @@ export function generateOpenApiDocument(version: string) {
   registerDataSchemas(registry);
   registerRatingSchemas(registry);
   registerImageSchemas(registry);
+  registerJobSchemas(registry);
   registerUserSchemas(registry);
 
   // Register all routes
   registerRatingRoutes(registry);
   registerImageRoutes(registry);
   registerDataRoutes(registry);
+  registerJobRoutes(registry);
   registerUserRoutes(registry);
 
   // Generate the document
@@ -59,6 +63,10 @@ export function generateOpenApiDocument(version: string) {
       {
         name: "Data",
         description: "Endpoints for game data retrieval",
+      },
+      {
+        name: "Jobs",
+        description: "Endpoints for job management (scraper integration)",
       },
       {
         name: "Users",
