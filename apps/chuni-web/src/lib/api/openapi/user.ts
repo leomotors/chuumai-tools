@@ -2,6 +2,7 @@ import type { OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
 
 import { forRatingSchema } from "$lib/functions/forRating";
 import { musicRecordSchema } from "$lib/functions/musicRecord";
+import { playCountSinceSchema } from "$lib/functions/playCount";
 import { userStatsSchema } from "$lib/functions/userStats";
 
 import { z } from "@repo/types/zod";
@@ -158,6 +159,56 @@ export function registerUserRoutes(registry: OpenAPIRegistry) {
       },
     },
   });
+
+  // GET /api/users/playCount
+  registry.registerPath({
+    method: "get",
+    path: "/api/users/playCount",
+    tags: ["Users"],
+    summary: "Get play count since various time periods",
+    description:
+      "Returns the number of plays since today (7AM JST), this week (Monday 7AM JST), this month (1st day 7AM JST), last 30 days, and last 365 days.\nOptionally accepts a currentPlayCount parameter to use for calculation instead of the latest value from the database.\nRequires authentication via API key or session.",
+    security: [
+      { [API_KEY_SECURITY_SCHEME]: [] },
+      { [SESSION_SECURITY_SCHEME]: [] },
+    ],
+    request: {
+      query: z.object({
+        currentPlayCount: z.number().int().nonnegative().optional().openapi({
+          description:
+            "Optional current play count to use for calculation. If not provided, the latest play count from the database will be used.",
+        }),
+      }),
+    },
+    responses: {
+      200: {
+        description:
+          "Play count statistics successfully retrieved. Returns the number of plays since various time periods.",
+        content: {
+          "application/json": {
+            schema: playCountSinceSchema,
+          },
+        },
+      },
+      400: {
+        description:
+          "Bad Request - Invalid currentPlayCount parameter (must be a non-negative integer)",
+        content: {
+          "application/json": {
+            schema: errorSchema,
+          },
+        },
+      },
+      401: {
+        description: "Unauthorized - Invalid or missing API key/session",
+        content: {
+          "application/json": {
+            schema: errorSchema,
+          },
+        },
+      },
+    },
+  });
 }
 
 // Schema registration for user-related schemas
@@ -165,4 +216,5 @@ export function registerUserSchemas(registry: OpenAPIRegistry) {
   registry.register("UserStats", userStatsSchema);
   registry.register("ForRatingResult", forRatingSchema);
   registry.register("MusicRecord", musicRecordSchema);
+  registry.register("PlayCountSince", playCountSinceSchema);
 }
