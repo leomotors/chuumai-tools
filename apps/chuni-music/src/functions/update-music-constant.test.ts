@@ -45,14 +45,9 @@ describe("updateMusicConstant", () => {
       newData,
     );
 
-    // There should be 2 updates: 晴る ultima (14.1 -> 14.2) and ビビデバ master (null -> 12.5)
-    expect(result.payload).toHaveLength(2);
-    expect(result.payload).toContainEqual({
-      songId: 2684,
-      difficulty: "ultima",
-      version: "VRS",
-      newConstant: "14.2",
-    });
+    // Without OVERWRITE_CONSTANT, only null->value updates should happen
+    // Only ビビデバ master (null -> 12.5) should be updated
+    expect(result.payload).toHaveLength(1);
     expect(result.payload).toContainEqual({
       songId: 2686,
       difficulty: "master",
@@ -65,8 +60,9 @@ describe("updateMusicConstant", () => {
     expect(result.warnings).toContain(
       "Multiple songs found in DB: Duplicate Title",
     );
+    // Should warn about mismatch but NOT update
     expect(result.warnings).toContain(
-      "Constant value mismatch: 晴る, ultima, VRS, Existing: 14.2 != New: 14.1",
+      "Constant value mismatch: 晴る, ultima, VRS, Existing: 14.1 != New: 14.2",
     );
   });
 
@@ -115,7 +111,7 @@ describe("updateMusicConstant", () => {
           {
             type: "std" as const,
             difficulty: "advanced" as const,
-            internalLevel: "6.0", // New constant for existing null
+            internalLevel: "6.0", // Different from existing 5.0 (overwrite case)
           },
         ],
       },
@@ -128,15 +124,13 @@ describe("updateMusicConstant", () => {
       nullConstantData,
     );
 
-    expect(result.payload).toHaveLength(1);
-    expect(result.payload[0]).toEqual({
-      songId: 1001,
-      difficulty: "advanced",
-      version: "VRS",
-      newConstant: "6.0",
-    });
+    // Without OVERWRITE_CONSTANT, only warn about the mismatch, don't update
+    expect(result.payload).toHaveLength(0);
     expect(result.nullsCount).toBe(1); // One case where both are null
     expect(result.nullsTitle).toContain("Null Constants Song");
+    expect(result.warnings).toContain(
+      "Constant value mismatch: Null Constants Song, advanced, VRS, Existing: 5.0 != New: 6.0",
+    );
   });
 
   it("should collect null constants titles correctly", async () => {
@@ -233,15 +227,10 @@ describe("updateMusicConstant", () => {
       mismatchData,
     );
 
-    expect(result.payload).toHaveLength(1);
-    expect(result.payload[0]).toEqual({
-      songId: 2686,
-      difficulty: "basic",
-      version: "VRS",
-      newConstant: "4.0",
-    });
+    // Without OVERWRITE_CONSTANT, should warn but not update
+    expect(result.payload).toHaveLength(0);
     expect(result.warnings).toContain(
-      "Constant value mismatch: ビビデバ, basic, VRS, Existing: 4.0 != New: 3.0",
+      "Constant value mismatch: ビビデバ, basic, VRS, Existing: 3.0 != New: 4.0",
     );
   });
 
@@ -338,15 +327,51 @@ describe("updateMusicConstant", () => {
       ],
     );
 
-    expect(result.payload).toHaveLength(1);
-    expect(result.payload[0]).toEqual({
-      songId: 2684,
-      difficulty: "basic",
-      version: "XVRS",
-      newConstant: "2.5",
-    });
+    // Without OVERWRITE_CONSTANT, should not update
+    expect(result.payload).toHaveLength(0);
     expect(result.warnings).toContain(
-      "Constant value mismatch: 晴る, basic, XVRS, Existing: 2.5 != New: 2.0",
+      "Constant value mismatch: 晴る, basic, XVRS, Existing: 2.0 != New: 2.5",
     );
+  });
+
+  it("should update non-null constants when OVERWRITE_CONSTANT is set", async () => {
+    const originalEnv = process.env.OVERWRITE_CONSTANT;
+    process.env.OVERWRITE_CONSTANT = "1";
+
+    try {
+      const version = "VRS";
+      const result = await updateMusicConstant(
+        version,
+        existingMusicData,
+        existingLevelData,
+        newData,
+      );
+
+      // With OVERWRITE_CONSTANT, both updates should happen
+      // 晴る ultima (14.1 -> 14.2) and ビビデバ master (null -> 12.5)
+      expect(result.payload).toHaveLength(2);
+      expect(result.payload).toContainEqual({
+        songId: 2684,
+        difficulty: "ultima",
+        version: "VRS",
+        newConstant: "14.2",
+      });
+      expect(result.payload).toContainEqual({
+        songId: 2686,
+        difficulty: "master",
+        version: "VRS",
+        newConstant: "12.5",
+      });
+
+      expect(result.warnings).toContain(
+        "Constant value mismatch: 晴る, ultima, VRS, Existing: 14.1 != New: 14.2",
+      );
+    } finally {
+      if (originalEnv === undefined) {
+        delete process.env.OVERWRITE_CONSTANT;
+      } else {
+        process.env.OVERWRITE_CONSTANT = originalEnv;
+      }
+    }
   });
 });

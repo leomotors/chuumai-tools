@@ -2,7 +2,7 @@ import {
   categoryValues,
   chartTypeValues,
   stdChartDifficultyValues,
-} from "@repo/database/maimai";
+} from "@repo/types/maimai";
 import { z } from "@repo/types/zod";
 
 /*

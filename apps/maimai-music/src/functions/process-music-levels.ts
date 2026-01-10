@@ -1,10 +1,7 @@
 import z from "zod";
 
-import {
-  type ChartType,
-  musicLevelTable,
-  type StdChartDifficulty,
-} from "@repo/database/maimai";
+import { musicLevelTable } from "@repo/database/maimai";
+import { ChartType, StdChartDifficulty } from "@repo/types/maimai";
 
 import { musicJsonSchema } from "../types.js";
 

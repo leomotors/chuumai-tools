@@ -1,6 +1,6 @@
 import { decimal, integer, pgTable, text, unique } from "drizzle-orm/pg-core";
 
-import { categoryType, chartType, stdChartDifficultyType } from "./types";
+import { categoryType, chartType, stdChartDifficultyType } from "./enum";
 
 export const musicDataTable = pgTable("music_data", {
   title: text().notNull().primaryKey(),

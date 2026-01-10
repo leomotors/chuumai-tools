@@ -70,10 +70,13 @@ export async function updateMusicConstant(
         }
       } else {
         if (internalLevel !== existingConstant && existingConstant !== null) {
-          warnings += `Constant value mismatch: ${song.title}, ${difficulty}, ${version}, Existing: ${internalLevel} != New: ${existingConstant}\n`;
+          warnings += `Constant value mismatch: ${song.title}, ${difficulty}, ${version}, Existing: ${existingConstant} != New: ${internalLevel}\n`;
         }
 
-        if (internalLevel !== existingConstant) {
+        if (
+          internalLevel !== existingConstant &&
+          (existingConstant === null || process.env.OVERWRITE_CONSTANT)
+        ) {
           payload.push({
             songId,
             difficulty,

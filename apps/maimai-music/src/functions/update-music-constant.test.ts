@@ -87,8 +87,9 @@ describe("updateMusicConstant", () => {
     expect(result).toHaveProperty("nullsTitle");
     expect(result).toHaveProperty("warnings");
 
-    // Verify payload contains the expected updates
-    expect(result.payload.length).toBeGreaterThan(0);
+    // Without OVERWRITE_CONSTANT, only null->value updates should happen
+    // Only 君の知らない物語 dx master (null -> 12.4) should update
+    expect(result.payload.length).toBe(1);
 
     // Check specific update for "君の知らない物語" master difficulty
     const kimishiraUpdate = result.payload.find(
@@ -215,16 +216,11 @@ describe("updateMusicConstant", () => {
       newData.songs,
     );
 
-    // Should update the constant for the correct version
-    const futureUpdate = result.payload.find(
-      (update) =>
-        update.musicTitle === "Future" &&
-        update.chartType === "std" &&
-        update.difficulty === "basic" &&
-        update.version === "BUDDiES",
+    // Without OVERWRITE_CONSTANT, should warn but not update
+    expect(result.payload).toHaveLength(0);
+    expect(result.warnings).toContain(
+      "Constant value mismatch: Future, std, basic, BUDDiES, Existing: 6.8 != New: 7.0",
     );
-    expect(futureUpdate).toBeDefined();
-    expect(futureUpdate?.newConstant).toBe("7.0");
   });
 
   it("should handle duplicate songs with warnings", async () => {
@@ -271,8 +267,55 @@ describe("updateMusicConstant", () => {
       newData.songs,
     );
 
-    // Should generate warnings for constant mismatches
+    // Without OVERWRITE_CONSTANT, should warn but not update
+    expect(result.payload).toHaveLength(0);
     expect(result.warnings).toContain("Constant value mismatch");
     expect(result.warnings).toContain("Future");
+  });
+
+  it("should update non-null constants when OVERWRITE_CONSTANT is set", async () => {
+    const originalEnv = process.env.OVERWRITE_CONSTANT;
+    process.env.OVERWRITE_CONSTANT = "1";
+
+    try {
+      // Create level data with different constants
+      const mismatchLevelData = [
+        {
+          id: 1,
+          musicTitle: "Future",
+          chartType: "std" as const,
+          difficulty: "basic" as const,
+          level: "7",
+          constant: "6.5", // Different from new data (7.0)
+          version: testVersion,
+        },
+      ];
+
+      const result = await updateMusicConstant(
+        testVersion,
+        existingMusicData,
+        mismatchLevelData,
+        newData.songs,
+      );
+
+      // With OVERWRITE_CONSTANT, should update
+      expect(result.payload).toHaveLength(1);
+      const futureUpdate = result.payload.find(
+        (update) =>
+          update.musicTitle === "Future" &&
+          update.chartType === "std" &&
+          update.difficulty === "basic",
+      );
+      expect(futureUpdate).toBeDefined();
+      expect(futureUpdate?.newConstant).toBe("7.0");
+      expect(result.warnings).toContain("Constant value mismatch");
+      expect(result.warnings).toContain("Future");
+    } finally {
+      if (originalEnv === undefined) {
+        delete process.env.OVERWRITE_CONSTANT;
+      } else {
+        process.env.OVERWRITE_CONSTANT = originalEnv;
+      }
+    }
   });
 });

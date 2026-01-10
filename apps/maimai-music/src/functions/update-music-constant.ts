@@ -1,12 +1,8 @@
 import z from "zod";
 
 import { forWithProgressBar } from "@repo/core";
-import {
-  type ChartType,
-  musicDataTable,
-  musicLevelTable,
-  type StdChartDifficulty,
-} from "@repo/database/maimai";
+import { musicDataTable, musicLevelTable } from "@repo/database/maimai";
+import { ChartType, StdChartDifficulty } from "@repo/types/maimai";
 
 import { zSchema } from "../types.js";
 
@@ -72,10 +68,13 @@ export async function updateMusicConstant(
         }
       } else {
         if (internalLevel !== existingConstant && existingConstant !== null) {
-          warnings += `Constant value mismatch: ${song.title}, ${chartType}, ${difficulty}, ${version}, Existing: ${internalLevel} != New: ${existingConstant}\n`;
+          warnings += `Constant value mismatch: ${song.title}, ${chartType}, ${difficulty}, ${version}, Existing: ${existingConstant} != New: ${internalLevel}\n`;
         }
 
-        if (internalLevel !== existingConstant) {
+        if (
+          internalLevel !== existingConstant &&
+          (existingConstant === null || process.env.OVERWRITE_CONSTANT)
+        ) {
           payload.push({
             musicTitle,
             chartType,
