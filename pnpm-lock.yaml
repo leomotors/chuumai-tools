@@ -353,6 +353,58 @@ importers:
         specifier: ^4.3.5
         version: 4.3.5
 
+  apps/maimai-scraper:
+    dependencies:
+      jsdom:
+        specifier: ^27.4.0
+        version: 27.4.0
+      playwright:
+        specifier: ^1.57.0
+        version: 1.57.0
+    devDependencies:
+      '@discordjs/builders':
+        specifier: ^1.13.1
+        version: 1.13.1
+      '@repo/api-types':
+        specifier: workspace:*
+        version: link:../../packages/api-types
+      '@repo/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@repo/types':
+        specifier: workspace:*
+        version: link:../../packages/types
+      '@types/jsdom':
+        specifier: ^27.0.0
+        version: 27.0.0
+      '@vitest/coverage-v8':
+        specifier: ^4.0.16
+        version: 4.0.16(@vitest/browser@4.0.16(vite@7.3.1(@types/node@24.10.6)(jiti@2.6.1)(lightningcss@1.30.2)(sass-embedded@1.97.2)(sass@1.97.2)(terser@5.44.1)(yaml@2.8.2))(vitest@4.0.16))(vitest@4.0.16)
+      discord-api-types:
+        specifier: ^0.38.37
+        version: 0.38.37
+      dotenv-cli:
+        specifier: ^11.0.0
+        version: 11.0.0
+      openapi-fetch:
+        specifier: ^0.15.0
+        version: 0.15.0
+      papaparse:
+        specifier: ^5.5.3
+        version: 5.5.3
+      tsdown:
+        specifier: ^0.19.0
+        version: 0.19.0(synckit@0.11.11)(typescript@5.9.3)
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+      vitest:
+        specifier: ^4.0.16
+        version: 4.0.16(@types/node@24.10.6)(@vitest/browser-playwright@4.0.16)(jiti@2.6.1)(jsdom@27.4.0)(lightningcss@1.30.2)(sass-embedded@1.97.2)(sass@1.97.2)(terser@5.44.1)(yaml@2.8.2)
+      zod:
+        specifier: ^4.3.5
+        version: 4.3.5
+
   packages/api-types:
     devDependencies:
       eslint:
@@ -8627,10 +8679,6 @@ snapshots:
       whatwg-mimetype: 4.0.0
       whatwg-url: 15.1.0
 
-  debug@4.4.3:
-    dependencies:
-      ms: 2.1.3
-
   debug@4.4.3(supports-color@10.2.2):
     dependencies:
       ms: 2.1.3
@@ -9117,14 +9165,7 @@ snapshots:
   http-proxy-agent@7.0.2:
     dependencies:
       agent-base: 7.1.4
-      debug: 4.4.3
-    transitivePeerDependencies:
-      - supports-color
-
-  https-proxy-agent@7.0.6:
-    dependencies:
-      agent-base: 7.1.4
-      debug: 4.4.3
+      debug: 4.4.3(supports-color@10.2.2)
     transitivePeerDependencies:
       - supports-color
 
@@ -9215,7 +9256,7 @@ snapshots:
   istanbul-lib-source-maps@5.0.6:
     dependencies:
       '@jridgewell/trace-mapping': 0.3.31
-      debug: 4.4.3
+      debug: 4.4.3(supports-color@10.2.2)
       istanbul-lib-coverage: 3.2.2
     transitivePeerDependencies:
       - supports-color
@@ -9257,7 +9298,7 @@ snapshots:
       decimal.js: 10.6.0
       html-encoding-sniffer: 6.0.0
       http-proxy-agent: 7.0.2
-      https-proxy-agent: 7.0.6
+      https-proxy-agent: 7.0.6(supports-color@10.2.2)
       is-potential-custom-element-name: 1.0.1
       parse5: 8.0.0
       saxes: 6.0.0

@@ -7,6 +7,10 @@
       "types": "./src/chuni/index.ts",
       "default": "./src/chuni/index.ts"
     },
+    "./maimai": {
+      "types": "./src/maimai/index.ts",
+      "default": "./src/maimai/index.ts"
+    },
     "./zod": {
       "types": "./src/zod/index.ts",
       "default": "./src/zod/index.ts"
