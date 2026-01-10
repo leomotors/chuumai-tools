@@ -29,7 +29,7 @@ You will have to change `USERNAME` and `PASSWORD` to your own,
 
 This basic command will scrape your data, saving to json in `outputs` folder (If you mount it correctly).  
 To generate image, go to https://chuni.wonderhoy.me (My hosted instance of `apps/chuni-web`) and upload this JSON file.  
-You can also add `-e IMAGE_GEN_URL=https://chuni.wonderhoy.me` to tell scraper to launch a playwright browser to generate on the website. The output image will be saved in `outputs` folder.
+You can also add `-e CHUNI_SERVICE_URL=https://chuni.wonderhoy.me` to tell scraper to launch a playwright browser to generate on the website. The output image will be saved in `outputs` folder.
 
 > [!WARNING]
 > If you use Docker Desktop on Windows, when using `-v` option, make sure to start with `//` and use absolute path. For example: `-v //c/Users/username/outputs:/app/outputs`
@@ -45,25 +45,27 @@ You can follow instructions on the website in case you choose to manually upload
 ### Advanced Usage
 
 - Add `-e DISCORD_WEBHOOK_URL=your_webhook_url` to send the rendered image to Discord, or send screenshot if the scraper ran into error.
-- Add `-e DATABASE_URL=postgres://USER:PASSWORD@HOST:PORT/DB` to save the scraped data into PostgreSQL database. You need to migrate database by cloning the repo and use `packages/db-chuni` (Seeding is not required).
+- Add `-e CHUNI_SERVICE_API_KEY=your_api_key` to save the scraped data into a Chuni Web Service instance. This allow you to view your data in that instance.
 
 - If you made your own scraper, the JSON schema for the website is `imgGenInputSchema` in `packages/types/src/chuni/index.ts`.
 
 ### Technical Details
 
-outdated, will update soon
-
 packages:
 
-- db-chuni: Database Schema
-- types-chuni: Shared type and schema
-- utils-chuni: Shared utils
+- api-types: Codegen API Client
+- config: Shared eslint/prettier config
+- core: Core logic
+- database: Database Schema
+- types: Shared Schema
 
 apps:
 
 - chuni-music: Seeding data into database and music jacket into S3
+- chuni-video: Generate rating breakdown video
 - chuni-web: Web for generating Music for Rating Image
 - chunithm-scraper: Web scraper
+- maimai-music: Same but for maimai
 
 ### Demo
 
@@ -77,4 +79,4 @@ Big thanks to [Qman](https://github.com/Qman11010101) for inspiration.
 
 ## maimai
 
-todo, prob before PRiSM PLUS
+todo, prob before ~~PRiSM PLUS~~ CiRCLE
