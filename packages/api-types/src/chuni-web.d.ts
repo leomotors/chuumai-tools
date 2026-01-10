@@ -219,6 +219,209 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/jobs/create": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * Create a new scraping job
+     * @description Creates a new job entry in the database to track a scraping session. Returns the job ID and start timestamp. This endpoint is used by the scraper at the beginning of execution. Requires API key authentication.
+     */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: {
+        content: {
+          "application/json": Record<string, never>;
+        };
+      };
+      responses: {
+        /** @description Job created successfully */
+        201: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": components["schemas"]["CreateJobResponse"];
+          };
+        };
+        /** @description Unauthorized - Invalid or missing API key */
+        401: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": components["schemas"]["Error"];
+          };
+        };
+        /** @description Internal server error */
+        500: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": components["schemas"]["Error"];
+          };
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/jobs/finish": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * Finish a scraping job
+     * @description Finish a scraping job by adding log (or error message if failed). Requires API key authentication.
+     */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: {
+        content: {
+          "application/json":
+            | components["schemas"]["FinishJobSuccess"]
+            | components["schemas"]["FinishJobFailure"];
+        };
+      };
+      responses: {
+        /** @description Job finished successfully */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": components["schemas"]["FinishJobResponse"];
+          };
+        };
+        /** @description Bad request - Invalid request body or job ID not found */
+        400: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": components["schemas"]["Error"];
+          };
+        };
+        /** @description Unauthorized - Invalid or missing API key */
+        401: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": components["schemas"]["Error"];
+          };
+        };
+        /** @description Internal server error */
+        500: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": components["schemas"]["Error"];
+          };
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/jobs/data": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * Save scraping data to database
+     * @description Saves all scraped data including player profile, music records, and rating breakdowns to the database. Requires API key authentication.
+     */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: {
+        content: {
+          "application/json": components["schemas"]["SaveJobDataRequest"];
+        };
+      };
+      responses: {
+        /** @description Data saved successfully */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": components["schemas"]["SaveJobDataResponse"];
+          };
+        };
+        /** @description Bad request - Invalid request body, job not found, or job doesn't belong to user */
+        400: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": components["schemas"]["Error"];
+          };
+        };
+        /** @description Unauthorized - Invalid or missing API key */
+        401: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": components["schemas"]["Error"];
+          };
+        };
+        /** @description Internal server error */
+        500: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": components["schemas"]["Error"];
+          };
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/users/stats": {
     parameters: {
       query?: never;
@@ -337,9 +540,9 @@ export interface paths {
      */
     get: {
       parameters: {
-        query?: {
+        query: {
           /** @description The music ID to retrieve records for */
-          musicId?: number | null;
+          musicId: number;
         };
         header?: never;
         path?: never;
@@ -376,6 +579,68 @@ export interface paths {
         };
         /** @description Not Found - Music not found */
         404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": components["schemas"]["Error"];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/users/playCount": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Get play count since various time periods
+     * @description Returns the number of plays since today (7AM JST), this week (Monday 7AM JST), this month (1st day 7AM JST), last 30 days, and last 365 days.
+     *     Optionally accepts a currentPlayCount parameter to use for calculation instead of the latest value from the database.
+     *     Requires authentication via API key or session.
+     */
+    get: {
+      parameters: {
+        query?: {
+          /** @description Optional current play count to use for calculation. If not provided, the latest play count from the database will be used. */
+          currentPlayCount?: number;
+        };
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description Play count statistics successfully retrieved. Returns the number of plays since various time periods. */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": components["schemas"]["PlayCountSince"];
+          };
+        };
+        /** @description Bad Request - Invalid currentPlayCount parameter (must be a non-negative integer) */
+        400: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": components["schemas"]["Error"];
+          };
+        };
+        /** @description Unauthorized - Invalid or missing API key/session */
+        401: {
           headers: {
             [name: string]: unknown;
           };
@@ -474,7 +739,7 @@ export interface components {
       rating: number;
       overpowerValue: number;
       overpowerPercent: number;
-      /** Format: date */
+      /** Format: date-time */
       lastPlayed: string | null;
       playCount: number;
     };
@@ -504,16 +769,16 @@ export interface components {
       rating: number | null;
       image: string | null;
     };
-    RatingDetail: {
-      bestAvg: number;
-      currentAvg: number;
-      totalAvg: number;
-    };
     RawImageGen: {
       profile: components["schemas"]["Profile"];
       best: components["schemas"]["ChartForRender"][];
       current: components["schemas"]["ChartForRender"][];
       rating: components["schemas"]["RatingDetail"];
+    };
+    RatingDetail: {
+      bestAvg: number;
+      currentAvg: number;
+      totalAvg: number;
     };
     CalcRatingRequest: {
       data: {
@@ -545,8 +810,212 @@ export interface components {
       /** @example jacket_image.png */
       img: string;
     };
+    CreateJobResponse: {
+      /**
+       * @description The unique identifier for the created job
+       * @example 12345
+       */
+      jobId: number;
+      /**
+       * Format: date-time
+       * @description The timestamp when the job was created (ISO 8601 format)
+       * @example 2026-01-10T12:00:00.000Z
+       */
+      jobStart: string;
+    };
+    FinishJobSuccess: {
+      /**
+       * @description The ID of the job to finish
+       * @example 12345
+       */
+      jobId: number;
+      /**
+       * @description Status discriminator for successful job completion (enum property replaced by openapi-typescript)
+       * @enum {string}
+       */
+      status: "success";
+      /**
+       * @description Execution logs from the job
+       * @example Step 1: Login completed
+       *     Step 2: Data fetched successfully
+       */
+      jobLog: string;
+    };
+    FinishJobFailure: {
+      /**
+       * @description The ID of the job to finish
+       * @example 12345
+       */
+      jobId: number;
+      /**
+       * @description Status discriminator for failed job completion (enum property replaced by openapi-typescript)
+       * @enum {string}
+       */
+      status: "failure";
+      /**
+       * @description Error message or stack trace from the failed job
+       * @example Error: Failed to connect to database
+       */
+      jobError: string;
+      /**
+       * @description Execution logs from the job (if any were captured)
+       * @example Step 1: Login completed
+       *     Step 2: Connection failed
+       */
+      jobLog?: string;
+    };
+    FinishJobResponse: {
+      /**
+       * @description Whether the job was successfully marked as finished
+       * @example true
+       */
+      success: boolean;
+      /**
+       * @description Confirmation message
+       * @example Job 12345 finished successfully
+       */
+      message: string;
+    };
+    SavePlayerData: {
+      /** @enum {string} */
+      characterRarity:
+        | "NORMAL"
+        | "BRONZE"
+        | "SILVER"
+        | "GOLD"
+        | "PLATINUM"
+        | "RAINBOW"
+        | "HOLOGRAPHIC";
+      characterImage: string;
+      teamName: string | null;
+      /** @enum {string|null} */
+      teamEmblem:
+        | "NORMAL"
+        | "GREEN"
+        | "YELLOW"
+        | "RED"
+        | "PURPLE"
+        | "SILVER"
+        | "GOLD"
+        | "RAINBOW"
+        | null;
+      mainHonorText: string;
+      /** @enum {string} */
+      mainHonorRarity:
+        | "NORMAL"
+        | "BRONZE"
+        | "SILVER"
+        | "GOLD"
+        | "PLATINUM"
+        | "RAINBOW"
+        | "HOLOGRAPHIC";
+      subHonor1Text: string | null;
+      /** @enum {string|null} */
+      subHonor1Rarity:
+        | "NORMAL"
+        | "BRONZE"
+        | "SILVER"
+        | "GOLD"
+        | "PLATINUM"
+        | "RAINBOW"
+        | "HOLOGRAPHIC"
+        | null;
+      subHonor2Text: string | null;
+      /** @enum {string|null} */
+      subHonor2Rarity:
+        | "NORMAL"
+        | "BRONZE"
+        | "SILVER"
+        | "GOLD"
+        | "PLATINUM"
+        | "RAINBOW"
+        | "HOLOGRAPHIC"
+        | null;
+      playerLevel: number;
+      playerName: string;
+      classBand: number | null;
+      classEmblem: number | null;
+      rating: number;
+      overpowerValue: number;
+      overpowerPercent: number;
+      /**
+       * Format: date-time
+       * @description Last played timestamp (ISO 8601 format)
+       * @example 2026-01-10T12:00:00.000Z
+       */
+      lastPlayed: string;
+      currentCurrency: number;
+      totalCurrency: number;
+      playCount: number;
+    };
+    SaveRatingRecords: {
+      /** @description Best 30 songs for rating */
+      best: components["schemas"]["ChartWithFullChain"][];
+      /** @description Recent 20 songs for rating */
+      current: components["schemas"]["ChartWithFullChain"][];
+      /** @description Selection best candidates */
+      selectionBest: components["schemas"]["ChartWithFullChain"][];
+      /** @description Selection current candidates */
+      selectionCurrent: components["schemas"]["ChartWithFullChain"][];
+      /** @description All play records */
+      allRecords: components["schemas"]["ChartWithFullChain"][];
+    };
+    ChartWithFullChain: components["schemas"]["Chart"] & {
+      /**
+       * @description Full Chain Status (0: None, 1: Gold, 2: Platinum)
+       * @example 2
+       */
+      fullChain: number;
+    };
+    SaveJobDataRequest: {
+      /**
+       * @description The ID of the job to save data for
+       * @example 12345
+       */
+      jobId: number;
+      playerData: components["schemas"]["SavePlayerData"] & unknown;
+      recordData: components["schemas"]["SaveRatingRecords"] & unknown;
+      /** @description Raw HTML from player data page (for debugging) */
+      playerDataHtml: string;
+      /** @description Raw HTML from music record pages (for debugging) */
+      allMusicRecordHtml: string;
+      /** @description Data formatted for image generation */
+      imgGenInput: {
+        profile: components["schemas"]["Profile"];
+        best: components["schemas"]["Chart"][];
+        current: components["schemas"]["Chart"][];
+        hidden?: components["schemas"]["HiddenChart"][];
+      };
+      /**
+       * @description Calculated rating from image generation service
+       * @example 16.4521
+       */
+      calculatedRating?: number;
+      /**
+       * @description Game version
+       * @example XVRS
+       */
+      version: string;
+    };
+    SaveJobDataResponse: {
+      /**
+       * @description Whether the data was successfully saved
+       * @example true
+       */
+      success: boolean;
+      /**
+       * @description Confirmation message
+       * @example Job data saved successfully
+       */
+      message: string;
+      /**
+       * @description Number of music records inserted
+       * @example 450
+       */
+      recordsInserted: number;
+    };
     UserStats: {
-      /** Format: date */
+      /** Format: date-time */
       lastPlayed: string | null;
       jobId: number;
       playerLevel: number;
@@ -561,6 +1030,16 @@ export interface components {
        * @example VRS
        */
       version: string;
+    };
+    MusicRecord: {
+      musicInfo: components["schemas"]["MusicInfo"];
+      records: {
+        basic: components["schemas"]["MusicRecordItem"][];
+        advanced: components["schemas"]["MusicRecordItem"][];
+        expert: components["schemas"]["MusicRecordItem"][];
+        master: components["schemas"]["MusicRecordItem"][];
+        ultima: components["schemas"]["MusicRecordItem"][] | null;
+      };
     };
     MusicInfo: {
       id: number;
@@ -579,18 +1058,15 @@ export interface components {
       fc: boolean;
       aj: boolean;
       fullChain: number;
-      /** Format: date */
+      /** Format: date-time */
       lastPlayed: string | null;
     };
-    MusicRecord: {
-      musicInfo: components["schemas"]["MusicInfo"];
-      records: {
-        basic: components["schemas"]["MusicRecordItem"][];
-        advanced: components["schemas"]["MusicRecordItem"][];
-        expert: components["schemas"]["MusicRecordItem"][];
-        master: components["schemas"]["MusicRecordItem"][];
-        ultima: components["schemas"]["MusicRecordItem"][] | null;
-      };
+    PlayCountSince: {
+      today?: number;
+      thisWeek?: number;
+      thisMonth?: number;
+      last30Days?: number;
+      last365Days?: number;
     };
     MusicDataView: {
       id: number;

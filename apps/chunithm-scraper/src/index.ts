@@ -1,15 +1,15 @@
 import { existsSync } from "node:fs";
 import { mkdir } from "node:fs/promises";
 
-import { eq } from "drizzle-orm";
 import { chromium } from "playwright";
 
-import { jobTable } from "@repo/database/chuni";
-
+import { createApiClient } from "./api.js";
 import { stateStoragePath } from "./constants.js";
-import { db } from "./db.js";
+import { environment } from "./environment.js";
 import { main } from "./main.js";
 import { logger } from "./utils/logger.js";
+
+logger.log(`Starting scraper version: ${APP_VERSION}`);
 
 const browser = await chromium.launch({
   headless: !process.env.DEBUG,
@@ -17,12 +17,27 @@ const browser = await chromium.launch({
   slowMo: 100,
 });
 
-const jobId = (await db?.insert(jobTable).values({}).returning())?.[0].id;
+// Create API client if service URL is configured
+const apiClient = createApiClient();
+let jobId: number | undefined;
+
+// Create job via API if both URL and API key are provided
+if (apiClient && environment.CHUNI_SERVICE_API_KEY) {
+  const response = await apiClient.POST("/api/jobs/create", { body: {} });
+
+  if (response.error) {
+    throw new Error(
+      `Failed to create job: ${response.error.message || JSON.stringify(response.error)}`,
+    );
+  }
+
+  jobId = response.data.jobId;
+  logger.log(`Created job with ID: ${jobId} via API`);
+} else {
+  logger.log("API client not configured, running without job tracking");
+}
 
 try {
-  logger.log(`Starting scraper version: ${APP_VERSION}`);
-  logger.log(`Created job with ID: ${jobId}`);
-
   // Create folder "outputs" if not exists
   try {
     await mkdir("outputs");
@@ -42,26 +57,33 @@ try {
 
   const page = await browser.newPage(options);
 
-  await main(jobId, page);
+  await main(jobId, page, apiClient);
 
   await page.context().storageState({ path: stateStoragePath });
 } catch (err) {
-  await db
-    ?.update(jobTable)
-    .set({
-      jobError: `${err}`,
-    })
-    .where(eq(jobTable.id, jobId!));
+  // Report error to API if configured
+  if (apiClient && jobId && environment.CHUNI_SERVICE_API_KEY) {
+    await apiClient.POST("/api/jobs/finish", {
+      body: {
+        jobId,
+        status: "failure",
+        jobError: `${err}`,
+        jobLog: logger.getMessages().join("\n"),
+      },
+    });
+  }
   logger.error(`${err}`);
 } finally {
-  await db
-    ?.update(jobTable)
-    .set({
-      jobEnd: new Date(),
-      jobLog: logger.getMessages().join("\n"),
-    })
-    .where(eq(jobTable.id, jobId!));
+  // Report completion to API if configured
+  if (apiClient && jobId && environment.CHUNI_SERVICE_API_KEY) {
+    await apiClient.POST("/api/jobs/finish", {
+      body: {
+        jobId,
+        status: "success",
+        jobLog: logger.getMessages().join("\n"),
+      },
+    });
+  }
 
   await browser.close();
-  await db?.$client.end();
 }

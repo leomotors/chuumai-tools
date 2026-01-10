@@ -8,7 +8,7 @@ import {
   type RawImageGen,
 } from "@repo/types/chuni";
 
-import { db } from "./db.js";
+import type { ApiClient } from "./api.js";
 import { environment } from "./environment.js";
 import { readHiddenCharts } from "./hidden.js";
 import { recordToGenInput } from "./parser/music.js";
@@ -17,13 +17,17 @@ import { fetchPath } from "./scraper.js";
 import { login } from "./steps/1-login.js";
 import { scrapePlayerData } from "./steps/2-playerdata.js";
 import { scrapeMusicRecord } from "./steps/3-music.js";
-import { saveToDatabase } from "./steps/6-savedb.js";
+import { saveDataToService } from "./steps/6-savedata.js";
 import { generateImage } from "./steps/7-image.js";
 import { sendDiscordImage } from "./steps/8-discord.js";
 import { downloadImageAsBase64 } from "./utils/image.js";
 import { logger } from "./utils/logger.js";
 
-export async function main(jobId: number | undefined, page: Page) {
+export async function main(
+  jobId: number | undefined,
+  page: Page,
+  apiClient: ApiClient | null,
+) {
   const start = performance.now();
 
   // * Step 0: Preparation
@@ -55,6 +59,8 @@ export async function main(jobId: number | undefined, page: Page) {
     "Step 3: Scrape Music Records",
     () => scrapeMusicRecord(page),
   );
+
+  const timeForScrape = performance.now() - start;
 
   // * Step 4: Create JSON for Image Generation
   const { imgGenInput, imgGenFileName } = await runner.runStep(
@@ -104,21 +110,26 @@ export async function main(jobId: number | undefined, page: Page) {
   const rawImgGen = await runner.runStep(
     "Step 5: Calculate Rating",
     async () => {
-      if (!environment.IMAGE_GEN_URL) {
-        logger.warn("IMAGE_GEN_URL is not set. Skipping rating calculation.");
+      if (!environment.CHUNI_SERVICE_URL) {
+        logger.warn(
+          "CHUNI_SERVICE_URL is not set. Skipping rating calculation.",
+        );
         return;
       }
 
-      const res = await fetch(environment.IMAGE_GEN_URL + "/api/calcRating", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const res = await fetch(
+        environment.CHUNI_SERVICE_URL + "/api/calcRating",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            data: imgGenInput,
+            version: environment.VERSION,
+          }),
         },
-        body: JSON.stringify({
-          data: imgGenInput,
-          version: environment.VERSION,
-        }),
-      });
+      );
 
       if (!res.ok) {
         logger.error(
@@ -133,10 +144,10 @@ export async function main(jobId: number | undefined, page: Page) {
     3,
   );
 
-  // * Step 6: Save data to DB
-  if (db) {
-    await runner.runStep("Step 6: Save to DB", async () => {
-      await saveToDatabase(jobId!, db!, {
+  // * Step 6: Save data to Service
+  if (apiClient && environment.CHUNI_SERVICE_API_KEY && jobId) {
+    await runner.runStep("Step 6: Save data to Service", async () => {
+      await saveDataToService(jobId, apiClient, {
         playerData,
         recordData,
         playerDataHtml,
@@ -146,18 +157,24 @@ export async function main(jobId: number | undefined, page: Page) {
       });
     });
   } else {
-    logger.warn("Database Mode disabled, skipped saving to DB");
+    logger.warn("Service API not configured, skipped saving data");
   }
 
   // * Step 7: Generate Image
+  const startGenerateImage = performance.now();
   const outputLocation = await runner.runStep(
     "Step 7: Generate Image",
     () => generateImage(page, imgGenFileName),
     (ctx) => handlePwError(ctx, page),
   );
+  const timeForImageGen = performance.now() - startGenerateImage;
 
   // * Step 8: Send Image to Discord
   await runner.runStep("Step 8: Send Image to Discord", () =>
-    sendDiscordImage(outputLocation, playerData, rawImgGen, cached, start),
+    sendDiscordImage(outputLocation, playerData, rawImgGen, cached, {
+      startTime: start,
+      scrapeTimeMs: timeForScrape,
+      imageGenTimeMs: timeForImageGen,
+    }),
   );
 }

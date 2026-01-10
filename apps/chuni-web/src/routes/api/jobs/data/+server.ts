@@ -114,9 +114,19 @@ export const POST: RequestHandler = async ({ request }) => {
 
     // Get all records for this job only
     const allRecords = await db
-      .select()
+      .select({
+        id: musicRecordTable.id,
+        musicId: musicRecordTable.musicId,
+        difficulty: musicRecordTable.difficulty,
+        score: musicRecordTable.score,
+        clearMark: musicRecordTable.clearMark,
+        fc: musicRecordTable.fc,
+        aj: musicRecordTable.aj,
+        fullChain: musicRecordTable.fullChain,
+      })
       .from(musicRecordTable)
-      .where(eq(musicRecordTable.jobId, jobId));
+      .innerJoin(jobTable, eq(musicRecordTable.jobId, jobTable.id))
+      .where(eq(jobTable.userId, userId));
 
     // Helper function to insert rating records
     async function insertRating(

@@ -4,13 +4,12 @@ import { environment } from "../environment.js";
 import { logger } from "../utils/logger.js";
 
 export async function generateImage(page: Page, inputFileName: string) {
-  if (!environment.IMAGE_GEN_URL) {
-    logger.warn("IMAGE_GEN_URL is not set. Skipping image generation.");
+  if (!environment.CHUNI_SERVICE_URL) {
+    logger.warn("CHUNI_SERVICE_URL is not set. Skipping image generation.");
     return;
   }
 
-  await page.goto(environment.IMAGE_GEN_URL, { waitUntil: "load" });
-
+  await page.goto(environment.CHUNI_SERVICE_URL, { waitUntil: "load" });
   await page.selectOption("#version", environment.VERSION);
 
   await page

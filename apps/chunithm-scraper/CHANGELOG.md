@@ -2,10 +2,11 @@
 
 For changelog before V4: [here](https://github.com/leomotors/chunithm-net-scraper/blob/main/CHANGELOG.md)
 
-## [next] - Unreleased
+## [6.0.0] - 2026-01-10
 
 - update discord notification message text (add some emojis)
 - bump deps as always
+- migrate from direct db insert to calling chuni-web service instead, this will require environment variables changed
 
 ## [5.2.1] - 2025-12-04
 

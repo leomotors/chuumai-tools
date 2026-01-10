@@ -6,11 +6,9 @@ const environmentSchema = z.object({
   PASSWORD: z.string(),
   VERSION: z.string(),
 
-  // For saving to Database (requires seed)
-  DATABASE_URL: z.string().optional(),
-
-  // For Image Generation (Suggest: https://chuni.wonderhoy.me)
-  IMAGE_GEN_URL: z.string().optional(),
+  // For Image Generation and saving data (Requires URL only for image gen, both for saving)
+  CHUNI_SERVICE_URL: z.string().optional(),
+  CHUNI_SERVICE_API_KEY: z.string().optional(),
 
   // For sending image to Discord
   // Using Existing Discord Bot

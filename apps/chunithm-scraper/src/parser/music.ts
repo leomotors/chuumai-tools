@@ -1,4 +1,8 @@
-import { ClearMark, stdChartDifficultyValues } from "@repo/types/chuni";
+import {
+  ChartWithFullChain,
+  ClearMark,
+  stdChartDifficultyValues,
+} from "@repo/types/chuni";
 import { BaseChartSchema } from "@repo/types/chuni";
 
 export function parseMusic(element: Element) {
@@ -99,7 +103,7 @@ export function recordToGenInput(
 
 export function recordToGenInputWithFullChain(
   record: ReturnType<typeof parseRecord>,
-): BaseChartSchema & { fullChain: number } {
+): ChartWithFullChain {
   return {
     id: record.musicId,
     title: record.musicTitle,

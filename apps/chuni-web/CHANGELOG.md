@@ -1,6 +1,6 @@
 # Changelog
 
-## [3.5.0] - xxx
+## [3.5.0] - 2025-01-10
 
 - feat: endpoint for uploading scraping job result
 
