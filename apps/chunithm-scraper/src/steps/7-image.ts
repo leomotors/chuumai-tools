@@ -9,7 +9,10 @@ export async function generateImage(page: Page, inputFileName: string) {
     return;
   }
 
-  await page.goto(environment.CHUNI_SERVICE_URL, { waitUntil: "load" });
+  await page.goto(
+    environment.CHUNI_SERVICE_URL + `?scraperVersion=${APP_VERSION}`,
+    { waitUntil: "load" },
+  );
   await page.selectOption("#version", environment.VERSION);
 
   await page

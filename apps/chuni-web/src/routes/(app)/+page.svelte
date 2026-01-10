@@ -10,6 +10,7 @@
   } from "@lucide/svelte";
   import { toPng } from "html-to-image";
 
+  import { page } from "$app/state";
   import ExtLink from "$lib/components/molecule/ExtLink.svelte";
   import Render from "$lib/components/Render.svelte";
   import { getVersionNameMapping } from "$lib/constants/index";
@@ -115,7 +116,10 @@
     element.style.display = "flex";
     await ensureImageLoaded(element);
     const dataUrl = await toPng(element);
-    element.style.display = "none";
+
+    if (!page.url.searchParams.get("debug")) {
+      element.style.display = "none";
+    }
 
     // Download
     const link = document.createElement("a");

@@ -2,6 +2,7 @@
   import { Github, Globe, Twitter, Workflow } from "@lucide/svelte";
   import type { Snippet } from "svelte";
 
+  import { page } from "$app/state";
   import { getLogoMapping } from "$lib/constants/index";
 
   interface Props {
@@ -13,6 +14,8 @@
   let { children, lastPlayed, version }: Props = $props();
 
   const logo = $derived(getLogoMapping(version));
+
+  const scraperVersion = page.url.searchParams.get("scraperVersion");
 </script>
 
 <header class="flex justify-between gap-4 pb-2">
@@ -46,7 +49,12 @@
 
       <div class="flex gap-1 items-center font-normal text-slate-800">
         <Workflow />
-        <p>Web Version: {WEB_VERSION}</p>
+        <p>
+          Web Version: {WEB_VERSION}
+          {#if scraperVersion}
+            | Scraper Version: {scraperVersion}
+          {/if}
+        </p>
       </div>
 
       <div class="flex gap-1 items-center font-normal text-slate-800">
