@@ -1,4 +1,4 @@
-import { Category } from "@repo/types/maimai";
+import type { Category } from "@repo/types/maimai";
 
 // It is hard to determine music ID in maimai so we use title as PKEY.
 // Current known duplicate is Link which can be determined by Category or Image.
