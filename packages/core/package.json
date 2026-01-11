@@ -12,6 +12,10 @@
       "types": "./src/chuni/index.ts",
       "default": "./src/chuni/index.ts"
     },
+    "./maimai": {
+      "types": "./src/maimai/index.ts",
+      "default": "./src/maimai/index.ts"
+    },
     "./s3": {
       "types": "./src/s3/index.ts",
       "default": "./src/s3/index.ts"

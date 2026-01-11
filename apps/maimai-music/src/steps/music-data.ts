@@ -1,7 +1,7 @@
+import { mapMaimaiTitleWithCategory } from "@repo/core/maimai";
 import { musicDataTable, musicLevelTable } from "@repo/database/maimai";
 
 import { db } from "../db.js";
-import { mapMaimaiTitle } from "../duplicate-title.js";
 import { environment } from "../environment.js";
 import { diffInMusicData } from "../functions/diff-in-music-data.js";
 import { processMusicLevels } from "../functions/process-music-levels.js";
@@ -28,7 +28,7 @@ export async function downloadMusicData(version: string) {
 
   const musicData = musicJsonSchema.parse(data).map((m) => ({
     ...m,
-    title: mapMaimaiTitle(m.title, m.catcode),
+    title: mapMaimaiTitleWithCategory(m.title, m.catcode),
   }));
 
   console.log(`Found ${musicData.length} music records`);
@@ -36,7 +36,19 @@ export async function downloadMusicData(version: string) {
   console.log("\nStep 2: Compare with existing music data in the database");
 
   const existingMusicData = await db.select().from(musicDataTable);
-  const { newRecords } = diffInMusicData(existingMusicData, musicData);
+  const { newRecords, updatedRecords } = diffInMusicData(
+    existingMusicData,
+    musicData,
+  );
+
+  if (updatedRecords.length > 0) {
+    console.warn(
+      `Warning: Found ${updatedRecords.length} updated records. Please review and update them manually if necessary (showing first 5):`,
+    );
+    for (const record of updatedRecords.slice(0, 5)) {
+      console.warn(JSON.stringify(record));
+    }
+  }
 
   if (newRecords.length > 0) {
     await db.insert(musicDataTable).values(
@@ -45,7 +57,9 @@ export async function downloadMusicData(version: string) {
         category: m.catcode,
         artist: m.artist,
         image: m.image_url,
-        // todo version field after first seed
+        version: m.version,
+        // todo versionName field after first seed
+        // versionName: version,
       })),
     );
     console.log(`Successfully inserted ${newRecords.length} new music data`);

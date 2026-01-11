@@ -1,8 +1,18 @@
 import { db } from "./db.js";
-import { downloadMusicData } from "./steps/1-music-data.js";
-import { updateMusicConstant } from "./steps/2-music-constant.js";
+import { updateMusicConstant } from "./steps/music-constant.js";
+import { downloadMusicData } from "./steps/music-data.js";
 
 const command = process.argv[2];
+
+function validateVersion(version: string) {
+  const EXPECTED_VERSIONS = ["CiRCLE"];
+  if (!EXPECTED_VERSIONS.includes(version)) {
+    console.log(
+      `Invalid version. Expected one of: ${EXPECTED_VERSIONS.join(", ")}. Are you seeding correct game?`,
+    );
+    process.exit(1);
+  }
+}
 
 if (command === "music") {
   if (!process.argv[3]) {
@@ -11,12 +21,23 @@ if (command === "music") {
   }
 
   const version = process.argv[3];
+  validateVersion(version);
   await downloadMusicData(version);
+  console.log("\n✅ Download Music Data + Seed Level Completed\n");
+} else if (command === "constant") {
+  if (!process.argv[3]) {
+    console.log("Please provide a version");
+    process.exit(1);
+  }
+
+  const version = process.argv[3];
+  validateVersion(version);
   await updateMusicConstant(version);
-  console.log("\n✅ All steps completed\n");
-  await db.$client.end();
-  console.log("✅ Database connection closed");
+  console.log("\n✅ Update Music Constant Completed\n");
 } else {
   console.log(`Unknown Command: ${command}`);
   process.exit(1);
 }
+
+await db.$client.end();
+console.log("✅ Database connection closed");

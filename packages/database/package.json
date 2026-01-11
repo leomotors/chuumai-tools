@@ -8,7 +8,10 @@
     "format": "eslint src *.ts --fix",
     "chuni:generate": "dotenv -- drizzle-kit --config drizzle.chuni.ts generate",
     "chuni:migrate": "dotenv -- drizzle-kit --config drizzle.chuni.ts migrate",
-    "chuni:export": "dotenv -- drizzle-kit --config drizzle.chuni.ts export"
+    "chuni:export": "dotenv -- drizzle-kit --config drizzle.chuni.ts export",
+    "maimai:generate": "dotenv -- drizzle-kit --config drizzle.maimai.ts generate",
+    "maimai:migrate": "dotenv -- drizzle-kit --config drizzle.maimai.ts migrate",
+    "maimai:export": "dotenv -- drizzle-kit --config drizzle.maimai.ts export"
   },
   "exports": {
     "./client": "./src/client.ts",

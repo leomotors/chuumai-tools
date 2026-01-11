@@ -6,19 +6,13 @@ CREATE TYPE "public"."rarity_level" AS ENUM('NORMAL', 'BRONZE', 'SILVER', 'GOLD'
 CREATE TYPE "public"."rating_type" AS ENUM('OLD', 'NEW', 'SELECTION_OLD', 'SELECTION_NEW');--> statement-breakpoint
 CREATE TYPE "public"."std_chart_difficulty" AS ENUM('basic', 'advanced', 'expert', 'master', 'remaster');--> statement-breakpoint
 CREATE TYPE "public"."sync_mark" AS ENUM('NONE', 'SYNC', 'FS', 'FS+', 'FDX', 'FDX+');--> statement-breakpoint
-CREATE TABLE "manual_rating" (
-	"id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "manual_rating_id_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1),
-	"rating" integer NOT NULL,
-	"timestamp" timestamp NOT NULL
-);
---> statement-breakpoint
 CREATE TABLE "music_data" (
 	"title" text PRIMARY KEY NOT NULL,
-	"sort" integer NOT NULL,
 	"category" "category" NOT NULL,
 	"artist" text NOT NULL,
 	"image" text NOT NULL,
-	CONSTRAINT "music_data_sort_unique" UNIQUE("sort")
+	"version" integer NOT NULL,
+	"version_name" text
 );
 --> statement-breakpoint
 CREATE TABLE "music_level" (
@@ -30,6 +24,13 @@ CREATE TABLE "music_level" (
 	"constant" numeric(3, 1),
 	"version" text NOT NULL,
 	CONSTRAINT "music_level_music_title_chart_type_difficulty_version_unique" UNIQUE("music_title","chart_type","difficulty","version")
+);
+--> statement-breakpoint
+CREATE TABLE "manual_rating" (
+	"id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "manual_rating_id_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1),
+	"user_id" text,
+	"rating" integer NOT NULL,
+	"timestamp" timestamp NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE "for_rating" (
@@ -44,6 +45,7 @@ CREATE TABLE "for_rating" (
 --> statement-breakpoint
 CREATE TABLE "job" (
 	"id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "job_id_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1),
+	"user_id" text,
 	"job_start" timestamp DEFAULT now() NOT NULL,
 	"job_end" timestamp,
 	"job_error" text,
@@ -83,6 +85,12 @@ CREATE TABLE "raw_scrape_data" (
 	"player_data_html" text,
 	"all_music_record_html" text,
 	"data_for_image_gen" text
+);
+--> statement-breakpoint
+CREATE TABLE "api_key" (
+	"user_id" text PRIMARY KEY NOT NULL,
+	"api_key" text NOT NULL,
+	"created_at" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
 ALTER TABLE "music_level" ADD CONSTRAINT "music_level_music_title_music_data_title_fk" FOREIGN KEY ("music_title") REFERENCES "public"."music_data"("title") ON DELETE no action ON UPDATE no action;--> statement-breakpoint

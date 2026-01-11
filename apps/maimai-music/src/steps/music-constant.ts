@@ -38,6 +38,13 @@ export async function updateMusicConstant(version: string) {
     console.log(result.warnings.trim());
   }
 
+  // Dry run
+  if (process.env.DRY_RUN) {
+    console.log("Dry Run enabled - no database updates will be applied");
+    console.log(result.payload);
+    return;
+  }
+
   // Apply the database updates
   await forInRangeWithProgressBar(
     result.payload,
@@ -61,7 +68,7 @@ export async function updateMusicConstant(version: string) {
 
   if (result.nullsTitle.length > 0) {
     console.log(
-      `Songs with null constants (Update from other source required): ${result.nullsTitle.join(", ")}`,
+      `Songs with null constants (Update from other source required): ${result.nullsTitle.slice(0, 10).join(", ")}`,
     );
   }
 }

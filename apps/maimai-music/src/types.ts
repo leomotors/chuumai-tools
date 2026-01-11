@@ -87,6 +87,7 @@ export const musicSchema = z.object({
   artist: z.string(),
   catcode: categoryEnum,
   image_url: z.string(),
+  version: z.coerce.number(),
 
   // STD
   lev_bas: z.string().optional(),

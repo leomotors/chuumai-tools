@@ -1,6 +1,7 @@
 import z from "zod";
 
 import { forWithProgressBar } from "@repo/core";
+import { mapMaimaiTitleWithCategory } from "@repo/core/maimai";
 import { musicDataTable, musicLevelTable } from "@repo/database/maimai";
 import { ChartType, StdChartDifficulty } from "@repo/types/maimai";
 
@@ -25,7 +26,8 @@ export async function updateMusicConstant(
 
   await forWithProgressBar(newData.length, (i) => {
     const song = newData[i];
-    const foundSong = existingMusicData.filter((m) => m.title === song.title);
+    const songTitleKey = mapMaimaiTitleWithCategory(song.title, song.category);
+    const foundSong = existingMusicData.filter((m) => m.title === songTitleKey);
 
     if (foundSong.length === 0) {
       // Song might be deleted
@@ -33,7 +35,7 @@ export async function updateMusicConstant(
     }
 
     if (foundSong.length > 1) {
-      warnings += `Multiple songs found in DB: ${song.title}, you have to manually set chart constant value!\n`;
+      warnings += `Multiple songs found in DB: ${songTitleKey}, you have to manually set chart constant value!\n`;
       return;
     }
 

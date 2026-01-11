@@ -1,1 +1,0 @@
-ALTER TABLE "music_data" ADD COLUMN "version" text;

@@ -7,7 +7,8 @@ export const musicDataTable = pgTable("music_data", {
   category: categoryType().notNull(),
   artist: text().notNull(),
   image: text().notNull(),
-  version: text(),
+  version: integer().notNull(), // For Sort
+  versionName: text("version_name"),
 });
 
 export const musicLevelTable = pgTable(
