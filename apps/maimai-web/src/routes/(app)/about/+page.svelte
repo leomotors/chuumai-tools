@@ -9,7 +9,7 @@
   gameName="maimai"
 >
   {#snippet credits()}
-    <p>Inspired by mimixd bot</p>
+    <p>Inspired by mimi xd bot</p>
   {/snippet}
   {#snippet infoSource()}
     <p>
@@ -17,12 +17,14 @@
       Official Chunithm (JP) Website
     </p>
     <p>
-      Chart Constant from <ExtLink href="https://arcade-songs.zetaraku.dev">
-        https://arcade-songs.zetaraku.dev
-      </ExtLink> (Old Main Source) + https://reiwa.f5.si/maimai_record.json and manual
+      Chart Constant from https://reiwa.f5.si (Primary Source) and manual
       <ExtLink href="https://www.youtube.com/watch?v=LLjfal8jCYI">
         override
-      </ExtLink> sometimes.
+      </ExtLink> sometimes by using data from <ExtLink
+        href="https://gamerch.com/maimai"
+      >
+        maimai wiki
+      </ExtLink>.
     </p>
   {/snippet}
   <!-- {#snippet contentAfter()}

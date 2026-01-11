@@ -124,3 +124,28 @@ const zSong = z.object({
 export const zSchema = z.object({
   songs: z.array(zSong),
 });
+
+const qmanDiff = ["BAS", "ADV", "EXP", "MAS", "REMAS"] as const;
+const toStdDiffMapping = {
+  BAS: "basic",
+  ADV: "advanced",
+  EXP: "expert",
+  MAS: "master",
+  REMAS: "remaster",
+} as const;
+
+const qmanSchema = z.object({
+  title: z.string(),
+  artist: z.string(),
+  genre: categoryEnum,
+  img: z.string(),
+  release: z.string(),
+  version: z.string(),
+  is_dx: z.boolean(),
+  diff: z.enum(qmanDiff).transform((val) => toStdDiffMapping[val]),
+  level: z.number(),
+  const: z.number(),
+  is_unknown: z.number(),
+});
+
+export const qmanJsonSchema = z.array(qmanSchema);
