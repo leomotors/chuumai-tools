@@ -11,7 +11,6 @@
   import { toPng } from "html-to-image";
 
   import { page } from "$app/state";
-  import ExtLink from "$lib/components/molecule/ExtLink.svelte";
   import Render from "$lib/components/Render.svelte";
   import { getVersionNameMapping } from "$lib/constants/index";
   import { getDefaultVersion, getEnabledVersions } from "$lib/version";
@@ -27,6 +26,7 @@
     type ImgGenInput,
     imgGenInputSchema,
   } from "@repo/types/chuni";
+  import { ExtLink } from "@repo/ui/molecule/ExtLink";
 
   let files = $state<FileList>();
   let userData = $state<ImgGenInput>();

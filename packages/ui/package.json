@@ -21,6 +21,11 @@
       "svelte": "./src/molecule/*/index.ts",
       "default": "./src/molecule/*/index.ts"
     },
+    "./templates/*": {
+      "types": "./src/templates/*",
+      "svelte": "./src/templates/*",
+      "default": "./src/templates/*"
+    },
     "./icons/*": {
       "types": "./src/icons/*",
       "svelte": "./src/icons/*",

@@ -3,6 +3,8 @@
 
 @source "./atom";
 @source "./icons";
+@source "./molecule";
+@source "./templates";
 
 @custom-variant dark (&:is(.dark *));
 
