@@ -31,7 +31,7 @@
     "@repo/types": "workspace:*",
     "@repo/ui": "workspace:*",
     "@types/js-yaml": "^4.0.9",
-    "@types/react": "^19.2.7",
+    "@types/react": "^19.2.8",
     "dotenv-cli": "^11.0.0",
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",

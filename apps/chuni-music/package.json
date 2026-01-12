@@ -15,13 +15,13 @@
     "@repo/core": "workspace:*",
     "@repo/database": "workspace:*",
     "@repo/types": "workspace:*",
-    "@vitest/coverage-v8": "^4.0.16",
+    "@vitest/coverage-v8": "^4.0.17",
     "csv-parse": "^6.1.0",
     "dotenv-cli": "^11.0.0",
     "drizzle-orm": "^0.45.1",
     "tsdown": "^0.19.0",
     "typescript": "^5.9.3",
-    "vitest": "^4.0.16",
+    "vitest": "^4.0.17",
     "zod": "^4.3.5"
   }
 }
