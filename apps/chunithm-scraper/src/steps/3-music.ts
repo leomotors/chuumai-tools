@@ -1,9 +1,11 @@
 import { JSDOM } from "jsdom";
 import { Page } from "playwright";
 
+import { fetchPath } from "@repo/core/scraper";
+import { logger } from "@repo/core/utils";
+
+import { mobileBaseURL } from "../constants.js";
 import { parseMusic, parseRecord } from "../parser/music.js";
-import { fetchPath } from "../scraper.js";
-import { logger } from "../utils/logger.js";
 
 function fillMarkInfo(
   original: Array<ReturnType<typeof parseMusic>>,
@@ -32,7 +34,7 @@ function fillMarkInfo(
 export async function scrapeMusicRecord(page: Page) {
   const ratingBestPageHTML = await fetchPath(
     page,
-    "home/playerData/ratingDetailBest",
+    mobileBaseURL + "home/playerData/ratingDetailBest",
   );
 
   let totalHTML = "<!-- BEST -->\n";
@@ -59,7 +61,7 @@ export async function scrapeMusicRecord(page: Page) {
   // Current (New) Songs
   const ratingCurrentPageHTML = await fetchPath(
     page,
-    "home/playerData/ratingDetailRecent",
+    mobileBaseURL + "home/playerData/ratingDetailRecent",
   );
 
   // warning: error if no current songs
@@ -85,7 +87,7 @@ export async function scrapeMusicRecord(page: Page) {
   // Selection
   const ratingSelectionPageHTML = await fetchPath(
     page,
-    "home/playerData/ratingDetailNext",
+    mobileBaseURL + "home/playerData/ratingDetailNext",
   );
 
   const selection = new JSDOM(
@@ -120,7 +122,10 @@ export async function scrapeMusicRecord(page: Page) {
   logger.log("Step 3.1.3: Selection Songs done");
 
   // Part 3.2: All Records
-  const ratingAllPageHTML = await fetchPath(page, "record/musicGenre");
+  const ratingAllPageHTML = await fetchPath(
+    page,
+    mobileBaseURL + "record/musicGenre",
+  );
   totalHTML += `\n<!-- All Music Home Page -->\n${ratingAllPageHTML}`;
   const tokenInput = new JSDOM(ratingAllPageHTML).window.document.querySelector(
     "input[name=token]",
@@ -140,7 +145,7 @@ export async function scrapeMusicRecord(page: Page) {
   for (const diff of difficulties) {
     const ratingDiffPageHTML = await fetchPath(
       page,
-      `record/musicGenre/send${diff}`,
+      `${mobileBaseURL}record/musicGenre/send${diff}`,
       "POST",
       {
         "Content-Type": "application/x-www-form-urlencoded",

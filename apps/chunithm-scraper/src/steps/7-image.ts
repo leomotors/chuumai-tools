@@ -1,7 +1,8 @@
 import { Page } from "playwright";
 
+import { logger } from "@repo/core/utils";
+
 import { environment } from "../environment.js";
-import { logger } from "../utils/logger.js";
 
 export async function generateImage(page: Page, inputFileName: string) {
   if (!environment.CHUNI_SERVICE_URL) {

@@ -3,11 +3,12 @@ import { mkdir } from "node:fs/promises";
 
 import { chromium } from "playwright";
 
+import { logger } from "@repo/core/utils";
+
 import { createApiClient } from "./api.js";
 import { stateStoragePath } from "./constants.js";
 import { environment } from "./environment.js";
 import { main } from "./main.js";
-import { logger } from "./utils/logger.js";
 
 logger.log(`Starting scraper version: ${APP_VERSION}`);
 

@@ -24,6 +24,14 @@
       "types": "./src/web/index.ts",
       "default": "./src/web/index.ts"
     },
+    "./utils": {
+      "types": "./src/utils/index.ts",
+      "default": "./src/utils/index.ts"
+    },
+    "./scraper": {
+      "types": "./src/scraper/index.ts",
+      "default": "./src/scraper/index.ts"
+    },
     "./zod": {
       "types": "./src/zod/index.ts",
       "default": "./src/zod/index.ts"
@@ -38,6 +46,7 @@
   "devDependencies": {
     "@repo/database": "workspace:*",
     "@vitest/coverage-v8": "^4.0.17",
+    "playwright": "^1.57.0",
     "vitest": "^4.0.17"
   },
   "dependencies": {

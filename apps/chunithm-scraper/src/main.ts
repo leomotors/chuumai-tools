@@ -2,6 +2,8 @@ import fs from "node:fs/promises";
 
 import { Page } from "playwright";
 
+import { fetchPath } from "@repo/core/scraper";
+import { downloadImageAsBase64, logger } from "@repo/core/utils";
 import {
   FullPlayDataInput,
   ImgGenInput,
@@ -9,19 +11,17 @@ import {
 } from "@repo/types/chuni";
 
 import type { ApiClient } from "./api.js";
+import { mobileBaseURL } from "./constants.js";
 import { environment } from "./environment.js";
 import { readHiddenCharts } from "./hidden.js";
 import { recordToGenInput } from "./parser/music.js";
 import { handlePwError, Runner } from "./runner.js";
-import { fetchPath } from "./scraper.js";
 import { login } from "./steps/1-login.js";
 import { scrapePlayerData } from "./steps/2-playerdata.js";
 import { scrapeMusicRecord } from "./steps/3-music.js";
 import { saveDataToService } from "./steps/6-savedata.js";
 import { generateImage } from "./steps/7-image.js";
 import { sendDiscordImage } from "./steps/8-discord.js";
-import { downloadImageAsBase64 } from "./utils/image.js";
-import { logger } from "./utils/logger.js";
 
 export async function main(
   jobId: number | undefined,
@@ -45,7 +45,7 @@ export async function main(
   // * Step 2: Player Data
   const playerDataPage = await runner.runStep(
     "Step 2.1: Fetch Player Data",
-    () => fetchPath(page, "home/playerData"),
+    () => fetchPath(page, mobileBaseURL + "home/playerData"),
   );
 
   const { playerData, playerDataHtml } = await runner.runStep(

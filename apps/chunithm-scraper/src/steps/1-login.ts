@@ -1,8 +1,9 @@
 import { Page } from "playwright";
 
+import { logger } from "@repo/core/utils";
+
 import { mobileBaseURL } from "../constants.js";
 import { environment } from "../environment.js";
-import { logger } from "../utils/logger.js";
 
 export async function login(page: Page) {
   await page.goto(mobileBaseURL);

@@ -1,10 +1,10 @@
 import fs from "node:fs/promises";
 
+import { logger } from "@repo/core/utils";
 import type { RawImageGen } from "@repo/types/chuni";
 
 import { environment } from "../environment.js";
 import { sendFiles } from "../utils/discord.js";
-import { logger } from "../utils/logger.js";
 import type { scrapePlayerData } from "./2-playerdata.js";
 
 type TimeResult = {

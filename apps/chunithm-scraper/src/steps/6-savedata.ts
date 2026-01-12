@@ -1,9 +1,9 @@
+import { logger } from "@repo/core/utils";
 import type { ImgGenInput } from "@repo/types/chuni";
 
 import type { ApiClient } from "../api.js";
 import { environment } from "../environment.js";
 import { recordToGenInputWithFullChain } from "../parser/music.js";
-import { logger } from "../utils/logger.js";
 import type { scrapePlayerData } from "./2-playerdata.js";
 import type { scrapeMusicRecord } from "./3-music.js";
 

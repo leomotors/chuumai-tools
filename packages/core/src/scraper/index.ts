@@ -1,6 +1,4 @@
-import { Page } from "playwright";
-
-import { mobileBaseURL } from "./constants.js";
+import type { Page } from "playwright";
 
 export async function fetchPath(
   page: Page,
@@ -25,7 +23,7 @@ export async function fetchPath(
         text,
       };
     },
-    { fetchPath: `${mobileBaseURL}${path}`, method, headers, body },
+    { fetchPath: `${path}`, method, headers, body },
   );
 
   if (!response.ok) {
