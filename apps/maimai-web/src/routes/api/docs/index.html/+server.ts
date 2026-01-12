@@ -1,6 +1,6 @@
 import { text } from "@sveltejs/kit";
 
-import { createScalarHTML } from "@repo/core";
+import { createScalarHTML } from "@repo/core/web";
 
 import type { RequestHandler } from "./$types";
 

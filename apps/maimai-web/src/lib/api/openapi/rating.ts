@@ -1,6 +1,6 @@
 import type { OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
 
-import { rawImageGenSchema } from "$lib/api/schemas/rating";
+import { rawImageGenSchema } from "@repo/types/maimai";
 
 import { errorSchema } from "../schemas/common";
 import {

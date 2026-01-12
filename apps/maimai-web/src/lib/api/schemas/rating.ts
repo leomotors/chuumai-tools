@@ -1,63 +1,15 @@
 import type { OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
 
 import {
+  chartForRenderSchema,
   chartSchema,
   fullPlayDataInputSchema,
   imgGenInputSchema,
   profileSchema,
+  ratingDetailSchema,
+  rawImageGenSchema,
 } from "@repo/types/maimai";
 import { z } from "@repo/types/zod";
-
-// ============================================================================
-// ChartForRender - extends base chart with rating calculation info
-// ============================================================================
-
-export const chartForRenderSchema = chartSchema
-  .extend({
-    level: z.number(),
-    levelSure: z.boolean(),
-    rating: z.number().nullable(),
-    image: z.string().nullable(),
-  })
-  .openapi("ChartForRender");
-
-export type ChartForRender = z.infer<typeof chartForRenderSchema>;
-
-// ============================================================================
-// RawImageGen - processed data ready for image generation
-// ============================================================================
-
-export const ratingDetailSchema = z
-  .object({
-    bestSum: z.number().int().openapi({
-      description: "Sum of best 35 songs rating",
-      example: 14520,
-    }),
-    currentSum: z.number().int().openapi({
-      description: "Sum of current 15 songs rating",
-      example: 6230,
-    }),
-    total: z.number().int().openapi({
-      description: "Total rating (bestSum + currentSum)",
-      example: 20750,
-    }),
-  })
-  .openapi("RatingDetail");
-
-export const rawImageGenSchema = z
-  .object({
-    profile: profileSchema,
-    best: z.array(chartForRenderSchema).openapi({
-      description: "Best 35 songs with rating info",
-    }),
-    current: z.array(chartForRenderSchema).openapi({
-      description: "Current 15 songs with rating info",
-    }),
-    rating: ratingDetailSchema,
-  })
-  .openapi("RawImageGen");
-
-export type RawImageGen = z.infer<typeof rawImageGenSchema>;
 
 // ============================================================================
 // Request/Response schemas for rating endpoints

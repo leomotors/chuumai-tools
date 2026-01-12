@@ -1,12 +1,14 @@
 import { json } from "@sveltejs/kit";
 
-import { calcRatingRequestSchema, rawImageGenSchema } from "$lib/api/schemas";
+import { calcRatingRequestSchema } from "$lib/api/schemas";
 import { getMusicDataCached } from "$lib/functions/musicData";
 import {
   addForRenderInfo,
   calculateRatingTotals,
 } from "$lib/functions/ratingCalculation";
 import { getEnabledVersions } from "$lib/version";
+
+import { rawImageGenSchema } from "@repo/types/maimai";
 
 import type { RequestHandler } from "./$types";
 

@@ -1,8 +1,7 @@
-import type { ChartForRender } from "$lib/api/schemas/rating";
 import type { MusicDataViewSchema } from "$lib/functions/musicData";
 
 import { calculateRating } from "@repo/core/maimai";
-import type { ChartSchema } from "@repo/types/maimai";
+import type { ChartForRender, ChartSchema } from "@repo/types/maimai";
 
 /**
  * Add rating calculation information to a chart

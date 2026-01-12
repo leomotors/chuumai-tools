@@ -79,3 +79,48 @@ export const fullPlayDataInputSchema = imgGenInputSchema
   .openapi("FullPlayDataInput");
 
 export type FullPlayDataInput = z.infer<typeof fullPlayDataInputSchema>;
+
+export const chartForRenderSchema = chartSchema
+  .extend({
+    level: z.number(),
+    levelSure: z.boolean(),
+    rating: z.number().nullable(),
+    image: z.string().nullable(),
+  })
+  .openapi("ChartForRender");
+
+export type ChartForRender = z.infer<typeof chartForRenderSchema>;
+
+export const ratingDetailSchema = z
+  .object({
+    bestSum: z.number().int().openapi({
+      description: "Sum of best 35 songs rating",
+      example: 14520,
+    }),
+    currentSum: z.number().int().openapi({
+      description: "Sum of current 15 songs rating",
+      example: 6230,
+    }),
+    total: z.number().int().openapi({
+      description: "Total rating (bestSum + currentSum)",
+      example: 20750,
+    }),
+  })
+  .openapi("RatingDetail");
+
+export type RatingDetail = z.infer<typeof ratingDetailSchema>;
+
+export const rawImageGenSchema = z
+  .object({
+    profile: profileSchema,
+    best: z.array(chartForRenderSchema).openapi({
+      description: "Best 35 songs with rating info",
+    }),
+    current: z.array(chartForRenderSchema).openapi({
+      description: "Current 15 songs with rating info",
+    }),
+    rating: ratingDetailSchema,
+  })
+  .openapi("RawImageGen");
+
+export type RawImageGen = z.infer<typeof rawImageGenSchema>;
