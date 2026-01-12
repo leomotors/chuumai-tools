@@ -45,7 +45,8 @@ export const playerDataTable = pgTable("player_data", {
 
   playerName: text("player_name").notNull(),
 
-  // Not planned: Course Rank and オトモダチ Class
+  courseRank: integer("course_rank").notNull(), // Course Mode
+  classRank: integer("class_rank").notNull(), // オトモダチ
 
   rating: integer("rating").notNull(),
 

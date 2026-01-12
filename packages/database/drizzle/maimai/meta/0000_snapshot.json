@@ -1,5 +1,5 @@
 {
-  "id": "0f735536-256b-46f7-a58a-e321f7e4ad26",
+  "id": "77358ed4-73d8-467c-a0e5-f7a521aba977",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -38,12 +38,6 @@
           "type": "integer",
           "primaryKey": false,
           "notNull": true
-        },
-        "version_name": {
-          "name": "version_name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
         }
       },
       "indexes": {},
@@ -143,6 +137,52 @@
           ]
         }
       },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.music_version": {
+      "name": "music_version",
+      "schema": "",
+      "columns": {
+        "title": {
+          "name": "title",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "chart_type": {
+          "name": "chart_type",
+          "type": "chart_type",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "version": {
+          "name": "version",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "music_version_title_music_data_title_fk": {
+          "name": "music_version_title_music_data_title_fk",
+          "tableFrom": "music_version",
+          "tableTo": "music_data",
+          "columnsFrom": [
+            "title"
+          ],
+          "columnsTo": [
+            "title"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
@@ -397,6 +437,18 @@
           "primaryKey": false,
           "notNull": true
         },
+        "dx_score": {
+          "name": "dx_score",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "dx_score_max": {
+          "name": "dx_score_max",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
         "combo_mark": {
           "name": "combo_mark",
           "type": "combo_mark",
@@ -438,11 +490,127 @@
             "chart_type",
             "difficulty",
             "score",
+            "dx_score",
+            "dx_score_max",
             "combo_mark",
             "sync_mark"
           ]
         }
       },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.play_history": {
+      "name": "play_history",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "identity": {
+            "type": "always",
+            "name": "play_history_id_seq",
+            "schema": "public",
+            "increment": "1",
+            "startWith": "1",
+            "minValue": "1",
+            "maxValue": "2147483647",
+            "cache": "1",
+            "cycle": false
+          }
+        },
+        "job_id": {
+          "name": "job_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "music_title": {
+          "name": "music_title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "chart_type": {
+          "name": "chart_type",
+          "type": "chart_type",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "difficulty": {
+          "name": "difficulty",
+          "type": "std_chart_difficulty",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "score": {
+          "name": "score",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "dx_score": {
+          "name": "dx_score",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "dx_score_max": {
+          "name": "dx_score_max",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "combo_mark": {
+          "name": "combo_mark",
+          "type": "combo_mark",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "sync_mark": {
+          "name": "sync_mark",
+          "type": "sync_mark",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "track_no": {
+          "name": "track_no",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "played_at": {
+          "name": "played_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "play_history_job_id_job_id_fk": {
+          "name": "play_history_job_id_job_id_fk",
+          "tableFrom": "play_history",
+          "tableTo": "job",
+          "columnsFrom": [
+            "job_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
@@ -499,6 +667,18 @@
           "primaryKey": false,
           "notNull": true
         },
+        "course_rank": {
+          "name": "course_rank",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "class_rank": {
+          "name": "class_rank",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
         "rating": {
           "name": "rating",
           "type": "integer",
@@ -520,6 +700,12 @@
         "play_count_total": {
           "name": "play_count_total",
           "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "last_played": {
+          "name": "last_played",
+          "type": "timestamp",
           "primaryKey": false,
           "notNull": true
         }
