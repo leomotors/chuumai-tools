@@ -1,4 +1,4 @@
-import { integer, pgTable, text, unique } from "drizzle-orm/pg-core";
+import { integer, pgTable, text, timestamp, unique } from "drizzle-orm/pg-core";
 
 import { jobTable } from "../../shared";
 import {
@@ -11,6 +11,22 @@ import {
 } from "../enum";
 
 export { jobTable };
+
+const chartIdentifierFragment = {
+  musicTitle: text("music_title").notNull(),
+
+  chartType: chartType("chart_type").notNull(),
+  difficulty: stdChartDifficultyType().notNull(),
+} as const;
+
+const playDataFragment = {
+  score: integer().notNull(),
+  dxScore: integer("dx_score").notNull(),
+  dxScoreMax: integer("dx_score_max").notNull(),
+
+  comboMark: comboMarkType("combo_mark").notNull(),
+  syncMark: syncMarkType("sync_mark").notNull(),
+};
 
 /**
  * Table for storing player data at each job.
@@ -37,6 +53,7 @@ export const playerDataTable = pgTable("player_data", {
 
   playCountCurrent: integer("play_count_current").notNull(),
   playCountTotal: integer("play_count_total").notNull(),
+  lastPlayed: timestamp("last_played").notNull(),
 });
 
 /**
@@ -50,15 +67,8 @@ export const musicRecordTable = pgTable(
 
     jobId: integer("job_id").references(() => jobTable.id),
 
-    musicTitle: text("music_title").notNull(),
-
-    chartType: chartType("chart_type").notNull(),
-    difficulty: stdChartDifficultyType().notNull(),
-
-    score: integer().notNull(),
-
-    comboMark: comboMarkType("combo_mark").notNull(),
-    syncMark: syncMarkType("sync_mark").notNull(),
+    ...chartIdentifierFragment,
+    ...playDataFragment,
   },
   (t) => [
     unique("music_record_unique")
@@ -67,12 +77,28 @@ export const musicRecordTable = pgTable(
         t.chartType,
         t.difficulty,
         t.score,
+        t.dxScore,
+        t.dxScoreMax,
         t.comboMark,
         t.syncMark,
       )
       .nullsNotDistinct(),
   ],
 );
+
+export const playHistoryTable = pgTable("play_history", {
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
+
+  jobId: integer("job_id").references(() => jobTable.id),
+
+  // Chart Identifier
+  ...chartIdentifierFragment,
+  ...playDataFragment,
+
+  // Play History Specific
+  trackNo: integer("track_no").notNull(),
+  playedAt: timestamp("played_at").notNull(),
+});
 
 /**
  * Table for showing Music for Rating for each job.
