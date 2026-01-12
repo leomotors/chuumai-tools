@@ -3,6 +3,8 @@ import fs from "node:fs/promises";
 import { JSDOM } from "jsdom";
 import { describe, expect, it } from "vitest";
 
+import type { ProfileWithoutLastPlayed } from "@repo/types/maimai";
+
 import { parsePlayerData } from "./playerData";
 
 async function getFixture(folder: string, filename: string) {
@@ -15,19 +17,66 @@ async function getFixture(folder: string, filename: string) {
 
 describe("Player Data", () => {
   it("should parse leomotors.html correctly", async () => {
-    const dom = await getFixture("playerData", "leomotors.html");
+    const fixtures: Record<string, ProfileWithoutLastPlayed> = {
+      "leomotors.html": {
+        characterImage:
+          "https://maimaidx-eng.com/maimai-mobile/img/Icon/88b3e152350aa218.png",
+        honorText: "シリウスの輝きのように",
+        honorRarity: "GOLD",
+        playerName: "Ｌｅｏψｒθφ",
+        courseRank: 10,
+        classRank: 0,
+        rating: 14911,
+        star: 234,
+        playCountCurrent: 105,
+        playCountTotal: 523,
+      },
+      "amakami.html": {
+        characterImage:
+          "https://maimaidx-eng.com/maimai-mobile/img/Icon/4f2837bbf424a86c.png",
+        honorText: "アマカミサマ",
+        honorRarity: "GOLD",
+        playerName: "AmakamiSamaLover",
+        courseRank: 6,
+        classRank: 1,
+        rating: 14291,
+        star: 69420,
+        playCountCurrent: 67,
+        playCountTotal: 6967,
+      },
+      "silver.html": {
+        characterImage:
+          "https://maimaidx-eng.com/maimai-mobile/img/Icon/e7376c0cfb074b53.png",
+        honorText: "皆皆 御唱和あれ！",
+        honorRarity: "SILVER",
+        playerName: "AcidGod",
+        courseRank: 0,
+        classRank: 0,
+        rating: 13849,
+        star: 67,
+        playCountCurrent: 123,
+        playCountTotal: 456,
+      },
+      "rate16.html": {
+        characterImage:
+          "https://maimaidx-eng.com/maimai-mobile/img/Icon/4724624520f6605f.png",
+        honorText: "Luminescence",
+        honorRarity: "GOLD",
+        playerName: "RATE16",
+        courseRank: 18,
+        classRank: 22,
+        rating: 16969,
+        star: 1337,
+        playCountCurrent: 0,
+        playCountTotal: 1,
+      },
+    };
 
-    const result = parsePlayerData(dom);
+    for (const [filename, expected] of Object.entries(fixtures)) {
+      const dom = await getFixture("playerData", filename);
+      const parsedData = parsePlayerData(dom);
 
-    expect(result).toEqual({
-      icon: "https://maimaidx-eng.com/maimai-mobile/img/Icon/88b3e152350aa218.png",
-      playerName: "Ｌｅｏψｒθφ",
-      trophyRarity: "GOLD",
-      trophyText: "シリウスの輝きのように",
-      rating: 14911,
-      starCount: 234,
-      currentVersionPlayCount: 105,
-      totalPlayCount: 523,
-    });
+      expect(parsedData).toEqual(expected);
+    }
   });
 });

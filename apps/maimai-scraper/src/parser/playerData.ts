@@ -1,24 +1,8 @@
 import { JSDOM } from "jsdom";
 
-import { z } from "@repo/types/zod";
+import { profileWithoutLastPlayedSchema } from "@repo/types/maimai";
 
-// Mock constant for trophy rarity - to be implemented properly later
-const MOCK_TROPHY_RARITY = "GOLD" as const;
-
-const playerDataSchema = z.object({
-  icon: z.url(),
-  playerName: z.string(),
-  trophyRarity: z.string(),
-  trophyText: z.string(),
-  rating: z.number().int(),
-  starCount: z.number().int(),
-  currentVersionPlayCount: z.number().int(),
-  totalPlayCount: z.number().int(),
-});
-
-export type PlayerData = z.infer<typeof playerDataSchema>;
-
-export function parsePlayerData(dom: JSDOM): PlayerData {
+export function parsePlayerData(dom: JSDOM) {
   const doc = dom.window.document;
 
   // Parse Icon
@@ -59,8 +43,25 @@ export function parsePlayerData(dom: JSDOM): PlayerData {
     throw new Error("Failed to parse trophy text");
   }
 
-  // Trophy rarity is mocked for now
-  const trophyRarity = MOCK_TROPHY_RARITY;
+  // Parse trophy rarity from class name
+  let trophyRarity: "NORMAL" | "BRONZE" | "SILVER" | "GOLD" | "RAINBOW" =
+    "NORMAL";
+  const classList = Array.from(trophyBlock.classList);
+  for (const className of classList) {
+    if (className.startsWith("trophy_") && className !== "trophy_block") {
+      const rarityPart = className.substring(7).toUpperCase(); // "trophy_".length = 7
+      switch (rarityPart) {
+        case "NORMAL":
+        case "BRONZE":
+        case "SILVER":
+        case "GOLD":
+        case "RAINBOW":
+          trophyRarity = rarityPart;
+          break;
+      }
+      break;
+    }
+  }
 
   // Parse Rating
   const ratingBlock = doc.querySelector(".rating_block");
@@ -73,7 +74,7 @@ export function parsePlayerData(dom: JSDOM): PlayerData {
     throw new Error("Failed to parse rating");
   }
 
-  const rating = parseInt(ratingText, 10);
+  const rating = parseInt(ratingText.replace(/,/g, ""), 10);
   if (isNaN(rating)) {
     throw new Error(`Failed to parse rating as number: ${ratingText}`);
   }
@@ -90,11 +91,11 @@ export function parsePlayerData(dom: JSDOM): PlayerData {
     throw new Error("Failed to parse star count text");
   }
 
-  const starCountMatch = starCountText.match(/×(\d+)/);
+  const starCountMatch = starCountText.match(/×([\d,]+)/);
   if (!starCountMatch) {
     throw new Error("Failed to parse star count from: " + starCountText);
   }
-  const starCount = parseInt(starCountMatch[1], 10);
+  const starCount = parseInt(starCountMatch[1].replace(/,/g, ""), 10);
 
   // Parse Play Counts
   // Format: "play count of current version：105<br />maimaiDX total play count：523"
@@ -110,34 +111,65 @@ export function parsePlayerData(dom: JSDOM): PlayerData {
 
   // Extract current version play count
   const currentVersionMatch = playCountContent.match(
-    /play count of current version[：:]\s*(\d+)/,
+    /play count of current version[：:]\s*([\d,]+)/,
   );
   if (!currentVersionMatch) {
     throw new Error(
       "Failed to parse current version play count from: " + playCountContent,
     );
   }
-  const currentVersionPlayCount = parseInt(currentVersionMatch[1], 10);
+  const currentVersionPlayCount = parseInt(
+    currentVersionMatch[1].replace(/,/g, ""),
+    10,
+  );
 
   // Extract total play count
   const totalPlayCountMatch = playCountContent.match(
-    /maimaiDX total play count[：:]\s*(\d+)/,
+    /maimaiDX total play count[：:]\s*([\d,]+)/,
   );
   if (!totalPlayCountMatch) {
     throw new Error(
       "Failed to parse total play count from: " + playCountContent,
     );
   }
-  const totalPlayCount = parseInt(totalPlayCountMatch[1], 10);
+  const totalPlayCount = parseInt(totalPlayCountMatch[1].replace(/,/g, ""), 10);
 
-  return playerDataSchema.parse({
-    icon,
+  // Parse Course Rank
+  // Format: <img src=".../course/course_rank_10hvsSHd90.png" />
+  const courseRankImg = doc.querySelector(
+    'img[src*="/course/course_rank_"]',
+  ) as HTMLImageElement | null;
+  let courseRank: number | undefined;
+  if (courseRankImg) {
+    const courseRankMatch = courseRankImg.src.match(/course_rank_(\d+)/);
+    if (courseRankMatch) {
+      courseRank = parseInt(courseRankMatch[1], 10);
+    }
+  }
+
+  // Parse Class Rank
+  // Format: <img src=".../class/class_rank_s_00ZqZmdpb8.png" />
+  const classRankImg = doc.querySelector(
+    'img[src*="/class/class_rank_"]',
+  ) as HTMLImageElement | null;
+  let classRank: number | undefined;
+  if (classRankImg) {
+    const classRankMatch = classRankImg.src.match(/class_rank_s_(\d+)/);
+    if (classRankMatch) {
+      classRank = parseInt(classRankMatch[1], 10);
+    }
+  }
+
+  return profileWithoutLastPlayedSchema.parse({
+    characterImage: icon,
     playerName,
-    trophyRarity,
-    trophyText,
+    honorRarity: trophyRarity,
+    honorText: trophyText,
+    courseRank,
+    classRank,
     rating,
-    starCount,
-    currentVersionPlayCount,
-    totalPlayCount,
+    star: starCount,
+    playCountCurrent: currentVersionPlayCount,
+    playCountTotal: totalPlayCount,
   });
 }
