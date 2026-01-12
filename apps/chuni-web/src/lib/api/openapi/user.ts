@@ -5,31 +5,29 @@ import { musicRecordSchema } from "$lib/functions/musicRecord";
 import { playCountSinceSchema } from "$lib/functions/playCount";
 import { userStatsSchema } from "$lib/functions/userStats";
 
+import {
+  API_KEY_SECURITY_SCHEME,
+  SECURITY_SCHEMES,
+  SESSION_SECURITY_SCHEME,
+} from "@repo/core/web";
 import { z } from "@repo/types/zod";
 
 import { errorSchema } from "../schemas/common";
 
-// Security scheme name for API key authentication
-export const API_KEY_SECURITY_SCHEME = "BearerAuth";
-export const SESSION_SECURITY_SCHEME = "SessionAuth";
-
 // Registration function - called only when generating docs
 export function registerUserRoutes(registry: OpenAPIRegistry) {
   // Register security schemes
-  registry.registerComponent("securitySchemes", API_KEY_SECURITY_SCHEME, {
-    type: "http",
-    scheme: "bearer",
-    bearerFormat: "API Key",
-    description:
-      "API key for authentication. Can be generated from dashboard. Use format: Authorization: Bearer <api-key>",
-  });
+  registry.registerComponent(
+    "securitySchemes",
+    API_KEY_SECURITY_SCHEME,
+    SECURITY_SCHEMES[API_KEY_SECURITY_SCHEME],
+  );
 
-  registry.registerComponent("securitySchemes", SESSION_SECURITY_SCHEME, {
-    type: "apiKey",
-    in: "cookie",
-    name: "authjs.session-token",
-    description: "Session cookie from Auth.js login.",
-  });
+  registry.registerComponent(
+    "securitySchemes",
+    SESSION_SECURITY_SCHEME,
+    SECURITY_SCHEMES[SESSION_SECURITY_SCHEME],
+  );
 
   // GET /api/users/stats
   registry.registerPath({

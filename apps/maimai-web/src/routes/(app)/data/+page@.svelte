@@ -1,6 +1,7 @@
 <script lang="ts">
   import { LoaderCircle, Search } from "@lucide/svelte";
 
+  import { getBackgroundMapping, getVersionNameMapping } from "$lib/constants";
   import type { MusicDataViewSchema } from "$lib/functions/musicData";
   import { getDefaultVersion, getEnabledVersions } from "$lib/version";
 
@@ -178,7 +179,10 @@
   }
 </script>
 
-<div class="min-h-screen pt-24 bg-gray-100">
+<div
+  class="min-h-screen bg-fixed bg-cover bg-center bg-no-repeat pt-24"
+  style="background-image: url('{getBackgroundMapping(selectedVersion)}');"
+>
   <div class="container mx-auto max-w-7xl px-4 pb-8">
     <!-- Header with glass effect -->
     <div
@@ -198,12 +202,12 @@
           </label>
           <Select.Root type="single" bind:value={selectedVersion}>
             <Select.Trigger class="w-full bg-white/90 backdrop-blur-sm">
-              {selectedVersion || "Select version"}
+              {getVersionNameMapping(selectedVersion) || "Select version"}
             </Select.Trigger>
             <Select.Content class="bg-white/95 backdrop-blur-md">
               {#each enabledVersions as version (version)}
                 <Select.Item value={version}>
-                  {version}
+                  {getVersionNameMapping(version)}
                 </Select.Item>
               {/each}
             </Select.Content>

@@ -1,6 +1,7 @@
 <script lang="ts">
   import { CircleCheck, Upload } from "@lucide/svelte";
 
+  import { getVersionNameMapping } from "$lib/constants";
   import { getDefaultVersion, getEnabledVersions } from "$lib/version";
 
   import { ExtLink } from "@repo/ui/molecule/ExtLink";
@@ -75,7 +76,7 @@
           <option value="" disabled>Error: No versions available</option>
         {:else}
           {#each enabledVersions as version (version)}
-            <option value={version}>{version}</option>
+            <option value={version}>{getVersionNameMapping(version)}</option>
           {/each}
         {/if}
       </select>

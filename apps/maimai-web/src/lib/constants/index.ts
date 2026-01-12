@@ -1,5 +1,9 @@
 import { getDefaultVersion } from "../version";
-import { backgroundMapping, logoMapping } from "./pureMapping";
+import {
+  backgroundMapping,
+  logoMapping,
+  versionNameMapping,
+} from "./pureMapping";
 
 export const defaultVersion = getDefaultVersion();
 
@@ -14,5 +18,11 @@ export function getLogoMapping(version: string) {
   return (
     logoMapping[version as keyof typeof logoMapping] ||
     logoMapping[defaultVersion as keyof typeof logoMapping]
+  );
+}
+
+export function getVersionNameMapping(version: string) {
+  return (
+    versionNameMapping[version as keyof typeof versionNameMapping] || version
   );
 }

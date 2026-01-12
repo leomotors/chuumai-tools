@@ -1,9 +1,9 @@
-// TODO
-
 export const backgroundMapping = {
-  CiRCLE: "/",
+  CiRCLE: "/assets/circle/bg.webp",
 };
-
 export const logoMapping = {
-  CiRCLE: "/",
+  CiRCLE: "/assets/circle/logo.webp",
+};
+export const versionNameMapping = {
+  CiRCLE: "CiRCLE",
 };

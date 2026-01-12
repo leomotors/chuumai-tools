@@ -3,6 +3,8 @@ import {
   OpenAPIRegistry,
 } from "@asteasolutions/zod-to-openapi";
 
+import { OPENAPI_TAGS } from "@repo/core/web";
+
 import {
   registerCommonSchemas,
   registerDataSchemas,
@@ -64,15 +66,8 @@ export function generateOpenApiDocument(version: string) {
         name: "Data",
         description: "Endpoints for game data retrieval",
       },
-      {
-        name: "Jobs",
-        description: "Endpoints for job management (scraper integration)",
-      },
-      {
-        name: "Users",
-        description:
-          "Endpoints for user-specific data (requires authentication)",
-      },
+      OPENAPI_TAGS.JOBS,
+      OPENAPI_TAGS.USERS,
     ],
   });
 }

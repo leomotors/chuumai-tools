@@ -3,13 +3,17 @@ import {
   OpenAPIRegistry,
 } from "@asteasolutions/zod-to-openapi";
 
+import { OPENAPI_TAGS } from "@repo/core/web";
+
 import {
   registerCommonSchemas,
   registerDataSchemas,
   registerImageSchemas,
+  registerJobSchemas,
 } from "../schemas";
 import { registerDataRoutes } from "./data";
 import { registerImageRoutes } from "./image";
+import { registerJobRoutes } from "./job";
 
 export function generateOpenApiDocument(version: string) {
   // Create a fresh registry for each generation
@@ -19,10 +23,12 @@ export function generateOpenApiDocument(version: string) {
   registerCommonSchemas(registry);
   registerDataSchemas(registry);
   registerImageSchemas(registry);
+  registerJobSchemas(registry);
 
   // Register all routes
   registerImageRoutes(registry);
   registerDataRoutes(registry);
+  registerJobRoutes(registry);
 
   // Generate the document
   const generator = new OpenApiGeneratorV3(registry.definitions);
@@ -49,6 +55,7 @@ export function generateOpenApiDocument(version: string) {
         name: "Data",
         description: "Endpoints for game data retrieval",
       },
+      OPENAPI_TAGS.JOBS,
     ],
   });
 }
