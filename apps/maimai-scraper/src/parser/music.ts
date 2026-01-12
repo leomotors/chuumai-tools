@@ -1,3 +1,5 @@
+/* eslint-disable no-irregular-whitespace */
+
 import { chartSchema, historyRecordSchema } from "@repo/types/maimai";
 
 // Helper function to parse chart type from icon
@@ -105,12 +107,15 @@ export function parseMusic(element: Element) {
   // Parse title
   const titleElement = element.querySelector(".music_name_block");
   if (!titleElement) {
-    throw new Error("Failed to find music title element");
+    throw new Error(`Failed to find music title element: ${element.outerHTML}`);
   }
-  const title = titleElement.textContent?.trim();
-  if (!title) {
-    throw new Error("Failed to parse music title");
+  const textContent = titleElement.textContent;
+  if (textContent === null || textContent === undefined) {
+    throw new Error(`Failed to parse music title: ${element.outerHTML}`);
   }
+  // Use trimmed version, but fall back to original if trim results in empty string
+  // This handles edge case where song title is whitespace like "　"
+  const title = textContent.trim() || textContent;
 
   const chartType = parseChartType(element);
   const difficulty = parseDifficulty(element);
@@ -178,14 +183,24 @@ export function parseHistory(element: Element) {
 
   // Get text content and remove the level div content
   const levelDiv = titleElement.querySelector(".music_lv_back");
-  let title = titleElement.textContent?.trim() || "";
+  const textContent = titleElement.textContent;
+  if (textContent === null || textContent === undefined) {
+    throw new Error("Failed to parse title");
+  }
+
+  let title = textContent.trim();
   if (levelDiv) {
     const levelText = levelDiv.textContent?.trim() || "";
     title = title.replace(levelText, "").trim();
   }
 
+  // Fall back to original text if trim resulted in empty string
+  // This handles edge case where song title is whitespace like "　"
   if (!title) {
-    throw new Error("Failed to parse title");
+    title = textContent.replace(levelDiv?.textContent || "", "");
+    if (!title) {
+      throw new Error("Failed to parse title");
+    }
   }
 
   const chartType = parseChartType(element);

@@ -85,6 +85,16 @@ test("Parse Record", async () => {
       comboMark: undefined,
       syncMark: "SYNC",
     },
+    "empty.html": {
+      title: "　",
+      chartType: "dx",
+      difficulty: "basic",
+      score: 0,
+      dxScore: undefined,
+      dxScoreMax: undefined,
+      comboMark: undefined,
+      syncMark: undefined,
+    },
     "expert-yuusha.html": {
       title: "勇者",
       chartType: "dx",

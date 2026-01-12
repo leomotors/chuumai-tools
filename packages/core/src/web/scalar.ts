@@ -1,7 +1,7 @@
-export const SCALAR_HTML = `<!doctype html>
+export const createScalarHTML = (title: string) => `<!doctype html>
 <html>
   <head>
-    <title>Uni Wonderhoy API Reference</title>
+    <title>${title} API Reference</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 

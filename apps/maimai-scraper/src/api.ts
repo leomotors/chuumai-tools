@@ -24,3 +24,5 @@ export function createApiClient() {
 }
 
 export type ApiClient = ReturnType<typeof createApiClient>;
+
+export const apiClient = createApiClient();

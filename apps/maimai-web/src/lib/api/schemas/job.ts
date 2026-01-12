@@ -53,16 +53,16 @@ export const savePlayerDataSchema = z
  */
 export const saveRatingRecordsSchema = z
   .object({
-    old: z.array(chartSchema).openapi({
-      description: "Old (standard) 35 songs for rating",
+    best: z.array(chartSchema).openapi({
+      description: "Old (Best) 35 songs for rating",
     }),
-    new: z.array(chartSchema).openapi({
-      description: "New (deluxe) 15 songs for rating",
+    current: z.array(chartSchema).openapi({
+      description: "New (Current) 15 songs for rating",
     }),
-    selectionOld: z.array(chartSchema).openapi({
+    selectionBest: z.array(chartSchema).openapi({
       description: "Selection old candidates",
     }),
-    selectionNew: z.array(chartSchema).openapi({
+    selectionCurrent: z.array(chartSchema).openapi({
       description: "Selection new candidates",
     }),
     allRecords: z.array(chartSchema).openapi({

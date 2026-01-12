@@ -1,6 +1,6 @@
 import { text } from "@sveltejs/kit";
 
-import { SCALAR_HTML } from "@repo/core";
+import { createScalarHTML } from "@repo/core";
 
 import type { RequestHandler } from "./$types";
 
@@ -12,5 +12,5 @@ export const GET: RequestHandler = ({ setHeaders }) => {
     "Content-Type": "text/html; charset=utf-8",
   });
 
-  return text(SCALAR_HTML);
+  return text(createScalarHTML("Washing Machine"));
 };

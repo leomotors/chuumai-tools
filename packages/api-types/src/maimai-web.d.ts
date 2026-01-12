@@ -531,14 +531,14 @@ export interface components {
       lastPlayed: string;
     };
     SaveRatingRecords: {
-      /** @description Old (standard) 35 songs for rating */
-      old: components["schemas"]["Chart"][];
-      /** @description New (deluxe) 15 songs for rating */
-      new: components["schemas"]["Chart"][];
+      /** @description Old (Best) 35 songs for rating */
+      best: components["schemas"]["Chart"][];
+      /** @description New (Current) 15 songs for rating */
+      current: components["schemas"]["Chart"][];
       /** @description Selection old candidates */
-      selectionOld: components["schemas"]["Chart"][];
+      selectionBest: components["schemas"]["Chart"][];
       /** @description Selection new candidates */
-      selectionNew: components["schemas"]["Chart"][];
+      selectionCurrent: components["schemas"]["Chart"][];
       /** @description All play records */
       allRecords: components["schemas"]["Chart"][];
     };

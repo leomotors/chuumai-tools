@@ -160,10 +160,10 @@ export const POST: RequestHandler = async ({ request }) => {
     }
 
     // Insert rating breakdowns
-    await insertRating(recordData.old, "OLD");
-    await insertRating(recordData.new, "NEW");
-    await insertRating(recordData.selectionOld, "SELECTION_OLD");
-    await insertRating(recordData.selectionNew, "SELECTION_NEW");
+    await insertRating(recordData.best, "OLD");
+    await insertRating(recordData.current, "NEW");
+    await insertRating(recordData.selectionBest, "SELECTION_OLD");
+    await insertRating(recordData.selectionCurrent, "SELECTION_NEW");
 
     // Insert raw scrape data for debugging
     await db.insert(rawScrapeDataTable).values({
