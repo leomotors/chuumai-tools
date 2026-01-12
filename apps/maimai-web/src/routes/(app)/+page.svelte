@@ -14,6 +14,7 @@
   import Header from "@repo/ui/templates/RenderPage/Header.svelte";
   import InputSection from "@repo/ui/templates/RenderPage/InputSection.svelte";
   import StatusMessage from "@repo/ui/templates/RenderPage/StatusMessage.svelte";
+  import Render from "$lib/components/Render.svelte";
 
   let files = $state<FileList>();
 
@@ -102,4 +103,11 @@
     }}
     {handleDownload}
   />
+
+  <!-- Render Component -->
+  {#if renderData}
+    <div class="mt-8">
+      <Render input={renderData} version={selectedVersion} />
+    </div>
+  {/if}
 </div>
