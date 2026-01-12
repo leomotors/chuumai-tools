@@ -10,10 +10,12 @@ import {
   registerDataSchemas,
   registerImageSchemas,
   registerJobSchemas,
+  registerRatingSchemas,
 } from "../schemas";
 import { registerDataRoutes } from "./data";
 import { registerImageRoutes } from "./image";
 import { registerJobRoutes } from "./job";
+import { registerRatingRoutes } from "./rating";
 
 export function generateOpenApiDocument(version: string) {
   // Create a fresh registry for each generation
@@ -24,8 +26,10 @@ export function generateOpenApiDocument(version: string) {
   registerDataSchemas(registry);
   registerImageSchemas(registry);
   registerJobSchemas(registry);
+  registerRatingSchemas(registry);
 
   // Register all routes
+  registerRatingRoutes(registry);
   registerImageRoutes(registry);
   registerDataRoutes(registry);
   registerJobRoutes(registry);
@@ -47,6 +51,10 @@ export function generateOpenApiDocument(version: string) {
       },
     ],
     tags: [
+      {
+        name: "Rating",
+        description: "Endpoints related to rating calculations",
+      },
       {
         name: "Images",
         description: "Endpoints related to image proxying",
