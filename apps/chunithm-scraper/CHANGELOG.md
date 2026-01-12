@@ -2,6 +2,10 @@
 
 For changelog before V4: [here](https://github.com/leomotors/chunithm-net-scraper/blob/main/CHANGELOG.md)
 
+## [6.1.0] - 2026-01-13
+
+- refactor
+
 ## [6.0.0] - 2026-01-10
 
 - update discord notification message text (add some emojis)

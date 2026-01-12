@@ -1,7 +1,13 @@
 packages:
   - name: chuni-web
-    fullName: Chunithm Rating Image Generator
+    fullName: Chunithm Web Service
     packagePath: apps/chuni-web
   - name: chunithm-scraper
     fullName: Chunithm Scraper
     packagePath: apps/chunithm-scraper
+  - name: maimai-web
+    fullName: maimai Web Service
+    packagePath: apps/maimai-web
+  - name: maimai-scraper
+    fullName: maimai Scraper
+    packagePath: apps/maimai-scraper

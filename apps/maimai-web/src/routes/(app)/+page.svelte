@@ -2,6 +2,7 @@
   import { toPng } from "html-to-image";
 
   import { page } from "$app/state";
+  import Render from "$lib/components/Render.svelte";
   import { getVersionNameMapping } from "$lib/constants";
   import { getDefaultVersion, getEnabledVersions } from "$lib/version";
 
@@ -14,7 +15,6 @@
   import Header from "@repo/ui/templates/RenderPage/Header.svelte";
   import InputSection from "@repo/ui/templates/RenderPage/InputSection.svelte";
   import StatusMessage from "@repo/ui/templates/RenderPage/StatusMessage.svelte";
-  import Render from "$lib/components/Render.svelte";
 
   let files = $state<FileList>();
 

@@ -17,7 +17,7 @@ ENV DATABASE_URL=postgresql://mock:value@somewhere:5432/dbname
 ENV PUBLIC_VERSION=MOCK_SHOULD_NOT_APPEAR_ON_PROD
 ENV MUSIC_IMAGE_URL=http://mock:3000/value
 
-RUN pnpm --filter=chuni-web build
+RUN pnpm --filter=maimai-web build
 
 
 FROM node:24-alpine AS runner
@@ -25,7 +25,7 @@ FROM node:24-alpine AS runner
 WORKDIR /app
 
 USER node
-COPY --from=base --chown=node:node /app/apps/chuni-web/build/ ./build/
+COPY --from=base --chown=node:node /app/apps/maimai-web/build/ ./build/
 
 ENV NODE_ENV=production
 ENV PORT=3000

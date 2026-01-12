@@ -1,5 +1,9 @@
 # Changelog
 
+## [3.6.0] - 2026-01-13
+
+- refactor
+
 ## [3.5.0] - 2025-01-10
 
 - feat: endpoint for uploading scraping job result
