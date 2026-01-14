@@ -307,7 +307,11 @@
   <!-- Render Component -->
   {#if renderData}
     <div class="mt-8">
-      <Render input={renderData} version={selectedVersion} />
+      <Render
+        input={renderData}
+        version={selectedVersion}
+        scraperVersion={userData?.scraperVersion}
+      />
     </div>
   {/if}
 </div>

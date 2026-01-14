@@ -1,5 +1,9 @@
 # Changelog
 
+## [3.7.0] - 2026-01-14
+
+- accept field scraperVersion in input json
+
 ## [3.6.0] - 2026-01-13
 
 - refactor

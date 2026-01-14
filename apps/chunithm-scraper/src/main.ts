@@ -84,6 +84,7 @@ export async function main(
         best: recordData.bestSongs.map(recordToGenInput),
         current: recordData.currentSongs.map(recordToGenInput),
         hidden: hiddenCharts || undefined,
+        scraperVersion: APP_VERSION,
       } satisfies ImgGenInput;
 
       const imgGenFileName = `${playerData.lastPlayed.toISOString()}-${jobId}.json`;

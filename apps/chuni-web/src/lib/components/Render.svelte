@@ -9,9 +9,10 @@
   interface Props {
     input: RawImageGen;
     version: string;
+    scraperVersion?: string;
   }
 
-  let { input, version }: Props = $props();
+  let { input, version, scraperVersion }: Props = $props();
   let { profile, best, current, rating } = $derived(input);
 </script>
 
@@ -20,7 +21,7 @@
   id="chart"
   style="background-image: url({getBackgroundMapping(version)})"
 >
-  <Header lastPlayed={new Date(profile.lastPlayed)} {version}>
+  <Header lastPlayed={new Date(profile.lastPlayed)} {version} {scraperVersion}>
     <Profile {profile} calculatedRating={rating.totalAvg} />
   </Header>
 

@@ -79,6 +79,7 @@ export const imgGenInputSchema = z.object({
   best: z.array(chartSchema),
   current: z.array(chartSchema),
   hidden: z.array(hiddenChartSchema).optional(),
+  scraperVersion: z.string().optional(),
 });
 
 export const fullPlayDataInputSchema = imgGenInputSchema.extend({

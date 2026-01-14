@@ -9,13 +9,16 @@
     children: Snippet;
     lastPlayed: Date;
     version: string;
+    scraperVersion?: string;
   }
 
-  let { children, lastPlayed, version }: Props = $props();
+  let { children, lastPlayed, version, scraperVersion }: Props = $props();
 
   const logo = $derived(getLogoMapping(version));
 
-  const scraperVersion = page.url.searchParams.get("scraperVersion");
+  const scraperVersionQuery = page.url.searchParams.get("scraperVersion");
+
+  const showScraperVersion = $derived(scraperVersion || scraperVersionQuery);
 </script>
 
 <header class="flex justify-between gap-4 pb-2">
@@ -51,8 +54,8 @@
         <Workflow />
         <p>
           Web Version: {WEB_VERSION}
-          {#if scraperVersion}
-            | Scraper Version: {scraperVersion}
+          {#if showScraperVersion}
+            | Scraper Version: {showScraperVersion}
           {/if}
         </p>
       </div>
