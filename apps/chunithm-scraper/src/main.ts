@@ -46,6 +46,8 @@ export async function main(
   const playerDataPage = await runner.runStep(
     "Step 2.1: Fetch Player Data",
     () => fetchPath(page, mobileBaseURL + "home/playerData"),
+    handlePwError,
+    3,
   );
 
   const { playerData, playerDataHtml } = await runner.runStep(
@@ -53,6 +55,8 @@ export async function main(
     () => scrapePlayerData(playerDataPage),
     (ctx) => handlePwError(ctx),
   );
+
+  await new Promise((resolve) => setTimeout(resolve, 1000));
 
   // * Step 3: Music Record (For Rating and All)
   const { recordData, recordHtml } = await runner.runStep(

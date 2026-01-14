@@ -24,6 +24,7 @@ describe("Player Data", () => {
       "elysia.html": "NORMAL",
       "leomotors.html": "NORMAL",
       "minori.html": "NORMAL",
+      "one-honor.html": "NORMAL",
       "pooh.html": "NORMAL",
       "thatcat.html": "NORMAL",
     };
@@ -56,6 +57,11 @@ describe("Player Data", () => {
         characterRarity: "PLATINUM",
         characterImage:
           "https://chunithm-net-eng.com/mobile/img/e16348980f62f5ed.png", // minori bnw
+      },
+      "one-honor.html": {
+        characterRarity: "SILVER",
+        characterImage:
+          "https://chunithm-net-eng.com/mobile/img/8fa16e6e7cdb18b2.png", // hifumi
       },
       "pooh.html": {
         characterRarity: "SILVER",
@@ -160,6 +166,20 @@ describe("Player Data", () => {
         overpowerValue: 7178.72,
         overpowerPercent: 6.81,
         lastPlayed: new Date("2025-04-12T03:38:00Z"),
+      },
+      "one-honor.html": {
+        teamEmblem: "YELLOW",
+        teamName: "ＣＰ　ｖｓ　ＣＥＤＴ",
+        mainHonorRarity: "PLATINUM",
+        mainHonorText: "私たちの、青春の物語を！！",
+        playerLevel: 133,
+        playerName: "Ｌｅｏψｒθφ",
+        classBand: 4,
+        classEmblem: 5,
+        rating: 16.66,
+        overpowerValue: 52079.39,
+        overpowerPercent: 43.18,
+        lastPlayed: new Date("2026-01-13T09:47:00Z"),
       },
       "pooh.html": {
         teamEmblem: undefined,

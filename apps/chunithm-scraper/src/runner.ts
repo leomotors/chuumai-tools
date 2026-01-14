@@ -63,6 +63,9 @@ export class Runner {
           currentAttempt: i,
           maxRetries: retries,
         });
+
+        // Delay 1 second
+        await new Promise((resolve) => setTimeout(resolve, 1000));
       }
     }
 

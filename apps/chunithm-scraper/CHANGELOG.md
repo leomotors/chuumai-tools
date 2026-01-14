@@ -2,6 +2,10 @@
 
 For changelog before V4: [here](https://github.com/leomotors/chunithm-net-scraper/blob/main/CHANGELOG.md)
 
+## [6.2.0] - 2026-01-14
+
+- fix handling one or two honor set
+
 ## [6.1.0] - 2026-01-13
 
 - refactor

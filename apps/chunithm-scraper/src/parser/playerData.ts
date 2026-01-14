@@ -213,7 +213,9 @@ export function parseRightData(dom: JSDOM) {
 
 function parseHonor(dom: JSDOM) {
   const honors = dom.window.document.querySelectorAll(".player_honor_short");
-  const honorList = [...honors] as HTMLDivElement[];
+  const honorList = ([...honors] as HTMLDivElement[]).filter(
+    (e) => !!e.querySelector("span"),
+  );
 
   if (honorList.length < 1 || honorList.length > 3) {
     throw new Error(`Invalid honor list, got: ${honorList.length}`);
