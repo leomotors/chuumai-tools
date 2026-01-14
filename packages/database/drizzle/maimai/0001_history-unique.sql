@@ -1,0 +1,1 @@
+ALTER TABLE "play_history" ADD CONSTRAINT "play_history_played_at_unique" UNIQUE("played_at");

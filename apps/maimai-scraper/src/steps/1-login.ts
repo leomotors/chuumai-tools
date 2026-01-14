@@ -6,7 +6,7 @@ import { mobileBaseURL } from "../constants.js";
 import { environment } from "../environment.js";
 
 export async function login(page: Page) {
-  await page.goto(mobileBaseURL + "home/");
+  await page.goto(mobileBaseURL);
   await page.waitForLoadState("networkidle");
 
   if (page.url() === `${mobileBaseURL}home/`) {

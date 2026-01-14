@@ -10,6 +10,7 @@ import {
   jobTable,
   musicRecordTable,
   playerDataTable,
+  playHistoryTable,
   rawScrapeDataTable,
 } from "@repo/database/maimai";
 import type { RatingType } from "@repo/types/maimai";
@@ -164,6 +165,28 @@ export const POST: RequestHandler = async ({ request }) => {
     await insertRating(recordData.current, "NEW");
     await insertRating(recordData.selectionBest, "SELECTION_OLD");
     await insertRating(recordData.selectionCurrent, "SELECTION_NEW");
+
+    // Save History
+    if (recordData.history) {
+      await db
+        .insert(playHistoryTable)
+        .values(
+          recordData.history.map((history) => ({
+            jobId,
+            musicTitle: history.title,
+            chartType: history.chartType,
+            difficulty: history.difficulty,
+            score: history.score,
+            dxScore: history.dxScore ?? 0,
+            dxScoreMax: history.dxScoreMax ?? 0,
+            comboMark: history.comboMark ?? "NONE",
+            syncMark: history.syncMark ?? "NONE",
+            trackNo: history.trackNo,
+            playedAt: new Date(history.playedAt),
+          })),
+        )
+        .onConflictDoNothing();
+    }
 
     // Insert raw scrape data for debugging
     await db.insert(rawScrapeDataTable).values({

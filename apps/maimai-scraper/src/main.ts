@@ -13,7 +13,10 @@ import { handlePwError, Runner } from "./runner.js";
 import { login } from "./steps/1-login.js";
 import { scrapePlayerData } from "./steps/2-playerdata.js";
 import { scrapeMusicRecord } from "./steps/3-music.js";
+import { processHistoryData } from "./steps/4-history.js";
 import { saveDataToService } from "./steps/6-savedata.js";
+import { generateImage } from "./steps/7-image.js";
+import { sendDiscordImage } from "./steps/8-discord.js";
 
 export async function main(
   jobId: number | undefined,
@@ -32,8 +35,6 @@ export async function main(
   );
   logger.log(`Login cached: ${cached}`);
 
-  await page.screenshot({ path: "outputs/step1-login.png", fullPage: true });
-
   // * Step 2: Player Data
   const playerDataPage = await runner.runStep(
     "Step 2.1: Fetch Player Data",
@@ -43,9 +44,9 @@ export async function main(
   );
 
   const { playerData, playerDataHtml } = await runner.runStep(
-    "Step 2.2: Process Player Data",
+    "Step 2.2: Process/Parse Player Data",
     () => scrapePlayerData(playerDataPage),
-    (ctx) => handlePwError(ctx),
+    (ctx) => handlePwError(ctx, page),
   );
 
   await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -58,9 +59,30 @@ export async function main(
 
   const timeForScrape = performance.now() - start;
 
-  // * Step 4: Create JSON for Image Generation
-  const { imgGenInput, imgGenFileName } = await runner.runStep(
-    "Step 4: Create JSON for Image Generation",
+  // * Step 4: Scrape History
+  const historyHTML = await runner.runStep(
+    "Step 4.1: Scrape History",
+    () => fetchPath(page, mobileBaseURL + "record/"),
+    handlePwError,
+    3,
+  );
+
+  const historyData = await runner.runStep(
+    "Step 4.2: Process/Parse History Data",
+    () => processHistoryData(historyHTML),
+  );
+
+  const lastPlayed = historyData[0]?.playedAt as string | undefined;
+
+  if (!lastPlayed) {
+    console.log(
+      "WARNING: No history data found, last played date will be missing",
+    );
+  }
+
+  // * Step 5: Create JSON for Image Generation
+  const { imgGenInput, imgGenFileName, fullData } = await runner.runStep(
+    "Step 5.1: Create JSON for Image Generation",
     async () => {
       const charaImageData = await downloadImageAsBase64(
         playerData.characterImage,
@@ -70,14 +92,14 @@ export async function main(
         profile: {
           ...playerData,
           characterImage: charaImageData,
-          lastPlayed: "2026-01-01T00:00:00.000Z", // Dummy date as history is in todo
+          lastPlayed: lastPlayed ?? "2026-01-01T00:00:00.000Z",
         },
         best: recordData.bestSongs,
         current: recordData.currentSongs,
+        scraperVersion: APP_VERSION,
       } satisfies ImgGenInput;
 
-      // todo change to last played date when history is implemented
-      const imgGenFileName = `${Date.now()}-${jobId}.json`;
+      const imgGenFileName = `${lastPlayed}-${jobId}.json`;
 
       await fs.writeFile(
         `outputs/${imgGenFileName}`,
@@ -87,6 +109,7 @@ export async function main(
       const fullData = {
         ...imgGenInput,
         allRecords: recordData.allRecords.filter((r) => r.score > 0),
+        history: historyData,
       } satisfies FullPlayDataInput;
 
       const fullDataFileName = `full-${imgGenFileName}`;
@@ -99,9 +122,9 @@ export async function main(
     },
   );
 
-  // * Step 5: Calculate Rating
+  // * Step 5.2: Calculate Rating
   const rawImgGen = await runner.runStep(
-    "Step 5: Calculate Rating",
+    "Step 5.2: Calculate Rating",
     async () => {
       if (!environment.MAIMAI_SERVICE_URL || !apiClient) {
         logger.warn(
@@ -134,33 +157,34 @@ export async function main(
   if (apiClient && environment.MAIMAI_SERVICE_API_KEY && jobId) {
     await runner.runStep("Step 6: Save data to Service", async () => {
       await saveDataToService(jobId, apiClient, {
-        playerData,
+        imgGenInput,
+        fullPlayDataInput: fullData,
         recordData,
         playerDataHtml,
         allMusicRecordHtml: recordHtml,
-        imgGenInput,
         calculatedRating: rawImgGen?.rating.total,
+        lastPlayed: lastPlayed ?? "2026-01-01T00:00:00.000Z",
       });
     });
   } else {
     logger.warn("Service API not configured, skipped saving data");
   }
 
-  // // * Step 7: Generate Image
-  // const startGenerateImage = performance.now();
-  // const outputLocation = await runner.runStep(
-  //   "Step 7: Generate Image",
-  //   () => generateImage(page, imgGenFileName),
-  //   (ctx) => handlePwError(ctx, page),
-  // );
-  // const timeForImageGen = performance.now() - startGenerateImage;
+  // * Step 7: Generate Image
+  const startGenerateImage = performance.now();
+  const outputLocation = await runner.runStep(
+    "Step 7: Generate Image",
+    () => generateImage(page, imgGenFileName),
+    (ctx) => handlePwError(ctx, page),
+  );
+  const timeForImageGen = performance.now() - startGenerateImage;
 
-  // // * Step 8: Send Image to Discord
-  // await runner.runStep("Step 8: Send Image to Discord", () =>
-  //   sendDiscordImage(outputLocation, playerData, rawImgGen, cached, {
-  //     startTime: start,
-  //     scrapeTimeMs: timeForScrape,
-  //     imageGenTimeMs: timeForImageGen,
-  //   }),
-  // );
+  // * Step 8: Send Image to Discord
+  await runner.runStep("Step 8: Send Image to Discord", () =>
+    sendDiscordImage(outputLocation, playerData, rawImgGen, cached, {
+      startTime: start,
+      scrapeTimeMs: timeForScrape,
+      imageGenTimeMs: timeForImageGen,
+    }),
+  );
 }

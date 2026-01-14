@@ -11,6 +11,7 @@ import {
 } from "@repo/core/web";
 import {
   chartSchema,
+  historyRecordSchema,
   imgGenInputSchema,
   rarityLevelValues,
 } from "@repo/types/maimai";
@@ -41,7 +42,7 @@ export const savePlayerDataSchema = z
     star: z.number().int(),
     playCountCurrent: z.number().int(),
     playCountTotal: z.number().int(),
-    lastPlayed: z.string().datetime().openapi({
+    lastPlayed: z.iso.datetime().openapi({
       description: "Last played timestamp (ISO 8601 format)",
       example: "2026-01-10T12:00:00.000Z",
     }),
@@ -68,6 +69,7 @@ export const saveRatingRecordsSchema = z
     allRecords: z.array(chartSchema).openapi({
       description: "All play records",
     }),
+    history: z.array(historyRecordSchema).optional(),
   })
   .openapi("SaveRatingRecords");
 

@@ -1,3 +1,4 @@
+export * from "./class";
 export * from "./color";
 export * from "./duplicate-title";
 export * from "./level";

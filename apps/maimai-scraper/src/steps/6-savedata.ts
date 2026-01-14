@@ -1,33 +1,36 @@
 import { logger } from "@repo/core/utils";
-import type { ImgGenInput } from "@repo/types/maimai";
+import type { FullPlayDataInput, ImgGenInput } from "@repo/types/maimai";
 
 import type { ApiClient } from "../api.js";
 import { environment } from "../environment.js";
-import type { scrapePlayerData } from "./2-playerdata.js";
 import type { scrapeMusicRecord } from "./3-music.js";
 
 type Params = {
-  playerData: Awaited<ReturnType<typeof scrapePlayerData>>["playerData"];
+  imgGenInput: ImgGenInput;
   recordData: Awaited<ReturnType<typeof scrapeMusicRecord>>["recordData"];
+  fullPlayDataInput: FullPlayDataInput;
   playerDataHtml: string;
   allMusicRecordHtml: string;
-  imgGenInput: ImgGenInput;
   calculatedRating: number | undefined;
+  lastPlayed: string;
 };
 
 export async function saveDataToService(
   jobId: number,
   apiClient: NonNullable<ApiClient>,
   {
-    playerData,
+    imgGenInput,
     recordData,
+    fullPlayDataInput,
     playerDataHtml,
     allMusicRecordHtml,
-    imgGenInput,
     calculatedRating,
+    lastPlayed,
   }: Params,
 ) {
   logger.log("Saving data to service via API...");
+
+  const playerData = fullPlayDataInput.profile;
 
   const response = await apiClient.POST("/api/jobs/data", {
     body: {
@@ -38,7 +41,7 @@ export async function saveDataToService(
         classRank: playerData.classRank ?? 0,
         playCountCurrent: playerData.playCountCurrent ?? 0,
         playCountTotal: playerData.playCountTotal ?? 0,
-        lastPlayed: "2000-01-01T00:00:00.000Z", // Dummy date to bypass validation
+        lastPlayed: lastPlayed,
       },
       recordData: {
         best: recordData.bestSongs,
@@ -46,6 +49,7 @@ export async function saveDataToService(
         selectionBest: recordData.selectionBestSongs,
         selectionCurrent: recordData.selectionCurrentSongs,
         allRecords: recordData.allRecords,
+        history: fullPlayDataInput.history,
       },
       playerDataHtml,
       allMusicRecordHtml,

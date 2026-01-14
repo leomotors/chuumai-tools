@@ -98,7 +98,7 @@ export const playHistoryTable = pgTable("play_history", {
 
   // Play History Specific
   trackNo: integer("track_no").notNull(),
-  playedAt: timestamp("played_at").notNull(),
+  playedAt: timestamp("played_at").notNull().unique(),
 });
 
 /**

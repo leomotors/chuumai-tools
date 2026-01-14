@@ -67,6 +67,7 @@ export const imgGenInputSchema = z
     profile: profileSchema,
     best: z.array(chartSchema),
     current: z.array(chartSchema),
+    scraperVersion: z.string().optional(),
   })
   .openapi("ImgGenInput");
 
@@ -75,6 +76,7 @@ export type ImgGenInput = z.infer<typeof imgGenInputSchema>;
 export const fullPlayDataInputSchema = imgGenInputSchema
   .extend({
     allRecords: z.array(chartSchema),
+    history: z.array(historyRecordSchema),
   })
   .openapi("FullPlayDataInput");
 
