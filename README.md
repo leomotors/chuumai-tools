@@ -18,7 +18,7 @@ docker run --rm \
  -v ./outputs:/app/outputs \
  -e USERNAME=YOUR_SEGA_ID \
  -e PASSWORD=YOUR_SEGA_PASSWORD \
- -e VERSION=VRS \
+ -e VERSION=XVRS \
  -e TZ=Asia/Bangkok \
  -e LANG=th_TH.UTF-8 \
  ghcr.io/leomotors/chunithm-scraper:v6
@@ -82,4 +82,7 @@ Inspiration of generating image from https://reiwa.f5.si/
 
 ## maimai
 
-todo, prob before ~~PRiSM PLUS~~ CiRCLE
+Same as Chunithm but use image `ghcr.io/leomotors/maimai-scraper:v1` and
+`MAIMAI_SERVICE_URL` + `MAIMAI_SERVICE_API_KEY` instead.
+
+Also current version is `CiRCLE`
