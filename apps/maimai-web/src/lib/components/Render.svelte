@@ -16,7 +16,7 @@
 </script>
 
 <div
-  class="w-[2560px] h-[1440px] bg-cover bg-no-repeat bg-center flex-col gap-2 p-4 hidden"
+  class="w-[2880px] h-[1440px] bg-cover bg-no-repeat bg-center flex-col gap-2 p-4 hidden"
   id="chart"
   style="background-image: url({getBackgroundMapping(version)})"
 >
@@ -25,11 +25,11 @@
   </Header>
 
   <main
-    class="flex justify-evenly gap-2 p-8 rounded-xl bg-gray-500/30 backdrop-opacity-5"
+    class="flex justify-evenly gap-2 py-8 px-4 rounded-xl bg-gray-500/30 backdrop-opacity-5"
   >
     <aside class="flex flex-col gap-4">
-      <p class="text-3xl font-bold font-helvetica">
-        BEST ({rating.bestSum})
+      <p class="text-3xl font-bold font-rodin-b">
+        OLD (Average: {(rating.bestSum / 35).toFixed(2)})
       </p>
       <div class="grid grid-cols-7 gap-4">
         {#each best as chart, index (index)}
@@ -47,8 +47,8 @@
     <div class="bg-gray-100/30 rounded-full w-2"></div>
 
     <aside class="flex flex-col gap-4">
-      <p class="font-bold text-3xl font-helvetica">
-        CURRENT ({rating.currentSum})
+      <p class="font-bold text-3xl font-rodin-b">
+        NEW (Average: {(rating.currentSum / 15).toFixed(2)})
       </p>
       <div class="grid grid-cols-3 gap-4">
         {#each current as chart, index (index)}

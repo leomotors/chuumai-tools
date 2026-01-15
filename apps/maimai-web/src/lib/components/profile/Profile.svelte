@@ -3,6 +3,7 @@
 
   interface Props {
     profile: ImgGenInput["profile"];
+    calculatedRating?: number;
   }
 
   let { profile }: Props = $props();

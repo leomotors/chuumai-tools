@@ -8,5 +8,5 @@ export const difficultyColorMap: Record<
   advanced: "bg-[#ff7e00]",
   expert: "bg-[#e35454]",
   master: "bg-[#bf6aff]",
-  remaster: "bg-[#232323] text-white",
+  remaster: "bg-[#dcaaff]",
 };

@@ -1,24 +1,6 @@
 @import "tailwindcss";
 
 @font-face {
-  font-family: "Helvetica Neue Cyr";
-  font-weight: 700;
-  src: url("/fonts/HelveticaNeueCyr-Bold.woff2") format("woff2");
-}
-
-@font-face {
-  font-family: "Helvetica Neue Cyr";
-  font-weight: 300;
-  src: url("/fonts/HelveticaNeueCyr-Light.woff2") format("woff2");
-}
-
-@font-face {
-  font-family: "Helvetica Neue Cyr";
-  font-weight: 500;
-  src: url("/fonts/HelveticaNeueCyr-Medium.woff2") format("woff2");
-}
-
-@font-face {
   font-family: "Inter";
   src: url("/fonts/InterVariable.woff2") format("woff2-variations");
   font-weight: 100 900;
@@ -26,11 +8,19 @@
   font-display: swap;
 }
 
+/* https://www.reddit.com/r/maimai/comments/1jda6cz/maimaidx_fonts */
+
+@font-face {
+  font-family: "RodinNTLG Pro B";
+  font-weight: 400;
+  src: url("/fonts/FOT-RodinNTLG Pro B.woff2") format("woff2");
+}
+
 @import "@fontsource-variable/noto-sans-jp";
 
 @theme {
   --font-app: Inter, "Noto Sans JP Variable", ui-sans-serif, system-ui;
-  --font-helvetica: "Helvetica Neue Cyr", sans-serif;
+  --font-rodin-b: "RodinNTLG Pro B", ui-sans-serif, system-ui;
 }
 
 @source "../../../packages/core/src/maimai/color.ts";

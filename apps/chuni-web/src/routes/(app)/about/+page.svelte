@@ -34,16 +34,4 @@
       </ExtLink> sometimes.
     </p>
   {/snippet}
-  {#snippet contentAfter()}
-    <div class="bg-white rounded-lg shadow-lg p-6 space-y-4 mb-4">
-      <h3 class="font-bold text-lg">Miscellaneous</h3>
-      <ul class="list-disc list-inside">
-        <li>
-          <a href="/ui-playground" class="text-blue-500 hover:text-blue-600">
-            UI Playground
-          </a>
-        </li>
-      </ul>
-    </div>
-  {/snippet}
 </AboutPage>
