@@ -1,4 +1,4 @@
-function getRankMultiplier(score: number) {
+export function getRankMultiplier(score: number) {
   if (score >= 100_5000) return 22.4;
   if (score >= 100_4999) return 22.2;
   if (score >= 100_0000) return 21.6;
