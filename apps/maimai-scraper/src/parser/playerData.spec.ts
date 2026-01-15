@@ -57,6 +57,20 @@ describe("Player Data", () => {
         playCountCurrent: 123,
         playCountTotal: 456,
       },
+      "shikanoko.html": {
+        characterImage:
+          "https://maimaidx.jp/maimai-mobile/img/Icon/ab9873ac3e18f505.png",
+        honorText:
+          "しかのこのこのここしたんたんしかのこのこのここしたんたんしかのこのこのここしたんたんしかのこのこのここしたんたんしかのこのこのここしたんたんしかのこのこのここしたんたんしかのこのこのここしたんたんしかのこのこのここしたんたん",
+        honorRarity: "NORMAL",
+        playerName: "Ｌｅｏψｒθφ",
+        courseRank: 0,
+        classRank: 0,
+        rating: 13062,
+        star: 30,
+        playCountCurrent: 1,
+        playCountTotal: 32,
+      },
       "rate16.html": {
         characterImage:
           "https://maimaidx-eng.com/maimai-mobile/img/Icon/4724624520f6605f.png",

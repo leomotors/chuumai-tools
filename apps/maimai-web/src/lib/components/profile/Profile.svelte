@@ -33,7 +33,9 @@
       class="w-[400px] h-[38px] bg-contain bg-no-repeat bg-center flex items-center justify-center"
       style="background-image: url(/trophy/trophy_{profile.honorRarity.toLowerCase()}.png)"
     >
-      <p class="text-2xl font-bold text-center z-10">{profile.honorText}</p>
+      <p class="text-2xl font-bold text-center z-10 whitespace-nowrap">
+        {profile.honorText}
+      </p>
     </div>
 
     <!-- Player Name / Rating -->
