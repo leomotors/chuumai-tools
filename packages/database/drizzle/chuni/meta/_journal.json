@@ -50,6 +50,13 @@
       "when": 1764924738391,
       "tag": "0006_fix-userid-type",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1768494116887,
+      "tag": "0007_play-history",
+      "breakpoints": true
     }
   ]
 }

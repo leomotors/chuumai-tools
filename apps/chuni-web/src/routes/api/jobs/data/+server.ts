@@ -10,6 +10,7 @@ import {
   jobTable,
   musicRecordTable,
   playerDataTable,
+  playHistoryTable,
   rawScrapeDataTable,
 } from "@repo/database/chuni";
 import type { RatingType } from "@repo/types/chuni";
@@ -173,6 +174,27 @@ export const POST: RequestHandler = async ({ request }) => {
     await insertRating(recordData.current, "CURRENT");
     await insertRating(recordData.selectionBest, "SELECTION_BEST");
     await insertRating(recordData.selectionCurrent, "SELECTION_CURRENT");
+
+    // Save History
+    if (recordData.history) {
+      await db
+        .insert(playHistoryTable)
+        .values(
+          recordData.history.map((history) => ({
+            jobId,
+            musicTitle: history.title,
+            difficulty: history.difficulty,
+            score: history.score,
+            clearMark: history.clearMark ?? null,
+            fc: history.fc,
+            aj: history.aj,
+            fullChain: history.fullChain,
+            trackNo: history.trackNo,
+            playedAt: new Date(history.playedAt),
+          })),
+        )
+        .onConflictDoNothing();
+    }
 
     // Insert raw scrape data for debugging
     await db.insert(rawScrapeDataTable).values({

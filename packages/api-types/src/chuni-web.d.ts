@@ -786,6 +786,7 @@ export interface components {
         best: components["schemas"]["Chart"][];
         current: components["schemas"]["Chart"][];
         hidden?: components["schemas"]["HiddenChart"][];
+        scraperVersion?: string;
       };
       /** @example XVRS */
       version: string;
@@ -796,10 +797,40 @@ export interface components {
         best: components["schemas"]["Chart"][];
         current: components["schemas"]["Chart"][];
         hidden?: components["schemas"]["HiddenChart"][];
+        scraperVersion?: string;
         allRecords: components["schemas"]["Chart"][];
+        history?: components["schemas"]["HistoryRecord"][];
       };
       /** @example XVRS */
       version: string;
+    };
+    HistoryRecord: {
+      title: string;
+      score: number;
+      /** @enum {string|null} */
+      clearMark?:
+        | "CLEAR"
+        | "HARD"
+        | "BRAVE"
+        | "ABSOLUTE"
+        | "CATASTROPHY"
+        | null;
+      /** @default false */
+      fc: boolean;
+      /** @default false */
+      aj: boolean;
+      /** @default false */
+      isHidden: boolean;
+      /**
+       * @description Full Chain Status (0: None, 1: Gold, 2: Platinum)
+       * @example 2
+       */
+      fullChain: number;
+      /** @enum {string|null} */
+      difficulty?: "basic" | "advanced" | "expert" | "master" | "ultima" | null;
+      trackNo: number;
+      /** Format: date-time */
+      playedAt: string;
     };
     PreviewNextResponse: {
       profile: components["schemas"]["Profile"];
@@ -959,6 +990,7 @@ export interface components {
       selectionCurrent: components["schemas"]["ChartWithFullChain"][];
       /** @description All play records */
       allRecords: components["schemas"]["ChartWithFullChain"][];
+      history?: components["schemas"]["HistoryRecord"][];
     };
     ChartWithFullChain: components["schemas"]["Chart"] & {
       /**
@@ -985,6 +1017,7 @@ export interface components {
         best: components["schemas"]["Chart"][];
         current: components["schemas"]["Chart"][];
         hidden?: components["schemas"]["HiddenChart"][];
+        scraperVersion?: string;
       };
       /**
        * @description Calculated rating from image generation service

@@ -11,6 +11,7 @@ import {
 } from "@repo/core/web";
 import {
   chartSchemaWithFullChain,
+  historyRecordSchema,
   imgGenInputSchema,
   rarityLevelValues,
   teamRarityLevelValues,
@@ -79,6 +80,7 @@ export const saveRatingRecordsSchema = z
     allRecords: z.array(chartSchemaWithFullChain).openapi({
       description: "All play records",
     }),
+    history: z.array(historyRecordSchema).optional(),
   })
   .openapi("SaveRatingRecords");
 

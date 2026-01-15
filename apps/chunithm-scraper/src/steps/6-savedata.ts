@@ -1,5 +1,5 @@
 import { logger } from "@repo/core/utils";
-import type { ImgGenInput } from "@repo/types/chuni";
+import type { FullPlayDataInput, ImgGenInput } from "@repo/types/chuni";
 
 import type { ApiClient } from "../api.js";
 import { environment } from "../environment.js";
@@ -10,6 +10,7 @@ import type { scrapeMusicRecord } from "./3-music.js";
 type Params = {
   playerData: Awaited<ReturnType<typeof scrapePlayerData>>["playerData"];
   recordData: Awaited<ReturnType<typeof scrapeMusicRecord>>["recordData"];
+  fullPlayDataInput: FullPlayDataInput;
   playerDataHtml: string;
   allMusicRecordHtml: string;
   imgGenInput: ImgGenInput;
@@ -22,6 +23,7 @@ export async function saveDataToService(
   {
     playerData,
     recordData,
+    fullPlayDataInput,
     playerDataHtml,
     allMusicRecordHtml,
     imgGenInput,
@@ -66,6 +68,7 @@ export async function saveDataToService(
           recordToGenInputWithFullChain,
         ),
         allRecords: recordData.allRecords.map(recordToGenInputWithFullChain),
+        history: fullPlayDataInput.history,
       },
       playerDataHtml,
       allMusicRecordHtml,

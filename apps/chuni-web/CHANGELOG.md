@@ -3,6 +3,7 @@
 ## [3.8.0] - 2026-01-15
 
 - Update music card UI allowing for more space for long titles
+- Save history data
 
 ## [3.7.0] - 2026-01-14
 

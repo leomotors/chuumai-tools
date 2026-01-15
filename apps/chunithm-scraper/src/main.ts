@@ -19,6 +19,7 @@ import { handlePwError, Runner } from "./runner.js";
 import { login } from "./steps/1-login.js";
 import { scrapePlayerData } from "./steps/2-playerdata.js";
 import { scrapeMusicRecord } from "./steps/3-music.js";
+import { processHistoryData } from "./steps/4-history.js";
 import { saveDataToService } from "./steps/6-savedata.js";
 import { generateImage } from "./steps/7-image.js";
 import { sendDiscordImage } from "./steps/8-discord.js";
@@ -64,11 +65,24 @@ export async function main(
     () => scrapeMusicRecord(page),
   );
 
+  // * Step 4: Scrape History
+  const historyHTML = await runner.runStep(
+    "Step 4.1: Scrape History",
+    () => fetchPath(page, mobileBaseURL + "record/playlog"),
+    handlePwError,
+    3,
+  );
+
+  const historyData = await runner.runStep(
+    "Step 4.2: Process/Parse History Data",
+    () => processHistoryData(historyHTML),
+  );
+
   const timeForScrape = performance.now() - start;
 
-  // * Step 4: Create JSON for Image Generation
-  const { imgGenInput, imgGenFileName } = await runner.runStep(
-    "Step 4: Create JSON for Image Generation",
+  // * Step 5.1: Create JSON for Image Generation
+  const { imgGenInput, imgGenFileName, fullData } = await runner.runStep(
+    "Step 5.1: Create JSON for Image Generation",
     async () => {
       const charaImageData = await downloadImageAsBase64(
         playerData.characterImage,
@@ -99,6 +113,7 @@ export async function main(
         allRecords: recordData.allRecords
           .filter((r) => r.score > 0)
           .map(recordToGenInput),
+        history: historyData,
       } satisfies FullPlayDataInput;
 
       const fullDataFileName = `full-${imgGenFileName}`;
@@ -111,9 +126,9 @@ export async function main(
     },
   );
 
-  // * Step 5: Calculate Rating
+  // * Step 5.2: Calculate Rating
   const rawImgGen = await runner.runStep(
-    "Step 5: Calculate Rating",
+    "Step 5.2: Calculate Rating",
     async () => {
       if (!environment.CHUNI_SERVICE_URL) {
         logger.warn(
@@ -155,6 +170,7 @@ export async function main(
       await saveDataToService(jobId, apiClient, {
         playerData,
         recordData,
+        fullPlayDataInput: fullData,
         playerDataHtml,
         allMusicRecordHtml: recordHtml,
         imgGenInput,

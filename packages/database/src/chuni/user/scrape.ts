@@ -19,6 +19,15 @@ import {
 
 export { jobTable };
 
+const playDataFragment = {
+  score: integer().notNull(),
+
+  clearMark: clearMarkType("clear_mark"),
+  fc: boolean().notNull(),
+  aj: boolean().notNull(),
+  fullChain: integer("full_chain").notNull(),
+} as const;
+
 /**
  * Table for storing player data at each job.
  */
@@ -79,12 +88,7 @@ export const musicRecordTable = pgTable(
     musicId: integer("music_id").notNull(),
     difficulty: stdChartDifficultyType().notNull(),
 
-    score: integer().notNull(),
-
-    clearMark: clearMarkType("clear_mark"),
-    fc: boolean().notNull(),
-    aj: boolean().notNull(),
-    fullChain: integer("full_chain").notNull(),
+    ...playDataFragment,
   },
   (t) => [
     unique("music_record_unique")
@@ -100,6 +104,22 @@ export const musicRecordTable = pgTable(
       .nullsNotDistinct(),
   ],
 );
+
+export const playHistoryTable = pgTable("play_history", {
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
+
+  jobId: integer("job_id").references(() => jobTable.id),
+
+  // WORLD'S END will be stored as difficulty = NULL
+  musicTitle: text("music_title").notNull(),
+  difficulty: stdChartDifficultyType(),
+
+  ...playDataFragment,
+
+  // Play History Specific
+  trackNo: integer("track_no").notNull(),
+  playedAt: timestamp("played_at").notNull().unique(),
+});
 
 /**
  * Table for showing Music for Rating for each job.

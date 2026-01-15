@@ -33,6 +33,20 @@ export const chartSchemaWithFullChain = chartSchema
 
 export type ChartWithFullChain = z.infer<typeof chartSchemaWithFullChain>;
 
+export const historyRecordSchema = chartSchemaWithFullChain
+  .omit({
+    id: true,
+    difficulty: true,
+  })
+  .extend({
+    difficulty: z.enum(stdChartDifficultyValues).nullish(),
+    trackNo: z.number().int().min(1),
+    playedAt: z.iso.datetime(),
+  })
+  .openapi("HistoryRecord");
+
+export type HistoryRecordSchema = z.infer<typeof historyRecordSchema>;
+
 export const profileSchema = z
   .object({
     // Must be data URL of base64 or URL from website without CORS
@@ -84,6 +98,7 @@ export const imgGenInputSchema = z.object({
 
 export const fullPlayDataInputSchema = imgGenInputSchema.extend({
   allRecords: z.array(chartSchema),
+  history: z.array(historyRecordSchema).optional(),
 });
 
 export type ImgGenInput = z.infer<typeof imgGenInputSchema>;

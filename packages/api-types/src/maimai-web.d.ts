@@ -541,6 +541,7 @@ export interface components {
       selectionCurrent: components["schemas"]["Chart"][];
       /** @description All play records */
       allRecords: components["schemas"]["Chart"][];
+      history?: components["schemas"]["HistoryRecord"][];
     };
     Chart: {
       title: string;
@@ -555,6 +556,11 @@ export interface components {
       comboMark?: "NONE" | "FC" | "FC+" | "AP" | "AP+" | null;
       /** @enum {string|null} */
       syncMark?: "NONE" | "SYNC" | "FS" | "FS+" | "FDX" | "FDX+" | null;
+    };
+    HistoryRecord: components["schemas"]["Chart"] & {
+      trackNo: number;
+      /** Format: date-time */
+      playedAt: string;
     };
     SaveJobDataRequest: {
       /**
@@ -585,6 +591,7 @@ export interface components {
       profile: components["schemas"]["Profile"];
       best: components["schemas"]["Chart"][];
       current: components["schemas"]["Chart"][];
+      scraperVersion?: string;
     };
     Profile: components["schemas"]["ProfileWithoutLastPlayed"] & {
       /** Format: date-time */
@@ -663,6 +670,7 @@ export interface components {
     };
     FullPlayDataInput: components["schemas"]["ImgGenInput"] & {
       allRecords: components["schemas"]["Chart"][];
+      history: components["schemas"]["HistoryRecord"][];
     };
     PreviewNextResponse: {
       profile: components["schemas"]["Profile"];

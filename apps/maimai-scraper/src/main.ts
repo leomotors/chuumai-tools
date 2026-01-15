@@ -57,8 +57,6 @@ export async function main(
     () => scrapeMusicRecord(page),
   );
 
-  const timeForScrape = performance.now() - start;
-
   // * Step 4: Scrape History
   const historyHTML = await runner.runStep(
     "Step 4.1: Scrape History",
@@ -80,7 +78,9 @@ export async function main(
     );
   }
 
-  // * Step 5: Create JSON for Image Generation
+  const timeForScrape = performance.now() - start;
+
+  // * Step 5.1: Create JSON for Image Generation
   const { imgGenInput, imgGenFileName, fullData } = await runner.runStep(
     "Step 5.1: Create JSON for Image Generation",
     async () => {
