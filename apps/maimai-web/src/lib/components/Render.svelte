@@ -21,7 +21,7 @@
   style="background-image: url({getBackgroundMapping(version)})"
 >
   <Header lastPlayed={new Date(profile.lastPlayed)} {version}>
-    <Profile {profile} />
+    <Profile {profile} calculatedRating={input.rating.total} />
   </Header>
 
   <main

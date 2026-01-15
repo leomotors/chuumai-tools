@@ -6,69 +6,86 @@
   import { Button } from "@repo/ui/atom/button";
 </script>
 
-<h1 class="font-bold text-xl">Rating Components</h1>
-
 <Button>Shadcn Button</Button>
 
-<p>Rating = 14280</p>
+<h1 class="font-bold text-3xl">Rating Components</h1>
 
-<div class="items-center flex gap-1 ml-4">
-  <Rating rating={14280} calculatedRating={14280} />
+<div
+  class="rating-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 my-4"
+>
+  <div>
+    <p>Rating = 14280</p>
+    <Rating rating={14280} calculatedRating={14280} />
+  </div>
+
+  <div>
+    <p>Rating = 14912</p>
+    <Rating rating={14912} calculatedRating={14912} />
+  </div>
+
+  <div>
+    <p>Rating = 16399</p>
+    <Rating rating={16399} calculatedRating={16399} />
+  </div>
+
+  <div>
+    <p>Calculation Error (Actual 16550, Calculated: 16562)</p>
+    <Rating rating={16550} calculatedRating={16562} />
+  </div>
+
+  <div>
+    <p>Rating = 0</p>
+    <Rating rating={0} calculatedRating={0} />
+  </div>
+
+  <div>
+    <p>Rating = 9999</p>
+    <Rating rating={9999} calculatedRating={9999} />
+  </div>
+
+  <div>
+    <p>Rating = 13370</p>
+    <Rating rating={13370} calculatedRating={13370} />
+  </div>
+
+  <div>
+    <p>Rating = 12420</p>
+    <Rating rating={12420} calculatedRating={12420} />
+  </div>
+
+  <div>
+    <p>Rating = 11999</p>
+    <Rating rating={11999} calculatedRating={11999} />
+  </div>
 </div>
 
-<p>Rating = 16399</p>
+<h1 class="font-bold text-3xl">Profile</h1>
 
-<div class="items-center flex gap-1 ml-4">
-  <Rating rating={16399} calculatedRating={16399} />
+<div class="bg-blue-300 p-4 flex flex-col gap-4">
+  <Profile
+    profile={{
+      characterImage: "/mafuyu-bnw.png",
+
+      honorText: "シリウスの輝きのように",
+      honorRarity: "GOLD",
+
+      playerName: "Ｌｅｏψｒθφ",
+
+      courseRank: 10,
+      classRank: 0,
+
+      rating: 14912,
+      star: 237,
+
+      playCountCurrent: 111,
+      playCountTotal: 529,
+      lastPlayed: "2026-01-13T10:23:00Z",
+    }}
+    calculatedRating={14912}
+  />
 </div>
 
-<p>Calculation Error (Actual 16550, Calculated: 16562)</p>
-
-<div class="items-center flex gap-1 ml-4">
-  <Rating rating={16550} calculatedRating={16562} />
-</div>
-
-<p>Rating = 0</p>
-
-<div class="items-center flex gap-1 ml-4">
-  <Rating rating={0} calculatedRating={0} />
-</div>
-
-<p>Rating = 9999</p>
-
-<div class="items-center flex gap-1 ml-4">
-  <Rating rating={9999} calculatedRating={9999} />
-</div>
-
-<p>Rating = 13370</p>
-
-<div class="items-center flex gap-1 ml-4">
-  <Rating rating={13370} calculatedRating={13370} />
-</div>
-
-<h1 class="font-bold text-xl">Profile</h1>
-
-<Profile
-  profile={{
-    characterImage: "/mafuyu-bnw.png",
-
-    honorText: "シリウスの輝きのように",
-    honorRarity: "GOLD",
-
-    playerName: "Ｌｅｏψｒθφ",
-
-    courseRank: 10,
-    classRank: 0,
-
-    rating: 14912,
-    star: 237,
-
-    playCountCurrent: 111,
-    playCountTotal: 529,
-    lastPlayed: "2026-01-13T10:23:00Z",
-  }}
-  calculatedRating={16.3999}
-/>
+<h1 class="font-bold text-3xl">Music Card</h1>
 
 <div
   class="bg-blue-300 p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
@@ -218,3 +235,11 @@
     }}
   />
 </div>
+
+<style lang="postcss">
+  @reference "tailwindcss";
+
+  .rating-grid > div {
+    @apply flex flex-col items-center gap-1;
+  }
+</style>

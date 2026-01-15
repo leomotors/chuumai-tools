@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { cn } from "@repo/ui/utils";
+
   interface Props {
     rating: number;
     calculatedRating: number;
@@ -40,7 +42,10 @@
   style="background-image: url(/rating/{ratingLevel}.png)"
 >
   <p
-    class="flex items-center justify-end gap-[14px] pr-6 text-2xl text-amber-300 font-rodin-b"
+    class={cn(
+      "flex items-center justify-end gap-[10px] pr-[21px] text-3xl font-rodin-b",
+      ratingMatched ? "text-amber-300" : "text-gray-300",
+    )}
   >
     {#each splitted as digit, index (index)}
       <span>{digit}</span>
