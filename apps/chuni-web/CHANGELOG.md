@@ -1,5 +1,9 @@
 # Changelog
 
+## [3.8.0] - 2026-01-15
+
+- Update music card UI allowing for more space for long titles
+
 ## [3.7.0] - 2026-01-14
 
 - accept field scraperVersion in input json

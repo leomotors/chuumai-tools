@@ -44,43 +44,43 @@
   <!-- Upper -->
   <div
     class={twMerge(
-      "flex justify-between px-2 pt-2 rounded-t-lg",
+      "px-2 pt-1 rounded-t-lg",
       difficultyColorMap[music.difficulty],
     )}
   >
     <!-- Left -->
-    <div>
+    <div class="flex items-center justify-between">
       <p class="font-bold pl-6 text-xl font-helvetica">
         {music.difficulty.toUpperCase()}
       </p>
-      <p
-        class={twMerge(
-          "text-xl -mt-1 whitespace-nowrap w-[150px] overflow-ellipsis overflow-hidden -translate-y-0.5",
-          music.title.length > 15 && "text-lg",
-        )}
-      >
-        {music.title}
-      </p>
     </div>
-
-    <!-- Right -->
     <p
-      class="p-1 font-helvetica bg-white rounded h-9 w-[50px] text-black flex justify-end items-baseline gap-1 relative"
+      class={twMerge(
+        "text-xl -mt-1 whitespace-nowrap overflow-ellipsis overflow-hidden -translate-y-0.5",
+        music.title.length > 15 && "text-lg",
+      )}
     >
-      <span class="font-bold text-2xl text-[26px]">
-        {music.constant < 1 ? "?" : Math.floor(music.constant)}
-      </span>
-      <span class="-ml-1">
-        .{music.constantSure
-          ? Math.floor(((music.constant % 1) + Number.EPSILON * 100) * 10)
-          : "?"}
-      </span>
-
-      {#if music.constant % 1 >= 0.5}
-        <span class="absolute -top-1.5 right-1.5 font-bold text-xl"> + </span>
-      {/if}
+      {music.title}
     </p>
   </div>
+
+  <!-- Overlay Level on Top Right -->
+  <p
+    class="absolute top-0 right-2 px-1 pt-[3px] font-helvetica bg-white rounded h-8 w-[50px] text-black flex justify-end items-baseline gap-1 -translate-y-2.5"
+  >
+    <span class="font-bold text-2xl text-[26px]">
+      {music.constant < 1 ? "?" : Math.floor(music.constant)}
+    </span>
+    <span class="-ml-1">
+      .{music.constantSure
+        ? Math.floor(((music.constant % 1) + Number.EPSILON * 100) * 10)
+        : "?"}
+    </span>
+
+    {#if (music.constant % 1) + Number.EPSILON * 100 >= 0.5}
+      <span class="absolute -top-1.5 right-1.5 font-bold text-xl"> + </span>
+    {/if}
+  </p>
 
   <!-- Mid -->
   <div class="px-2 flex gap-2">
