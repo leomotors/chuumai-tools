@@ -10,7 +10,6 @@
   let { data, form } = $props();
 
   let isGenerating = $state(false);
-  let showApiKey = $state(false);
 
   // Derive if there's an API key (current or newly generated)
   const hasApiKey = $derived(data.apiKey || (form?.success && form?.apiKey));
@@ -37,7 +36,6 @@
             return async ({ update }) => {
               await update();
               isGenerating = false;
-              showApiKey = true;
             };
           }}
         >

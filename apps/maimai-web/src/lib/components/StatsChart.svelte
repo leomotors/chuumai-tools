@@ -1,6 +1,6 @@
 <script lang="ts">
   import { scaleLinear, scaleTime } from "d3-scale";
-  import type { LineChart as LineChartType } from "layerchart";
+  import { LineChart } from "layerchart";
   import type { Snippet } from "svelte";
   import { SvelteDate } from "svelte/reactivity";
 
@@ -9,22 +9,13 @@
 
   import * as Tabs from "@repo/ui/atom/tabs";
 
-  // Dynamically import LayerChart only on client side
-  let LineChart = $state<typeof LineChartType | null>(null);
-  $effect(() => {
-    if (browser) {
-      import("layerchart").then((module) => {
-        LineChart = module.LineChart;
-      });
-    }
-  });
-
   type StatsChartProps = {
     userStats: UserStats[];
+    manualRatings?: { rating: number; timestamp: Date }[];
     header: Snippet;
   };
 
-  let { userStats, header }: StatsChartProps = $props();
+  let { userStats, manualRatings = [], header }: StatsChartProps = $props();
 
   // Chart state
   let xAxisMode = $state<"time" | "playCount">("time");
@@ -44,6 +35,7 @@
     playCount: number;
     rating: number;
     star: number;
+    isManual?: boolean;
   };
 
   // Chart data transformations
@@ -73,14 +65,46 @@
     }
   });
 
+  // Manual rating data (filtered by time range when in time mode)
+  const filteredManualRatings = $derived.by(() => {
+    if (xAxisMode !== "time" || !manualRatings || manualRatings.length === 0)
+      return [];
+
+    if (timeRange > 0) {
+      const cutoffDate = new SvelteDate();
+      cutoffDate.setDate(cutoffDate.getDate() - timeRange);
+      return manualRatings.filter((r) => new Date(r.timestamp) >= cutoffDate);
+    }
+    return manualRatings;
+  });
+
   // Transform data for chart
   const transformedData = $derived.by((): ChartDataPoint[] => {
-    return chartData.map((s) => ({
+    const userStatsData = chartData.map((s) => ({
       date: new Date(s.lastPlayed),
       playCount: s.playCountTotal,
       rating: s.rating,
       star: s.star,
+      isManual: false,
     }));
+
+    // Add manual ratings only in time mode and only for rating metric
+    if (xAxisMode === "time" && selectedMetric === "rating") {
+      const manualData = filteredManualRatings.map((r) => ({
+        date: new Date(r.timestamp),
+        playCount: 0,
+        rating: r.rating,
+        star: 0,
+        isManual: true,
+      }));
+
+      // Combine and sort by date
+      return [...userStatsData, ...manualData].sort(
+        (a, b) => a.date.getTime() - b.date.getTime(),
+      );
+    }
+
+    return userStatsData;
   });
 
   // Metric configuration
@@ -237,7 +261,7 @@
     <!-- Chart Content with fixed height to prevent layout shift -->
     <div class="h-96 w-full">
       <Tabs.Content value="time" class="h-full">
-        {#if !browser || !LineChart}
+        {#if !browser}
           <div class="flex h-full items-center justify-center text-gray-500">
             Loading chart...
           </div>
@@ -248,10 +272,11 @@
             xScale={scaleTime()}
             series={chartSeries}
             axis
+            points
             props={{
               xAxis: {
                 format: (d: Date) =>
-                  d.toLocaleDateString("en-US", {
+                  d.toLocaleDateString("en-UK", {
                     month: "short",
                     day: "numeric",
                     year: transformedData.length > 90 ? "2-digit" : undefined,
@@ -275,7 +300,7 @@
       </Tabs.Content>
 
       <Tabs.Content value="playCount" class="h-full">
-        {#if !browser || !LineChart}
+        {#if !browser}
           <div class="flex h-full items-center justify-center text-gray-500">
             Loading chart...
           </div>
@@ -287,6 +312,7 @@
             series={chartSeries}
             axis
             padding={{ left: 60, right: 20, top: 20, bottom: 40 }}
+            points
             props={{
               xAxis: {
                 labelProps: {
@@ -300,7 +326,6 @@
               },
             }}
           />
-        {:else}
           <div class="flex h-full items-center justify-center text-gray-500">
             No data available
           </div>

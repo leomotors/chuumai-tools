@@ -28,7 +28,10 @@ export const load: PageServerLoad = async ({ parent }) => {
         .where(eq(apiKey.userId, session.user.id)),
       getUserStats(session.user.id),
       db
-        .select()
+        .select({
+          rating: manualRatingTable.rating,
+          timestamp: manualRatingTable.timestamp,
+        })
         .from(manualRatingTable)
         .where(eq(manualRatingTable.userId, session.user.id)),
     ],
