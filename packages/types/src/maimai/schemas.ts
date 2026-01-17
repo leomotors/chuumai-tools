@@ -1,6 +1,8 @@
 import { z } from "../zod";
 import {
+  allChartDifficultyValues,
   chartTypeValues,
+  chartTypeWithUtageValues,
   comboMarkValues,
   rarityLevelValues,
   stdChartDifficultyValues,
@@ -23,7 +25,11 @@ export const chartSchema = z
 export type ChartSchema = z.infer<typeof chartSchema>;
 
 export const historyRecordSchema = chartSchema
+  .omit({ score: true, chartType: true, difficulty: true })
   .extend({
+    score: z.number().min(0).max(2020000),
+    chartType: z.enum(chartTypeWithUtageValues),
+    difficulty: z.enum(allChartDifficultyValues),
     trackNo: z.number().int().min(1),
     playedAt: z.iso.datetime(),
   })

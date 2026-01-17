@@ -177,6 +177,30 @@ test("Parse History", async () => {
       trackNo: 2,
       playedAt: "2025-12-14T09:03:00.000Z", // JST 18:03 = UTC 09:03
     },
+    "utage.html": {
+      title: "[回]ハム太郎とっとこうた",
+      chartType: "utage",
+      difficulty: "utage",
+      score: 973126,
+      dxScore: 1637,
+      dxScoreMax: 2022,
+      comboMark: undefined,
+      syncMark: undefined,
+      trackNo: 2,
+      playedAt: "2025-05-18T12:20:00.000Z", // JST 21:20 = UTC 12:20
+    },
+    "utage-buddy.html": {
+      title: "[騒]ありきたりな恋の歌",
+      chartType: "utage-buddy",
+      difficulty: "utage",
+      score: 1977592,
+      dxScore: 4263,
+      dxScoreMax: 4776,
+      comboMark: undefined,
+      syncMark: "SYNC",
+      trackNo: 3,
+      playedAt: "2026-01-17T04:57:00.000Z", // JST 13:57 = UTC 04:57
+    },
   };
 
   for (const [fixture, expected] of Object.entries(fixtures)) {

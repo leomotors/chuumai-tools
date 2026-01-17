@@ -557,7 +557,25 @@ export interface components {
       /** @enum {string|null} */
       syncMark?: "NONE" | "SYNC" | "FS" | "FS+" | "FDX" | "FDX+" | null;
     };
-    HistoryRecord: components["schemas"]["Chart"] & {
+    HistoryRecord: {
+      title: string;
+      dxScore?: number | null;
+      dxScoreMax?: number | null;
+      /** @enum {string|null} */
+      comboMark?: "NONE" | "FC" | "FC+" | "AP" | "AP+" | null;
+      /** @enum {string|null} */
+      syncMark?: "NONE" | "SYNC" | "FS" | "FS+" | "FDX" | "FDX+" | null;
+      score: number;
+      /** @enum {string} */
+      chartType: "std" | "dx" | "utage" | "utage-buddy";
+      /** @enum {string} */
+      difficulty:
+        | "basic"
+        | "advanced"
+        | "expert"
+        | "master"
+        | "remaster"
+        | "utage";
       trackNo: number;
       /** Format: date-time */
       playedAt: string;

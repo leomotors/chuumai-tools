@@ -2,7 +2,9 @@ import { integer, pgTable, text, timestamp, unique } from "drizzle-orm/pg-core";
 
 import { jobTable } from "../../shared";
 import {
+  allChartDifficultyType,
   chartType,
+  chartTypeWithUtageType,
   comboMarkType,
   rarityLevelType,
   ratingType,
@@ -93,7 +95,10 @@ export const playHistoryTable = pgTable("play_history", {
   jobId: integer("job_id").references(() => jobTable.id),
 
   // Chart Identifier
-  ...chartIdentifierFragment,
+  musicTitle: text("music_title").notNull(),
+
+  chartType: chartTypeWithUtageType("chart_type").notNull(),
+  difficulty: allChartDifficultyType().notNull(),
   ...playDataFragment,
 
   // Play History Specific

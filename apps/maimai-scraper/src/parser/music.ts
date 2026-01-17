@@ -13,6 +13,30 @@ function parseChartType(element: Element): "dx" | "std" {
   return musicKindIcon.src.includes("music_dx.png") ? "dx" : "std";
 }
 
+// Helper function to parse chart type for history (includes utage types)
+function parseChartTypeHistory(
+  element: Element,
+): "dx" | "std" | "utage" | "utage-buddy" {
+  // Check for utage charts first
+  const utageContainer = element.querySelector(".playlog_utage_container");
+  if (utageContainer) {
+    // Check if it's a buddy chart by looking for the buddy icon
+    const hasBuddyIcon = element.querySelector(
+      'img[src*="music_utage_buddy.png"]',
+    );
+    return hasBuddyIcon ? "utage-buddy" : "utage";
+  }
+
+  // For non-utage charts, use the standard logic
+  const musicKindIcon = element.querySelector(
+    ".music_kind_icon, .playlog_music_kind_icon",
+  ) as HTMLImageElement | null;
+  if (!musicKindIcon) {
+    throw new Error("Failed to find music kind icon");
+  }
+  return musicKindIcon.src.includes("music_dx.png") ? "dx" : "std";
+}
+
 // Helper function to parse difficulty from image
 function parseDifficulty(
   element: Element,
@@ -34,6 +58,34 @@ function parseDifficulty(
     return "master";
   } else if (difficultyImg.src.includes("diff_remaster.png")) {
     return "remaster";
+  } else {
+    throw new Error("Failed to parse difficulty from image");
+  }
+}
+
+// Helper function to parse difficulty for history (includes utage)
+function parseDifficultyHistory(
+  element: Element,
+): "basic" | "advanced" | "expert" | "master" | "remaster" | "utage" {
+  const difficultyImg = element.querySelector(
+    "img[src*='/diff_']",
+  ) as HTMLImageElement | null;
+  if (!difficultyImg) {
+    throw new Error("Failed to find difficulty image");
+  }
+
+  if (difficultyImg.src.includes("diff_basic.png")) {
+    return "basic";
+  } else if (difficultyImg.src.includes("diff_advanced.png")) {
+    return "advanced";
+  } else if (difficultyImg.src.includes("diff_expert.png")) {
+    return "expert";
+  } else if (difficultyImg.src.includes("diff_master.png")) {
+    return "master";
+  } else if (difficultyImg.src.includes("diff_remaster.png")) {
+    return "remaster";
+  } else if (difficultyImg.src.includes("diff_utage.png")) {
+    return "utage";
   } else {
     throw new Error("Failed to parse difficulty from image");
   }
@@ -203,8 +255,8 @@ export function parseHistory(element: Element) {
     }
   }
 
-  const chartType = parseChartType(element);
-  const difficulty = parseDifficulty(element);
+  const chartType = parseChartTypeHistory(element);
+  const difficulty = parseDifficultyHistory(element);
 
   // Parse track number and played time
   const subTitle = element.querySelector(".sub_title");

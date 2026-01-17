@@ -11,6 +11,14 @@ export type Category = (typeof categoryValues)[number];
 export const chartTypeValues = ["std", "dx"] as const;
 export type ChartType = (typeof chartTypeValues)[number];
 
+export const chartTypeWithUtageValues = [
+  "std",
+  "dx",
+  "utage",
+  "utage-buddy",
+] as const;
+export type ChartTypeWithUtage = (typeof chartTypeWithUtageValues)[number];
+
 export const stdChartDifficultyValues = [
   "basic",
   "advanced",
@@ -19,6 +27,12 @@ export const stdChartDifficultyValues = [
   "remaster",
 ] as const;
 export type StdChartDifficulty = (typeof stdChartDifficultyValues)[number];
+
+export const allChartDifficultyValues = [
+  ...stdChartDifficultyValues,
+  "utage",
+] as const;
+export type AllChartDifficulty = (typeof allChartDifficultyValues)[number];
 
 export const rarityLevelValues = [
   "NORMAL",

@@ -15,6 +15,13 @@
       "when": 1768384482982,
       "tag": "0001_history-unique",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1768661838299,
+      "tag": "0002_utage-history",
+      "breakpoints": true
     }
   ]
 }
