@@ -4,3 +4,4 @@ export * from "./data";
 export * from "./image";
 export * from "./job";
 export * from "./rating";
+export * from "./user";
