@@ -1,6 +1,7 @@
 import type { OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
 
 import { forRatingSchema } from "$lib/functions/forRating";
+import { musicRecordSchema } from "$lib/functions/musicRecord";
 import { playCountSinceSchema } from "$lib/functions/playCount";
 import { userStatsSchema } from "$lib/functions/userStats";
 
@@ -100,6 +101,62 @@ export function registerUserRoutes(registry: OpenAPIRegistry) {
     },
   });
 
+  // GET /api/users/musicRecord
+  registry.registerPath({
+    method: "get",
+    path: "/api/users/musicRecord",
+    tags: ["Users"],
+    summary: "Get user music record",
+    description:
+      "Returns the user's play records for a specific music title across all chart types and difficulties. Requires authentication via API key or session.",
+    security: [
+      { [API_KEY_SECURITY_SCHEME]: [] },
+      { [SESSION_SECURITY_SCHEME]: [] },
+    ],
+    request: {
+      query: z.object({
+        musicTitle: z.string().openapi({
+          description: "The music title to retrieve records for",
+          example: "ナイト・オブ・ナイツ",
+        }),
+      }),
+    },
+    responses: {
+      200: {
+        description: "Music record successfully retrieved",
+        content: {
+          "application/json": {
+            schema: musicRecordSchema,
+          },
+        },
+      },
+      400: {
+        description: "Bad Request - Invalid or missing musicTitle parameter",
+        content: {
+          "application/json": {
+            schema: errorSchema,
+          },
+        },
+      },
+      401: {
+        description: "Unauthorized - Invalid or missing API key/session",
+        content: {
+          "application/json": {
+            schema: errorSchema,
+          },
+        },
+      },
+      404: {
+        description: "Not Found - Music not found",
+        content: {
+          "application/json": {
+            schema: errorSchema,
+          },
+        },
+      },
+    },
+  });
+
   // GET /api/users/playCount
   registry.registerPath({
     method: "get",
@@ -155,5 +212,6 @@ export function registerUserRoutes(registry: OpenAPIRegistry) {
 export function registerUserSchemas(registry: OpenAPIRegistry) {
   registry.register("UserStats", userStatsSchema);
   registry.register("ForRatingResult", forRatingSchema);
+  registry.register("MusicRecord", musicRecordSchema);
   registry.register("PlayCountSince", playCountSinceSchema);
 }
