@@ -7,6 +7,7 @@
   import { browser } from "$app/environment";
   import type { UserStats } from "$lib/functions/userStats";
 
+  import * as Chart from "@repo/ui/atom/chart";
   import * as Tabs from "@repo/ui/atom/tabs";
 
   type StatsChartProps = {
@@ -109,9 +110,8 @@
 
   // Metric configuration
   const metricConfig = {
-    playerLevel: { label: "Player Level", color: "#3b82f6" },
+    rating: { label: "Rating", color: "#3b82f6" },
     playCount: { label: "Play Count", color: "#22c55e" },
-    rating: { label: "Rating", color: "#f97316" },
     star: { label: "Star", color: "#a855f7" },
   };
 
@@ -266,32 +266,40 @@
             Loading chart...
           </div>
         {:else if transformedData.length > 0}
-          <LineChart
-            data={transformedData}
-            x="date"
-            xScale={scaleTime()}
-            series={chartSeries}
-            axis
-            points
-            props={{
-              xAxis: {
-                format: (d: Date) =>
-                  d.toLocaleDateString("en-UK", {
-                    month: "short",
-                    day: "numeric",
-                    year: transformedData.length > 90 ? "2-digit" : undefined,
-                  }),
-                labelProps: {
-                  class: "text-xs fill-gray-600",
+          <Chart.Container config={{}} class="pl-4">
+            <LineChart
+              data={transformedData}
+              x="date"
+              xScale={scaleTime()}
+              series={chartSeries}
+              axis
+              points
+              props={{
+                xAxis: {
+                  format: (d: Date) =>
+                    d.toLocaleDateString("en-GB", {
+                      day: transformedData.length > 90 ? undefined : "numeric",
+                      month: "short",
+                      year: transformedData.length > 90 ? "2-digit" : undefined,
+                    }),
+                  labelProps: {
+                    class: "text-xs fill-gray-600",
+                  },
                 },
-              },
-              yAxis: {
-                labelProps: {
-                  class: "text-xs fill-gray-600",
+                yAxis: {
+                  labelProps: {
+                    class: "text-xs fill-gray-600",
+                  },
                 },
-              },
-            }}
-          />
+              }}
+            >
+              {#snippet tooltip()}
+                <Chart.Tooltip
+                  labelFormatter={(value) => value.toLocaleDateString()}
+                />
+              {/snippet}
+            </LineChart>
+          </Chart.Container>
         {:else}
           <div class="flex h-full items-center justify-center text-gray-500">
             No data available for selected time range
@@ -305,27 +313,36 @@
             Loading chart...
           </div>
         {:else if transformedData.length > 0}
-          <LineChart
-            data={transformedData}
-            x="playCount"
-            xScale={scaleLinear()}
-            series={chartSeries}
-            axis
-            padding={{ left: 60, right: 20, top: 20, bottom: 40 }}
-            points
-            props={{
-              xAxis: {
-                labelProps: {
-                  class: "text-xs fill-gray-600",
+          <Chart.Container config={{}}>
+            <LineChart
+              data={transformedData}
+              x="playCount"
+              xScale={scaleLinear()}
+              series={chartSeries}
+              axis
+              padding={{ left: 60, right: 20, top: 20, bottom: 40 }}
+              points
+              props={{
+                xAxis: {
+                  labelProps: {
+                    class: "text-xs fill-gray-600",
+                  },
                 },
-              },
-              yAxis: {
-                labelProps: {
-                  class: "text-xs fill-gray-600",
+                yAxis: {
+                  labelProps: {
+                    class: "text-xs fill-gray-600",
+                  },
                 },
-              },
-            }}
-          />
+              }}
+            >
+              {#snippet tooltip()}
+                <Chart.Tooltip
+                  labelFormatter={(value) => `Play Count: ${value}`}
+                />
+              {/snippet}
+            </LineChart>
+          </Chart.Container>
+        {:else}
           <div class="flex h-full items-center justify-center text-gray-500">
             No data available
           </div>

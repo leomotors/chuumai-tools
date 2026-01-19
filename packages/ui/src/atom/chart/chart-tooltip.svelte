@@ -1,126 +1,178 @@
 <script lang="ts">
+  import { getTooltipContext, Tooltip as TooltipPrimitive } from "layerchart";
   import type { Snippet } from "svelte";
-  import { getContext } from "svelte";
+  import type { HTMLAttributes } from "svelte/elements";
 
-  import { cn } from "@repo/ui/utils";
+  import {
+    cn,
+    type WithElementRef,
+    type WithoutChildren,
+  } from "@repo/ui/utils";
 
-  import type { ChartConfig } from "./chart-container.svelte";
+  import {
+    getPayloadConfigFromPayload,
+    type TooltipPayload,
+    useChart,
+  } from "./chart-utils.js";
 
-  type IndicatorType = "line" | "dot" | "dashed";
-
-  interface TooltipPayloadItem {
-    key: string;
-    value: number | string;
-    name?: string;
-    color?: string;
-  }
-
-  interface Props {
-    hideLabel?: boolean;
-    hideIndicator?: boolean;
-    indicator?: IndicatorType;
-    nameKey?: string;
-    labelKey?: string;
-    label?: string;
-    labelFormatter?: (value: string | number) => string;
-    formatter?: Snippet<[{ payload: TooltipPayloadItem; config: ChartConfig }]>;
-    payload?: TooltipPayloadItem[];
-    class?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  function defaultFormatter(value: any, _payload: TooltipPayload[]) {
+    return `${value}`;
   }
 
   let {
+    ref = $bindable(null),
+    class: className,
     hideLabel = false,
-    hideIndicator = false,
     indicator = "dot",
-    nameKey,
+    hideIndicator = false,
     labelKey,
     label,
-    labelFormatter,
+    labelFormatter = defaultFormatter,
+    labelClassName,
     formatter,
-    payload = [],
-    class: className,
-  }: Props = $props();
+    nameKey,
+    color,
+    ...restProps
+  }: WithoutChildren<WithElementRef<HTMLAttributes<HTMLDivElement>>> & {
+    hideLabel?: boolean;
+    label?: string;
+    indicator?: "line" | "dot" | "dashed";
+    nameKey?: string;
+    labelKey?: string;
+    hideIndicator?: boolean;
+    labelClassName?: string;
+    labelFormatter?: // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      | ((value: any, payload: TooltipPayload[]) => string | number | Snippet)
+      | null;
+    formatter?: Snippet<
+      [
+        {
+          value: unknown;
+          name: string;
+          item: TooltipPayload;
+          index: number;
+          payload: TooltipPayload[];
+        },
+      ]
+    >;
+  } = $props();
 
-  const config = getContext<ChartConfig>("chart-config");
+  const chart = useChart();
+  const tooltipCtx = getTooltipContext();
 
-  function getItemConfig(key: string) {
-    return config?.[key] ?? {};
-  }
+  const formattedLabel = $derived.by(() => {
+    if (hideLabel || !tooltipCtx.payload?.length) return null;
 
-  function getLabel(item: TooltipPayloadItem) {
-    if (labelKey) {
-      const itemConfig = getItemConfig(labelKey);
-      return itemConfig.label ?? labelKey;
-    }
-    if (label) return label;
-    return item.name ?? item.key;
-  }
+    const [item] = tooltipCtx.payload;
+    const key = labelKey ?? item?.label ?? item?.name ?? "value";
 
-  function getName(item: TooltipPayloadItem) {
-    if (nameKey) {
-      const itemConfig = getItemConfig(item.key);
-      return itemConfig.label ?? item.key;
-    }
-    const itemConfig = getItemConfig(item.key);
-    return itemConfig.label ?? item.name ?? item.key;
-  }
+    const itemConfig = getPayloadConfigFromPayload(chart.config, item, key);
+
+    const value =
+      !labelKey && typeof label === "string"
+        ? (chart.config[label as keyof typeof chart.config]?.label ?? label)
+        : (itemConfig?.label ?? item.label);
+
+    if (value === undefined) return null;
+    if (!labelFormatter) return value;
+    return labelFormatter(value, tooltipCtx.payload);
+  });
+
+  const nestLabel = $derived(
+    tooltipCtx.payload.length === 1 && indicator !== "dot",
+  );
 </script>
 
-{#if payload.length > 0}
+{#snippet TooltipLabel()}
+  {#if formattedLabel}
+    <div class={cn("font-medium", labelClassName)}>
+      {#if typeof formattedLabel === "function"}
+        {@render formattedLabel()}
+      {:else}
+        {formattedLabel}
+      {/if}
+    </div>
+  {/if}
+{/snippet}
+
+<TooltipPrimitive.Root variant="none">
   <div
     class={cn(
-      "border-border bg-background grid min-w-32 items-start gap-1.5 rounded-lg border px-2.5 py-1.5 text-xs shadow-xl",
+      "border-border/50 bg-background grid min-w-[9rem] items-start gap-1.5 rounded-lg border px-2.5 py-1.5 text-xs shadow-xl",
       className,
     )}
+    {...restProps}
   >
-    {#if !hideLabel}
-      <div class="text-muted-foreground font-medium">
-        {#if labelFormatter}
-          {labelFormatter(getLabel(payload[0]))}
-        {:else}
-          {getLabel(payload[0])}
-        {/if}
-      </div>
+    {#if !nestLabel}
+      {@render TooltipLabel()}
     {/if}
-
     <div class="grid gap-1.5">
-      {#each payload as item (item.key)}
-        {@const itemConfig = getItemConfig(item.key)}
-        {#if formatter}
-          {@render formatter({ payload: item, config })}
-        {:else}
-          <div class="flex w-full flex-wrap items-stretch gap-2">
-            {#if !hideIndicator}
+      {#each tooltipCtx.payload as item, i (item.key + i)}
+        {@const key = `${nameKey || item.key || item.name || "value"}`}
+        {@const itemConfig = getPayloadConfigFromPayload(
+          chart.config,
+          item,
+          key,
+        )}
+        {@const indicatorColor = color || item.payload?.color || item.color}
+        <div
+          class={cn(
+            "[&>svg]:text-muted-foreground flex w-full flex-wrap items-stretch gap-2 [&>svg]:size-2.5",
+            indicator === "dot" && "items-center",
+          )}
+        >
+          {#if formatter && item.value !== undefined && item.name}
+            {@render formatter({
+              value: item.value,
+              name: item.name,
+              item,
+              index: i,
+              payload: tooltipCtx.payload,
+            })}
+          {:else}
+            {#if itemConfig?.icon}
+              <itemConfig.icon />
+            {:else if !hideIndicator}
               <div
+                style="--color-bg: {indicatorColor}; --color-border: {indicatorColor};"
                 class={cn(
                   "shrink-0 rounded-[2px] border-(--color-border) bg-(--color-bg)",
                   {
-                    "h-2.5 w-2.5": indicator === "dot",
-                    "w-1": indicator === "line",
+                    "size-2.5": indicator === "dot",
+                    "h-full w-1": indicator === "line",
                     "w-0 border-[1.5px] border-dashed bg-transparent":
                       indicator === "dashed",
+                    "my-0.5": nestLabel && indicator === "dashed",
                   },
                 )}
-                style="--color-bg: {itemConfig.color ??
-                  item.color ??
-                  'currentColor'}; --color-border: {itemConfig.color ??
-                  item.color ??
-                  'currentColor'}"
               ></div>
             {/if}
             <div
-              class="flex flex-1 justify-between gap-2 leading-none [&>svg]:text-muted-foreground [&>svg]:size-3"
+              class={cn(
+                "flex flex-1 shrink-0 justify-between leading-none",
+                nestLabel ? "items-end" : "items-center",
+              )}
             >
-              <span class="text-muted-foreground">{getName(item)}</span>
-              <span class="text-foreground font-mono font-medium tabular-nums">
-                {typeof item.value === "number"
-                  ? item.value.toLocaleString()
-                  : item.value}
-              </span>
+              <div class="grid gap-1.5">
+                {#if nestLabel}
+                  {@render TooltipLabel()}
+                {/if}
+                <span class="text-muted-foreground">
+                  {itemConfig?.label || item.name}
+                </span>
+              </div>
+              {#if item.value !== undefined}
+                <span
+                  class="text-foreground font-mono font-medium tabular-nums"
+                >
+                  {item.value.toLocaleString()}
+                </span>
+              {/if}
             </div>
-          </div>
-        {/if}
+          {/if}
+        </div>
       {/each}
     </div>
   </div>
-{/if}
+</TooltipPrimitive.Root>

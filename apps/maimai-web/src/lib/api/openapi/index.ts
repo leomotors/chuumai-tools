@@ -67,11 +67,8 @@ export function generateOpenApiDocument(version: string) {
         name: "Data",
         description: "Endpoints for game data retrieval",
       },
-      {
-        name: "Users",
-        description: "Endpoints for user data and statistics",
-      },
       OPENAPI_TAGS.JOBS,
+      OPENAPI_TAGS.USERS,
     ],
   });
 }
