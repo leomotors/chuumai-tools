@@ -1,5 +1,6 @@
 import type { OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
 
+import { forRatingSchema } from "$lib/functions/forRating";
 import { userStatsSchema } from "$lib/functions/userStats";
 
 /**
@@ -7,4 +8,5 @@ import { userStatsSchema } from "$lib/functions/userStats";
  */
 export function registerUserSchemas(registry: OpenAPIRegistry) {
   registry.register("UserStats", userStatsSchema);
+  registry.register("ForRatingResult", forRatingSchema);
 }
