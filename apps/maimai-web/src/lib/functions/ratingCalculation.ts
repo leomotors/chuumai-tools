@@ -39,7 +39,7 @@ export function addForRenderInfo(
   }
 
   const level = levelData.constant ?? parseFloat(levelData.level);
-  const rating = calculateRating(chart.score, level);
+  const rating = calculateRating(chart.score, level, chart.comboMark || "NONE");
 
   return {
     ...chart,

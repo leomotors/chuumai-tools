@@ -1,3 +1,5 @@
+import type { ComboMark } from "@repo/types/maimai";
+
 export function getRankMultiplier(score: number) {
   if (score >= 100_5000) return 22.4;
   if (score >= 100_4999) return 22.2;
@@ -24,9 +26,19 @@ export function getRankMultiplier(score: number) {
   return 0.0;
 }
 
-export function calculateRating(score: number, level: number) {
-  return Math.floor(
+export function calculateRating(
+  score: number,
+  level: number,
+  comboMark: ComboMark,
+) {
+  const baseRating = Math.floor(
     (Math.min(score, 100_5000) / 1000000) * getRankMultiplier(score) * level +
       Number.EPSILON * 10000,
   );
+
+  if (comboMark === "AP" || comboMark === "AP+") {
+    return baseRating + 1;
+  } else {
+    return baseRating;
+  }
 }

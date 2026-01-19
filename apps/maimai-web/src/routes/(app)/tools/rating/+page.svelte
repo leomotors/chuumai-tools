@@ -1,7 +1,9 @@
 <script lang="ts">
   import { calculateRating, getRankMultiplier } from "@repo/core/maimai";
+  import type { ComboMark } from "@repo/types/maimai";
   import { Button } from "@repo/ui/atom/button";
   import * as Card from "@repo/ui/atom/card";
+  import { Checkbox } from "@repo/ui/atom/checkbox";
   import { Input } from "@repo/ui/atom/input";
   import { Label } from "@repo/ui/atom/label";
   import * as Tabs from "@repo/ui/atom/tabs";
@@ -11,26 +13,35 @@
   // Forward calculation: Level + Score -> Rating
   let level = $state<string>("");
   let score = $state<string>("");
+  let isAllPerfect = $state<boolean>(false);
   let rating = $state<number | null>(null);
   let displayLevel = $state<string>("");
   let displayScore = $state<string>("");
+  let displayIsAllPerfect = $state<boolean>(false);
 
   // Reverse calculation: Score + Rating -> Level
   let reverseScore = $state<string>("");
   let reverseRating = $state<string>("");
+  let reverseIsAllPerfect = $state<boolean>(false);
   let calculatedLevel = $state<number | null>(null);
   let verifiedRating = $state<number | null>(null);
   let displayReverseScore = $state<string>("");
   let displayReverseRating = $state<string>("");
+  let displayReverseIsAllPerfect = $state<boolean>(false);
 
-  function calculateLevel(score: number, targetRating: number): number {
+  function calculateLevel(
+    score: number,
+    targetRating: number,
+    isAP: boolean,
+  ): number {
     const multiplier = getRankMultiplier(score);
     if (multiplier === 0) return 0;
 
     const scoreRatio = Math.min(score, 100_5000) / 1000000;
-    // From rating formula: rating = floor((score/1000000) * multiplier * level)
-    // Solving for level: level = rating / ((score/1000000) * multiplier)
-    const rawLevel = targetRating / (scoreRatio * multiplier);
+    // From rating formula: rating = floor((score/1000000) * multiplier * level) + (AP ? 1 : 0)
+    // Solving for level: level = (rating - (AP ? 1 : 0)) / ((score/1000000) * multiplier)
+    const adjustedRating = targetRating - (isAP ? 1 : 0);
+    const rawLevel = adjustedRating / (scoreRatio * multiplier);
 
     return Math.round(rawLevel * 10) / 10; // Round to 1 decimal place
   }
@@ -44,9 +55,11 @@
       return;
     }
 
-    rating = calculateRating(scoreNum, levelNum);
+    const comboMark: ComboMark = isAllPerfect ? "AP" : "NONE";
+    rating = calculateRating(scoreNum, levelNum, comboMark);
     displayLevel = level;
     displayScore = score;
+    displayIsAllPerfect = isAllPerfect;
   }
 
   function handleReverseCalculate() {
@@ -59,22 +72,26 @@
       return;
     }
 
-    calculatedLevel = calculateLevel(scoreNum, ratingNum);
+    calculatedLevel = calculateLevel(scoreNum, ratingNum, reverseIsAllPerfect);
     // Verify by calculating rating back from the calculated level
-    verifiedRating = calculateRating(scoreNum, calculatedLevel);
+    const comboMark: ComboMark = reverseIsAllPerfect ? "AP" : "FC";
+    verifiedRating = calculateRating(scoreNum, calculatedLevel, comboMark);
     displayReverseScore = reverseScore;
     displayReverseRating = reverseRating;
+    displayReverseIsAllPerfect = reverseIsAllPerfect;
   }
 
   function handleForwardReset() {
     level = "";
     score = "";
+    isAllPerfect = false;
     rating = null;
   }
 
   function handleReverseReset() {
     reverseScore = "";
     reverseRating = "";
+    reverseIsAllPerfect = false;
     calculatedLevel = null;
     verifiedRating = null;
   }
@@ -127,6 +144,16 @@
             </div>
           </div>
 
+          <div class="flex items-center space-x-2">
+            <Checkbox id="ap" bind:checked={isAllPerfect} />
+            <Label
+              for="ap"
+              class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+              All Perfect (AP/AP+) - adds +1 to rating
+            </Label>
+          </div>
+
           <div class="flex flex-col gap-3 sm:flex-row">
             <Button
               class="flex-1"
@@ -154,6 +181,10 @@
                   Level: <span class="font-semibold">{displayLevel}</span><br />
                   Score: <span class="font-semibold">{displayScore}%</span><br
                   />
+                  All Perfect:
+                  <span class="font-semibold"
+                    >{displayIsAllPerfect ? "Yes (+1)" : "No"}</span
+                  ><br />
                   <span class="text-base font-bold mt-2 block"
                     >Rating = {rating}</span
                   >
@@ -193,6 +224,16 @@
             </div>
           </div>
 
+          <div class="flex items-center space-x-2">
+            <Checkbox id="reverseAp" bind:checked={reverseIsAllPerfect} />
+            <Label
+              for="reverseAp"
+              class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+              All Perfect (AP/AP+) - adds +1 to rating
+            </Label>
+          </div>
+
           <div class="flex flex-col gap-3 sm:flex-row">
             <Button
               class="flex-1"
@@ -223,6 +264,11 @@
                   <br />
                   Rating:
                   <span class="font-semibold">{displayReverseRating}</span>
+                  <br />
+                  All Perfect:
+                  <span class="font-semibold"
+                    >{displayReverseIsAllPerfect ? "Yes (+1)" : "No"}</span
+                  >
                   <br />
                   <span class="text-base font-bold mt-2 block">
                     Calculated Level = <span
