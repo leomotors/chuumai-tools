@@ -25,11 +25,13 @@
   </Header>
 
   <main
-    class="flex justify-evenly gap-2 py-8 px-4 rounded-xl bg-gray-500/30 backdrop-opacity-5"
+    class="flex justify-evenly gap-2 py-6 px-4 rounded-xl bg-gray-500/30 backdrop-opacity-5"
   >
     <aside class="flex flex-col gap-4">
-      <p class="text-3xl font-bold font-rodin-b">
-        OLD (Average: {(rating.bestSum / 35).toFixed(2)})
+      <p
+        class="font-bold text-3xl font-rodin-b bg-sky-500/80 p-2 text-white rounded-lg w-fit"
+      >
+        OLD ({rating.bestSum}, Avg: {(rating.bestSum / 35).toFixed(2)})
       </p>
       <div class="grid grid-cols-7 gap-4">
         {#each best as chart, index (index)}
@@ -47,8 +49,10 @@
     <div class="bg-gray-100/30 rounded-full w-2"></div>
 
     <aside class="flex flex-col gap-4">
-      <p class="font-bold text-3xl font-rodin-b">
-        NEW (Average: {(rating.currentSum / 15).toFixed(2)})
+      <p
+        class="font-bold text-3xl font-rodin-b bg-white/80 p-2 text-black rounded-lg w-fit"
+      >
+        NEW ({rating.currentSum}, Avg: {(rating.currentSum / 15).toFixed(2)})
       </p>
       <div class="grid grid-cols-3 gap-4">
         {#each current as chart, index (index)}

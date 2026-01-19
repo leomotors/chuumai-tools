@@ -4,6 +4,7 @@
 
 - feat: user dashboard page
 - update rating formula to include AP bonus
+- add sum of old and new in render image
 
 ## [1.1.0] - 2026-01-17
 

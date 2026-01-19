@@ -30,11 +30,11 @@ export async function handleDownload(
 
   if (!isDebug) {
     element.style.display = "none";
-  }
 
-  // Download
-  const link = document.createElement("a");
-  link.download = "chart.png";
-  link.href = dataUrl;
-  link.click();
+    // Download
+    const link = document.createElement("a");
+    link.download = "chart.png";
+    link.href = dataUrl;
+    link.click();
+  }
 }
