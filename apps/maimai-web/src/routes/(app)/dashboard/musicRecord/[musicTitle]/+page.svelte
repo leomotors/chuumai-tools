@@ -214,8 +214,16 @@
                     <!-- Score and Marks on Right -->
                     <div class="flex flex-col items-end gap-2 w-full sm:w-auto">
                       <!-- Score -->
-                      <div class="text-xl sm:text-2xl font-bold text-gray-800">
-                        {record.score.toLocaleString()}
+                      <div class="flex gap-2 items-center">
+                        <img
+                          src={getRankImage(record.score)}
+                          alt={ranks[getRank(record.score)]}
+                          class="w-16"
+                        />
+
+                        <p class="text-xl sm:text-2xl font-bold text-gray-800">
+                          {(record.score / 10000).toFixed(4)}%
+                        </p>
                       </div>
 
                       <!-- DX Score -->
@@ -223,7 +231,7 @@
                         class="flex items-center gap-2 text-sm text-gray-600"
                       >
                         <span>
-                          DX: {record.dxScore.toLocaleString()} / {record.dxScoreMax.toLocaleString()}
+                          DX Score: {record.dxScore.toLocaleString()} / {record.dxScoreMax.toLocaleString()}
                         </span>
                         {#if getDXStarImage(record.dxScore, record.dxScoreMax)}
                           <img
@@ -241,25 +249,18 @@
                       <div
                         class="flex items-center gap-1 sm:gap-2 flex-wrap justify-end"
                       >
-                        <!-- Rank Image -->
-                        <img
-                          src={getRankImage(record.score)}
-                          alt={ranks[getRank(record.score)]}
-                          class="w-12 sm:w-14 md:w-16 h-[14px] sm:h-[16px] md:h-[18px] object-contain"
-                        />
-
                         <!-- Combo Mark -->
                         <img
                           src={getComboMarkImage(record.comboMark)}
                           alt={record.comboMark}
-                          class="w-12 sm:w-14 md:w-16 h-[14px] sm:h-[16px] md:h-[18px] object-contain"
+                          class="w-14"
                         />
 
                         <!-- Sync Mark -->
                         <img
                           src={getSyncMarkImage(record.syncMark)}
                           alt={record.syncMark}
-                          class="w-12 sm:w-14 md:w-16 h-[14px] sm:h-[16px] md:h-[18px] object-contain"
+                          class="w-14"
                         />
                       </div>
                     </div>

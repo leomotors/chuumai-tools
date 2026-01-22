@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.3.0] - 2026-01-22
+
+- feat: fix styling on music record page
+- update table to show release date and version
+
 ## [1.2.0] - 2026-01-19
 
 - feat: user dashboard page

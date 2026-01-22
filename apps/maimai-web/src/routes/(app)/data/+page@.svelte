@@ -20,7 +20,7 @@
   let selectedVersion = $state<string>("");
   let searchQuery = $state<string>("");
   let debouncedSearchQuery = $state<string>("");
-  let sortField = $state<keyof MusicDataViewSchema>("releasedVersion");
+  let sortField = $state<keyof MusicDataViewSchema>("releaseDate");
   let sortDirection = $state<"asc" | "desc">("desc");
   let currentPage = $state<number>(1);
   let filterNullConstant = $state<boolean>(false);
@@ -255,6 +255,19 @@
         <Label for="null-filter">Show songs with missing constant data</Label>
       </div>
 
+      <!-- Note -->
+      <div class="mt-4 text-sm text-gray-700">
+        <p>
+          Note 1: The data shown here is primarily used for other functions in
+          this website and not meant to be up-to-date or accurate database. See
+          about page for data source.
+        </p>
+        <p>
+          Note 2: Release Date is based on JP Version. Released Version in
+          parenthesis show International Version.
+        </p>
+      </div>
+
       <!-- Stats -->
       <div class="mt-4 text-sm text-gray-700">
         {#if !loading && musicData.length > 0}
@@ -300,13 +313,13 @@
               <Table.Row class="border-white/20 hover:bg-white/5">
                 <Table.Head
                   class="cursor-pointer text-gray-900 hover:text-gray-700"
-                  onclick={() => handleSort("releasedVersion")}
+                  onclick={() => handleSort("releaseDate")}
                 >
                   <SortableHeader
-                    isSorting={sortField === "releasedVersion"}
+                    isSorting={sortField === "releaseDate"}
                     {sortDirection}
                   >
-                    Released
+                    Release
                   </SortableHeader>
                 </Table.Head>
                 <Table.Head class="text-gray-900 hover:text-gray-700">
@@ -334,6 +347,7 @@
                     Artist
                   </SortableHeader>
                 </Table.Head>
+                <Table.Head class="text-gray-900">Version</Table.Head>
                 <Table.Head class="text-center text-gray-900">
                   Chart Type
                 </Table.Head>
@@ -403,7 +417,7 @@
               {#each paginatedData as song (song.title + song.chartType)}
                 <Table.Row class="border-white/20">
                   <Table.Cell class="font-medium text-gray-900">
-                    {song.releasedVersion}
+                    {song.releaseDate}
                   </Table.Cell>
                   <Table.Cell>
                     <img
@@ -428,6 +442,15 @@
                   </Table.Cell>
                   <Table.Cell class="max-w-xs whitespace-normal text-gray-900">
                     {song.artist}
+                  </Table.Cell>
+                  <Table.Cell class="font-medium text-gray-900">
+                    <div>
+                      {song.releasedVersion}
+                      {#if song.releasedVersionIntl}
+                        <br />
+                        ({song.releasedVersionIntl})
+                      {/if}
+                    </div>
                   </Table.Cell>
                   <Table.Cell class="font-medium text-gray-900 text-center">
                     <img

@@ -422,6 +422,244 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/users/stats": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Get user play stats history
+     * @description Returns the user's play statistics history including play count (current and total), rating, and star count at each distinct play session. Requires authentication via API key or session.
+     */
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description User stats successfully retrieved */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": components["schemas"]["UserStats"][];
+          };
+        };
+        /** @description Unauthorized - Invalid or missing API key/session */
+        401: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": components["schemas"]["Error"];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/users/forRating": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Get user rating data for image generation
+     * @description Returns the user's profile, best 35 songs, and current 15 songs with rating details for the latest job. This endpoint provides all data needed for rating card/image generation. Requires authentication via API key or session.
+     */
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description Rating data successfully retrieved */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": components["schemas"]["ForRatingResult"];
+          };
+        };
+        /** @description Unauthorized - Invalid or missing API key/session */
+        401: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": components["schemas"]["Error"];
+          };
+        };
+        /** @description No rating data found for this user */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": components["schemas"]["Error"];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/users/musicRecord": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Get user music record
+     * @description Returns the user's play records for a specific music title across all chart types and difficulties. Requires authentication via API key or session.
+     */
+    get: {
+      parameters: {
+        query: {
+          /** @description The music title to retrieve records for */
+          musicTitle: string;
+        };
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description Music record successfully retrieved */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": components["schemas"]["MusicRecord"];
+          };
+        };
+        /** @description Bad Request - Invalid or missing musicTitle parameter */
+        400: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": components["schemas"]["Error"];
+          };
+        };
+        /** @description Unauthorized - Invalid or missing API key/session */
+        401: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": components["schemas"]["Error"];
+          };
+        };
+        /** @description Not Found - Music not found */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": components["schemas"]["Error"];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/users/playCount": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Get play count since various time periods
+     * @description Returns the number of plays since today (7AM JST), this week (Monday 7AM JST), this month (1st day 7AM JST), last 30 days, last 365 days, and play count for the current version.
+     *
+     *     The 'thisVersion' field returns playCountCurrent from the latest row. If currentPlayCount parameter is provided, it applies an offset: playCountCurrent + (currentPlayCount - playCountTotal).
+     *
+     *     Requires authentication via API key or session.
+     */
+    get: {
+      parameters: {
+        query?: {
+          /** @description Optional current play count to use for calculation. If not provided, the latest play count from the database will be used. */
+          currentPlayCount?: number;
+        };
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description Play count statistics successfully retrieved. Returns the number of plays since various time periods. */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": components["schemas"]["PlayCountSince"];
+          };
+        };
+        /** @description Bad Request - Invalid currentPlayCount parameter (must be a non-negative integer) */
+        400: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": components["schemas"]["Error"];
+          };
+        };
+        /** @description Unauthorized - Invalid or missing API key/session */
+        401: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": components["schemas"]["Error"];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -695,19 +933,73 @@ export interface components {
       best: components["schemas"]["Chart"][];
       current: components["schemas"]["Chart"][];
     };
+    UserStats: {
+      /** Format: date-time */
+      lastPlayed: string | null;
+      jobId: number;
+      playCountCurrent: number;
+      playCountTotal: number;
+      rating: number;
+      star: number;
+    };
+    ForRatingResult: components["schemas"]["RawImageGen"] & {
+      jobId: number;
+      /**
+       * @example FESTiVAL PLUS
+       * @example BUDDiES
+       */
+      version: string;
+    };
     MusicDataView: {
       title: string;
       artist: string;
       image: string;
-      /** @example 26010 */
-      releasedVersion: number;
       /** @enum {string} */
       chartType: "std" | "dx";
+      /** Format: date */
+      releaseDate: string;
+      /** @example CiRCLE */
+      releasedVersion: string;
+      releasedVersionIntl?: string;
       basic?: components["schemas"]["ChartLevel"];
       advanced?: components["schemas"]["ChartLevel"];
       expert?: components["schemas"]["ChartLevel"];
       master?: components["schemas"]["ChartLevel"];
       remaster?: components["schemas"]["ChartLevel"];
+    };
+    MusicRecord: {
+      musicInfo: components["schemas"]["MusicInfo"];
+      records: components["schemas"]["MusicRecordItem"][];
+    };
+    MusicInfo: {
+      title: string;
+      category: string;
+      artist: string;
+      image: string;
+      version: number;
+    };
+    MusicRecordItem: {
+      /** @enum {string} */
+      chartType: "std" | "dx";
+      /** @enum {string} */
+      difficulty: "basic" | "advanced" | "expert" | "master" | "remaster";
+      score: number;
+      dxScore: number;
+      dxScoreMax: number;
+      /** @enum {string} */
+      comboMark: "NONE" | "FC" | "FC+" | "AP" | "AP+";
+      /** @enum {string} */
+      syncMark: "NONE" | "SYNC" | "FS" | "FS+" | "FDX" | "FDX+";
+      /** Format: date-time */
+      lastPlayed: string | null;
+    };
+    PlayCountSince: {
+      today?: number;
+      thisWeek?: number;
+      thisMonth?: number;
+      last30Days?: number;
+      last365Days?: number;
+      thisVersion?: number;
     };
   };
   responses: never;

@@ -24,7 +24,8 @@
         href="https://gamerch.com/maimai"
       >
         maimai wiki
-      </ExtLink>.
+      </ExtLink> or <ExtLink href="https://x.com/laundromai">Laundromai</ExtLink
+      >.
     </p>
   {/snippet}
   <!-- {#snippet contentAfter()}

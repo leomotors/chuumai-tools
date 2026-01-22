@@ -1,0 +1,1 @@
+ALTER TABLE "music_version" ADD COLUMN "version_intl" text;

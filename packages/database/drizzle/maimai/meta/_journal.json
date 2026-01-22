@@ -36,6 +36,13 @@
       "when": 1769097467499,
       "tag": "0004_fix-release-pk-constraint",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1769102414860,
+      "tag": "0005_add-column-release-intl-to-version-data",
+      "breakpoints": true
     }
   ]
 }

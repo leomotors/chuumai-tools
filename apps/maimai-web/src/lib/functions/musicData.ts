@@ -3,7 +3,11 @@ import { and, eq } from "drizzle-orm";
 import { db } from "$lib/db";
 
 import { SimpleCache } from "@repo/core";
-import { musicDataTable, musicLevelTable } from "@repo/database/maimai";
+import {
+  musicDataTable,
+  musicLevelTable,
+  musicVersionTable,
+} from "@repo/database/maimai";
 import { chartTypeValues, stdChartDifficultyValues } from "@repo/types/maimai";
 import { z } from "@repo/types/zod";
 
@@ -19,8 +23,10 @@ export const musicDataViewSchema = z
     title: z.string(),
     artist: z.string(),
     image: z.string(),
-    releasedVersion: z.number().openapi({ example: 26010 }),
     chartType: z.enum(chartTypeValues),
+    releaseDate: z.string().openapi({ format: "date" }),
+    releasedVersion: z.string().openapi({ example: "CiRCLE" }),
+    releasedVersionIntl: z.string().optional(),
     basic: chartLevelSchema.optional(),
     advanced: chartLevelSchema.optional(),
     expert: chartLevelSchema.optional(),
@@ -37,11 +43,13 @@ export async function getMusicData(version: string) {
       title: musicDataTable.title,
       artist: musicDataTable.artist,
       image: musicDataTable.image,
-      releasedVersion: musicDataTable.version,
       chartType: musicLevelTable.chartType,
       difficulty: musicLevelTable.difficulty,
       level: musicLevelTable.level,
       constant: musicLevelTable.constant,
+      releaseDate: musicVersionTable.releaseDate,
+      releasedVersion: musicVersionTable.version,
+      releasedVersionIntl: musicVersionTable.versionIntl,
     })
     .from(musicDataTable)
     .innerJoin(
@@ -49,6 +57,13 @@ export async function getMusicData(version: string) {
       and(
         eq(musicDataTable.title, musicLevelTable.musicTitle),
         eq(musicLevelTable.version, version),
+      ),
+    )
+    .innerJoin(
+      musicVersionTable,
+      and(
+        eq(musicDataTable.title, musicVersionTable.title),
+        eq(musicLevelTable.chartType, musicVersionTable.chartType),
       ),
     );
 
@@ -61,8 +76,10 @@ export async function getMusicData(version: string) {
           title: item.title,
           artist: item.artist,
           image: item.image,
-          releasedVersion: item.releasedVersion,
           chartType: item.chartType,
+          releaseDate: item.releaseDate,
+          releasedVersion: item.releasedVersion,
+          releasedVersionIntl: item.releasedVersionIntl || undefined,
           basic: undefined,
           advanced: undefined,
           expert: undefined,
