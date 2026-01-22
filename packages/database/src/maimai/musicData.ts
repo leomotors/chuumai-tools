@@ -1,4 +1,11 @@
-import { decimal, integer, pgTable, text, unique } from "drizzle-orm/pg-core";
+import {
+  date,
+  decimal,
+  integer,
+  pgTable,
+  text,
+  unique,
+} from "drizzle-orm/pg-core";
 
 import { categoryType, chartType, stdChartDifficultyType } from "./enum";
 
@@ -10,14 +17,18 @@ export const musicDataTable = pgTable("music_data", {
   version: integer().notNull(), // For Sort
 });
 
-export const musicVersionTable = pgTable("music_version", {
-  title: text()
-    .notNull()
-    .primaryKey()
-    .references(() => musicDataTable.title),
-  chartType: chartType("chart_type").notNull(),
-  version: text().notNull(),
-});
+export const musicVersionTable = pgTable(
+  "music_version",
+  {
+    title: text()
+      .notNull()
+      .references(() => musicDataTable.title),
+    chartType: chartType("chart_type").notNull(),
+    version: text().notNull(),
+    releaseDate: date("release_date").notNull(),
+  },
+  (t) => [unique().on(t.title, t.chartType)],
+);
 
 export const musicLevelTable = pgTable(
   "music_level",

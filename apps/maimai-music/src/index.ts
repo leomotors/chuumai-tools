@@ -2,6 +2,7 @@ import { db } from "./db.js";
 import { updateMusicConstant } from "./steps/music-constant.js";
 import { downloadMusicData } from "./steps/music-data.js";
 import { updateMusicConstantQman } from "./steps/music-qman.js";
+import { updateReleaseDateData } from "./steps/release-date.js";
 
 const command = process.argv[2];
 
@@ -45,6 +46,9 @@ if (command === "music") {
   validateVersion(version);
   await updateMusicConstantQman(version);
   console.log("\n✅ Update Music Constant Completed\n");
+} else if (command === "release-date") {
+  await updateReleaseDateData();
+  console.log("\n✅ Update Release Date Data Completed\n");
 } else {
   console.log(`Unknown Command: ${command}`);
   process.exit(1);
