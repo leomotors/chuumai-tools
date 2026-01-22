@@ -29,7 +29,19 @@ export type CalcRatingRequest = z.infer<typeof calcRatingRequestSchema>;
 export const previewNextRequestSchema = z
   .object({
     data: fullPlayDataInputSchema,
-    version: z.string().openapi({ example: "CiRCLE" }),
+    nextVersion: z.string().openapi({
+      description:
+        "Version of Chart Constant to calculate rating, usually next version",
+      example: "CiRCLE",
+    }),
+    currentVersion: z.string().openapi({
+      description:
+        "Only song in this version will be considered new songs due to being in latest 2 versions",
+      example: "PRiSM+",
+    }),
+    intlVersion: z.boolean().openapi({
+      description: "Use international release date to determine new songs",
+    }),
   })
   .openapi("PreviewNextRequest");
 

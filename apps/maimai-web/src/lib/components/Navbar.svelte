@@ -35,6 +35,13 @@
         >
           Rating Calculator
         </a>
+        <a
+          href="/tools/preview-next"
+          onclick={() => (toolsOpen = false)}
+          class="block rounded-lg px-3 py-2 text-sm text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-900"
+        >
+          Preview Next
+        </a>
       </Popover.Content>
     </Popover.Root>
 

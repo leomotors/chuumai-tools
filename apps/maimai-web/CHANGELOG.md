@@ -4,6 +4,7 @@
 
 - feat: fix styling on music record page
 - update table to show release date and version
+- feat: preview next page
 
 ## [1.2.0] - 2026-01-19
 

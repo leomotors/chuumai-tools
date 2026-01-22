@@ -1,6 +1,7 @@
 import { json } from "@sveltejs/kit";
 
 import { previewNextRequestSchema } from "$lib/api/schemas";
+import { db } from "$lib/db";
 import { getMusicDataCached } from "$lib/functions/musicData";
 import {
   addForRenderInfo,
@@ -8,9 +9,21 @@ import {
 } from "$lib/functions/ratingCalculation";
 import { getEnabledVersions } from "$lib/version";
 
+import { musicVersionTable } from "@repo/database/maimai";
 import { chartSchema } from "@repo/types/maimai";
 
 import type { RequestHandler } from "./$types";
+
+type Record = ReturnType<typeof addForRenderInfo>;
+
+function compareRecord(a: Record, b: Record) {
+  const ratingA = a.rating ?? 0;
+  const ratingB = b.rating ?? 0;
+  if (ratingA !== ratingB) {
+    return ratingB - ratingA;
+  }
+  return b.score - a.score;
+}
 
 export const POST: RequestHandler = async ({ request }) => {
   const enabledVersions = getEnabledVersions();
@@ -24,16 +37,19 @@ export const POST: RequestHandler = async ({ request }) => {
     });
   }
 
-  const { data, version } = parseResult.data;
+  const { data, nextVersion, currentVersion, intlVersion } = parseResult.data;
 
-  if (!enabledVersions.includes(version)) {
+  if (
+    !enabledVersions.includes(nextVersion) ||
+    !enabledVersions.includes(currentVersion)
+  ) {
     return new Response(
       `Invalid version, valid versions are: ${enabledVersions.join(", ")}`,
       { status: 400 },
     );
   }
 
-  const musicData = await getMusicDataCached(version);
+  const musicData = await getMusicDataCached(nextVersion);
 
   const { profile, allRecords } = data;
 
@@ -46,15 +62,31 @@ export const POST: RequestHandler = async ({ request }) => {
     }
   });
 
-  // Sort by rating and take top 50 (35 old + 15 new)
-  const top50 = processed
-    .filter((c) => c !== null)
-    .sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0))
-    .slice(0, 50);
+  // Filter old/new songs
+  const rawVersionData = await db.select().from(musicVersionTable);
+  const versionData = intlVersion
+    ? rawVersionData.map((d) => ({
+        ...d,
+        version: d.versionIntl || d.version,
+      }))
+    : rawVersionData;
 
-  // Split into old 35 and new 15
-  const old35 = top50.slice(0, 35);
-  const new15 = top50.slice(35, 50);
+  const newSongs = processed
+    .filter((record) => record !== null)
+    .filter((record) =>
+      versionData.some(
+        (v) =>
+          v.title === record.title &&
+          (v.version === currentVersion || v.version === nextVersion),
+      ),
+    );
+
+  const oldSongs = processed
+    .filter((record) => record !== null)
+    .filter((record) => !newSongs.some((nc) => nc.title === record.title));
+
+  const new15 = newSongs.sort(compareRecord).slice(0, 15);
+  const old35 = oldSongs.sort(compareRecord).slice(0, 35);
 
   const rating = calculateRatingTotals(old35, new15);
 
