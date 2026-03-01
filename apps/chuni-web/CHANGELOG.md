@@ -1,5 +1,10 @@
 # Changelog
 
+## [3.9.0] - 2026-03-01
+
+- feat: add AoT mode in preview next calculation
+- add logo scale to fix logo scale in some version
+
 ## [3.8.0] - 2026-01-15
 
 - Update music card UI allowing for more space for long titles

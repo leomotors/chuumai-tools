@@ -58,6 +58,7 @@ export async function getCachedMusicData() {
       id: musicDataTable.id,
       title: musicDataTable.title,
       image: musicDataTable.image,
+      version: musicDataTable.version,
     })
     .from(musicDataTable);
 

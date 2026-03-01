@@ -7,7 +7,7 @@ export function addForRenderInfo(
   constantData: ChartConstantData,
   imageData: MusicData,
   version: string,
-): ChartForRender {
+): ChartForRender & { version: string } {
   const chartLevel = constantData.find(
     (c) =>
       c.musicId === data.id &&
@@ -22,6 +22,7 @@ export function addForRenderInfo(
       constantSure: false,
       rating: null,
       image: null,
+      version,
     };
   }
 
@@ -39,5 +40,6 @@ export function addForRenderInfo(
     constantSure: !!chartLevel.constant,
     rating,
     image,
+    version,
   };
 }

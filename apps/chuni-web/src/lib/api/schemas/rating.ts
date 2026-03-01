@@ -30,6 +30,10 @@ export const previewNextRequestSchema = z
   .object({
     data: fullPlayDataInputSchema,
     version: z.string().openapi({ example: "XVRS" }),
+    aotMode: z.boolean().optional().openapi({
+      description:
+        "Ahead of Time: Chart in preview version will be put in new songs. (For Intl players)",
+    }),
   })
   .openapi("PreviewNextRequest");
 

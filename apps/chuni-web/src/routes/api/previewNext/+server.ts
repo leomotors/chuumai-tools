@@ -6,7 +6,11 @@ import { addForRenderInfo } from "$lib/calculation";
 import { getEnabledVersions } from "$lib/version";
 
 import { floorDecimalPlaces } from "@repo/core/chuni";
-import { chartSchema, type ImgGenInput } from "@repo/types/chuni";
+import {
+  chartSchema,
+  type ChartForRender,
+  type ImgGenInput,
+} from "@repo/types/chuni";
 
 import type { RequestHandler } from "./$types";
 
@@ -22,7 +26,7 @@ export const POST: RequestHandler = async ({ request }) => {
     });
   }
 
-  const { data, version } = parseResult.data;
+  const { data, version, aotMode } = parseResult.data;
 
   if (!enabledVersions.includes(version)) {
     return new Response(
@@ -44,13 +48,22 @@ export const POST: RequestHandler = async ({ request }) => {
     }
   });
 
-  const best30 = processed
-    .filter((c) => c !== null)
+  const nonNullProcessed = processed.filter((c) => c !== null);
+
+  const best30 = nonNullProcessed
+    .filter((c) => !aotMode || c.version !== version)
     .sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0))
     .slice(0, 30);
 
+  const new20 = nonNullProcessed
+    .filter((c) => aotMode && c.version === version)
+    .slice(0, 20);
+
+  const ratingReducer = (acc: number, cur: ChartForRender) =>
+    acc + (cur.rating ?? 0);
+
   const newRating = floorDecimalPlaces(
-    best30.reduce((acc, cur) => acc + (cur.rating ?? 0), 0) / 50,
+    (best30.reduce(ratingReducer, 0) + new20.reduce(ratingReducer, 0)) / 50,
     4,
   );
 
@@ -60,6 +73,6 @@ export const POST: RequestHandler = async ({ request }) => {
       rating: newRating,
     },
     best: best30.map((d) => chartSchema.parse(d)),
-    current: [],
+    current: new20.map((d) => chartSchema.parse(d)),
   } satisfies ImgGenInput);
 };
