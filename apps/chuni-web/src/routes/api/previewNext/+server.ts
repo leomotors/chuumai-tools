@@ -7,8 +7,8 @@ import { getEnabledVersions } from "$lib/version";
 
 import { floorDecimalPlaces } from "@repo/core/chuni";
 import {
-  chartSchema,
   type ChartForRender,
+  chartSchema,
   type ImgGenInput,
 } from "@repo/types/chuni";
 
