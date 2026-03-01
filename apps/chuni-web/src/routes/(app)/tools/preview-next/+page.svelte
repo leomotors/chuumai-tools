@@ -17,6 +17,7 @@
 
   const enabledVersions = getEnabledVersions();
   let selectedVersion = $state<string>(enabledVersions[0]);
+  let aotMode = $state(false);
 
   async function parseFile(fileList: FileList) {
     const file = fileList[0];
@@ -61,6 +62,7 @@
         body: JSON.stringify({
           data: jsonData,
           version: selectedVersion,
+          aotMode,
         }),
       });
 
@@ -127,6 +129,20 @@
           {/each}
         {/if}
       </select>
+    </div>
+
+    <!-- AOT Mode -->
+    <div class="flex items-center space-x-2">
+      <input
+        id="aotMode"
+        type="checkbox"
+        bind:checked={aotMode}
+        class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+      />
+      <label for="aotMode" class="text-sm font-medium text-gray-700">
+        Ahead of Time Mode
+      </label>
+      <span class="text-xs text-gray-500"> (aka Intl. Mode) </span>
     </div>
 
     <!-- File Upload -->
