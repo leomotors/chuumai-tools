@@ -263,8 +263,9 @@
           about page for data source.
         </p>
         <p>
-          Note 2: Release Date is based on JP Version. Released Version in
-          parenthesis show International Version.
+          Note 2: Release Date in first line is JP Version while second line is
+          Intl Version. Released Version in parenthesis show International
+          Version if it is different in some cases.
         </p>
       </div>
 
@@ -415,9 +416,15 @@
             </Table.Header>
             <Table.Body>
               {#each paginatedData as song (song.title + song.chartType)}
-                <Table.Row class="border-white/20">
+                <Table.Row class="border-white/20 text-center">
                   <Table.Cell class="font-medium text-gray-900">
                     {song.releaseDate}
+                    {#if song.releaseDateIntl !== song.releaseDate}
+                      <br />
+                      <span class="text-sm text-gray-700">
+                        {song.releaseDateIntl || "-"}
+                      </span>
+                    {/if}
                   </Table.Cell>
                   <Table.Cell>
                     <img

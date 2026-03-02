@@ -27,6 +27,7 @@ export const musicVersionTable = pgTable(
     version: text().notNull(),
     versionIntl: text("version_intl"),
     releaseDate: date("release_date").notNull(),
+    releaseDateIntl: date("release_date_intl"),
   },
   (t) => [unique().on(t.title, t.chartType)],
 );

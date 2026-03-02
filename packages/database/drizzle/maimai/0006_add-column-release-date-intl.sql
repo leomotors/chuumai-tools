@@ -1,0 +1,1 @@
+ALTER TABLE "music_version" ADD COLUMN "release_date_intl" date;

@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.4.0] - 2026-03-02
+
+- show release date for intl version
+
 ## [1.3.0] - 2026-01-22
 
 - feat: fix styling on music record page

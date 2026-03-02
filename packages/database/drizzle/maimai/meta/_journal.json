@@ -43,6 +43,13 @@
       "when": 1769102414860,
       "tag": "0005_add-column-release-intl-to-version-data",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1772453833887,
+      "tag": "0006_add-column-release-date-intl",
+      "breakpoints": true
     }
   ]
 }

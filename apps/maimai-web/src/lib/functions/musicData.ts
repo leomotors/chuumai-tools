@@ -25,8 +25,15 @@ export const musicDataViewSchema = z
     image: z.string(),
     chartType: z.enum(chartTypeValues),
     releaseDate: z.string().openapi({ format: "date" }),
+    releaseDateIntl: z.string().openapi({ format: "date" }).optional(),
     releasedVersion: z.string().openapi({ example: "CiRCLE" }),
-    releasedVersionIntl: z.string().optional(),
+    releasedVersionIntl: z
+      .string()
+      .openapi({
+        description:
+          "Released Version in Intl. version if different, usually null meaning same as releasedVersion",
+      })
+      .optional(),
     basic: chartLevelSchema.optional(),
     advanced: chartLevelSchema.optional(),
     expert: chartLevelSchema.optional(),
@@ -48,6 +55,7 @@ export async function getMusicData(version: string) {
       level: musicLevelTable.level,
       constant: musicLevelTable.constant,
       releaseDate: musicVersionTable.releaseDate,
+      releaseDateIntl: musicVersionTable.releaseDateIntl,
       releasedVersion: musicVersionTable.version,
       releasedVersionIntl: musicVersionTable.versionIntl,
     })
@@ -78,6 +86,7 @@ export async function getMusicData(version: string) {
           image: item.image,
           chartType: item.chartType,
           releaseDate: item.releaseDate,
+          releaseDateIntl: item.releaseDateIntl || undefined,
           releasedVersion: item.releasedVersion,
           releasedVersionIntl: item.releasedVersionIntl || undefined,
           basic: undefined,
