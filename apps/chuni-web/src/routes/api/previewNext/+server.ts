@@ -1,7 +1,11 @@
 import { json } from "@sveltejs/kit";
 
 import { previewNextRequestSchema } from "$lib/api/schemas";
-import { getCachedChartConstantData, getCachedMusicData } from "$lib/cachedDb";
+import {
+  getCachedChartConstantData,
+  getCachedMusicData,
+  getCachedMusicIdVersionMap,
+} from "$lib/cachedDb";
 import { addForRenderInfo } from "$lib/calculation";
 import { getEnabledVersions } from "$lib/version";
 
@@ -13,6 +17,20 @@ import {
 } from "@repo/types/chuni";
 
 import type { RequestHandler } from "./$types";
+
+function recordComparer(
+  a: ChartForRender & { version: string },
+  b: ChartForRender & { version: string },
+) {
+  const aRating = a.rating ?? 0;
+  const bRating = b.rating ?? 0;
+
+  if (aRating !== bRating) {
+    return bRating - aRating; // Sort by rating descending
+  }
+
+  return a.score - b.score; // If ratings are equal, sort by score ascending, mimicking the actual behavior
+}
 
 export const POST: RequestHandler = async ({ request }) => {
   const enabledVersions = getEnabledVersions();
@@ -40,9 +58,17 @@ export const POST: RequestHandler = async ({ request }) => {
 
   const { profile, allRecords } = data;
 
+  const versionMapping = await getCachedMusicIdVersionMap();
+
   const processed = allRecords.map((record) => {
     try {
-      return addForRenderInfo(record, chartConstantData, musicData, version);
+      return addForRenderInfo(
+        record,
+        chartConstantData,
+        musicData,
+        version,
+        versionMapping,
+      );
     } catch (_) {
       return null;
     }
@@ -52,11 +78,12 @@ export const POST: RequestHandler = async ({ request }) => {
 
   const best30 = nonNullProcessed
     .filter((c) => !aotMode || c.version !== version)
-    .sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0))
+    .sort(recordComparer)
     .slice(0, 30);
 
   const new20 = nonNullProcessed
     .filter((c) => aotMode && c.version === version)
+    .sort(recordComparer)
     .slice(0, 20);
 
   const ratingReducer = (acc: number, cur: ChartForRender) =>

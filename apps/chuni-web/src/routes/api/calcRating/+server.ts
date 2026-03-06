@@ -1,7 +1,11 @@
 import { error, json } from "@sveltejs/kit";
 
 import { calcRatingRequestSchema } from "$lib/api/schemas";
-import { getCachedChartConstantData, getCachedMusicData } from "$lib/cachedDb";
+import {
+  getCachedChartConstantData,
+  getCachedMusicData,
+  getCachedMusicIdVersionMap,
+} from "$lib/cachedDb";
 import { addForRenderInfo } from "$lib/calculation";
 import { getEnabledVersions } from "$lib/version";
 
@@ -67,9 +71,18 @@ export const POST: RequestHandler = async ({ request }) => {
   const chartConstantData = await getCachedChartConstantData(version);
 
   const musicData = await getCachedMusicData();
+  const versionMapping = await getCachedMusicIdVersionMap();
 
   const bestWithRating = best
-    .map((c) => addForRenderInfo(c, chartConstantData, musicData, version))
+    .map((c) =>
+      addForRenderInfo(
+        c,
+        chartConstantData,
+        musicData,
+        version,
+        versionMapping,
+      ),
+    )
     .concat(
       (hidden || [])
         .filter((c) => c.ratingType === "BEST")
@@ -79,13 +92,22 @@ export const POST: RequestHandler = async ({ request }) => {
             chartConstantData,
             musicData,
             version,
+            versionMapping,
           ),
         ),
     )
     .slice(0, 30);
 
   const currentWithRating = current
-    .map((c) => addForRenderInfo(c, chartConstantData, musicData, version))
+    .map((c) =>
+      addForRenderInfo(
+        c,
+        chartConstantData,
+        musicData,
+        version,
+        versionMapping,
+      ),
+    )
     .concat(
       (hidden || [])
         .filter((c) => c.ratingType === "CURRENT")
@@ -95,6 +117,7 @@ export const POST: RequestHandler = async ({ request }) => {
             chartConstantData,
             musicData,
             version,
+            versionMapping,
           ),
         ),
     )

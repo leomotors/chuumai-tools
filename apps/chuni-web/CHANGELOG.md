@@ -1,5 +1,9 @@
 # Changelog
 
+## [3.10.0] - 2026-03-06
+
+- fix invalid logic in AoT mode
+
 ## [3.9.0] - 2026-03-01
 
 - feat: add AoT mode in preview next calculation

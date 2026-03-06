@@ -10,6 +10,9 @@ import { db } from "./db";
 export const chartConstantCache = new SimpleCache<ChartConstantData>(50);
 export const musicDataCache = new SimpleCache<MusicData>(10);
 
+export type VersionMapping = Map<number, string | null>;
+export const musicIdVersionMapCache = new SimpleCache<VersionMapping>(10);
+
 // Cache TTL constants (in milliseconds)
 export const CHART_CONSTANT_TTL = 30 * 60 * 1000; // 30 minutes
 export const MUSIC_DATA_TTL = 60 * 60 * 1000; // 1 hour
@@ -39,19 +42,15 @@ export async function getCachedChartConstantData(version: string) {
   return data;
 }
 
-/**
- * Get music data with caching
- */
-export async function getCachedMusicData() {
-  const cacheKey = "music_data";
+async function fetchAndCacheMusicData() {
+  const musicCacheKey = "music_data";
+  const mapCacheKey = "music_id_version_map";
 
-  // Try to get from cache first
-  const cached = musicDataCache.get(cacheKey);
-  if (cached) {
-    return cached;
+  const cachedMusic = musicDataCache.get(musicCacheKey);
+  if (cachedMusic) {
+    return;
   }
 
-  // If not in cache, fetch from database
   console.log("[INFO]: Fetching music data");
   const data = await db
     .select({
@@ -62,8 +61,37 @@ export async function getCachedMusicData() {
     })
     .from(musicDataTable);
 
-  // Store in cache
-  musicDataCache.set(cacheKey, data, MUSIC_DATA_TTL);
+  musicDataCache.set(musicCacheKey, data, MUSIC_DATA_TTL);
 
-  return data;
+  const idVersionMap = new Map<number, string | null>();
+  for (const row of data) {
+    idVersionMap.set(row.id, row.version);
+  }
+  musicIdVersionMapCache.set(mapCacheKey, idVersionMap, MUSIC_DATA_TTL);
+}
+
+/**
+ * Get music data with caching
+ */
+export async function getCachedMusicData() {
+  const cached = musicDataCache.get("music_data");
+  if (cached) {
+    return cached;
+  }
+
+  await fetchAndCacheMusicData();
+  return musicDataCache.get("music_data")!;
+}
+
+/**
+ * Get a map from music id to version with caching
+ */
+export async function getCachedMusicIdVersionMap() {
+  const cached = musicIdVersionMapCache.get("music_id_version_map");
+  if (cached) {
+    return cached;
+  }
+
+  await fetchAndCacheMusicData();
+  return musicIdVersionMapCache.get("music_id_version_map")!;
 }

@@ -2,12 +2,17 @@ import { calculateRating, constantFromLevel } from "@repo/core/chuni";
 import type { ChartConstantData, MusicData } from "@repo/database/chuni";
 import type { BaseChartSchema, ChartForRender } from "@repo/types/chuni";
 
+import type { VersionMapping } from "./cachedDb";
+
 export function addForRenderInfo(
   data: BaseChartSchema,
   constantData: ChartConstantData,
   imageData: MusicData,
   version: string,
+  versionMapping: VersionMapping,
 ): ChartForRender & { version: string } {
+  const musicVersion = versionMapping.get(data.id) ?? "";
+
   const chartLevel = constantData.find(
     (c) =>
       c.musicId === data.id &&
@@ -22,7 +27,7 @@ export function addForRenderInfo(
       constantSure: false,
       rating: null,
       image: null,
-      version,
+      version: musicVersion,
     };
   }
 
@@ -40,6 +45,6 @@ export function addForRenderInfo(
     constantSure: !!chartLevel.constant,
     rating,
     image,
-    version,
+    version: musicVersion,
   };
 }
