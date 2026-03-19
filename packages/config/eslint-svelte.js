@@ -36,6 +36,7 @@ export default defineConfig(
           ignoreReplaceState: false,
         },
       ],
+      "no-useless-assignment": "off",
     },
   },
 );

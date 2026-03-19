@@ -4,6 +4,7 @@
 
 - feat: assets for CiRCLE+
 - update database constraint to allow null in some column and handle that
+- chore: bump deps
 
 ## [1.4.0] - 2026-03-02
 

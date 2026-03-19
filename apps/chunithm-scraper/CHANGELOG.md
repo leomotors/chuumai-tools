@@ -2,6 +2,10 @@
 
 For changelog before V4: [here](https://github.com/leomotors/chunithm-net-scraper/blob/main/CHANGELOG.md)
 
+## [next]
+
+- chore: bump deps
+
 ## [6.3.0] - 2026-01-15
 
 - feat: scrape history (Beta)

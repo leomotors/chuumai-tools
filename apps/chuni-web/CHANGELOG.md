@@ -1,5 +1,9 @@
 # Changelog
 
+## [next]
+
+- chore: bump deps
+
 ## [3.10.0] - 2026-03-06
 
 - fix invalid logic in AoT mode

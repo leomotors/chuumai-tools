@@ -143,12 +143,10 @@
         if (bVal === null) return -1;
       }
 
-      let comparison = 0;
-      if (typeof aVal === "number" && typeof bVal === "number") {
-        comparison = aVal - bVal;
-      } else {
-        comparison = String(aVal).localeCompare(String(bVal));
-      }
+      const comparison =
+        typeof aVal === "number" && typeof bVal === "number"
+          ? aVal - bVal
+          : String(aVal).localeCompare(String(bVal));
 
       return sortDirection === "asc" ? comparison : -comparison;
     });

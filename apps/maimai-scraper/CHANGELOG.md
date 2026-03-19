@@ -1,5 +1,9 @@
 # Changelog
 
+## [next]
+
+- chore: bump deps
+
 ## [1.1.0] - 2026-01-17
 
 - feat: support utage in history
