@@ -3,7 +3,7 @@
   import type { Snippet } from "svelte";
 
   import { page } from "$app/state";
-  import { getLogoMapping } from "$lib/constants/index";
+  import { getLogoMapping, getLogoScale } from "$lib/constants/index";
 
   interface Props {
     children: Snippet;
@@ -14,6 +14,7 @@
   let { children, lastPlayed, version }: Props = $props();
 
   const logo = $derived(getLogoMapping(version));
+  const logoScale = $derived(getLogoScale(version));
 
   const scraperVersion = page.url.searchParams.get("scraperVersion");
 </script>
@@ -63,6 +64,10 @@
       </div>
     </div>
 
-    <img src={logo} alt="Version {version} Logo" class="h-[217px] scale-100" />
+    <img
+      src={logo}
+      alt="Version {version} Logo"
+      class="h-[217px] {logoScale}"
+    />
   </div>
 </header>

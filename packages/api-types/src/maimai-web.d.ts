@@ -921,8 +921,18 @@ export interface components {
     };
     PreviewNextRequest: {
       data: components["schemas"]["FullPlayDataInput"];
-      /** @example CiRCLE */
-      version: string;
+      /**
+       * @description Version of Chart Constant to calculate rating, usually next version
+       * @example CiRCLE
+       */
+      nextVersion: string;
+      /**
+       * @description Only song in this version will be considered new songs due to being in latest 2 versions
+       * @example PRiSM+
+       */
+      currentVersion: string;
+      /** @description Use international release date to determine new songs */
+      intlVersion: boolean;
     };
     FullPlayDataInput: components["schemas"]["ImgGenInput"] & {
       allRecords: components["schemas"]["Chart"][];
@@ -957,9 +967,12 @@ export interface components {
       /** @enum {string} */
       chartType: "std" | "dx";
       /** Format: date */
-      releaseDate: string;
+      releaseDate?: string;
+      /** Format: date */
+      releaseDateIntl?: string;
       /** @example CiRCLE */
       releasedVersion: string;
+      /** @description Released Version in Intl. version if different, usually null meaning same as releasedVersion */
       releasedVersionIntl?: string;
       basic?: components["schemas"]["ChartLevel"];
       advanced?: components["schemas"]["ChartLevel"];

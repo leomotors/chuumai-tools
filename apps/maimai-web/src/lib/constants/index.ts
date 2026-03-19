@@ -26,3 +26,7 @@ export function getVersionNameMapping(version: string) {
     versionNameMapping[version as keyof typeof versionNameMapping] || version
   );
 }
+
+export function getLogoScale(version: string) {
+  return version === "CiRCLE+" ? "scale-110" : "";
+}

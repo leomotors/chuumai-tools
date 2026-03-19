@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.5.0] - 2026-03-19
+
+- feat: assets for CiRCLE+
+- update database constraint to allow null in some column and handle that
+
 ## [1.4.0] - 2026-03-02
 
 - show release date for intl version

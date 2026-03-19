@@ -17,7 +17,7 @@ export const GET: RequestHandler = async ({ url }) => {
   if (!enabledVersions.includes(version)) {
     error(
       400,
-      `Invalid version. Valid versions are: ${enabledVersions.join(", ")}`,
+      `Invalid version ${version}. Valid versions are: ${enabledVersions.join(", ")}`,
     );
   }
 

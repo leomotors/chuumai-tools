@@ -50,6 +50,13 @@
       "when": 1772453833887,
       "tag": "0006_add-column-release-date-intl",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1773890409149,
+      "tag": "0007_nullable-release-date",
+      "breakpoints": true
     }
   ]
 }

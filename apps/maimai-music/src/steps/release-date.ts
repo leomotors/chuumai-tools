@@ -103,13 +103,15 @@ export async function updateReleaseDateData() {
     ),
   );
 
+  const zeroTime = new Date(0);
+
   const changedData = payload.filter((p) =>
     existingVersionData.some(
       (d) =>
         d.title === p.title &&
         d.chartType === p.chartType &&
-        (new Date(d.releaseDate).getTime() !==
-          new Date(p.releaseDate.toString()).getTime() ||
+        (new Date(d.releaseDate || zeroTime).getTime() !==
+          new Date(p.releaseDate?.toString() || zeroTime).getTime() ||
           d.version !== p.version),
     ),
   );

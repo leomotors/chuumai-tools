@@ -24,9 +24,9 @@ export const musicDataViewSchema = z
     artist: z.string(),
     image: z.string(),
     chartType: z.enum(chartTypeValues),
-    releaseDate: z.string().openapi({ format: "date" }),
+    releaseDate: z.string().openapi({ format: "date" }).optional(),
     releaseDateIntl: z.string().openapi({ format: "date" }).optional(),
-    releasedVersion: z.string().openapi({ example: "CiRCLE" }),
+    releasedVersion: z.string().openapi({ example: "CiRCLE" }).optional(),
     releasedVersionIntl: z
       .string()
       .openapi({
@@ -67,7 +67,7 @@ export async function getMusicData(version: string) {
         eq(musicLevelTable.version, version),
       ),
     )
-    .innerJoin(
+    .leftJoin(
       musicVersionTable,
       and(
         eq(musicDataTable.title, musicVersionTable.title),
@@ -85,9 +85,9 @@ export async function getMusicData(version: string) {
           artist: item.artist,
           image: item.image,
           chartType: item.chartType,
-          releaseDate: item.releaseDate,
+          releaseDate: item.releaseDate || undefined,
           releaseDateIntl: item.releaseDateIntl || undefined,
-          releasedVersion: item.releasedVersion,
+          releasedVersion: item.releasedVersion || undefined,
           releasedVersionIntl: item.releasedVersionIntl || undefined,
           basic: undefined,
           advanced: undefined,

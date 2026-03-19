@@ -2,7 +2,7 @@
   import { CircleAlert, Download, Upload } from "@lucide/svelte";
 
   import { getVersionNameMapping } from "$lib/constants/index";
-  import { getEnabledVersions } from "$lib/version";
+  import { getDefaultVersion, getEnabledVersions } from "$lib/version";
 
   import {
     type FullPlayDataInput,
@@ -15,11 +15,12 @@
   let submissionError = $state<string>();
   let isSubmitting = $state(false);
 
+  const defaultVersion = getDefaultVersion();
   const enabledVersions = getEnabledVersions();
-  let selectedNextVersion = $state<string>(enabledVersions[0]);
-  let selectedCurrentVersion = $state<string>(
-    enabledVersions.length > 1 ? enabledVersions[1] : enabledVersions[0],
+  let selectedNextVersion = $state<string>(
+    enabledVersions.at(-1) || defaultVersion,
   );
+  let selectedCurrentVersion = $state<string>(defaultVersion);
   let useIntlVersion = $state<boolean>(false);
 
   async function parseFile(fileList: FileList) {

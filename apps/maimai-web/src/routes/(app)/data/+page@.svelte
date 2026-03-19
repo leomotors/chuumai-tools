@@ -50,7 +50,9 @@
     loading = true;
     error = "";
     try {
-      const response = await fetch(`/api/musicData?version=${selectedVersion}`);
+      const response = await fetch(
+        `/api/musicData?version=${encodeURIComponent(selectedVersion)}`,
+      );
       if (!response.ok) {
         throw new Error(`Failed to fetch data: ${response.statusText}`);
       }
@@ -418,7 +420,7 @@
               {#each paginatedData as song (song.title + song.chartType)}
                 <Table.Row class="border-white/20 text-center">
                   <Table.Cell class="font-medium text-gray-900">
-                    {song.releaseDate}
+                    {song.releaseDate || "-"}
                     {#if song.releaseDateIntl !== song.releaseDate}
                       <br />
                       <span class="text-sm text-gray-700">
@@ -452,7 +454,7 @@
                   </Table.Cell>
                   <Table.Cell class="font-medium text-gray-900">
                     <div>
-                      {song.releasedVersion}
+                      {song.releasedVersion || "-"}
                       {#if song.releasedVersionIntl}
                         <br />
                         ({song.releasedVersionIntl})
