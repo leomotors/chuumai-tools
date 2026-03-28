@@ -803,6 +803,8 @@ export interface components {
       };
       /** @example XVRS */
       version: string;
+      /** @description Ahead of Time: Chart in preview version will be put in new songs. (For Intl players) */
+      aotMode?: boolean;
     };
     HistoryRecord: {
       title: string;

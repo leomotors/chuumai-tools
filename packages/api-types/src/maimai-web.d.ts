@@ -971,7 +971,7 @@ export interface components {
       /** Format: date */
       releaseDateIntl?: string;
       /** @example CiRCLE */
-      releasedVersion: string;
+      releasedVersion?: string;
       /** @description Released Version in Intl. version if different, usually null meaning same as releasedVersion */
       releasedVersionIntl?: string;
       basic?: components["schemas"]["ChartLevel"];
