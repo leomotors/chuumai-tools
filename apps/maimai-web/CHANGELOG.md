@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.6.0] - 2026-03-28
+
+- upgrade to lucide icon v1
+- fix: calculated rating override actual rating in profile data
+
 ## [1.5.0] - 2026-03-19
 
 - feat: assets for CiRCLE+

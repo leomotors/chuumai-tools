@@ -9,6 +9,7 @@
     "skipLibCheck": true,
     "paths": {
       "@/app/*": ["../../apps/*"]
-    }
+    },
+    "types": ["node"]
   }
 }

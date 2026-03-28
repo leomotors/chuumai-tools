@@ -3,6 +3,7 @@
 ## [next]
 
 - chore: bump deps
+- upgrade to lucide icon v1
 
 ## [3.10.0] - 2026-03-06
 

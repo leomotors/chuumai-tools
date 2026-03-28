@@ -51,10 +51,7 @@ export const POST: RequestHandler = async ({ request }) => {
 
   return json(
     rawImageGenSchema.parse({
-      profile: {
-        ...profile,
-        rating: rating.total,
-      },
+      profile,
       best: oldWithRating,
       current: newWithRating,
       rating,

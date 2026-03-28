@@ -1,9 +1,12 @@
 <script lang="ts">
-  import { Github, Globe, Twitter, Workflow } from "@lucide/svelte";
+  import { Globe, Workflow } from "@lucide/svelte";
   import type { Snippet } from "svelte";
 
   import { page } from "$app/state";
   import { getLogoMapping, getLogoScale } from "$lib/constants/index";
+
+  import GitHub from "@repo/ui/icons/GitHub.svelte";
+  import X from "@repo/ui/icons/X.svelte";
 
   interface Props {
     children: Snippet;
@@ -33,7 +36,7 @@
         <p>Music for Rating Image Generator by</p>
 
         <div class="flex gap-1 items-center font-normal">
-          <Twitter />
+          <X class="size-6 shrink-0 text-black" />
           <p>@LeomotorsTH</p>
         </div>
       </div>
@@ -47,7 +50,7 @@
       </p>
 
       <div class="flex gap-1 items-center font-normal text-slate-800">
-        <Github />
+        <GitHub class="size-6 shrink-0 text-black" />
         <p>leomotors/chuumai-tools</p>
       </div>
 
