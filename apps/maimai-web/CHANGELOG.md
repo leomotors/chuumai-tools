@@ -2,6 +2,7 @@
 
 ## [1.6.0] - 2026-03-28
 
+- chore: bump deps
 - upgrade to lucide icon v1
 - fix: calculated rating override actual rating in profile data
 

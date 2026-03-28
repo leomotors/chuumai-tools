@@ -192,10 +192,17 @@ export async function main(
 
   // * Step 8: Send Image to Discord
   await runner.runStep("Step 8: Send Image to Discord", () =>
-    sendDiscordImage(outputLocation, playerData, rawImgGen, cached, {
-      startTime: start,
-      scrapeTimeMs: timeForScrape,
-      imageGenTimeMs: timeForImageGen,
-    }),
+    sendDiscordImage(
+      outputLocation,
+      playerData,
+      rawImgGen,
+      cached,
+      {
+        startTime: start,
+        scrapeTimeMs: timeForScrape,
+        imageGenTimeMs: timeForImageGen,
+      },
+      apiClient,
+    ),
   );
 }

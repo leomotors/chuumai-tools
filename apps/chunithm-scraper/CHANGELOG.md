@@ -2,8 +2,9 @@
 
 For changelog before V4: [here](https://github.com/leomotors/chunithm-net-scraper/blob/main/CHANGELOG.md)
 
-## [next]
+## [6.4.0] - 2026-03-28
 
+- feat: add play count today and this week to Discord message
 - chore: bump deps
 
 ## [6.3.0] - 2026-01-15

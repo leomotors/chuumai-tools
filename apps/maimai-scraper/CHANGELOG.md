@@ -1,7 +1,8 @@
 # Changelog
 
-## [next]
+## [1.2.0] - 2026-03-28
 
+- feat: add play count today and this week to Discord message
 - chore: bump deps
 
 ## [1.1.0] - 2026-01-17
