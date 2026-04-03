@@ -1102,6 +1102,7 @@ export interface components {
       thisMonth?: number;
       last30Days?: number;
       last365Days?: number;
+      thisVersion?: number;
     };
     MusicDataView: {
       id: number;
