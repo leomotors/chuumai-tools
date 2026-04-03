@@ -1,5 +1,9 @@
 # Changelog
 
+## [3.12.0] - 2026-04-04
+
+- fix(api): play count since logic
+
 ## [3.11.0] - 2026-03-28
 
 - chore: bump deps
