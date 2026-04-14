@@ -4,8 +4,15 @@ import { Composition } from "remotion";
 
 import { RecordView } from "./RecordView";
 import { RecordSequence, RecordSequenceProps } from "./RecordSequence";
+import { Intro } from "./Intro";
+import { Outro } from "./Outro";
 import { example2Data, example2NoVideo, exampleDataNoVideo } from "./example";
-import { recordSequenceSchema, recordViewSchema } from "./types";
+import {
+  introCompositionSchema,
+  outroCompositionSchema,
+  recordSequenceSchema,
+  recordViewSchema,
+} from "./types";
 
 // Each <Composition> is an entry in the sidebar!
 
@@ -33,12 +40,30 @@ export const RemotionRoot: React.FC = () => {
         calculateMetadata={({ props }) => {
           const fps = 60;
           const typedProps = props as RecordSequenceProps;
+          const crossfadeFrames = 30;
+
+          const songsDuration =
+            typedProps.songs.length *
+            fps *
+            typedProps.videoConfig.durationPerSong;
+          const introDuration = typedProps.intro
+            ? typedProps.intro.durationSeconds * fps
+            : 0;
+          const outroDuration = typedProps.outro
+            ? typedProps.outro.durationSeconds * fps
+            : 0;
+
+          // Crossfade overlaps: intro overlaps with first song, last song overlaps with outro
+          const introOverlap = introDuration > 0 ? crossfadeFrames : 0;
+          const outroOverlap = outroDuration > 0 ? crossfadeFrames : 0;
 
           return {
             durationInFrames:
-              typedProps.songs.length *
-              fps *
-              typedProps.videoConfig.durationPerSong,
+              introDuration +
+              songsDuration +
+              outroDuration -
+              introOverlap -
+              outroOverlap,
           };
         }}
         fps={60}
@@ -66,22 +91,50 @@ export const RemotionRoot: React.FC = () => {
             },
           ],
           videoConfig: { durationPerSong: 10 },
+          intro: {
+            lines: ["Chunithm X-VERSE-X", "Rating 16.75", "on 2026/04/03"],
+            durationSeconds: 5,
+          },
+          outro: {
+            imagePath: "best-1675.png",
+            durationSeconds: 5,
+          },
         }}
       />
 
-      {/* Mount any React component to make it show up in the sidebar and work on it individually! */}
-      {/* <Composition
-        id="OnlyLogo"
-        component={Logo}
-        durationInFrames={150}
-        fps={30}
+      <Composition
+        id="Intro"
+        component={Intro}
+        durationInFrames={300}
+        fps={60}
         width={1920}
         height={1080}
+        schema={introCompositionSchema}
         defaultProps={{
-          logoColor1: "#91dAE2" as const,
-          logoColor2: "#86A8E7" as const,
+          intro: {
+            lines: ["Chunithm X-VERSE-X", "Rating 16.75", "on 2026/04/03"],
+            durationSeconds: 5,
+          },
+          version: "XVRS",
         }}
-      /> */}
+      />
+
+      <Composition
+        id="Outro"
+        component={Outro}
+        durationInFrames={300}
+        fps={60}
+        width={1920}
+        height={1080}
+        schema={outroCompositionSchema}
+        defaultProps={{
+          outro: {
+            imagePath: "best-1675.png",
+            durationSeconds: 5,
+          },
+          version: "XVRS",
+        }}
+      />
     </>
   );
 };

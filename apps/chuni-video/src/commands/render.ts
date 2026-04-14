@@ -1,7 +1,7 @@
 import { renderMedia, selectComposition } from "@remotion/renderer";
 import readline from "node:readline";
-import fs from "node:fs/promises";
 import { getRenderYaml } from "../shared";
+import { validateRenderInputFiles } from "../libs/validation";
 
 export async function render() {
   const start = Date.now();
@@ -9,36 +9,7 @@ export async function render() {
 
   // Load songs from YAML
   const songsData = await getRenderYaml();
-
-  for (const song of songsData.songs) {
-    const videoMapping = songsData.videoMapping.find(
-      (v) => v.id === song.chart.id && v.difficulty === song.chart.difficulty,
-    );
-
-    if (!videoMapping?.url) {
-      throw new Error(
-        `No video mapping found for song ID ${song.chart.id} (${song.chart.title} ${song.chart.difficulty})`,
-      );
-    }
-
-    // Check if video file exists and is not empty
-    const videoPath = `build/public/files/${videoMapping.url}`;
-    try {
-      const stats = await fs.stat(videoPath);
-      if (stats.size === 0) {
-        throw new Error(
-          `Video file is empty: ${videoPath} for song ${song.chart.title} ${song.chart.difficulty}`,
-        );
-      }
-    } catch (error) {
-      if ((error as NodeJS.ErrnoException).code === "ENOENT") {
-        throw new Error(
-          `Video file not found: ${videoPath} for song ${song.chart.title} ${song.chart.difficulty}`,
-        );
-      }
-      throw error;
-    }
-  }
+  await validateRenderInputFiles(songsData);
 
   // Select the composition
   const compositionId = "RecordSequence";

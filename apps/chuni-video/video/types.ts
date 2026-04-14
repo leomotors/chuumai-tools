@@ -40,6 +40,28 @@ export const recordViewSchema = recordViewWithoutVideoSchema.extend({
   video: videoSchema,
 });
 
+// Schema for Intro and Outro
+export const introSchema = z.object({
+  lines: z.array(z.string()),
+  durationSeconds: z.number().default(5),
+});
+
+export const outroSchema = z.object({
+  imagePath: z.string(),
+  durationSeconds: z.number().default(5),
+});
+
+// Standalone composition schemas (for Remotion Studio previews)
+export const introCompositionSchema = z.object({
+  intro: introSchema,
+  version: z.string(),
+});
+
+export const outroCompositionSchema = z.object({
+  outro: outroSchema,
+  version: z.string(),
+});
+
 // Schema for RecordSequence
 export const videoMappingSchema = z.array(
   z.object({
@@ -60,4 +82,6 @@ export const recordSequenceSchema = z.object({
   songs: z.array(recordViewWithoutVideoSchema),
   videoMapping: videoMappingSchema,
   videoConfig: videoConfigSchema,
+  intro: introSchema.optional(),
+  outro: outroSchema.optional(),
 });

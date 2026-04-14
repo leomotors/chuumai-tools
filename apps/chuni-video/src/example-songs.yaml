@@ -46,3 +46,12 @@ videoMapping:
     volumeMultiplier: 0.5
 videoConfig:
   durationPerSong: 10
+intro:
+  lines:
+    - Chunithm X-VERSE-X
+    - Rating 16.75
+    - on 2026/04/03
+  durationSeconds: 5
+outro:
+  imagePath: best-1675.png
+  durationSeconds: 5
