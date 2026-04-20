@@ -1,6 +1,7 @@
 import { z } from "../zod";
 import {
   clearMarkValues,
+  honorRarityLevelValues,
   rarityLevelValues,
   ratingTypeValues,
   stdChartDifficultyValues,
@@ -57,7 +58,7 @@ export const profileSchema = z
     teamEmblem: z.enum(teamRarityLevelValues).nullish(),
 
     honorText: z.string().nonempty(),
-    honorRarity: z.enum(rarityLevelValues),
+    honorRarity: z.enum(honorRarityLevelValues),
 
     playerLevel: z.number(),
     playerName: z.string().nonempty(),

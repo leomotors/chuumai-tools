@@ -1,19 +1,19 @@
 import { JSDOM } from "jsdom";
 
 import {
-  RarityLevel,
-  rarityLevelValues,
+  HonorRarityLevel,
+  honorRarityLevelValues,
   TeamRarityLevel,
   teamRarityLevelValues,
 } from "@repo/types/chuni";
 import { ImgGenInput } from "@repo/types/chuni";
 import { z } from "@repo/types/zod";
 
-import { rarityFromUrl } from "./imageUrl";
+import { honorRarityFromUrl, rarityFromUrl } from "./imageUrl";
 import { parseCurrentRating } from "./playerRating";
 
 // Box
-export function parsePossession(dom: JSDOM): RarityLevel {
+export function parsePossession(dom: JSDOM): HonorRarityLevel {
   const ele = dom.window.document.querySelector(
     ".box_playerprofile",
   )! as HTMLDivElement;
@@ -65,11 +65,11 @@ const rightDataSchema = z.object({
   teamEmblem: z.enum(teamRarityLevelValues).optional(),
   teamName: z.string().optional(),
 
-  mainHonorRarity: z.enum(rarityLevelValues),
+  mainHonorRarity: z.enum(honorRarityLevelValues),
   mainHonorText: z.string(),
-  subHonor1Rarity: z.enum(rarityLevelValues).optional(),
+  subHonor1Rarity: z.enum(honorRarityLevelValues).optional(),
   subHonor1Text: z.string().optional(),
-  subHonor2Rarity: z.enum(rarityLevelValues).optional(),
+  subHonor2Rarity: z.enum(honorRarityLevelValues).optional(),
   subHonor2Text: z.string().optional(),
 
   playerLevel: z.number().int(),
@@ -222,8 +222,8 @@ function parseHonor(dom: JSDOM) {
   }
 
   const honorsData = honorList.map((ele) => {
-    const level = rarityFromUrl(ele.style.backgroundImage);
-    if (level === undefined) {
+    const level = honorRarityFromUrl(ele.style.backgroundImage);
+    if (level === null) {
       throw new Error("Failed to parse honor level");
     }
     return {

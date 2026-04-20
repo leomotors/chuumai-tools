@@ -57,6 +57,13 @@
       "when": 1768494116887,
       "tag": "0007_play-history",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1776702812214,
+      "tag": "0008_honor-bg-type",
+      "breakpoints": true
     }
   ]
 }

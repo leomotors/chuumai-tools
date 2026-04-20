@@ -1,0 +1,4 @@
+CREATE TYPE "public"."honor_rarity_level" AS ENUM('NORMAL', 'BRONZE', 'SILVER', 'GOLD', 'PLATINUM', 'RAINBOW', 'HOLOGRAPHIC', 'EXPERT', 'MASTER', 'ULTIMA');--> statement-breakpoint
+ALTER TABLE "player_data" ALTER COLUMN "main_honor_rarity" SET DATA TYPE "public"."honor_rarity_level" USING "main_honor_rarity"::text::"public"."honor_rarity_level";--> statement-breakpoint
+ALTER TABLE "player_data" ALTER COLUMN "sub_honor1_rarity" SET DATA TYPE "public"."honor_rarity_level" USING "sub_honor1_rarity"::text::"public"."honor_rarity_level";--> statement-breakpoint
+ALTER TABLE "player_data" ALTER COLUMN "sub_honor2_rarity" SET DATA TYPE "public"."honor_rarity_level" USING "sub_honor2_rarity"::text::"public"."honor_rarity_level";

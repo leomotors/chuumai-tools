@@ -29,6 +29,14 @@ export const rarityLevelValues = [
 ] as const;
 export type RarityLevel = (typeof rarityLevelValues)[number];
 
+export const honorRarityLevelValues = [
+  ...rarityLevelValues,
+  "EXPERT",
+  "MASTER",
+  "ULTIMA",
+] as const;
+export type HonorRarityLevel = (typeof honorRarityLevelValues)[number];
+
 export const teamRarityLevelValues = [
   "NORMAL",
   "GREEN",

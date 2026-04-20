@@ -11,6 +11,7 @@ import {
 import { jobTable } from "../../shared";
 import {
   clearMarkType,
+  honorRarityLevelType,
   rarityLevelType,
   ratingType,
   stdChartDifficultyType,
@@ -45,11 +46,11 @@ export const playerDataTable = pgTable("player_data", {
   teamEmblem: teamRarityLevelType("team_emblem"), // null for no team
 
   mainHonorText: text("main_honor_text").notNull(),
-  mainHonorRarity: rarityLevelType("main_honor_rarity").notNull(),
+  mainHonorRarity: honorRarityLevelType("main_honor_rarity").notNull(),
   subHonor1Text: text("sub_honor1_text"),
-  subHonor1Rarity: rarityLevelType("sub_honor1_rarity"),
+  subHonor1Rarity: honorRarityLevelType("sub_honor1_rarity"),
   subHonor2Text: text("sub_honor2_text"),
-  subHonor2Rarity: rarityLevelType("sub_honor2_rarity"),
+  subHonor2Rarity: honorRarityLevelType("sub_honor2_rarity"),
 
   playerLevel: integer("player_level").notNull(),
   playerName: text("player_name").notNull(),

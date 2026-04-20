@@ -1,4 +1,4 @@
-import { RarityLevel } from "@repo/types/chuni";
+import { HonorRarityLevel, RarityLevel } from "@repo/types/chuni";
 
 export function rarityFromUrl(url: string): RarityLevel | null {
   if (url.includes("_holographic")) {
@@ -30,4 +30,20 @@ export function rarityFromUrl(url: string): RarityLevel | null {
   }
 
   return null;
+}
+
+export function honorRarityFromUrl(url: string): HonorRarityLevel | null {
+  if (url.includes("_expert")) {
+    return "EXPERT";
+  }
+
+  if (url.includes("_master")) {
+    return "MASTER";
+  }
+
+  if (url.includes("_ultima")) {
+    return "ULTIMA";
+  }
+
+  return rarityFromUrl(url);
 }

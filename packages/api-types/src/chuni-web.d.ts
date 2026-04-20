@@ -731,7 +731,10 @@ export interface components {
         | "GOLD"
         | "PLATINUM"
         | "RAINBOW"
-        | "HOLOGRAPHIC";
+        | "HOLOGRAPHIC"
+        | "EXPERT"
+        | "MASTER"
+        | "ULTIMA";
       playerLevel: number;
       playerName: string;
       classBand?: number;
@@ -941,7 +944,10 @@ export interface components {
         | "GOLD"
         | "PLATINUM"
         | "RAINBOW"
-        | "HOLOGRAPHIC";
+        | "HOLOGRAPHIC"
+        | "EXPERT"
+        | "MASTER"
+        | "ULTIMA";
       subHonor1Text: string | null;
       /** @enum {string|null} */
       subHonor1Rarity:
@@ -952,6 +958,9 @@ export interface components {
         | "PLATINUM"
         | "RAINBOW"
         | "HOLOGRAPHIC"
+        | "EXPERT"
+        | "MASTER"
+        | "ULTIMA"
         | null;
       subHonor2Text: string | null;
       /** @enum {string|null} */
@@ -963,6 +972,9 @@ export interface components {
         | "PLATINUM"
         | "RAINBOW"
         | "HOLOGRAPHIC"
+        | "EXPERT"
+        | "MASTER"
+        | "ULTIMA"
         | null;
       playerLevel: number;
       playerName: string;

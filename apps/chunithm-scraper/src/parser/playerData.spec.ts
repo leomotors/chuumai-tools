@@ -27,6 +27,7 @@ describe("Player Data", () => {
       "one-honor.html": "NORMAL",
       "pooh.html": "NORMAL",
       "thatcat.html": "NORMAL",
+      "xvrsx-aj-honor.html": "NORMAL",
     };
 
     for (const [filename, expected] of Object.entries(fixtures)) {
@@ -77,6 +78,11 @@ describe("Player Data", () => {
         characterRarity: "RAINBOW",
         characterImage:
           "https://chunithm-net-eng.com/mobile/img/ca42d927c55a6f9b.png", // toa
+      },
+      "xvrsx-aj-honor.html": {
+        characterRarity: "NORMAL",
+        characterImage:
+          "https://chunithm-net-eng.com/mobile/img/f98827a3b9504f11.png",
       },
     };
 
@@ -222,6 +228,24 @@ describe("Player Data", () => {
         overpowerValue: 47546.36,
         overpowerPercent: 43.77,
         lastPlayed: new Date("2025-04-06T03:55:00Z"),
+      },
+      "xvrsx-aj-honor.html": {
+        teamEmblem: "YELLOW",
+        teamName: "ＣＰ　ｖｓ　ＣＥＤＴ",
+        mainHonorRarity: "EXPERT",
+        mainHonorText: "We don't need tears!",
+        subHonor1Rarity: "MASTER",
+        subHonor1Text: "Challenger!!",
+        subHonor2Rarity: "ULTIMA",
+        subHonor2Text: "パーフェクト生命",
+        playerLevel: 167,
+        playerName: "",
+        classBand: 0,
+        classEmblem: 4,
+        rating: 16.67,
+        overpowerValue: 67.67,
+        overpowerPercent: 67.67,
+        lastPlayed: new Date("2026-04-20T07:00:00Z"),
       },
     };
 

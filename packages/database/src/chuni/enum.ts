@@ -3,6 +3,7 @@ import { pgEnum } from "drizzle-orm/pg-core";
 import {
   categoryValues,
   clearMarkValues,
+  honorRarityLevelValues,
   ranks,
   rarityLevelValues,
   ratingTypeValues,
@@ -18,6 +19,11 @@ export const stdChartDifficultyType = pgEnum(
 );
 
 export const rarityLevelType = pgEnum("rarity_level", rarityLevelValues);
+
+export const honorRarityLevelType = pgEnum(
+  "honor_rarity_level",
+  honorRarityLevelValues,
+);
 
 export const teamRarityLevelType = pgEnum(
   "team_rarity_level",

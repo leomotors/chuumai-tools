@@ -1,5 +1,9 @@
 # Changelog
 
+## [3.13.0] - 2026-04-20
+
+- feat: support x-verse-x all justice honor background
+
 ## [3.12.0] - 2026-04-04
 
 - fix(api): play count since logic

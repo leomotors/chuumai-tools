@@ -2,6 +2,10 @@
 
 For changelog before V4: [here](https://github.com/leomotors/chunithm-net-scraper/blob/main/CHANGELOG.md)
 
+## [6.5.0] - 2026-04-20
+
+- feat: support x-verse-x all justice honor background
+
 ## [6.4.0] - 2026-03-28
 
 - feat: add play count today and this week to Discord message
