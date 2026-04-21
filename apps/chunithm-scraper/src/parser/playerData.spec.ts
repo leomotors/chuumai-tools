@@ -269,6 +269,12 @@ describe("Player Data", () => {
         totalCurrency: 8000,
         playCount: 468,
       },
+      "xvrsx.html": {
+        currentCurrency: 3363000,
+        totalCurrency: 3432000,
+        playCount: 1002,
+        playCountCurrent: 15,
+      },
     };
 
     for (const [filename, expected] of Object.entries(fixtures)) {

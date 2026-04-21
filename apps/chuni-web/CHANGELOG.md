@@ -1,5 +1,9 @@
 # Changelog
 
+## [3.14.0] - 2026-04-21
+
+- api: support saving this version play count
+
 ## [3.13.0] - 2026-04-20
 
 - feat: support x-verse-x all justice honor background

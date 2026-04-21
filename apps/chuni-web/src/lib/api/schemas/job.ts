@@ -58,6 +58,7 @@ export const savePlayerDataSchema = z
     currentCurrency: z.number().int(),
     totalCurrency: z.number().int(),
     playCount: z.number().int(),
+    playCountCurrent: z.number().int().nullable(),
   })
   .openapi("SavePlayerData");
 

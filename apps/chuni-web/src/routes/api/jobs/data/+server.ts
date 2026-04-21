@@ -94,6 +94,7 @@ export const POST: RequestHandler = async ({ request }) => {
       currentCurrency: playerData.currentCurrency,
       totalCurrency: playerData.totalCurrency,
       playCount: playerData.playCount,
+      playCountCurrent: playerData.playCountCurrent,
     });
 
     // Insert all music records

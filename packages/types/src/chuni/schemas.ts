@@ -72,6 +72,7 @@ export const profileSchema = z
 
     lastPlayed: z.coerce.date(),
     playCount: z.number(),
+    playCountCurrent: z.number().optional(),
   })
   .openapi("Profile");
 

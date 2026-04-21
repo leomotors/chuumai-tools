@@ -2,6 +2,10 @@
 
 For changelog before V4: [here](https://github.com/leomotors/chunithm-net-scraper/blob/main/CHANGELOG.md)
 
+## [6.6.0] - 2026-04-21
+
+- feat: support scraping this version play count
+
 ## [6.5.0] - 2026-04-20
 
 - feat: support x-verse-x all justice honor background

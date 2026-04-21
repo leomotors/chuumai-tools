@@ -64,6 +64,13 @@
       "when": 1776702812214,
       "tag": "0008_honor-bg-type",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1776783320092,
+      "tag": "0009_add-current-version-playcount",
+      "breakpoints": true
     }
   ]
 }

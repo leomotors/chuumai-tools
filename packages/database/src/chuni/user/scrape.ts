@@ -73,6 +73,7 @@ export const playerDataTable = pgTable("player_data", {
   totalCurrency: integer("total_currency").notNull(),
 
   playCount: integer("play_count").notNull(),
+  playCountCurrent: integer("play_count_current"),
 });
 
 /**

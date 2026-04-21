@@ -1,0 +1,1 @@
+ALTER TABLE "player_data" ADD COLUMN "play_count_current" integer;

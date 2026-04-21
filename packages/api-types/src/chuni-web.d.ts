@@ -745,6 +745,7 @@ export interface components {
       /** Format: date-time */
       lastPlayed: string | null;
       playCount: number;
+      playCountCurrent?: number;
     };
     HiddenChart: {
       search: string;
@@ -992,6 +993,7 @@ export interface components {
       currentCurrency: number;
       totalCurrency: number;
       playCount: number;
+      playCountCurrent: number | null;
     };
     SaveRatingRecords: {
       /** @description Best 30 songs for rating */
@@ -1067,6 +1069,7 @@ export interface components {
       jobId: number;
       playerLevel: number;
       playCount: number;
+      playCountCurrent: number | null;
       rating: string;
       overpowerValue: string;
     };

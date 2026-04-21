@@ -58,6 +58,7 @@ export async function getForRating(userId: string) {
       overpowerPercent: playerDataTable.overpowerPercent,
       lastPlayed: playerDataTable.lastPlayed,
       playCount: playerDataTable.playCount,
+      playCountCurrent: playerDataTable.playCountCurrent,
     })
     .from(playerDataTable)
     .where(eq(playerDataTable.jobId, jobId))
@@ -147,6 +148,7 @@ export async function getForRating(userId: string) {
       overpowerPercent: Number(profile.overpowerPercent),
       classBand: profile.classBand ?? undefined,
       classEmblem: profile.classEmblem ?? undefined,
+      playCountCurrent: profile.playCountCurrent ?? undefined,
     },
     best,
     current,

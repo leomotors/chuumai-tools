@@ -12,7 +12,7 @@ export async function generateImage(page: Page, inputFileName: string) {
 
   await page.goto(
     environment.CHUNI_SERVICE_URL + `?scraperVersion=${APP_VERSION}`,
-    { waitUntil: "load" },
+    { waitUntil: "networkidle" },
   );
   await page.selectOption("#version", environment.VERSION);
 

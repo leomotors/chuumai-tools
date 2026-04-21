@@ -14,6 +14,7 @@ export const userStatsSchema = z
     jobId: z.number(),
     playerLevel: z.number(),
     playCount: z.number(),
+    playCountCurrent: z.number().nullable(),
     rating: z.string(),
     overpowerValue: z.string(),
   })
@@ -27,7 +28,7 @@ export type UserStats = z.infer<typeof userStatsSchema>;
  * SQL equivalent:
  * ```sql
  * SELECT DISTINCT ON (last_played)
- *   last_played, job.id, player_level, play_count, rating, overpower_value
+ *   last_played, job.id, player_level, play_count, play_count_current, rating, overpower_value
  * FROM job
  * INNER JOIN player_data ON user_id = {USER ID} AND job.id = player_data.job_id
  * ```
@@ -41,6 +42,7 @@ export async function getUserStats(userId: string): Promise<UserStats[]> {
       jobId: jobTable.id,
       playerLevel: playerDataTable.playerLevel,
       playCount: playerDataTable.playCount,
+      playCountCurrent: playerDataTable.playCountCurrent,
       rating: playerDataTable.rating,
       overpowerValue: playerDataTable.overpowerValue,
     })
@@ -54,6 +56,7 @@ export async function getUserStats(userId: string): Promise<UserStats[]> {
     jobId: row.jobId,
     playerLevel: row.playerLevel,
     playCount: row.playCount,
+    playCountCurrent: row.playCountCurrent,
     rating: row.rating,
     overpowerValue: row.overpowerValue,
   }));

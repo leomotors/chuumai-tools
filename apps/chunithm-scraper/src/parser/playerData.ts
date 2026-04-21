@@ -253,9 +253,17 @@ export function parseBottomData(dom: JSDOM) {
     .querySelector(".user_data_play_count")!
     .textContent!.replaceAll(",", "");
 
+  const currentPlayCountEle = bottomData.querySelector(
+    ".user_data_current_play_count",
+  );
+  const playCountCurrent = currentPlayCountEle
+    ? +currentPlayCountEle.textContent!.replaceAll(",", "")
+    : undefined;
+
   return {
     currentCurrency,
     totalCurrency,
     playCount,
+    ...(playCountCurrent !== undefined && { playCountCurrent }),
   };
 }

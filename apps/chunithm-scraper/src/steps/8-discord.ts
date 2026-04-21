@@ -32,7 +32,7 @@ export async function sendDiscordImage(
   const image = await fs.readFile(imageLocation);
   const blob = new Blob([new Uint8Array(image)], { type: "image/png" });
 
-  let playCountPeriods = "";
+  const parts: string[] = [];
   if (apiClient && environment.CHUNI_SERVICE_API_KEY) {
     const { data, error } = await apiClient.GET("/api/users/playCount", {
       params: {
@@ -45,18 +45,19 @@ export async function sendDiscordImage(
         `Could not fetch play count periods for Discord: ${error.message ?? JSON.stringify(error)}`,
       );
     } else if (data) {
-      const parts: string[] = [];
       if (typeof data.today === "number") {
         parts.push(`Today: ${data.today}`);
       }
       if (typeof data.thisWeek === "number") {
         parts.push(`This week: ${data.thisWeek}`);
       }
-      if (parts.length > 0) {
-        playCountPeriods = ` (${parts.join(" | ")})`;
-      }
     }
   }
+
+  if (playerData.playCountCurrent !== undefined) {
+    parts.push(`This Version: ${playerData.playCountCurrent}`);
+  }
+  const playCountPeriods = parts.length > 0 ? ` (${parts.join(" | ")})` : "";
 
   const message = `## Your Music for Rating Image is here!
 **Scraper Version**: ${APP_VERSION} @ ${environment.VERSION}\t\t**Cached Login**: ${loginCached ? "Yes :white_check_mark:" : "No :arrows_clockwise:"}

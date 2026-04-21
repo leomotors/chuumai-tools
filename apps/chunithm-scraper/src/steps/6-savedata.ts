@@ -57,6 +57,7 @@ export async function saveDataToService(
         currentCurrency: playerData.currentCurrency,
         totalCurrency: playerData.totalCurrency,
         playCount: playerData.playCount,
+        playCountCurrent: playerData.playCountCurrent ?? null,
       },
       recordData: {
         best: recordData.bestSongs.map(recordToGenInputWithFullChain),
