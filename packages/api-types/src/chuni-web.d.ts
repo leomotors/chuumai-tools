@@ -1124,6 +1124,10 @@ export interface components {
       title: string;
       artist: string;
       image: string;
+      /** Format: date */
+      releaseDate?: string;
+      /** Format: date */
+      releaseDateIntl?: string;
       releasedVersion: string | null;
       basic?: components["schemas"]["ChartLevel"];
       advanced?: components["schemas"]["ChartLevel"];

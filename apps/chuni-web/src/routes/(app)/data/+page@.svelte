@@ -117,6 +117,9 @@
       let aVal: unknown;
       let bVal: unknown;
 
+      // Fallback to ID sort descendingly
+      const descIdSort = b.id - a.id;
+
       // Handle difficulty columns
       if (
         sortField === "basic" ||
@@ -138,7 +141,7 @@
         aVal = a[sortField as keyof MusicDataViewSchema];
         bVal = b[sortField as keyof MusicDataViewSchema];
 
-        if (aVal === null && bVal === null) return 0;
+        if (aVal === null && bVal === null) return descIdSort;
         if (aVal === null) return 1;
         if (bVal === null) return -1;
       }
@@ -147,6 +150,8 @@
         typeof aVal === "number" && typeof bVal === "number"
           ? aVal - bVal
           : String(aVal).localeCompare(String(bVal));
+
+      if (comparison === 0) return descIdSort;
 
       return sortDirection === "asc" ? comparison : -comparison;
     });
@@ -257,6 +262,19 @@
         <Label for="null-filter">Show songs with missing constant data</Label>
       </div>
 
+      <!-- Note -->
+      <div class="mt-4 text-sm text-gray-700">
+        <p>
+          Note 1: The data shown here is primarily used for other functions in
+          this website and not meant to be up-to-date or accurate database. See
+          about page for data source.
+        </p>
+        <p>
+          Note 2: Release Date in first line is JP Version while second line is
+          Intl Version.
+        </p>
+      </div>
+
       <!-- Stats -->
       <div class="mt-4 text-sm text-gray-700">
         {#if !loading && musicData.length > 0}
@@ -309,6 +327,17 @@
                     {sortDirection}
                   >
                     ID
+                  </SortableHeader>
+                </Table.Head>
+                <Table.Head
+                  class="cursor-pointer text-gray-900 hover:text-gray-700"
+                  onclick={() => handleSort("releaseDate")}
+                >
+                  <SortableHeader
+                    isSorting={sortField === "releaseDate"}
+                    {sortDirection}
+                  >
+                    Release
                   </SortableHeader>
                 </Table.Head>
                 <Table.Head class="text-gray-900 hover:text-gray-700">
@@ -406,6 +435,15 @@
                 <Table.Row class="border-white/20">
                   <Table.Cell class="font-medium text-gray-900">
                     {song.id}
+                  </Table.Cell>
+                  <Table.Cell class="font-medium text-gray-900 text-center">
+                    {song.releaseDate || "-"}
+                    {#if song.releaseDateIntl !== song.releaseDate}
+                      <br />
+                      <span class="text-sm text-gray-700">
+                        {song.releaseDateIntl || "-"}
+                      </span>
+                    {/if}
                   </Table.Cell>
                   <Table.Cell>
                     <img
