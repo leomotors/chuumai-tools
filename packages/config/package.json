@@ -8,11 +8,11 @@
   },
   "dependencies": {
     "@leomotors/config": "^2.0.0",
-    "eslint": "^10.1.0",
-    "eslint-plugin-svelte": "^3.17.0",
-    "globals": "^17.4.0",
+    "eslint": "^10.2.1",
+    "eslint-plugin-svelte": "^3.17.1",
+    "globals": "^17.5.0",
     "prettier-plugin-svelte": "^3.5.1",
     "svelte-eslint-parser": "^1.6.0",
-    "typescript-eslint": "^8.58.0"
+    "typescript-eslint": "^8.59.0"
   }
 }

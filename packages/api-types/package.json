@@ -10,7 +10,7 @@
     "codegen": "rm -rf \"src/*.d.ts\" && sh ./ts-codegen.sh && pnpm format"
   },
   "devDependencies": {
-    "eslint": "^10.1.0",
+    "eslint": "^10.2.1",
     "openapi-typescript": "^7.13.0"
   }
 }

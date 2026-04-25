@@ -16,15 +16,15 @@
     "*.css"
   ],
   "dependencies": {
-    "@remotion/renderer": "4.0.443"
+    "@remotion/renderer": "4.0.451"
   },
   "devDependencies": {
     "@fontsource-variable/noto-sans-jp": "^5.2.10",
-    "@remotion/cli": "4.0.443",
-    "@remotion/eslint-config-flat": "4.0.443",
-    "@remotion/media": "4.0.443",
-    "@remotion/tailwind-v4": "4.0.443",
-    "@remotion/zod-types": "4.0.443",
+    "@remotion/cli": "4.0.451",
+    "@remotion/eslint-config-flat": "4.0.451",
+    "@remotion/media": "4.0.451",
+    "@remotion/tailwind-v4": "4.0.451",
+    "@remotion/zod-types": "4.0.451",
     "@repo/api-types": "workspace:*",
     "@repo/core": "workspace:*",
     "@repo/database": "workspace:*",
@@ -33,18 +33,18 @@
     "@types/js-yaml": "^4.0.9",
     "@types/react": "^19.2.14",
     "dotenv-cli": "^11.0.0",
-    "eslint": "^10.1.0",
+    "eslint": "^10.2.1",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.5",
     "js-yaml": "^4.1.1",
     "openapi-fetch": "^0.17.0",
-    "prettier": "^3.8.1",
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4",
-    "remotion": "4.0.443",
-    "tailwindcss": "^4.2.2",
-    "tsdown": "^0.21.7",
-    "typescript": "^6.0.2",
+    "prettier": "^3.8.3",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5",
+    "remotion": "4.0.451",
+    "tailwindcss": "^4.2.4",
+    "tsdown": "^0.21.10",
+    "typescript": "^6.0.3",
     "zod": "4.3.6"
   }
 }
