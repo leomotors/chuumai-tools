@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.8.0] - 2026-04-26
+
+- qol(data page): now reset to first page when sorting
+
 ## [1.7.0] - 2026-04-04
 
 - fix(api): play count since logic
