@@ -183,6 +183,7 @@
       sortField = field;
       sortDirection = "desc";
     }
+    currentPage = 1;
   }
 </script>
 
