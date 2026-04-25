@@ -143,6 +143,8 @@ describe("diffInMusicData", () => {
         artist: "Existing Artist",
         image: "existing.jpg",
         version: null,
+        releaseDate: null,
+        releaseDateIntl: null,
       },
     ];
 
@@ -209,6 +211,8 @@ describe("diffInMusicData", () => {
       artist: `Artist ${i}`,
       image: `image${i}.jpg`,
       version: null,
+      releaseDate: null,
+      releaseDateIntl: null,
     }));
 
     const newData = Array.from({ length: 1200 }, (_, i) => ({
@@ -263,6 +267,8 @@ describe("diffInMusicData", () => {
         artist: "Test Artist",
         image: "test.jpg",
         version: null,
+        releaseDate: null,
+        releaseDateIntl: null,
       },
     ];
 
