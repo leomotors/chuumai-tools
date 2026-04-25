@@ -68,6 +68,7 @@ export const diffMapping: Record<ThreeAlphaDiff, StdChartDifficulty> = {
 export const beerSchema = z.object({
   id: z.number(),
   title: z.string(),
+  release_date: z.string().nullable(),
   charts: z.array(
     z.object({
       difficulty: z.enum([...threeAlphaDiffValues, "WE"]),

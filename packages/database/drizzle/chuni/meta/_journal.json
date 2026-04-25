@@ -71,6 +71,13 @@
       "when": 1776783320092,
       "tag": "0009_add-current-version-playcount",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1777134862858,
+      "tag": "0010_release-date-column",
+      "breakpoints": true
     }
   ]
 }

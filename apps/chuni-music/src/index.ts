@@ -3,6 +3,7 @@ import { updateMusicConstantBeer } from "./steps/constant-beer.js";
 import { updateMusicConstantCsv } from "./steps/constant-csv.js";
 import { updateMusicConstantZerataku } from "./steps/constant-zerataku.js";
 import { downloadMusicData } from "./steps/music-data.js";
+import { updateReleaseDateData } from "./steps/release-date.js";
 
 const command = process.argv[2];
 
@@ -52,6 +53,9 @@ if (command === "music") {
   console.log(
     "\n✅ Update Music Constant from chuni-penguin.beerpsi.cc Completed\n",
   );
+} else if (command === "release-date") {
+  await updateReleaseDateData();
+  console.log("\n✅ Update Release Date Data Completed\n");
 } else {
   console.log(`Unknown Command: ${command}`);
   process.exit(1);
