@@ -4,4 +4,5 @@ packages:
 overrides:
   "@remotion/eslint-config-flat>typescript-eslint": ^8.57.1
 allowBuilds:
+  '@parcel/watcher': true
   esbuild: true
