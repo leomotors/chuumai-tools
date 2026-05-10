@@ -1,37 +1,7 @@
-<script lang="ts">
-  import { scaleLinear, scaleTime } from "d3-scale";
-  import { LineChart } from "layerchart";
-  import type { Snippet } from "svelte";
-  import { SvelteDate } from "svelte/reactivity";
+<script lang="ts" module>
+  export type MaimaiMetric = "playCount" | "rating" | "star";
 
-  import { browser } from "$app/environment";
-  import type { UserStats } from "$lib/functions/userStats";
-
-  import * as Chart from "@repo/ui/atom/chart";
-  import * as Tabs from "@repo/ui/atom/tabs";
-
-  type StatsChartProps = {
-    userStats: UserStats[];
-    manualRatings?: { rating: number; timestamp: Date }[];
-    header: Snippet;
-  };
-
-  let { userStats, manualRatings = [], header }: StatsChartProps = $props();
-
-  // Chart state
-  let xAxisMode = $state<"time" | "playCount">("time");
-
-  // Selected metric for display (only show one at a time to avoid scale issues)
-  let selectedMetric = $state<"playCount" | "rating" | "star">("rating");
-
-  // Time range filter (in days, 0 = all)
-  let timeRange = $state<number>(0);
-
-  // Play count filter (number of plays, 0 = all)
-  let playCountLimit = $state<number>(0);
-
-  // Type for transformed chart data
-  type ChartDataPoint = {
+  export type StatsChartTransformed = {
     date: Date;
     playCount: number;
     rating: number;
@@ -39,315 +9,176 @@
     isManual?: boolean;
   };
 
-  // Chart data transformations
-  const chartData = $derived.by(() => {
-    if (!userStats || userStats.length === 0) return [];
-
-    // Sort by date ascending
-    const sorted = [...userStats].sort(
-      (a, b) =>
-        new Date(a.lastPlayed).getTime() - new Date(b.lastPlayed).getTime(),
-    );
-
-    if (xAxisMode === "time") {
-      // Filter by time range if set
-      if (timeRange > 0) {
-        const cutoffDate = new SvelteDate();
-        cutoffDate.setDate(cutoffDate.getDate() - timeRange);
-        return sorted.filter((s) => new Date(s.lastPlayed) >= cutoffDate);
-      }
-      return sorted;
-    } else {
-      // Filter by play count (last N plays)
-      if (playCountLimit > 0) {
-        return sorted.slice(-playCountLimit);
-      }
-      return sorted;
-    }
-  });
-
-  // Manual rating data (filtered by time range when in time mode)
-  const filteredManualRatings = $derived.by(() => {
-    if (xAxisMode !== "time" || !manualRatings || manualRatings.length === 0)
-      return [];
-
-    if (timeRange > 0) {
-      const cutoffDate = new SvelteDate();
-      cutoffDate.setDate(cutoffDate.getDate() - timeRange);
-      return manualRatings.filter((r) => new Date(r.timestamp) >= cutoffDate);
-    }
-    return manualRatings;
-  });
-
-  // Transform data for chart
-  const transformedData = $derived.by((): ChartDataPoint[] => {
-    const userStatsData = chartData.map((s) => ({
-      date: new Date(s.lastPlayed),
-      playCount: s.playCountTotal,
-      rating: s.rating,
-      star: s.star,
-      isManual: false,
-    }));
-
-    // Add manual ratings only in time mode and only for rating metric
-    if (xAxisMode === "time" && selectedMetric === "rating") {
-      const manualData = filteredManualRatings.map((r) => ({
-        date: new Date(r.timestamp),
-        playCount: 0,
-        rating: r.rating,
-        star: 0,
-        isManual: true,
-      }));
-
-      // Combine and sort by date
-      return [...userStatsData, ...manualData].sort(
-        (a, b) => a.date.getTime() - b.date.getTime(),
-      );
-    }
-
-    return userStatsData;
-  });
-
-  // Metric configuration
-  const metricConfig = {
+  export const MAIMAI_METRIC_CONFIG: Record<
+    MaimaiMetric,
+    { label: string; color: string }
+  > = {
     rating: { label: "Rating", color: "#3b82f6" },
     playCount: { label: "Play Count", color: "#22c55e" },
     star: { label: "Star", color: "#a855f7" },
   };
+</script>
 
-  // Build series for the selected metric only
+<script lang="ts">
+  import { scaleTime } from "d3-scale";
+  import { LineChart } from "layerchart";
+
+  import { browser } from "$app/environment";
+
+  import * as Chart from "@repo/ui/atom/chart";
+
+  type Props = {
+    data: StatsChartTransformed[];
+    selectedMetric: MaimaiMetric;
+    onMetricChange: (m: MaimaiMetric) => void;
+    range: number;
+    onRangeChange: (r: number) => void;
+  };
+
+  let { data, selectedMetric, onMetricChange, range, onRangeChange }: Props =
+    $props();
+
   const chartSeries = $derived([
     {
       key: selectedMetric,
-      label: metricConfig[selectedMetric].label,
-      color: metricConfig[selectedMetric].color,
+      label: MAIMAI_METRIC_CONFIG[selectedMetric].label,
+      color: MAIMAI_METRIC_CONFIG[selectedMetric].color,
     },
   ]);
+
+  const yDomain = $derived.by((): [number, number] | undefined => {
+    if (data.length === 0) return undefined;
+    let min = Infinity;
+    let max = -Infinity;
+    for (const d of data) {
+      const v = d[selectedMetric];
+      if (typeof v !== "number") continue;
+      if (v < min) min = v;
+      if (v > max) max = v;
+    }
+    if (!isFinite(min) || !isFinite(max)) return undefined;
+    if (min === max) {
+      const pad = Math.max(1, Math.abs(min) * 0.05);
+      return [min - pad, max + pad];
+    }
+    const pad = (max - min) * 0.1;
+    return [min - pad, max + pad];
+  });
+
+  const rangeOptions: [number, string][] = [
+    [30, "30D"],
+    [90, "90D"],
+    [365, "1Y"],
+    [0, "All"],
+  ];
+
+  function rangeLabel(r: number): string {
+    if (r === 0) return "all time";
+    if (r === 365) return "last year";
+    return `last ${r} days`;
+  }
 </script>
 
-<div
-  class="rounded-xl border border-gray-200/50 bg-white/70 p-6 shadow-lg backdrop-blur-md flex flex-col gap-4"
->
-  <h2 class="text-lg font-semibold text-gray-800">Play Statistics</h2>
-
-  {@render header()}
-
-  <!-- X-Axis Mode Tabs -->
-  <Tabs.Root
-    value={xAxisMode}
-    onValueChange={(v: string | undefined) => {
-      if (v) xAxisMode = v as "time" | "playCount";
-    }}
-    class="w-full"
-  >
-    <Tabs.List class="grid w-full grid-cols-2">
-      <Tabs.Trigger value="time">By Time</Tabs.Trigger>
-      <Tabs.Trigger value="playCount">By Play Count</Tabs.Trigger>
-    </Tabs.List>
-
-    <!-- Filters -->
-    {#if xAxisMode === "time"}
-      <div class="my-4 flex flex-wrap gap-2">
-        <button
-          class="px-3 py-1 text-sm rounded-md transition-colors {timeRange === 0
-            ? 'bg-blue-500 text-white'
-            : 'bg-gray-200 hover:bg-gray-300'}"
-          onclick={() => (timeRange = 0)}
-        >
-          All Time
-        </button>
-        <button
-          class="px-3 py-1 text-sm rounded-md transition-colors {timeRange ===
-          30
-            ? 'bg-blue-500 text-white'
-            : 'bg-gray-200 hover:bg-gray-300'}"
-          onclick={() => (timeRange = 30)}
-        >
-          30 Days
-        </button>
-        <button
-          class="px-3 py-1 text-sm rounded-md transition-colors {timeRange ===
-          90
-            ? 'bg-blue-500 text-white'
-            : 'bg-gray-200 hover:bg-gray-300'}"
-          onclick={() => (timeRange = 90)}
-        >
-          90 Days
-        </button>
-        <button
-          class="px-3 py-1 text-sm rounded-md transition-colors {timeRange ===
-          365
-            ? 'bg-blue-500 text-white'
-            : 'bg-gray-200 hover:bg-gray-300'}"
-          onclick={() => (timeRange = 365)}
-        >
-          1 Year
-        </button>
+<div class="rounded-xl border border-gray-200/70 bg-white px-5 py-4 shadow-sm">
+  <div class="mb-3 flex flex-wrap items-start justify-between gap-3">
+    <div>
+      <h2 class="text-[15px] font-semibold tracking-tight text-gray-900">
+        Progression
+      </h2>
+      <p class="mt-0.5 text-[11.5px] text-gray-400">
+        {MAIMAI_METRIC_CONFIG[selectedMetric].label} over {rangeLabel(range)}
+      </p>
+    </div>
+    <div class="flex flex-wrap items-center gap-2">
+      <div class="flex flex-wrap gap-1">
+        {#each Object.entries(MAIMAI_METRIC_CONFIG) as [key, cfg] (key)}
+          {@const isOn = selectedMetric === key}
+          <button
+            type="button"
+            onclick={() => onMetricChange(key as MaimaiMetric)}
+            class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[11.5px] font-medium transition-colors"
+            class:border-gray-300={isOn}
+            class:bg-gray-100={isOn}
+            class:text-gray-900={isOn}
+            class:border-gray-200={!isOn}
+            class:text-gray-500={!isOn}
+            class:hover:text-gray-900={!isOn}
+          >
+            <span
+              class="size-[7px] rounded-full"
+              style:background-color={cfg.color}
+              aria-hidden="true"
+            ></span>
+            {cfg.label}
+          </button>
+        {/each}
       </div>
+      <div class="inline-flex gap-0.5 rounded-lg bg-gray-100 p-0.5">
+        {#each rangeOptions as [v, l] (v)}
+          {@const isOn = range === v}
+          <button
+            type="button"
+            onclick={() => onRangeChange(v)}
+            class="rounded-md px-2.5 py-1 text-[11.5px] font-medium transition-colors"
+            class:bg-white={isOn}
+            class:text-gray-900={isOn}
+            class:shadow-sm={isOn}
+            class:text-gray-500={!isOn}
+            class:hover:text-gray-900={!isOn}
+          >
+            {l}
+          </button>
+        {/each}
+      </div>
+    </div>
+  </div>
+
+  <div class="h-72 w-full">
+    {#if !browser}
+      <div
+        class="flex h-full items-center justify-center text-sm text-gray-400"
+      >
+        Loading chart...
+      </div>
+    {:else if data.length > 0}
+      <Chart.Container config={{}} class="aspect-auto h-full pl-4">
+        <LineChart
+          {data}
+          x="date"
+          xScale={scaleTime()}
+          {yDomain}
+          yNice
+          series={chartSeries}
+          axis
+          points
+          props={{
+            xAxis: {
+              format: (d: Date) =>
+                d.toLocaleDateString("en-GB", {
+                  day: data.length > 90 ? undefined : "numeric",
+                  month: "short",
+                  year: data.length > 90 ? "2-digit" : undefined,
+                }),
+              labelProps: { class: "text-xs fill-gray-500" },
+            },
+            yAxis: {
+              labelProps: { class: "text-xs fill-gray-500" },
+            },
+          }}
+        >
+          {#snippet tooltip()}
+            <Chart.Tooltip
+              labelFormatter={(value) => value.toLocaleDateString()}
+            />
+          {/snippet}
+        </LineChart>
+      </Chart.Container>
     {:else}
-      <div class="my-4 flex flex-wrap gap-2">
-        <button
-          class="px-3 py-1 text-sm rounded-md transition-colors {playCountLimit ===
-          0
-            ? 'bg-blue-500 text-white'
-            : 'bg-gray-200 hover:bg-gray-300'}"
-          onclick={() => (playCountLimit = 0)}
-        >
-          All Plays
-        </button>
-        <button
-          class="px-3 py-1 text-sm rounded-md transition-colors {playCountLimit ===
-          10
-            ? 'bg-blue-500 text-white'
-            : 'bg-gray-200 hover:bg-gray-300'}"
-          onclick={() => (playCountLimit = 10)}
-        >
-          Last 10
-        </button>
-        <button
-          class="px-3 py-1 text-sm rounded-md transition-colors {playCountLimit ===
-          50
-            ? 'bg-blue-500 text-white'
-            : 'bg-gray-200 hover:bg-gray-300'}"
-          onclick={() => (playCountLimit = 50)}
-        >
-          Last 50
-        </button>
-        <button
-          class="px-3 py-1 text-sm rounded-md transition-colors {playCountLimit ===
-          100
-            ? 'bg-blue-500 text-white'
-            : 'bg-gray-200 hover:bg-gray-300'}"
-          onclick={() => (playCountLimit = 100)}
-        >
-          Last 100
-        </button>
+      <div
+        class="flex h-full items-center justify-center text-sm text-gray-400"
+      >
+        No data available for selected time range
       </div>
     {/if}
-
-    <!-- Metric Selection -->
-    <div class="mb-4 flex flex-wrap gap-2">
-      <button
-        class="px-3 py-1.5 text-sm rounded-md transition-colors font-medium {selectedMetric ===
-        'rating'
-          ? 'bg-blue-500 text-white'
-          : 'bg-blue-100 text-blue-700 hover:bg-blue-200'}"
-        onclick={() => (selectedMetric = "rating")}
-      >
-        Rating
-      </button>
-      {#if xAxisMode === "time"}
-        <button
-          class="px-3 py-1.5 text-sm rounded-md transition-colors font-medium {selectedMetric ===
-          'playCount'
-            ? 'bg-green-500 text-white'
-            : 'bg-green-100 text-green-700 hover:bg-green-200'}"
-          onclick={() => (selectedMetric = "playCount")}
-        >
-          Play Count
-        </button>
-      {/if}
-      <button
-        class="px-3 py-1.5 text-sm rounded-md transition-colors font-medium {selectedMetric ===
-        'star'
-          ? 'bg-purple-500 text-white'
-          : 'bg-purple-100 text-purple-700 hover:bg-purple-200'}"
-        onclick={() => (selectedMetric = "star")}
-      >
-        Star
-      </button>
-    </div>
-
-    <!-- Chart Content with fixed height to prevent layout shift -->
-    <div class="h-96 w-full">
-      <Tabs.Content value="time" class="h-full">
-        {#if !browser}
-          <div class="flex h-full items-center justify-center text-gray-500">
-            Loading chart...
-          </div>
-        {:else if transformedData.length > 0}
-          <Chart.Container config={{}} class="pl-4">
-            <LineChart
-              data={transformedData}
-              x="date"
-              xScale={scaleTime()}
-              series={chartSeries}
-              axis
-              points
-              props={{
-                xAxis: {
-                  format: (d: Date) =>
-                    d.toLocaleDateString("en-GB", {
-                      day: transformedData.length > 90 ? undefined : "numeric",
-                      month: "short",
-                      year: transformedData.length > 90 ? "2-digit" : undefined,
-                    }),
-                  labelProps: {
-                    class: "text-xs fill-gray-600",
-                  },
-                },
-                yAxis: {
-                  labelProps: {
-                    class: "text-xs fill-gray-600",
-                  },
-                },
-              }}
-            >
-              {#snippet tooltip()}
-                <Chart.Tooltip
-                  labelFormatter={(value) => value.toLocaleDateString()}
-                />
-              {/snippet}
-            </LineChart>
-          </Chart.Container>
-        {:else}
-          <div class="flex h-full items-center justify-center text-gray-500">
-            No data available for selected time range
-          </div>
-        {/if}
-      </Tabs.Content>
-
-      <Tabs.Content value="playCount" class="h-full">
-        {#if !browser}
-          <div class="flex h-full items-center justify-center text-gray-500">
-            Loading chart...
-          </div>
-        {:else if transformedData.length > 0}
-          <Chart.Container config={{}}>
-            <LineChart
-              data={transformedData}
-              x="playCount"
-              xScale={scaleLinear()}
-              series={chartSeries}
-              axis
-              padding={{ left: 60, right: 20, top: 20, bottom: 40 }}
-              points
-              props={{
-                xAxis: {
-                  labelProps: {
-                    class: "text-xs fill-gray-600",
-                  },
-                },
-                yAxis: {
-                  labelProps: {
-                    class: "text-xs fill-gray-600",
-                  },
-                },
-              }}
-            >
-              {#snippet tooltip()}
-                <Chart.Tooltip
-                  labelFormatter={(value) => `Play Count: ${value}`}
-                />
-              {/snippet}
-            </LineChart>
-          </Chart.Container>
-        {:else}
-          <div class="flex h-full items-center justify-center text-gray-500">
-            No data available
-          </div>
-        {/if}
-      </Tabs.Content>
-    </div>
-  </Tabs.Root>
+  </div>
 </div>

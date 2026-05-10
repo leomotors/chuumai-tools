@@ -16,6 +16,7 @@ export const userStatsSchema = z
     playCount: z.number(),
     playCountCurrent: z.number().nullable(),
     rating: z.string(),
+    calculatedRating: z.string().nullable(),
     overpowerValue: z.string(),
   })
   .openapi("UserStats");
@@ -44,6 +45,7 @@ export async function getUserStats(userId: string): Promise<UserStats[]> {
       playCount: playerDataTable.playCount,
       playCountCurrent: playerDataTable.playCountCurrent,
       rating: playerDataTable.rating,
+      calculatedRating: playerDataTable.calculatedRating,
       overpowerValue: playerDataTable.overpowerValue,
     })
     .from(jobTable)
@@ -58,6 +60,7 @@ export async function getUserStats(userId: string): Promise<UserStats[]> {
     playCount: row.playCount,
     playCountCurrent: row.playCountCurrent,
     rating: row.rating,
+    calculatedRating: row.calculatedRating,
     overpowerValue: row.overpowerValue,
   }));
 }

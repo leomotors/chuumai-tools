@@ -22,46 +22,47 @@
 
   let showApiKey = $state(false);
 
-  // Derive current API key from data or form
   const currentApiKey = $derived(
     formSuccess && formApiKey ? formApiKey : apiKey,
   );
 </script>
 
-<div
-  class="rounded-xl border border-gray-200/50 bg-white/70 p-6 shadow-lg backdrop-blur-md"
->
-  <div class="mb-4 flex items-center gap-2">
-    <Key class="size-5 text-gray-700" />
-    <h2 class="text-lg font-semibold text-gray-800">API Key</h2>
+<div class="rounded-xl border border-gray-200/70 bg-white px-5 py-4 shadow-sm">
+  <div class="mb-2.5 flex items-baseline justify-between gap-2">
+    <div class="flex items-center gap-2">
+      <Key class="size-4 text-gray-700" />
+      <h2 class="text-sm font-semibold text-gray-900">API Key</h2>
+    </div>
+    {#if apiKeyCreatedAt}
+      <span class="font-mono text-[10.5px] text-gray-400">
+        Created {new Date(apiKeyCreatedAt).toLocaleString()}
+      </span>
+    {/if}
   </div>
 
   {#if currentApiKey}
-    <div class="space-y-4">
-      <div class="flex items-center gap-2">
-        <div
-          class="flex-1 rounded-lg border border-gray-300 bg-gray-50 px-4 py-2 font-mono text-sm"
+    <div class="flex items-center gap-2">
+      <div
+        class="flex flex-1 items-center gap-1.5 rounded-lg border border-gray-200 bg-gray-50 px-3 py-2"
+      >
+        <code
+          class="flex-1 truncate font-mono text-xs tracking-wider text-gray-900"
         >
-          {#if showApiKey}
-            {currentApiKey}
-          {:else}
-            {"•".repeat(32)}
-          {/if}
-        </div>
+          {showApiKey ? currentApiKey : "•".repeat(32)}
+        </code>
         <button
           type="button"
           onclick={() => (showApiKey = !showApiKey)}
-          class="rounded-lg border border-gray-300 bg-white p-2 hover:bg-gray-50"
+          class="grid size-6 place-items-center rounded text-gray-500 hover:bg-gray-200 hover:text-gray-900"
           aria-label={showApiKey ? "Hide API key" : "Show API key"}
         >
           {#if showApiKey}
-            <EyeOff class="size-5 text-gray-600" />
+            <EyeOff class="size-3.5" />
           {:else}
-            <Eye class="size-5 text-gray-600" />
+            <Eye class="size-3.5" />
           {/if}
         </button>
       </div>
-
       {#if generateForm}
         {@render generateForm()}
       {:else}
@@ -71,25 +72,18 @@
             showApiKey = true;
             onGenerate?.();
           }}
-          class="flex items-center gap-2 rounded-lg bg-orange-500 px-4 py-2 text-sm font-medium text-white hover:bg-orange-600 disabled:opacity-50"
+          class="flex items-center gap-2 rounded-lg bg-orange-500 px-4 py-2 text-xs font-semibold text-white hover:bg-orange-600 disabled:opacity-50"
         >
-          <RefreshCw class="size-4" />
-          Regenerate API Key
+          <RefreshCw class="size-3.5" />
+          Regenerate
         </button>
-      {/if}
-
-      {#if apiKeyCreatedAt}
-        <p class="text-xs text-gray-500">
-          Created: {new Date(apiKeyCreatedAt).toLocaleString()}
-        </p>
       {/if}
     </div>
   {:else}
-    <div class="space-y-4">
-      <p class="text-gray-600">
+    <div class="space-y-3">
+      <p class="text-sm text-gray-600">
         You don't have an API key yet. Generate one to access the API.
       </p>
-
       {#if generateForm}
         {@render generateForm()}
       {:else}
@@ -99,16 +93,16 @@
             showApiKey = true;
             onGenerate?.();
           }}
-          class="flex items-center gap-2 rounded-lg bg-blue-500 px-4 py-2 text-sm font-medium text-white hover:bg-blue-600 disabled:opacity-50"
+          class="flex items-center gap-2 rounded-lg bg-blue-500 px-4 py-2 text-xs font-semibold text-white hover:bg-blue-600"
         >
-          <Key class="size-4" />
+          <Key class="size-3.5" />
           Generate API Key
         </button>
       {/if}
     </div>
   {/if}
 
-  <p class="mt-4 text-xs text-gray-500">
+  <p class="mt-2.5 text-[11px] text-gray-400">
     By uploading your data, you agree that your data will be accessible by the
     website administrators.
   </p>

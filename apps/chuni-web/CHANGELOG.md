@@ -1,5 +1,14 @@
 # Changelog
 
+## [3.16.0] - 2026-05-10
+
+- chore: bump deps
+- feat: responsive mobile navbar
+- feat(dashboard): use calculated rating for higher precision when consistent with source-of-truth value
+- qol(dashboard): heatmap tooltip is now real-time and shows daily gain for all metrics
+- qol(dashboard): heatmap reset legend/color only shows for rating
+- qol(dashboard): chart y-axis auto-fits data range; longest streak replaces current streak
+
 ## [3.15.0] - 2026-04-26
 
 - feat: show release date in data page

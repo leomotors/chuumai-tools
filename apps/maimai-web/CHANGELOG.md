@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.9.0] - 2026-05-10
+
+- chore: bump deps
+- feat: responsive mobile navbar
+- qol(dashboard): heatmap tooltip is now real-time and shows daily gain for all metrics
+- qol(dashboard): heatmap reset legend only shows for rating
+- qol(dashboard): chart y-axis auto-fits data range; longest streak replaces current streak
+- fix(dashboard): chart no longer overflows vertically
+
 ## [1.8.0] - 2026-04-26
 
 - qol(data page): now reset to first page when sorting
