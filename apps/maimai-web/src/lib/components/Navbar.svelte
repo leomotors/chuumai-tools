@@ -3,12 +3,18 @@
   import { signIn, signOut } from "@auth/sveltekit/client";
   import { ChevronDown } from "@lucide/svelte";
 
+  import { page } from "$app/state";
+  import { env } from "$env/dynamic/public";
+
+  import { getSwapUrl } from "@repo/core/web";
   import * as Popover from "@repo/ui/atom/popover";
   import NavBar from "@repo/ui/templates/NavBar.svelte";
 
   let { session }: { session: Session | null } = $props();
 
   let toolsOpen = $state(false);
+
+  const swapUrl = $derived(getSwapUrl(env.PUBLIC_CHUNI_URL, page.url.pathname));
 </script>
 
 <NavBar
@@ -16,6 +22,8 @@
   user={session?.user}
   signIn={() => signIn("discord")}
   {signOut}
+  {swapUrl}
+  swapTooltip="Switch to Chunithm"
 >
   {#snippet navigationLinks()}
     <Popover.Root bind:open={toolsOpen}>

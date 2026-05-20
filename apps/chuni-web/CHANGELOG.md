@@ -1,5 +1,9 @@
 # Changelog
 
+## [3.17.0] - 2026-05-20
+
+- feat: add application swap button next to title to switch to Maimai, preserving interchangeable paths (/data, /about, /dashboard) with a custom tooltip
+
 ## [3.16.0] - 2026-05-10
 
 - chore: bump deps

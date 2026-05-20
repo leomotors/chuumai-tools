@@ -1,10 +1,11 @@
 <script lang="ts">
-  import { Gauge, LogOut, Menu } from "@lucide/svelte";
+  import { ArrowLeftRight, Gauge, LogOut, Menu } from "@lucide/svelte";
   import type { Snippet } from "svelte";
   import { MediaQuery } from "svelte/reactivity";
 
   import { Button } from "@repo/ui/atom/button";
   import * as Popover from "@repo/ui/atom/popover";
+  import * as Tooltip from "@repo/ui/atom/tooltip";
   import Discord from "@repo/ui/icons/Discord.svelte";
 
   let userOpen = $state(false);
@@ -24,21 +25,57 @@
       | undefined;
     signIn: () => void;
     signOut: () => void;
+    swapUrl?: string;
+    swapTooltip?: string;
   };
 
-  let { title, navigationLinks, user, signIn, signOut }: Props = $props();
+  let {
+    title,
+    navigationLinks,
+    user,
+    signIn,
+    signOut,
+    swapUrl,
+    swapTooltip,
+  }: Props = $props();
 </script>
 
 <nav
   class="mx-4 mt-4 max-w-3xl rounded-full border border-gray-200/50 bg-white/20 px-6 py-3 shadow-lg backdrop-blur-xs md:mx-auto"
 >
   <div class="flex items-center justify-between gap-6">
-    <a
-      href="/"
-      class="flex-1 text-lg font-bold text-gray-800 transition-colors hover:text-pink-600"
-    >
-      {title}
-    </a>
+    <div class="flex flex-1 items-center gap-2">
+      <a
+        href="/"
+        class="text-lg font-bold text-gray-800 transition-colors hover:text-pink-600"
+      >
+        {title}
+      </a>
+      {#if swapUrl}
+        <Tooltip.Provider>
+          <Tooltip.Root>
+            <Tooltip.Trigger>
+              {#snippet child({ props })}
+                <a
+                  href={swapUrl}
+                  class="inline-flex size-8 cursor-pointer items-center justify-center rounded-lg border border-gray-200/50 bg-white/50 text-gray-500 shadow-xs transition-all hover:scale-105 hover:bg-white/80 hover:text-pink-600 active:scale-95"
+                  aria-label="Swap app"
+                  {...props}
+                >
+                  <ArrowLeftRight class="size-4" />
+                </a>
+              {/snippet}
+            </Tooltip.Trigger>
+            <Tooltip.Content
+              class="rounded-lg border border-gray-200/50 bg-white/95 px-2.5 py-1.5 text-xs font-medium text-gray-700 shadow-md backdrop-blur-md"
+              arrowClasses="bg-white fill-white"
+            >
+              {swapTooltip ?? "Swap application"}
+            </Tooltip.Content>
+          </Tooltip.Root>
+        </Tooltip.Provider>
+      {/if}
+    </div>
 
     {#if isMobile.current}
       <Popover.Root bind:open={mobileOpen}>

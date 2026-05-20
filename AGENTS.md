@@ -5,6 +5,11 @@
 In each app/package or root level, `pnpm lint` and `pnpm format` can be used.
 However, you don't have to run those command to save time, human will do that.
 
+## Shared Logic and Code Duplication
+
+To prevent code duplication, any logic that is shared between the two applications (`apps/chuni-web` and `apps/maimai-web`) must be placed in the `packages/core` package (e.g., under `packages/core/src/web` or similar directories) and exported properly so it can be imported as `@repo/core/web`. Do not implement duplicate helper, business, or routing logic in both application packages.
+
+
 ## Website Part (apps/chuni-web)
 
 The application is written using SvelteKit.

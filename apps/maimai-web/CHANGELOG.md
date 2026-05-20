@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.10.0] - 2026-05-20
+
+- feat: add application swap button next to title to switch to Chunithm, preserving interchangeable paths (/data, /about, /dashboard) with a custom tooltip
+
 ## [1.9.0] - 2026-05-10
 
 - chore: bump deps
