@@ -3,6 +3,7 @@ import type { OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
 import { forRatingSchema } from "$lib/functions/forRating";
 import { musicRecordSchema } from "$lib/functions/musicRecord";
 import { playCountSinceSchema } from "$lib/functions/playCount";
+import { playHistorySchema } from "$lib/functions/playHistory";
 import { userStatsSchema } from "$lib/functions/userStats";
 
 import {
@@ -158,6 +159,62 @@ export function registerUserRoutes(registry: OpenAPIRegistry) {
     },
   });
 
+  // GET /api/users/playHistory
+  registry.registerPath({
+    method: "get",
+    path: "/api/users/playHistory",
+    tags: ["Users"],
+    summary: "Get user play history for a song",
+    description:
+      "Returns the user's recorded play history for a specific music ID. Requires authentication via API key or session.",
+    security: [
+      { [API_KEY_SECURITY_SCHEME]: [] },
+      { [SESSION_SECURITY_SCHEME]: [] },
+    ],
+    request: {
+      query: z.object({
+        musicId: z.number().int().openapi({
+          description: "The music ID to retrieve play history for",
+          example: 2844,
+        }),
+      }),
+    },
+    responses: {
+      200: {
+        description: "Play history successfully retrieved",
+        content: {
+          "application/json": {
+            schema: playHistorySchema,
+          },
+        },
+      },
+      400: {
+        description: "Bad Request - Invalid or missing musicId parameter",
+        content: {
+          "application/json": {
+            schema: errorSchema,
+          },
+        },
+      },
+      401: {
+        description: "Unauthorized - Invalid or missing API key/session",
+        content: {
+          "application/json": {
+            schema: errorSchema,
+          },
+        },
+      },
+      404: {
+        description: "Not Found - Music not found",
+        content: {
+          "application/json": {
+            schema: errorSchema,
+          },
+        },
+      },
+    },
+  });
+
   // GET /api/users/playCount
   registry.registerPath({
     method: "get",
@@ -214,5 +271,6 @@ export function registerUserSchemas(registry: OpenAPIRegistry) {
   registry.register("UserStats", userStatsSchema);
   registry.register("ForRatingResult", forRatingSchema);
   registry.register("MusicRecord", musicRecordSchema);
+  registry.register("PlayHistory", playHistorySchema);
   registry.register("PlayCountSince", playCountSinceSchema);
 }

@@ -8,6 +8,8 @@ import {
   finishJobRequestSchema,
   finishJobResponseSchema,
   finishJobSuccessSchema,
+  uploadRatingBreakdownImageRequestSchema,
+  uploadRatingBreakdownImageResponseSchema,
 } from "@repo/core/web";
 import {
   chartSchemaWithFullChain,
@@ -27,6 +29,8 @@ export {
   finishJobRequestSchema,
   finishJobResponseSchema,
   finishJobSuccessSchema,
+  uploadRatingBreakdownImageRequestSchema,
+  uploadRatingBreakdownImageResponseSchema,
 };
 
 /**
@@ -149,6 +153,14 @@ export function registerJobSchemas(registry: OpenAPIRegistry) {
   registry.register("FinishJobSuccess", finishJobSuccessSchema);
   registry.register("FinishJobFailure", finishJobFailureSchema);
   registry.register("FinishJobResponse", finishJobResponseSchema);
+  registry.register(
+    "UploadRatingBreakdownImageRequest",
+    uploadRatingBreakdownImageRequestSchema,
+  );
+  registry.register(
+    "UploadRatingBreakdownImageResponse",
+    uploadRatingBreakdownImageResponseSchema,
+  );
   registry.register("SavePlayerData", savePlayerDataSchema);
   registry.register("SaveRatingRecords", saveRatingRecordsSchema);
   registry.register("SaveJobDataRequest", saveJobDataRequestSchema);

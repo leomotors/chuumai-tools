@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.11.0] - 2026-05-29
+
+- feat(data): move song record detail pages under public data routes with login-gated play records
+- feat(data): add per-song level history and expandable play history timeline
+- feat(api): add app info, play history, and rating breakdown image upload endpoints
+- feat: store scraper rating breakdown images in S3-compatible storage
+
 ## [1.10.0] - 2026-05-20
 
 - feat: add application swap button next to title to switch to Chunithm, preserving interchangeable paths (/data, /about, /dashboard) with a custom tooltip

@@ -7,6 +7,7 @@
   import * as Popover from "@repo/ui/atom/popover";
   import * as Tooltip from "@repo/ui/atom/tooltip";
   import Discord from "@repo/ui/icons/Discord.svelte";
+  import { signInAgreementNotice } from "@repo/ui/utils";
 
   let userOpen = $state(false);
   let mobileOpen = $state(false);
@@ -228,8 +229,7 @@
                 <Discord class="size-5" />
               </Button>
               <p class="text-center text-xs text-gray-500">
-                By signing in, you agree to our terms of service and privacy
-                policy (See about page)
+                {signInAgreementNotice}
               </p>
             </div>
           </Popover.Content>

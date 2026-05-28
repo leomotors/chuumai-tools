@@ -5,6 +5,9 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export const signInAgreementNotice =
+  "By signing in, you agree to our terms of service and privacy policy (See about page)";
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type WithoutChild<T> = T extends { child?: any } ? Omit<T, "child"> : T;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

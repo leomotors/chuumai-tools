@@ -86,6 +86,46 @@ export const finishJobResponseSchema = z
   .openapi("FinishJobResponse");
 
 /**
+ * Multipart request schema for uploading a generated rating breakdown image.
+ */
+export const uploadRatingBreakdownImageRequestSchema = z
+  .object({
+    jobId: z.number().int().positive().openapi({
+      description: "The ID of the job to attach the image to",
+      example: 12345,
+    }),
+    image: z.string().openapi({
+      description: "Generated rating breakdown image file",
+      format: "binary",
+    }),
+  })
+  .openapi("UploadRatingBreakdownImageRequest");
+
+/**
+ * Response schema for rating breakdown image uploads.
+ */
+export const uploadRatingBreakdownImageResponseSchema = z
+  .object({
+    success: z.boolean().openapi({
+      description: "Whether the image was successfully saved",
+      example: true,
+    }),
+    message: z.string().openapi({
+      description: "Confirmation message",
+      example: "Rating breakdown image uploaded successfully",
+    }),
+    byteSize: z.number().int().nonnegative().openapi({
+      description: "Uploaded image size in bytes",
+      example: 123456,
+    }),
+    imageKey: z.string().openapi({
+      description: "S3 object key where the image was stored",
+      example: "ratingBreakdownImages/1234567890/12345.png",
+    }),
+  })
+  .openapi("UploadRatingBreakdownImageResponse");
+
+/**
  * Register common job schemas with OpenAPI
  */
 export function registerCommonJobSchemas(registry: OpenAPIRegistry) {
@@ -93,4 +133,12 @@ export function registerCommonJobSchemas(registry: OpenAPIRegistry) {
   registry.register("FinishJobSuccess", finishJobSuccessSchema);
   registry.register("FinishJobFailure", finishJobFailureSchema);
   registry.register("FinishJobResponse", finishJobResponseSchema);
+  registry.register(
+    "UploadRatingBreakdownImageRequest",
+    uploadRatingBreakdownImageRequestSchema,
+  );
+  registry.register(
+    "UploadRatingBreakdownImageResponse",
+    uploadRatingBreakdownImageResponseSchema,
+  );
 }

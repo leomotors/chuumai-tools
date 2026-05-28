@@ -2,6 +2,11 @@
 
 For changelog before V4: [here](https://github.com/leomotors/chunithm-net-scraper/blob/main/CHANGELOG.md)
 
+## [6.7.0] - 2026-05-29
+
+- feat: check web service compatibility before scraping
+- feat: upload generated rating breakdown image to the web service
+
 ## [6.6.0] - 2026-04-21
 
 - feat: support scraping this version play count

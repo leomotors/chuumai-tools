@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.3.0] - 2026-05-29
+
+- feat: check web service compatibility before scraping
+- feat: upload generated rating breakdown image to the web service
+
 ## [1.2.0] - 2026-03-28
 
 - feat: add play count today and this week to Discord message

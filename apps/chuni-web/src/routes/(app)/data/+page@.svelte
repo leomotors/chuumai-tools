@@ -18,8 +18,6 @@
 
   import ChartLevelCell from "./ChartLevelCell.svelte";
 
-  let { data } = $props();
-
   let selectedVersion = $state<string>("");
   let searchQuery = $state<string>("");
   let debouncedSearchQuery = $state<string>("");
@@ -34,7 +32,11 @@
 
   const pageSize = 50;
   const enabledVersions = getEnabledVersions();
-  const isLoggedIn = $derived(!!data.session?.user?.id);
+
+  function getVersionSortValue(version: string | null | undefined) {
+    const index = enabledVersions.indexOf(version ?? "");
+    return index === -1 ? Number.NEGATIVE_INFINITY : -index;
+  }
 
   $effect(() => {
     if (enabledVersions.length > 0 && !selectedVersion) {
@@ -137,6 +139,9 @@
 
         aVal = aChart.constant ?? constantFromLevel(aChart.level);
         bVal = bChart.constant ?? constantFromLevel(bChart.level);
+      } else if (sortField === "releasedVersion") {
+        aVal = getVersionSortValue(a.releasedVersion);
+        bVal = getVersionSortValue(b.releasedVersion);
       } else {
         aVal = a[sortField as keyof MusicDataViewSchema];
         bVal = b[sortField as keyof MusicDataViewSchema];
@@ -366,8 +371,17 @@
                     Artist
                   </SortableHeader>
                 </Table.Head>
-                <Table.Head class="text-center text-gray-900">
-                  Version
+                <Table.Head
+                  class="cursor-pointer text-center text-gray-900 hover:text-gray-700"
+                  onclick={() => handleSort("releasedVersion")}
+                >
+                  <SortableHeader
+                    isSorting={sortField === "releasedVersion"}
+                    {sortDirection}
+                    align="center"
+                  >
+                    Version
+                  </SortableHeader>
                 </Table.Head>
                 <Table.Head
                   class="cursor-pointer text-center text-gray-900 hover:text-gray-700"
@@ -456,16 +470,12 @@
                     />
                   </Table.Cell>
                   <Table.Cell class="max-w-xs whitespace-normal text-gray-900">
-                    {#if isLoggedIn}
-                      <a
-                        href="/dashboard/musicRecord/{song.id}"
-                        class="text-blue-600 hover:text-blue-800 hover:underline"
-                      >
-                        {song.title}
-                      </a>
-                    {:else}
+                    <a
+                      href="/data/{song.id}"
+                      class="text-blue-600 hover:text-blue-800 hover:underline"
+                    >
                       {song.title}
-                    {/if}
+                    </a>
                   </Table.Cell>
                   <Table.Cell class="max-w-xs whitespace-normal text-gray-900">
                     {song.artist}

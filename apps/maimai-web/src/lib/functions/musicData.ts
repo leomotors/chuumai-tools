@@ -1,4 +1,4 @@
-import { and, eq } from "drizzle-orm";
+import { and, eq, inArray } from "drizzle-orm";
 
 import { db } from "$lib/db";
 
@@ -43,6 +43,14 @@ export const musicDataViewSchema = z
   .openapi("MusicDataView");
 
 export type MusicDataViewSchema = z.infer<typeof musicDataViewSchema>;
+
+export type MusicLevelHistoryItem = {
+  version: string;
+  chartType: (typeof chartTypeValues)[number];
+  difficulty: (typeof stdChartDifficultyValues)[number];
+  level: string;
+  constant: number | null;
+};
 
 export async function getMusicData(version: string) {
   const data = await db
@@ -132,4 +140,34 @@ export async function getMusicDataCached(version: string) {
   const data = await getMusicData(version);
   musicDataForTableCache.set(cacheKey, data, MUSIC_DATA_FOR_TABLE_TTL);
   return data;
+}
+
+export async function getMusicLevelHistory(
+  musicTitle: string,
+  versions: string[],
+): Promise<MusicLevelHistoryItem[]> {
+  if (versions.length === 0) {
+    return [];
+  }
+
+  const data = await db
+    .select({
+      version: musicLevelTable.version,
+      chartType: musicLevelTable.chartType,
+      difficulty: musicLevelTable.difficulty,
+      level: musicLevelTable.level,
+      constant: musicLevelTable.constant,
+    })
+    .from(musicLevelTable)
+    .where(
+      and(
+        eq(musicLevelTable.musicTitle, musicTitle),
+        inArray(musicLevelTable.version, versions),
+      ),
+    );
+
+  return data.map((item) => ({
+    ...item,
+    constant: item.constant ? Number(item.constant) : null,
+  }));
 }

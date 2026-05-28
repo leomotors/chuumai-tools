@@ -4,6 +4,32 @@ import {
   S3Client,
 } from "@aws-sdk/client-s3";
 
+export type CreateS3ClientParams = {
+  endpoint: string;
+  region: string;
+  accessKeyId: string;
+  secretAccessKey: string;
+  forcePathStyle?: boolean;
+};
+
+export function createS3Client({
+  endpoint,
+  region,
+  accessKeyId,
+  secretAccessKey,
+  forcePathStyle = true,
+}: CreateS3ClientParams) {
+  return new S3Client({
+    endpoint,
+    region,
+    credentials: {
+      accessKeyId,
+      secretAccessKey,
+    },
+    forcePathStyle,
+  });
+}
+
 export async function downloadImage(url: string) {
   const response = await fetch(url);
   if (!response.ok) {

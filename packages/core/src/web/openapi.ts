@@ -17,6 +17,10 @@ export const SESSION_SECURITY_SCHEME = "SessionAuth";
  * OpenAPI tag definitions
  */
 export const OPENAPI_TAGS = {
+  APP: {
+    name: "App",
+    description: "Endpoints for application metadata and compatibility",
+  },
   JOBS: {
     name: "Jobs",
     description: "Endpoints for scraper job management",

@@ -17,6 +17,7 @@ import { processHistoryData } from "./steps/4-history.js";
 import { saveDataToService } from "./steps/6-savedata.js";
 import { generateImage } from "./steps/7-image.js";
 import { sendDiscordImage } from "./steps/8-discord.js";
+import { uploadRatingBreakdownImageToService } from "./steps/8-upload-image.js";
 
 export async function main(
   jobId: number | undefined,
@@ -179,8 +180,17 @@ export async function main(
   );
   const timeForImageGen = performance.now() - startGenerateImage;
 
-  // * Step 8: Send Image to Discord
-  await runner.runStep("Step 8: Send Image to Discord", () =>
+  // * Step 8: Upload Image to Service
+  if (apiClient && environment.MAIMAI_SERVICE_API_KEY && jobId) {
+    await runner.runStep("Step 8: Upload Image to Service", () =>
+      uploadRatingBreakdownImageToService(jobId, apiClient, outputLocation),
+    );
+  } else {
+    logger.warn("Service API not configured, skipped uploading image");
+  }
+
+  // * Step 9: Send Image to Discord
+  await runner.runStep("Step 9: Send Image to Discord", () =>
     sendDiscordImage(
       outputLocation,
       playerData,

@@ -4,6 +4,45 @@
  */
 
 export interface paths {
+  "/api/appInfo": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Get application information
+     * @description Returns the application name, application version, and minimum scraper version required by this application.
+     */
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description Application information returned successfully */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": components["schemas"]["AppInfo"];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/calcRating": {
     parameters: {
       query?: never;
@@ -422,6 +461,76 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/jobs/ratingBreakdownImage": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * Upload generated rating breakdown image
+     * @description Beta: Uploads the generated rating breakdown image for a scraping job. Requires API key authentication.
+     */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: {
+        content: {
+          "multipart/form-data": components["schemas"]["UploadRatingBreakdownImageRequest"];
+        };
+      };
+      responses: {
+        /** @description Image uploaded successfully */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": components["schemas"]["UploadRatingBreakdownImageResponse"];
+          };
+        };
+        /** @description Bad request - Invalid upload, job not found, or job doesn't belong to user */
+        400: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": components["schemas"]["Error"];
+          };
+        };
+        /** @description Unauthorized - Invalid or missing API key */
+        401: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": components["schemas"]["Error"];
+          };
+        };
+        /** @description Internal server error */
+        500: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": components["schemas"]["Error"];
+          };
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/users/stats": {
     parameters: {
       query?: never;
@@ -596,6 +705,75 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/users/playHistory": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Get user play history for a song
+     * @description Beta: Returns the user's recorded play history for a specific music ID. Requires authentication via API key or session.
+     */
+    get: {
+      parameters: {
+        query: {
+          /** @description The music ID to retrieve play history for */
+          musicId: number;
+        };
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description Play history successfully retrieved */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": components["schemas"]["PlayHistory"];
+          };
+        };
+        /** @description Bad Request - Invalid or missing musicId parameter */
+        400: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": components["schemas"]["Error"];
+          };
+        };
+        /** @description Unauthorized - Invalid or missing API key/session */
+        401: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": components["schemas"]["Error"];
+          };
+        };
+        /** @description Not Found - Music not found */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": components["schemas"]["Error"];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/users/playCount": {
     parameters: {
       query?: never;
@@ -662,6 +840,25 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
   schemas: {
+    AppInfo: {
+      /**
+       * @description Application name
+       * @example chuni-web
+       * @example maimai-web
+       * @enum {string}
+       */
+      appName: "chuni-web" | "maimai-web";
+      /**
+       * @description Application version
+       * @example 1.0.0
+       */
+      version: string;
+      /**
+       * @description Minimum scraper version supported by this application
+       * @example 1.0.0
+       */
+      minimumScraperVersion: string;
+    };
     Error: {
       /** @example Bad Request */
       message: string;
@@ -913,6 +1110,40 @@ export interface components {
        */
       message: string;
     };
+    UploadRatingBreakdownImageRequest: {
+      /**
+       * @description The ID of the job to attach the image to
+       * @example 12345
+       */
+      jobId: number;
+      /**
+       * Format: binary
+       * @description Generated rating breakdown image file
+       */
+      image: string;
+    };
+    UploadRatingBreakdownImageResponse: {
+      /**
+       * @description Whether the image was successfully saved
+       * @example true
+       */
+      success: boolean;
+      /**
+       * @description Confirmation message
+       * @example Rating breakdown image uploaded successfully
+       */
+      message: string;
+      /**
+       * @description Uploaded image size in bytes
+       * @example 123456
+       */
+      byteSize: number;
+      /**
+       * @description S3 object key where the image was stored
+       * @example ratingBreakdownImages/1234567890/12345.png
+       */
+      imageKey: string;
+    };
     SavePlayerData: {
       /** @enum {string} */
       characterRarity:
@@ -1071,6 +1302,7 @@ export interface components {
       playCount: number;
       playCountCurrent: number | null;
       rating: string;
+      calculatedRating: string | null;
       overpowerValue: string;
     };
     ForRatingResult: components["schemas"]["RawImageGen"] & {
@@ -1110,6 +1342,31 @@ export interface components {
       fullChain: number;
       /** Format: date-time */
       lastPlayed: string | null;
+    };
+    PlayHistory: {
+      /** Format: date-time */
+      earliestPlayedAt: string | null;
+      playCounts: {
+        basic?: number;
+        advanced?: number;
+        expert?: number;
+        master?: number;
+        ultima?: number;
+      };
+      records: components["schemas"]["PlayHistoryItem"][];
+    };
+    PlayHistoryItem: {
+      /** @enum {string|null} */
+      difficulty: "basic" | "advanced" | "expert" | "master" | "ultima" | null;
+      score: number;
+      /** @enum {string|null} */
+      clearMark: "CLEAR" | "HARD" | "BRAVE" | "ABSOLUTE" | "CATASTROPHY" | null;
+      fc: boolean;
+      aj: boolean;
+      fullChain: number;
+      trackNo: number;
+      /** Format: date-time */
+      playedAt: string | null;
     };
     PlayCountSince: {
       today?: number;

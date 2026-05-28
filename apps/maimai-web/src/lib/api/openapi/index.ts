@@ -3,7 +3,11 @@ import {
   OpenAPIRegistry,
 } from "@asteasolutions/zod-to-openapi";
 
-import { OPENAPI_TAGS } from "@repo/core/web";
+import {
+  OPENAPI_TAGS,
+  registerAppInfoRoute,
+  registerAppInfoSchemas,
+} from "@repo/core/web";
 
 import {
   registerCommonSchemas,
@@ -24,6 +28,7 @@ export function generateOpenApiDocument(version: string) {
   const registry = new OpenAPIRegistry();
 
   // Register all schemas
+  registerAppInfoSchemas(registry);
   registerCommonSchemas(registry);
   registerDataSchemas(registry);
   registerImageSchemas(registry);
@@ -32,6 +37,7 @@ export function generateOpenApiDocument(version: string) {
   registerUserSchemas(registry);
 
   // Register all routes
+  registerAppInfoRoute(registry);
   registerRatingRoutes(registry);
   registerImageRoutes(registry);
   registerDataRoutes(registry);
@@ -55,6 +61,7 @@ export function generateOpenApiDocument(version: string) {
       },
     ],
     tags: [
+      OPENAPI_TAGS.APP,
       {
         name: "Rating",
         description: "Endpoints related to rating calculations",

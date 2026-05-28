@@ -10,6 +10,8 @@ import {
   finishJobResponseSchema,
   saveJobDataRequestSchema,
   saveJobDataResponseSchema,
+  uploadRatingBreakdownImageRequestSchema,
+  uploadRatingBreakdownImageResponseSchema,
 } from "../schemas/job";
 
 /**
@@ -146,6 +148,61 @@ export function registerJobRoutes(registry: OpenAPIRegistry) {
       400: {
         description:
           "Bad request - Invalid request body, job not found, or job doesn't belong to user",
+        content: {
+          "application/json": {
+            schema: errorSchema,
+          },
+        },
+      },
+      401: {
+        description: "Unauthorized - Invalid or missing API key",
+        content: {
+          "application/json": {
+            schema: errorSchema,
+          },
+        },
+      },
+      500: {
+        description: "Internal server error",
+        content: {
+          "application/json": {
+            schema: errorSchema,
+          },
+        },
+      },
+    },
+  });
+
+  // POST /api/jobs/ratingBreakdownImage
+  registry.registerPath({
+    method: "post",
+    path: "/api/jobs/ratingBreakdownImage",
+    tags: ["Jobs"],
+    summary: "Upload generated rating breakdown image",
+    description:
+      "Uploads the generated rating breakdown image for a scraping job. Requires API key authentication.",
+    security: [{ [API_KEY_SECURITY_SCHEME]: [] }],
+    request: {
+      body: {
+        content: {
+          "multipart/form-data": {
+            schema: uploadRatingBreakdownImageRequestSchema,
+          },
+        },
+      },
+    },
+    responses: {
+      200: {
+        description: "Image uploaded successfully",
+        content: {
+          "application/json": {
+            schema: uploadRatingBreakdownImageResponseSchema,
+          },
+        },
+      },
+      400: {
+        description:
+          "Bad request - Invalid upload, job not found, or job doesn't belong to user",
         content: {
           "application/json": {
             schema: errorSchema,

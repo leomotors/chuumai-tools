@@ -50,7 +50,7 @@ export const musicRecordSchema = z
 
 export type MusicRecord = z.infer<typeof musicRecordSchema>;
 
-export async function getMusicRecord(userId: string, musicId: number) {
+export async function getMusicInfo(musicId: number) {
   const musicInfo = (
     await db.select().from(musicDataTable).where(eq(musicDataTable.id, musicId))
   )[0];
@@ -58,6 +58,12 @@ export async function getMusicRecord(userId: string, musicId: number) {
   if (!musicInfo) {
     error(404, "Music not found");
   }
+
+  return musicInfo;
+}
+
+export async function getMusicRecord(userId: string, musicId: number) {
+  const musicInfo = await getMusicInfo(musicId);
 
   const result = await db
     .select({

@@ -5,12 +5,28 @@ import { chromium } from "playwright";
 
 import { logger } from "@repo/core/utils";
 
-import { createApiClient } from "./api.js";
+import { checkServiceCompatibility, createApiClient } from "./api.js";
 import { stateStoragePath } from "./constants.js";
 import { environment } from "./environment.js";
 import { main } from "./main.js";
 
 logger.log(`Starting scraper version: ${APP_VERSION}`);
+
+// Create API client if service URL is configured
+const apiClient = createApiClient();
+
+try {
+  const appInfo = await checkServiceCompatibility(apiClient);
+
+  if (appInfo) {
+    logger.log(
+      `Connected to ${appInfo.appName} version ${appInfo.version}. Minimum supported scraper version: ${appInfo.minimumScraperVersion}`,
+    );
+  }
+} catch (err) {
+  logger.error(`${err}`);
+  process.exit(1);
+}
 
 const browser = await chromium.launch({
   headless: !process.env.DEBUG,
@@ -18,9 +34,8 @@ const browser = await chromium.launch({
   slowMo: 100,
 });
 
-// Create API client if service URL is configured
-const apiClient = createApiClient();
 let jobId: number | undefined;
+let jobFailed = false;
 
 // Create job via API if both URL and API key are provided
 if (apiClient && environment.MAIMAI_SERVICE_API_KEY) {
@@ -71,6 +86,8 @@ try {
 
   await context.storageState({ path: stateStoragePath });
 } catch (err) {
+  jobFailed = true;
+
   // Report error to API if configured
   if (apiClient && jobId && environment.MAIMAI_SERVICE_API_KEY) {
     await apiClient.POST("/api/jobs/finish", {
@@ -83,9 +100,10 @@ try {
     });
   }
   logger.error(`${err}`);
+  process.exitCode = 1;
 } finally {
   // Report completion to API if configured
-  if (apiClient && jobId && environment.MAIMAI_SERVICE_API_KEY) {
+  if (apiClient && jobId && environment.MAIMAI_SERVICE_API_KEY && !jobFailed) {
     await apiClient.POST("/api/jobs/finish", {
       body: {
         jobId,

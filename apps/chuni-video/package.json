@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "remotion studio video/index.ts",
+    "dev:video": "remotion studio video/index.ts",
     "build": "remotion browser ensure && remotion bundle video/index.ts && tsdown",
     "start": "dotenv -- node dist/index.mjs",
     "upgrade": "remotion upgrade",

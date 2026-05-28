@@ -17,7 +17,7 @@ export function registerRatingRoutes(registry: OpenAPIRegistry) {
     path: "/api/calcRating",
     summary: "Calculate rating from play data",
     description:
-      "Calculates the player rating based on their best 30 and current 20 songs. Returns processed chart data with ratings.",
+      "Beta: Calculates the player rating based on their best 30 and current 20 songs. Returns processed chart data with ratings.",
     tags: ["Rating"],
     request: {
       body: {
@@ -62,7 +62,7 @@ export function registerRatingRoutes(registry: OpenAPIRegistry) {
     path: "/api/previewNext",
     summary: "Preview next version rating calculation",
     description:
-      "Calculates what the player rating would be in the next version based on all records.",
+      "Beta: Calculates what the player rating would be in the next version based on all records.",
     tags: ["Rating"],
     request: {
       body: {
