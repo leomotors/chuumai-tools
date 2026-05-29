@@ -4,6 +4,7 @@
 
 - feat: check web service compatibility before scraping
 - feat: upload generated rating breakdown image to the web service
+- fix(api): send the configured web service origin for multipart image uploads
 
 ## [1.2.0] - 2026-03-28
 

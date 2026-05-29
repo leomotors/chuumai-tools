@@ -1,5 +1,9 @@
 # Changelog
 
+## [3.18.1] - 2026-05-29
+
+- fix(api): support authenticated multipart rating breakdown image uploads to S3-compatible storage
+
 ## [3.18.0] - 2026-05-29
 
 - feat(data): move song record detail pages under public data routes with login-gated play records

@@ -15,16 +15,27 @@ import { environment } from "./environment.js";
  */
 export type ApiClient = Client<MaimaiWeb.Paths> | null;
 
+function getServiceOrigin() {
+  if (!environment.MAIMAI_SERVICE_URL) {
+    return undefined;
+  }
+
+  return new URL(environment.MAIMAI_SERVICE_URL).origin;
+}
+
 export function createApiClient(): ApiClient {
   if (!environment.MAIMAI_SERVICE_URL) {
     return null;
   }
+
+  const serviceOrigin = getServiceOrigin();
 
   return createClient<MaimaiWeb.Paths>({
     baseUrl: environment.MAIMAI_SERVICE_URL,
     headers: environment.MAIMAI_SERVICE_API_KEY
       ? {
           Authorization: `Bearer ${environment.MAIMAI_SERVICE_API_KEY}`,
+          ...(serviceOrigin ? { Origin: serviceOrigin } : {}),
         }
       : undefined,
   });

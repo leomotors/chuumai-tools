@@ -2,6 +2,10 @@
 
 For changelog before V4: [here](https://github.com/leomotors/chunithm-net-scraper/blob/main/CHANGELOG.md)
 
+## [6.7.1] - 2026-05-29
+
+- fix(api): send the configured web service origin for multipart image uploads
+
 ## [6.7.0] - 2026-05-29
 
 - feat: check web service compatibility before scraping

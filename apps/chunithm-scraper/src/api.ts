@@ -15,16 +15,27 @@ import { environment } from "./environment.js";
  */
 export type ApiClient = Client<ChuniWeb.Paths> | null;
 
+function getServiceOrigin() {
+  if (!environment.CHUNI_SERVICE_URL) {
+    return undefined;
+  }
+
+  return new URL(environment.CHUNI_SERVICE_URL).origin;
+}
+
 export function createApiClient(): ApiClient {
   if (!environment.CHUNI_SERVICE_URL) {
     return null;
   }
+
+  const serviceOrigin = getServiceOrigin();
 
   return createClient<ChuniWeb.Paths>({
     baseUrl: environment.CHUNI_SERVICE_URL,
     headers: environment.CHUNI_SERVICE_API_KEY
       ? {
           Authorization: `Bearer ${environment.CHUNI_SERVICE_API_KEY}`,
+          ...(serviceOrigin ? { Origin: serviceOrigin } : {}),
         }
       : undefined,
   });
