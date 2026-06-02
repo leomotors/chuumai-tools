@@ -1,5 +1,11 @@
 # Changelog
 
+## [next]
+
+- feat(dashboard): split dashboard analytics into shared top summary with Activity and Milestones tabs
+- feat(dashboard): add rating milestones with all-time/current-version progress and next-target highlighting
+- refactor(dashboard): move milestone progress calculation into shared core web helpers for future reuse
+
 ## [3.18.1] - 2026-05-29
 
 - fix(api): support authenticated multipart rating breakdown image uploads to S3-compatible storage

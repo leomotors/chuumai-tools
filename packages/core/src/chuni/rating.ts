@@ -42,3 +42,44 @@ export function calculateRating(score: number, level: number) {
 
   return Math.max(0, floorDecimalPlaces(rating, 2));
 }
+
+export const chuniRatingMilestones = [
+  { id: "bronze", label: "Bronze", rating: 12 },
+  { id: "silver", label: "Silver", rating: 13.25 },
+  { id: "gold", label: "Gold", rating: 14.5 },
+  { id: "platinum-1", label: "Platinum ⭐", rating: 15.25 },
+  { id: "platinum-2", label: "Platinum ⭐⭐", rating: 15.5 },
+  { id: "platinum-3", label: "Platinum ⭐⭐⭐", rating: 15.75 },
+  { id: "rainbow-1", label: "Rainbow ⭐", rating: 16 },
+  { id: "rainbow-2", label: "Rainbow ⭐⭐", rating: 16.25 },
+  { id: "rainbow-3", label: "Rainbow ⭐⭐⭐", rating: 16.5 },
+  { id: "rainbow-4", label: "Rainbow ⭐⭐⭐⭐", rating: 16.75 },
+  { id: "kiwami-1", label: "Ultimate Rainbow ⭐", rating: 17 },
+  { id: "kiwami-2", label: "Ultimate Rainbow ⭐⭐", rating: 17.25 },
+  { id: "kiwami-3", label: "Ultimate Rainbow ⭐⭐⭐", rating: 17.5 },
+] as const;
+
+export type ChuniRatingLevel =
+  | "kiwami"
+  | "rainbow"
+  | "platinum"
+  | "gold"
+  | "silver"
+  | "bronze"
+  | "purple"
+  | "red"
+  | "orange"
+  | "green";
+
+export function getChuniRatingLevel(rating: number): ChuniRatingLevel {
+  if (rating >= 17) return "kiwami";
+  if (rating >= 16) return "rainbow";
+  if (rating >= 15.25) return "platinum";
+  if (rating >= 14.5) return "gold";
+  if (rating >= 13.25) return "silver";
+  if (rating >= 12) return "bronze";
+  if (rating >= 10) return "purple";
+  if (rating >= 7) return "red";
+  if (rating >= 4) return "orange";
+  return "green";
+}

@@ -1,5 +1,6 @@
 <script lang="ts">
   import { extractDigits } from "@repo/core";
+  import { getChuniRatingLevel } from "@repo/core/chuni";
 
   interface Props {
     rating: number;
@@ -8,27 +9,7 @@
 
   let { rating, calculatedRating }: Props = $props();
 
-  let ratingLevel = $derived(
-    rating >= 17
-      ? "kiwami"
-      : rating >= 16
-        ? "rainbow"
-        : rating >= 15.25
-          ? "platinum"
-          : rating >= 14.5
-            ? "gold"
-            : rating >= 13.25
-              ? "silver"
-              : rating >= 12
-                ? "bronze"
-                : rating >= 10
-                  ? "purple"
-                  : rating >= 7
-                    ? "red"
-                    : rating >= 4
-                      ? "orange"
-                      : "green",
-  );
+  let ratingLevel = $derived(getChuniRatingLevel(rating));
 
   let {
     tens: tensOri,
