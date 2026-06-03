@@ -4,6 +4,9 @@
 
 - feat(dashboard): split dashboard analytics into shared top summary with Activity and Milestones tabs
 - feat(dashboard): add rating milestones with all-time/current-version progress and next-target highlighting
+- feat(dashboard): add scraper job list with rating breakdown image preview and download
+- feat(api): add authenticated rating breakdown image status and retrieval endpoints
+- fix(api): use database time for job finish timestamps to avoid timezone skew
 - refactor(dashboard): move milestone progress calculation into shared core web helpers for future reuse
 
 ## [3.18.1] - 2026-05-29

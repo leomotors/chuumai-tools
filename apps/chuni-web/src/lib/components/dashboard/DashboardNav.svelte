@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ChartLine, Trophy } from "@lucide/svelte";
+  import { ChartLine, ClipboardList, Trophy } from "@lucide/svelte";
 
   import { page } from "$app/state";
 
@@ -8,6 +8,7 @@
   const links = [
     { href: "/dashboard/activity", label: "Activity", icon: ChartLine },
     { href: "/dashboard/milestones", label: "Milestones", icon: Trophy },
+    { href: "/dashboard/jobs", label: "Jobs", icon: ClipboardList },
   ];
 
   function isActive(href: string): boolean {

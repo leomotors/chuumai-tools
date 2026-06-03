@@ -1,6 +1,6 @@
 import type { OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
 
-import { API_KEY_SECURITY_SCHEME } from "@repo/core/web";
+import { API_KEY_SECURITY_SCHEME, SESSION_SECURITY_SCHEME } from "@repo/core/web";
 import { z } from "@repo/types/zod";
 
 import { errorSchema } from "../schemas/common";
@@ -8,6 +8,8 @@ import {
   createJobResponseSchema,
   finishJobRequestSchema,
   finishJobResponseSchema,
+  ratingBreakdownImageQuerySchema,
+  ratingBreakdownImageStatusResponseSchema,
   saveJobDataRequestSchema,
   saveJobDataResponseSchema,
   uploadRatingBreakdownImageRequestSchema,
@@ -211,6 +213,132 @@ export function registerJobRoutes(registry: OpenAPIRegistry) {
       },
       401: {
         description: "Unauthorized - Invalid or missing API key",
+        content: {
+          "application/json": {
+            schema: errorSchema,
+          },
+        },
+      },
+      500: {
+        description: "Internal server error",
+        content: {
+          "application/json": {
+            schema: errorSchema,
+          },
+        },
+      },
+    },
+  });
+
+  // GET /api/jobs/ratingBreakdownImage
+  registry.registerPath({
+    method: "get",
+    path: "/api/jobs/ratingBreakdownImage",
+    tags: ["Jobs"],
+    summary: "Check rating breakdown image",
+    description:
+      "Checks whether a scraping job has an uploaded rating breakdown image. Requires API key authentication or an active session.",
+    security: [
+      { [API_KEY_SECURITY_SCHEME]: [] },
+      { [SESSION_SECURITY_SCHEME]: [] },
+    ],
+    request: {
+      query: ratingBreakdownImageQuerySchema,
+    },
+    responses: {
+      200: {
+        description: "Image status checked successfully",
+        content: {
+          "application/json": {
+            schema: ratingBreakdownImageStatusResponseSchema,
+          },
+        },
+      },
+      400: {
+        description: "Bad request - Invalid query or job ID not found",
+        content: {
+          "application/json": {
+            schema: errorSchema,
+          },
+        },
+      },
+      401: {
+        description: "Unauthorized - Invalid or missing API key/session",
+        content: {
+          "application/json": {
+            schema: errorSchema,
+          },
+        },
+      },
+      403: {
+        description: "Forbidden - Job doesn't belong to user",
+        content: {
+          "application/json": {
+            schema: errorSchema,
+          },
+        },
+      },
+      500: {
+        description: "Internal server error",
+        content: {
+          "application/json": {
+            schema: errorSchema,
+          },
+        },
+      },
+    },
+  });
+
+  // GET /api/jobs/ratingBreakdownImage/file
+  registry.registerPath({
+    method: "get",
+    path: "/api/jobs/ratingBreakdownImage/file",
+    tags: ["Jobs"],
+    summary: "Retrieve rating breakdown image",
+    description:
+      "Retrieves the uploaded rating breakdown image for a scraping job from private storage. Requires API key authentication or an active session.",
+    security: [
+      { [API_KEY_SECURITY_SCHEME]: [] },
+      { [SESSION_SECURITY_SCHEME]: [] },
+    ],
+    request: {
+      query: ratingBreakdownImageQuerySchema,
+    },
+    responses: {
+      200: {
+        description: "Image returned successfully",
+        content: {
+          "image/png": {
+            schema: z.string().openapi({ format: "binary" }),
+          },
+        },
+      },
+      400: {
+        description: "Bad request - Invalid query or job ID not found",
+        content: {
+          "application/json": {
+            schema: errorSchema,
+          },
+        },
+      },
+      401: {
+        description: "Unauthorized - Invalid or missing API key/session",
+        content: {
+          "application/json": {
+            schema: errorSchema,
+          },
+        },
+      },
+      403: {
+        description: "Forbidden - Job doesn't belong to user",
+        content: {
+          "application/json": {
+            schema: errorSchema,
+          },
+        },
+      },
+      404: {
+        description: "Rating breakdown image not found",
         content: {
           "application/json": {
             schema: errorSchema,

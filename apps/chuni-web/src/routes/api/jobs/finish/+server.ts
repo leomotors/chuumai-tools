@@ -1,5 +1,5 @@
 import { error, json } from "@sveltejs/kit";
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 
 import { finishJobRequestSchema } from "$lib/api/schemas/job";
 import { db } from "$lib/db";
@@ -53,22 +53,17 @@ export const POST: RequestHandler = async ({ request }) => {
     }
 
     // Update the job based on status
-    const updateData: {
-      jobEnd: Date;
-      jobLog?: string;
-      jobError?: string;
-    } = {
-      jobEnd: new Date(),
-    };
-
-    if (body.status === "success") {
-      updateData.jobLog = body.jobLog;
-    } else {
-      updateData.jobError = body.jobError;
-      if (body.jobLog) {
-        updateData.jobLog = body.jobLog;
-      }
-    }
+    const updateData =
+      body.status === "success"
+        ? {
+            jobEnd: sql`now()`,
+            jobLog: body.jobLog,
+          }
+        : {
+            jobEnd: sql`now()`,
+            jobError: body.jobError,
+            ...(body.jobLog ? { jobLog: body.jobLog } : {}),
+          };
 
     await db
       .update(jobTable)

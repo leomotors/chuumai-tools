@@ -126,6 +126,39 @@ export const uploadRatingBreakdownImageResponseSchema = z
   .openapi("UploadRatingBreakdownImageResponse");
 
 /**
+ * Query schema for rating breakdown image lookup.
+ */
+export const ratingBreakdownImageQuerySchema = z
+  .object({
+    jobId: z.coerce.number().int().positive().openapi({
+      description: "The ID of the job to check or retrieve an image for",
+      example: 12345,
+    }),
+  })
+  .openapi("RatingBreakdownImageQuery");
+
+/**
+ * Response schema for rating breakdown image status.
+ */
+export const ratingBreakdownImageStatusResponseSchema = z
+  .object({
+    jobId: z.number().int().positive().openapi({
+      description: "The ID of the job that was checked",
+      example: 12345,
+    }),
+    hasImage: z.boolean().openapi({
+      description: "Whether the job has an uploaded rating breakdown image",
+      example: true,
+    }),
+    imageUrl: z.string().nullable().openapi({
+      description:
+        "Authenticated API URL to retrieve the image, or null when no image exists",
+      example: "/api/jobs/ratingBreakdownImage/file?jobId=12345",
+    }),
+  })
+  .openapi("RatingBreakdownImageStatusResponse");
+
+/**
  * Register common job schemas with OpenAPI
  */
 export function registerCommonJobSchemas(registry: OpenAPIRegistry) {
@@ -140,5 +173,10 @@ export function registerCommonJobSchemas(registry: OpenAPIRegistry) {
   registry.register(
     "UploadRatingBreakdownImageResponse",
     uploadRatingBreakdownImageResponseSchema,
+  );
+  registry.register("RatingBreakdownImageQuery", ratingBreakdownImageQuerySchema);
+  registry.register(
+    "RatingBreakdownImageStatusResponse",
+    ratingBreakdownImageStatusResponseSchema,
   );
 }

@@ -1,5 +1,9 @@
 # Changelog
 
+## [next]
+
+- feat(api): add authenticated rating breakdown image status and retrieval endpoints
+
 ## [1.11.0] - 2026-05-29
 
 - feat(data): move song record detail pages under public data routes with login-gated play records

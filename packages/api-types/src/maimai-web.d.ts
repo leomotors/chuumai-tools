@@ -54,7 +54,7 @@ export interface paths {
     put?: never;
     /**
      * Calculate rating from play data
-     * @description Calculates the player rating based on their old/best 35 and new/current 15 songs. Returns processed chart data with ratings. Uses summation instead of average.
+     * @description Beta: Calculates the player rating based on their old/best 35 and new/current 15 songs. Returns processed chart data with ratings. Uses summation instead of average.
      */
     post: {
       parameters: {
@@ -115,7 +115,7 @@ export interface paths {
     put?: never;
     /**
      * Preview next version rating calculation
-     * @description Calculates what the player rating would be in the next version based on all records.
+     * @description Beta: Calculates what the player rating would be in the next version based on all records.
      */
     post: {
       parameters: {
@@ -468,11 +468,73 @@ export interface paths {
       path?: never;
       cookie?: never;
     };
-    get?: never;
+    /**
+     * Check rating breakdown image
+     * @description Checks whether a scraping job has an uploaded rating breakdown image. Requires API key authentication or an active session.
+     */
+    get: {
+      parameters: {
+        query: {
+          /** @description The ID of the job to check or retrieve an image for */
+          jobId: number;
+        };
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description Image status checked successfully */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": components["schemas"]["RatingBreakdownImageStatusResponse"];
+          };
+        };
+        /** @description Bad request - Invalid query or job ID not found */
+        400: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": components["schemas"]["Error"];
+          };
+        };
+        /** @description Unauthorized - Invalid or missing API key/session */
+        401: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": components["schemas"]["Error"];
+          };
+        };
+        /** @description Forbidden - Job doesn't belong to user */
+        403: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": components["schemas"]["Error"];
+          };
+        };
+        /** @description Internal server error */
+        500: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": components["schemas"]["Error"];
+          };
+        };
+      };
+    };
     put?: never;
     /**
      * Upload generated rating breakdown image
-     * @description Beta: Uploads the generated rating breakdown image for a scraping job. Requires API key authentication.
+     * @description Uploads the generated rating breakdown image for a scraping job. Requires API key authentication.
      */
     post: {
       parameters: {
@@ -525,6 +587,93 @@ export interface paths {
         };
       };
     };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/jobs/ratingBreakdownImage/file": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Retrieve rating breakdown image
+     * @description Retrieves the uploaded rating breakdown image for a scraping job from private storage. Requires API key authentication or an active session.
+     */
+    get: {
+      parameters: {
+        query: {
+          /** @description The ID of the job to check or retrieve an image for */
+          jobId: number;
+        };
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description Image returned successfully */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "image/png": string;
+          };
+        };
+        /** @description Bad request - Invalid query or job ID not found */
+        400: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": components["schemas"]["Error"];
+          };
+        };
+        /** @description Unauthorized - Invalid or missing API key/session */
+        401: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": components["schemas"]["Error"];
+          };
+        };
+        /** @description Forbidden - Job doesn't belong to user */
+        403: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": components["schemas"]["Error"];
+          };
+        };
+        /** @description Rating breakdown image not found */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": components["schemas"]["Error"];
+          };
+        };
+        /** @description Internal server error */
+        500: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": components["schemas"]["Error"];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
     delete?: never;
     options?: never;
     head?: never;
@@ -714,7 +863,7 @@ export interface paths {
     };
     /**
      * Get user play history for a song
-     * @description Beta: Returns the user's recorded play history for a specific normalized music title. Requires authentication via API key or session.
+     * @description Returns the user's recorded play history for a specific normalized music title. Requires authentication via API key or session.
      */
     get: {
       parameters: {
@@ -979,6 +1128,30 @@ export interface components {
        * @example ratingBreakdownImages/1234567890/12345.png
        */
       imageKey: string;
+    };
+    RatingBreakdownImageQuery: {
+      /**
+       * @description The ID of the job to check or retrieve an image for
+       * @example 12345
+       */
+      jobId: number;
+    };
+    RatingBreakdownImageStatusResponse: {
+      /**
+       * @description The ID of the job that was checked
+       * @example 12345
+       */
+      jobId: number;
+      /**
+       * @description Whether the job has an uploaded rating breakdown image
+       * @example true
+       */
+      hasImage: boolean;
+      /**
+       * @description Authenticated API URL to retrieve the image, or null when no image exists
+       * @example /api/jobs/ratingBreakdownImage/file?jobId=12345
+       */
+      imageUrl: string | null;
     };
     SavePlayerData: {
       characterImage: string;
