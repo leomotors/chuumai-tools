@@ -1,12 +1,17 @@
 <script lang="ts">
   import {
+    Copy,
     Download,
     Eye,
+    FileText,
     ImageOff,
     LoaderCircle,
     OctagonAlert,
     X,
   } from "@lucide/svelte";
+
+  import AnimatedDialog from "$lib/components/dashboard/AnimatedDialog.svelte";
+  import ZoomableImage from "$lib/components/dashboard/ZoomableImage.svelte";
 
   import { Button } from "@repo/ui/atom/button";
   import * as Table from "@repo/ui/atom/table";
@@ -19,7 +24,10 @@
   let { data }: { data: PageData } = $props();
 
   let selectedJob = $state<Job | null>(null);
-  let previewDialog: HTMLDialogElement | null = null;
+  let logJob = $state<Job | null>(null);
+  let previewOpen = $state(false);
+  let logOpen = $state(false);
+  let copyFeedback = $state(false);
 
   const dateFormatter = new Intl.DateTimeFormat(undefined, {
     year: "numeric",
@@ -78,27 +86,46 @@
     }
   }
 
-  function briefDetail(job: Job) {
-    if (job.jobError) return job.jobError;
-    if (job.jobLog) return job.jobLog;
-    if (!job.jobEnd) return "Scrape job is still running.";
-    return "Scrape finished without saved log details.";
+  function hasLogContent(job: Job) {
+    return Boolean(job.jobError || job.jobLog);
+  }
+
+  function fullLogText(job: Job) {
+    const sections: string[] = [];
+    if (job.jobError) sections.push(`=== Error ===\n${job.jobError}`);
+    if (job.jobLog) sections.push(`=== Log ===\n${job.jobLog}`);
+    return sections.join("\n\n");
+  }
+
+  function logDialogTitle(job: Job) {
+    if (job.jobError && job.jobLog) return "Error & log";
+    if (job.jobError) return "Error";
+    return "Log";
   }
 
   function openPreview(job: Job) {
     selectedJob = job;
-    previewDialog?.showModal();
+    previewOpen = true;
   }
 
   function closePreview() {
-    previewDialog?.close();
-    selectedJob = null;
+    previewOpen = false;
   }
 
-  function closeOnBackdrop(event: MouseEvent) {
-    if (event.target === previewDialog) {
-      closePreview();
-    }
+  function openLog(job: Job) {
+    logJob = job;
+    copyFeedback = false;
+    logOpen = true;
+  }
+
+  function closeLog() {
+    logOpen = false;
+  }
+
+  async function copyLog() {
+    if (!logJob) return;
+    await navigator.clipboard.writeText(fullLogText(logJob));
+    copyFeedback = true;
   }
 </script>
 
@@ -123,10 +150,9 @@
         <Table.Row>
           <Table.Head class="w-20">Job</Table.Head>
           <Table.Head>Started</Table.Head>
-          <Table.Head>Finished</Table.Head>
           <Table.Head class="w-28">Duration</Table.Head>
           <Table.Head class="w-28">Status</Table.Head>
-          <Table.Head>Detail</Table.Head>
+          <Table.Head class="w-28">Log</Table.Head>
           <Table.Head class="w-20 text-right">Image</Table.Head>
         </Table.Row>
       </Table.Header>
@@ -136,12 +162,14 @@
           <Table.Row>
             <Table.Cell class="font-mono text-xs text-gray-700">
               #{job.id}
+              {#if job.isFromOldVersion}
+                <div class="mt-0.5 text-[10px] font-medium text-amber-600">
+                  Old scraper
+                </div>
+              {/if}
             </Table.Cell>
             <Table.Cell class="text-xs text-gray-600">
               {formatDate(job.jobStart)}
-            </Table.Cell>
-            <Table.Cell class="text-xs text-gray-600">
-              {formatDate(job.jobEnd)}
             </Table.Cell>
             <Table.Cell class="text-xs text-gray-600">
               {formatDuration(job)}
@@ -161,17 +189,25 @@
                 {statusLabel(status)}
               </span>
             </Table.Cell>
-            <Table.Cell class="max-w-[22rem]">
-              <div
-                class="truncate text-xs text-gray-600"
-                title={briefDetail(job)}
-              >
-                {briefDetail(job)}
-              </div>
-              {#if job.isFromOldVersion}
-                <div class="mt-1 text-[11px] font-medium text-amber-600">
-                  Old scraper version
-                </div>
+            <Table.Cell>
+              {#if hasLogContent(job)}
+                <Button
+                  size="sm"
+                  variant={job.jobError ? "outline" : "ghost"}
+                  class={cn(
+                    "h-7 gap-1 px-2 text-xs",
+                    job.jobError &&
+                      "border-red-200 text-red-700 hover:bg-red-50 hover:text-red-800",
+                  )}
+                  onclick={() => openLog(job)}
+                >
+                  <FileText class="size-3.5" />
+                  {job.jobError ? "View error" : "View log"}
+                </Button>
+              {:else if !job.jobEnd}
+                <span class="text-xs text-gray-400">Running…</span>
+              {:else}
+                <span class="text-xs text-gray-400">—</span>
               {/if}
             </Table.Cell>
             <Table.Cell class="text-right">
@@ -209,11 +245,11 @@
   {/if}
 </section>
 
-<dialog
-  bind:this={previewDialog}
-  class="m-auto w-[min(94vw,56rem)] rounded-xl border border-gray-200 bg-white p-0 shadow-2xl backdrop:bg-black/60"
-  onclick={closeOnBackdrop}
-  onclose={() => (selectedJob = null)}
+<AnimatedDialog
+  open={previewOpen}
+  onRequestClose={closePreview}
+  onClosed={() => (selectedJob = null)}
+  class="m-auto w-[min(96vw,calc(70vh*16/9+2rem))] rounded-xl border border-gray-200 bg-white p-0 shadow-2xl"
 >
   {#if selectedJob}
     <div
@@ -247,12 +283,60 @@
         </Button>
       </div>
     </div>
-    <div class="max-h-[78vh] overflow-auto bg-gray-50 p-3">
-      <img
+    <div class="p-4">
+      <ZoomableImage
         src={imageUrl(selectedJob.id)}
         alt="Rating breakdown for job {selectedJob.id}"
-        class="mx-auto h-auto max-w-full rounded-lg border border-gray-200 bg-white"
       />
     </div>
   {/if}
-</dialog>
+</AnimatedDialog>
+
+<AnimatedDialog
+  open={logOpen}
+  onRequestClose={closeLog}
+  onClosed={() => {
+    logJob = null;
+    copyFeedback = false;
+  }}
+  class="m-auto w-[min(94vw,42rem)] rounded-xl border border-gray-200 bg-white p-0 shadow-2xl"
+>
+  {#if logJob}
+    <div
+      class="flex items-center justify-between border-b border-gray-100 px-4 py-3"
+    >
+      <div>
+        <h2 class="text-sm font-semibold text-gray-900">
+          Job {logDialogTitle(logJob)}
+        </h2>
+        <p class="mt-0.5 text-xs text-gray-500">Job #{logJob.id}</p>
+      </div>
+      <div class="flex items-center gap-1">
+        <Button
+          size="sm"
+          variant="ghost"
+          class="h-8 gap-1.5 px-2 text-xs"
+          onclick={copyLog}
+        >
+          <Copy class="size-3.5" />
+          {copyFeedback ? "Copied" : "Copy"}
+        </Button>
+        <Button
+          size="icon-sm"
+          variant="ghost"
+          aria-label="Close log"
+          title="Close"
+          onclick={closeLog}
+        >
+          <X class="size-4" />
+        </Button>
+      </div>
+    </div>
+    <div class="max-h-[70vh] overflow-auto p-4">
+      <pre
+        class="whitespace-pre-wrap break-words rounded-lg border border-gray-200 bg-gray-50 p-3 font-mono text-xs leading-relaxed text-gray-800">{fullLogText(
+          logJob,
+        )}</pre>
+    </div>
+  {/if}
+</AnimatedDialog>
