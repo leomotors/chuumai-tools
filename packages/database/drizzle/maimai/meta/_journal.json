@@ -57,6 +57,13 @@
       "when": 1773890409149,
       "tag": "0007_nullable-release-date",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1780503732855,
+      "tag": "0008_milky_miss_america",
+      "breakpoints": true
     }
   ]
 }

@@ -1,4 +1,5 @@
 import { fail, redirect } from "@sveltejs/kit";
+import { sql } from "drizzle-orm";
 import { nanoid } from "nanoid";
 
 import { db } from "$lib/db";
@@ -31,7 +32,7 @@ export const actions: Actions = {
         target: apiKey.userId,
         set: {
           apiKey: newApiKey,
-          createdAt: new Date(),
+          createdAt: sql`now()`,
         },
       });
 

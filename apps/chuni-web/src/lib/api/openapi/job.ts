@@ -1,6 +1,9 @@
 import type { OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
 
-import { API_KEY_SECURITY_SCHEME, SESSION_SECURITY_SCHEME } from "@repo/core/web";
+import {
+  API_KEY_SECURITY_SCHEME,
+  SESSION_SECURITY_SCHEME,
+} from "@repo/core/web";
 import { z } from "@repo/types/zod";
 
 import { errorSchema } from "../schemas/common";

@@ -66,7 +66,7 @@ export const playerDataTable = pgTable("player_data", {
   overpowerValue: decimal("overpower_value", { scale: 2 }).notNull(),
   overpowerPercent: decimal("overpower_percent", { scale: 2 }).notNull(),
 
-  lastPlayed: timestamp("last_played").notNull(),
+  lastPlayed: timestamp("last_played", { withTimezone: true }).notNull(),
 
   // Page Player Data
   currentCurrency: integer("current_currency").notNull(),
@@ -120,7 +120,7 @@ export const playHistoryTable = pgTable("play_history", {
 
   // Play History Specific
   trackNo: integer("track_no").notNull(),
-  playedAt: timestamp("played_at").notNull().unique(),
+  playedAt: timestamp("played_at", { withTimezone: true }).notNull().unique(),
 });
 
 /**

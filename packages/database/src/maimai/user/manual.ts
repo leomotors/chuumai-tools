@@ -9,5 +9,5 @@ export const manualRatingTable = pgTable("manual_rating", {
   userId: text("user_id"),
 
   rating: integer().notNull(),
-  timestamp: timestamp().notNull(),
+  timestamp: timestamp("timestamp", { withTimezone: true }).notNull(),
 });

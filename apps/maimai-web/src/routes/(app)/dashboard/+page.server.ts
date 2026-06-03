@@ -1,5 +1,5 @@
 import { error, fail } from "@sveltejs/kit";
-import { count, eq } from "drizzle-orm";
+import { count, eq, sql } from "drizzle-orm";
 import { nanoid } from "nanoid";
 
 import { db } from "$lib/db";
@@ -71,7 +71,7 @@ export const actions: Actions = {
         target: apiKey.userId,
         set: {
           apiKey: newApiKey,
-          createdAt: new Date(),
+          createdAt: sql`now()`,
         },
       });
 

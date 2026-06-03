@@ -78,6 +78,13 @@
       "when": 1777134862858,
       "tag": "0010_release-date-column",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1780503732056,
+      "tag": "0011_bored_butterfly",
+      "breakpoints": true
     }
   ]
 }

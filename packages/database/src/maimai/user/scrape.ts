@@ -56,7 +56,7 @@ export const playerDataTable = pgTable("player_data", {
 
   playCountCurrent: integer("play_count_current").notNull(),
   playCountTotal: integer("play_count_total").notNull(),
-  lastPlayed: timestamp("last_played").notNull(),
+  lastPlayed: timestamp("last_played", { withTimezone: true }).notNull(),
 });
 
 /**
@@ -103,7 +103,7 @@ export const playHistoryTable = pgTable("play_history", {
 
   // Play History Specific
   trackNo: integer("track_no").notNull(),
-  playedAt: timestamp("played_at").notNull().unique(),
+  playedAt: timestamp("played_at", { withTimezone: true }).notNull().unique(),
 });
 
 /**

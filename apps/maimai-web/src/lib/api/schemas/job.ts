@@ -152,7 +152,10 @@ export function registerJobSchemas(registry: OpenAPIRegistry) {
     "UploadRatingBreakdownImageResponse",
     uploadRatingBreakdownImageResponseSchema,
   );
-  registry.register("RatingBreakdownImageQuery", ratingBreakdownImageQuerySchema);
+  registry.register(
+    "RatingBreakdownImageQuery",
+    ratingBreakdownImageQuerySchema,
+  );
   registry.register(
     "RatingBreakdownImageStatusResponse",
     ratingBreakdownImageStatusResponseSchema,

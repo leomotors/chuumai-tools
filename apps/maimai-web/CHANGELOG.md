@@ -1,16 +1,14 @@
 # Changelog
 
-## [next]
-
-- feat(api): add authenticated rating breakdown image status and retrieval endpoints
-
-## [1.11.0] - 2026-05-29
+## [1.11.0] - 2026-06-03
 
 - feat(data): move song record detail pages under public data routes with login-gated play records
 - feat(data): add per-song level history and expandable play history timeline
 - feat(api): add app info, play history, and rating breakdown image upload endpoints
+- feat(api): add authenticated rating breakdown image status and retrieval endpoints
 - feat: store scraper rating breakdown images in S3-compatible storage
 - fix(api): support authenticated multipart rating breakdown image uploads to S3-compatible storage
+- fix(db): migrate timestamp columns to timezone-aware storage
 
 ## [1.10.0] - 2026-05-20
 

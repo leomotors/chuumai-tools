@@ -162,7 +162,10 @@
               </span>
             </Table.Cell>
             <Table.Cell class="max-w-[22rem]">
-              <div class="truncate text-xs text-gray-600" title={briefDetail(job)}>
+              <div
+                class="truncate text-xs text-gray-600"
+                title={briefDetail(job)}
+              >
                 {briefDetail(job)}
               </div>
               {#if job.isFromOldVersion}
@@ -213,7 +216,9 @@
   onclose={() => (selectedJob = null)}
 >
   {#if selectedJob}
-    <div class="flex items-center justify-between border-b border-gray-100 px-4 py-3">
+    <div
+      class="flex items-center justify-between border-b border-gray-100 px-4 py-3"
+    >
       <div>
         <h2 class="text-sm font-semibold text-gray-900">
           Rating Breakdown Image
