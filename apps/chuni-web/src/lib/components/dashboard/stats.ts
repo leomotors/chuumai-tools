@@ -5,6 +5,8 @@ import type {
 import type { UserStats } from "$lib/functions/userStats";
 import { resolveChuniRating } from "$lib/utils/chuniRating";
 
+import { withMaxRating } from "@repo/core/web";
+
 export type DashboardDelta = {
   text: string;
   positive: boolean;
@@ -15,18 +17,20 @@ export function transformUserStats(
 ): StatsChartTransformed[] {
   if (!userStats || userStats.length === 0) return [];
 
-  return [...userStats]
-    .sort(
-      (a, b) =>
-        new Date(a.lastPlayed).getTime() - new Date(b.lastPlayed).getTime(),
-    )
-    .map((s) => ({
-      date: new Date(s.lastPlayed),
-      playCount: s.playCount,
-      playerLevel: s.playerLevel,
-      rating: resolveChuniRating(s.rating, s.calculatedRating),
-      overpower: parseFloat(s.overpowerValue),
-    }));
+  return withMaxRating(
+    [...userStats]
+      .sort(
+        (a, b) =>
+          new Date(a.lastPlayed).getTime() - new Date(b.lastPlayed).getTime(),
+      )
+      .map((s) => ({
+        date: new Date(s.lastPlayed),
+        playCount: s.playCount,
+        playerLevel: s.playerLevel,
+        rating: resolveChuniRating(s.rating, s.calculatedRating),
+        overpower: parseFloat(s.overpowerValue),
+      })),
+  );
 }
 
 export function filterStatsByRange(

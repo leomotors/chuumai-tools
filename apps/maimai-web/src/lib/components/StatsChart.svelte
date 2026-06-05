@@ -1,10 +1,11 @@
 <script lang="ts" module>
-  export type MaimaiMetric = "playCount" | "rating" | "star";
+  export type MaimaiMetric = "playCount" | "rating" | "maxRating" | "star";
 
   export type StatsChartTransformed = {
     date: Date;
     playCount: number;
     rating: number;
+    maxRating: number;
     star: number;
     isManual?: boolean;
   };
@@ -14,6 +15,7 @@
     { label: string; color: string }
   > = {
     rating: { label: "Rating", color: "#3b82f6" },
+    maxRating: { label: "Max Rating", color: "#ef4444" },
     playCount: { label: "Play Count", color: "#22c55e" },
     star: { label: "Star", color: "#a855f7" },
   };
@@ -21,7 +23,7 @@
 
 <script lang="ts">
   import { scaleTime } from "d3-scale";
-  import { LineChart } from "layerchart";
+  import { LineChart, Spline } from "layerchart";
 
   import { browser } from "$app/environment";
 
@@ -166,6 +168,18 @@
             },
           }}
         >
+          {#snippet spline({ props })}
+            {#if selectedMetric === "maxRating"}
+              <Spline {...props} stroke="#94a3b8" opacity={0.9} />
+              <Spline
+                {...props}
+                stroke={MAIMAI_METRIC_CONFIG.maxRating.color}
+                defined={(d: StatsChartTransformed) => d.rating === d.maxRating}
+              />
+            {:else}
+              <Spline {...props} />
+            {/if}
+          {/snippet}
           {#snippet tooltip()}
             <Chart.Tooltip
               labelFormatter={(value) => value.toLocaleDateString()}

@@ -41,6 +41,8 @@
         return buildGainHeatmap(filtered, (record) => record.rating, {
           detectReset: true,
         });
+      case "maxRating":
+        return buildGainHeatmap(filtered, (record) => record.maxRating);
       case "overpower":
         return buildGainHeatmap(filtered, (record) => record.overpower);
     }
@@ -61,7 +63,7 @@
     }
     const sign = day.value > 0 ? "+" : "";
     const formatted =
-      selectedMetric === "rating"
+      selectedMetric === "rating" || selectedMetric === "maxRating"
         ? formatChuniRating(day.value)
         : selectedMetric === "overpower"
           ? day.value.toFixed(2)

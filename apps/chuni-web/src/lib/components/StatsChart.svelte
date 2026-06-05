@@ -3,6 +3,7 @@
     | "playerLevel"
     | "playCount"
     | "rating"
+    | "maxRating"
     | "overpower";
 
   export type StatsChartTransformed = {
@@ -10,6 +11,7 @@
     playCount: number;
     playerLevel: number;
     rating: number;
+    maxRating: number;
     overpower: number;
   };
 
@@ -20,22 +22,28 @@
     playerLevel: { label: "Player Level", color: "#3b82f6" },
     playCount: { label: "Play Count", color: "#22c55e" },
     rating: { label: "Rating", color: "#f97316" },
+    maxRating: { label: "Max Rating", color: "#ef4444" },
     overpower: { label: "Overpower", color: "#a855f7" },
   };
 </script>
 
 <script lang="ts">
   import { scaleTime } from "d3-scale";
-  import type { LineChart as LineChartType } from "layerchart";
+  import type {
+    LineChart as LineChartType,
+    Spline as SplineType,
+  } from "layerchart";
 
   import { browser } from "$app/environment";
 
   // Dynamically import LayerChart only on client side
   let LineChart = $state<typeof LineChartType | null>(null);
+  let Spline = $state<typeof SplineType | null>(null);
   $effect(() => {
     if (browser) {
       import("layerchart").then((module) => {
         LineChart = module.LineChart;
+        Spline = module.Spline;
       });
     }
   });
@@ -180,7 +188,20 @@
             },
           },
         }}
-      />
+      >
+        {#snippet spline({ props })}
+          {#if selectedMetric === "maxRating" && Spline}
+            <Spline {...props} stroke="#94a3b8" opacity={0.9} />
+            <Spline
+              {...props}
+              stroke={CHUNI_METRIC_CONFIG.maxRating.color}
+              defined={(d: StatsChartTransformed) => d.rating === d.maxRating}
+            />
+          {:else if Spline}
+            <Spline {...props} />
+          {/if}
+        {/snippet}
+      </LineChart>
     {:else}
       <div
         class="flex h-full items-center justify-center text-sm text-gray-400"

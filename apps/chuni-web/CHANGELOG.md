@@ -2,6 +2,10 @@
 
 ## [next]
 
+## [3.20.0] - 2026-06-05
+
+- feat(dashboard): add Max Rating progression chart with muted below-peak segments
+
 ## [3.19.0] - 2026-06-04
 
 - feat(dashboard): split dashboard analytics into shared top summary with Activity and Milestones tabs

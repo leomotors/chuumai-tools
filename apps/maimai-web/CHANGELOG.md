@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.12.0] - 2026-06-05
+
+- feat(dashboard): add Max Rating progression chart with muted below-peak segments
+
 ## [1.11.0] - 2026-06-03
 
 - feat(data): move song record detail pages under public data routes with login-gated play records

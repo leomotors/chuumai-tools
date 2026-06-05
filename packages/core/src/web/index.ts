@@ -2,6 +2,7 @@ export * from "./appInfo";
 export * from "./improvementTimeline";
 export * from "./jobSchemas";
 export * from "./jobUpload";
+export * from "./maxRating";
 export * from "./musicLevelHistory";
 export * from "./openapi";
 export * from "./playCount";

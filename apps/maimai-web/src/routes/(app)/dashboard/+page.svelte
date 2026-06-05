@@ -9,6 +9,7 @@
     type StatsChartTransformed,
   } from "$lib/components/StatsChart.svelte";
 
+  import { withMaxRating } from "@repo/core/web";
   import { ApiKeySection } from "@repo/ui/molecule/ApiKeySection";
   import {
     buildGainHeatmap,
@@ -29,18 +30,20 @@
 
   const allTransformed = $derived.by((): StatsChartTransformed[] => {
     if (!data.userStats || data.userStats.length === 0) return [];
-    return [...data.userStats]
-      .sort(
-        (a, b) =>
-          new Date(a.lastPlayed).getTime() - new Date(b.lastPlayed).getTime(),
-      )
-      .map((s) => ({
-        date: new Date(s.lastPlayed),
-        playCount: s.playCountTotal,
-        rating: s.rating,
-        star: s.star,
-        isManual: false,
-      }));
+    return withMaxRating(
+      [...data.userStats]
+        .sort(
+          (a, b) =>
+            new Date(a.lastPlayed).getTime() - new Date(b.lastPlayed).getTime(),
+        )
+        .map((s) => ({
+          date: new Date(s.lastPlayed),
+          playCount: s.playCountTotal,
+          rating: s.rating,
+          star: s.star,
+          isManual: false,
+        })),
+    );
   });
 
   const filtered = $derived.by((): StatsChartTransformed[] => {
@@ -117,6 +120,8 @@
         return buildGainHeatmap(filtered, (r) => r.rating, {
           detectReset: true,
         });
+      case "maxRating":
+        return buildGainHeatmap(filtered, (r) => r.maxRating);
       case "star":
         return buildGainHeatmap(filtered, (r) => r.star);
     }
