@@ -35,7 +35,7 @@ Please note that it may import and re-export some of shared table in `packages/d
 
 ## Versioning
 
-Whenever you make any changes, update to CHANGELOG.md of respective apps or packages. Create or update a section of unreleased version looking something like this:
+Whenever you make any changes, update to CHANGELOG.md of respective apps. (Note: If CHANGELOG.md does not exist, that apps/packages might not be under versioning, no action needed.) Create or update a section of unreleased version looking something like this:
 
 ```
 ## [patch|minor|major]

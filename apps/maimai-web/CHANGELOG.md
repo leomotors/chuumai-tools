@@ -1,6 +1,6 @@
 # Changelog
 
-## [minor]
+## [1.13.0] - 2026-06-08
 
 - feat(dashboard): add manual rating CSV upload with inferred preview on Settings
 - feat(dashboard): add UTC/local timezone selection and local-offset preview for manual rating uploads
