@@ -14,6 +14,6 @@ export const manualRatingTable = pgTable("manual_rating", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
   userId: text("user_id"),
 
-  rating: numeric({ precision: 4, scale: 2 }).notNull(),
+  rating: numeric({ precision: 6, scale: 4 }).notNull(),
   timestamp: timestamp("timestamp", { withTimezone: true }).notNull(),
 });

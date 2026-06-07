@@ -2,6 +2,8 @@
 
 ## [minor]
 
+- feat(dashboard): add manual rating CSV upload with inferred preview on Settings
+- feat(dashboard): add UTC/local timezone selection and local-offset preview for manual rating uploads
 - feat(dashboard): show elapsed time from previous rating milestone
 - feat(dashboard): move API key settings into a dashboard Settings tab
 - fix(dashboard): improve milestone scope selector spacing and current-version icon

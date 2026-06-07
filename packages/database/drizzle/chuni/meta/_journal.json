@@ -85,6 +85,13 @@
       "when": 1780503732056,
       "tag": "0011_bored_butterfly",
       "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1780852177636,
+      "tag": "0012_far_rattler",
+      "breakpoints": true
     }
   ]
 }

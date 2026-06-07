@@ -1,0 +1,1 @@
+ALTER TABLE "manual_rating" ALTER COLUMN "rating" SET DATA TYPE numeric(6, 4);
