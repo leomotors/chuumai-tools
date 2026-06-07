@@ -9,7 +9,6 @@ However, you don't have to run those command to save time, human will do that.
 
 To prevent code duplication, any logic that is shared between the two applications (`apps/chuni-web` and `apps/maimai-web`) must be placed in the `packages/core` package (e.g., under `packages/core/src/web` or similar directories) and exported properly so it can be imported as `@repo/core/web`. Do not implement duplicate helper, business, or routing logic in both application packages.
 
-
 ## Website Part (apps/chuni-web)
 
 The application is written using SvelteKit.
@@ -33,6 +32,18 @@ Finally, cleanup empty `src/components` folder.
 Database is PostgreSQL with Drizzle ORM.
 
 Please note that it may import and re-export some of shared table in `packages/database/src/shared`.
+
+## Versioning
+
+Whenever you make any changes, update to CHANGELOG.md of respective apps or packages. Create or update a section of unreleased version looking something like this:
+
+```
+## [patch|minor|major]
+```
+
+When you are told to release, update the version of package.json based on the changes level (patch, minor, major) and update the changelog with actual version the release date.
+
+Once commit, create a git tag using command (`git tag -s`) to sign tag, no need to check signature. The tag should be `package-name@version`, please see existing tags for reference.
 
 ## Available MCP: Svelte
 
