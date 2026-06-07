@@ -15,6 +15,11 @@
     overpower: number;
   };
 
+  export type StatsChartDatum = {
+    date: Date;
+    isManual?: boolean;
+  } & Partial<Record<ChuniMetric | "maxRating", number>>;
+
   export const CHUNI_METRIC_CONFIG: Record<
     ChuniMetric,
     { label: string; color: string }
@@ -49,7 +54,7 @@
   });
 
   type Props = {
-    data: StatsChartTransformed[];
+    data: StatsChartDatum[];
     selectedMetric: ChuniMetric;
     onMetricChange: (m: ChuniMetric) => void;
     range: number;
@@ -67,15 +72,21 @@
     },
   ]);
 
+  const chartData = $derived(
+    data.filter((d) => typeof d[selectedMetric] === "number"),
+  );
+
   const yDomain = $derived.by((): [number, number] | undefined => {
-    if (data.length === 0) return undefined;
+    if (chartData.length === 0) return undefined;
     let min = Infinity;
     let max = -Infinity;
-    for (const d of data) {
+    for (const d of chartData) {
       const v = d[selectedMetric];
+      if (typeof v !== "number") continue;
       if (v < min) min = v;
       if (v > max) max = v;
     }
+    if (!isFinite(min) || !isFinite(max)) return undefined;
     if (min === max) {
       const pad = Math.max(1, Math.abs(min) * 0.05);
       return [min - pad, max + pad];
@@ -161,9 +172,9 @@
       >
         Loading chart...
       </div>
-    {:else if data.length > 0}
+    {:else if chartData.length > 0}
       <LineChart
-        {data}
+        data={chartData}
         x="date"
         xScale={scaleTime()}
         {yDomain}
@@ -195,7 +206,8 @@
             <Spline
               {...props}
               stroke={CHUNI_METRIC_CONFIG.maxRating.color}
-              defined={(d: StatsChartTransformed) => d.rating === d.maxRating}
+              defined={(d: StatsChartDatum) =>
+                d.rating !== undefined && d.rating === d.maxRating}
             />
           {:else if Spline}
             <Spline {...props} />

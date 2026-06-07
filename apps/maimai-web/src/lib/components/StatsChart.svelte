@@ -29,8 +29,13 @@
 
   import * as Chart from "@repo/ui/atom/chart";
 
+  type ChartDatum = {
+    date: Date;
+    isManual?: boolean;
+  } & Partial<Record<MaimaiMetric | "maxRating", number>>;
+
   type Props = {
-    data: StatsChartTransformed[];
+    data: ChartDatum[];
     selectedMetric: MaimaiMetric;
     onMetricChange: (m: MaimaiMetric) => void;
     range: number;
@@ -48,11 +53,15 @@
     },
   ]);
 
+  const chartData = $derived(
+    data.filter((d) => typeof d[selectedMetric] === "number"),
+  );
+
   const yDomain = $derived.by((): [number, number] | undefined => {
-    if (data.length === 0) return undefined;
+    if (chartData.length === 0) return undefined;
     let min = Infinity;
     let max = -Infinity;
-    for (const d of data) {
+    for (const d of chartData) {
       const v = d[selectedMetric];
       if (typeof v !== "number") continue;
       if (v < min) min = v;
@@ -142,17 +151,16 @@
       >
         Loading chart...
       </div>
-    {:else if data.length > 0}
+    {:else if chartData.length > 0}
       <Chart.Container config={{}} class="aspect-auto h-full pl-4">
         <LineChart
-          {data}
+          data={chartData}
           x="date"
           xScale={scaleTime()}
           {yDomain}
           yNice
           series={chartSeries}
           axis
-          points
           props={{
             xAxis: {
               format: (d: Date) =>
@@ -174,7 +182,8 @@
               <Spline
                 {...props}
                 stroke={MAIMAI_METRIC_CONFIG.maxRating.color}
-                defined={(d: StatsChartTransformed) => d.rating === d.maxRating}
+                defined={(d: ChartDatum) =>
+                  d.rating !== undefined && d.rating === d.maxRating}
               />
             {:else}
               <Spline {...props} />

@@ -42,3 +42,48 @@ export function calculateRating(
     return baseRating;
   }
 }
+
+export const maimaiRatingMilestones = [
+  { id: "bronze", label: "Bronze", rating: 12000 },
+  { id: "silver", label: "Silver", rating: 13000 },
+  { id: "gold-1", label: "Gold ⭐", rating: 14000 },
+  { id: "gold-2", label: "Gold ⭐⭐", rating: 14250 },
+  { id: "platinum-1", label: "Platinum ⭐", rating: 14500 },
+  { id: "platinum-2", label: "Platinum ⭐⭐", rating: 14750 },
+  { id: "rainbow-1", label: "Rainbow ⭐", rating: 15000 },
+  { id: "rainbow-2", label: "Rainbow ⭐⭐", rating: 15250 },
+  { id: "rainbow-3", label: "Rainbow ⭐⭐⭐", rating: 15500 },
+  { id: "rainbow-4", label: "Rainbow ⭐⭐⭐⭐", rating: 15750 },
+  { id: "ultimate-rainbow-1", label: "Ultimate Rainbow ⭐", rating: 16000 },
+  { id: "ultimate-rainbow-2", label: "Ultimate Rainbow ⭐⭐", rating: 16250 },
+  { id: "ultimate-rainbow-3", label: "Ultimate Rainbow ⭐⭐⭐", rating: 16500 },
+] as const;
+
+export type MaimaiRatingLevel =
+  | "rainbow_kiwami"
+  | "rainbow"
+  | "platinum"
+  | "gold"
+  | "silver"
+  | "bronze"
+  | "purple"
+  | "red"
+  | "orange"
+  | "green"
+  | "blue"
+  | "normal";
+
+export function getMaimaiRatingLevel(rating: number): MaimaiRatingLevel {
+  if (rating >= 16000) return "rainbow_kiwami";
+  if (rating >= 15000) return "rainbow";
+  if (rating >= 14500) return "platinum";
+  if (rating >= 14000) return "gold";
+  if (rating >= 13000) return "silver";
+  if (rating >= 12000) return "bronze";
+  if (rating >= 10000) return "purple";
+  if (rating >= 7000) return "red";
+  if (rating >= 4000) return "orange";
+  if (rating >= 2000) return "green";
+  if (rating >= 1000) return "blue";
+  return "normal";
+}

@@ -1,6 +1,10 @@
 # Changelog
 
-## [next]
+## [minor]
+
+- feat(dashboard): move API key settings into a dashboard Settings tab
+- fix(dashboard): improve milestone scope selector spacing and current-version icon
+- feat(dashboard): include manual rating history in rating and max rating graph and heatmap views
 
 ## [3.20.0] - 2026-06-05
 

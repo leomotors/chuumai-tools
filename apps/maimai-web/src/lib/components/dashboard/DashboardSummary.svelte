@@ -6,9 +6,8 @@
     sparklineValues,
     transformUserStats,
   } from "$lib/components/dashboard/stats";
-  import { CHUNI_METRIC_CONFIG } from "$lib/components/StatsChart.svelte";
+  import { MAIMAI_METRIC_CONFIG } from "$lib/components/StatsChart.svelte";
   import type { UserStats } from "$lib/functions/userStats";
-  import { formatChuniRating } from "$lib/utils/chuniRating";
 
   import { KpiTile } from "@repo/ui/molecule/KpiTile";
   import { UserProfileCard } from "@repo/ui/molecule/UserProfileCard";
@@ -42,26 +41,17 @@
     ]}
   />
 
-  <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+  <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
     {#if latest}
       {@const rd = deltaSinceDays(records, 30, (record) => record.rating)}
       <KpiTile
         label="Rating"
-        value={formatChuniRating(latest.rating)}
+        value={latest.rating.toLocaleString()}
         delta={rd?.text}
         deltaPositive={rd?.positive ?? true}
-        color={CHUNI_METRIC_CONFIG.rating.color}
+        color={MAIMAI_METRIC_CONFIG.rating.color}
         primary
         sparklineValues={sparklineValues(records, "rating")}
-      />
-      {@const od = deltaSinceDays(records, 30, (record) => record.overpower)}
-      <KpiTile
-        label="Overpower"
-        value={parseFloat(latest.overpower.toFixed(2)).toLocaleString()}
-        delta={od?.text}
-        deltaPositive={od?.positive ?? true}
-        color={CHUNI_METRIC_CONFIG.overpower.color}
-        sparklineValues={sparklineValues(records, "overpower")}
       />
       {@const pd = playsDeltaWeek(records)}
       <KpiTile
@@ -70,17 +60,17 @@
         delta={pd?.text}
         deltaSuffix="this week"
         deltaPositive={pd?.positive ?? true}
-        color={CHUNI_METRIC_CONFIG.playCount.color}
+        color={MAIMAI_METRIC_CONFIG.playCount.color}
         sparklineValues={sparklineValues(records, "playCount")}
       />
-      {@const ld = deltaSinceDays(records, 30, (record) => record.playerLevel)}
+      {@const sd = deltaSinceDays(records, 30, (record) => record.star)}
       <KpiTile
-        label="Player Level"
-        value={latest.playerLevel.toLocaleString()}
-        delta={ld?.text}
-        deltaPositive={ld?.positive ?? true}
-        color={CHUNI_METRIC_CONFIG.playerLevel.color}
-        sparklineValues={sparklineValues(records, "playerLevel")}
+        label="Star"
+        value={latest.star.toLocaleString()}
+        delta={sd?.text}
+        deltaPositive={sd?.positive ?? true}
+        color={MAIMAI_METRIC_CONFIG.star.color}
+        sparklineValues={sparklineValues(records, "star")}
       />
     {/if}
   </div>

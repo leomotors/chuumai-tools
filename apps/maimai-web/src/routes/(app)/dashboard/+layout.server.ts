@@ -4,7 +4,7 @@ import { count, eq } from "drizzle-orm";
 import { db } from "$lib/db";
 import { getUserStats } from "$lib/functions/userStats";
 
-import { apiKey, jobTable, manualRatingTable } from "@repo/database/chuni";
+import { apiKey, jobTable, manualRatingTable } from "@repo/database/maimai";
 
 import type { LayoutServerLoad } from "./$types";
 

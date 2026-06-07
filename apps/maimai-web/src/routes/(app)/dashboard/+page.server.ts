@@ -1,54 +1,15 @@
-import { error, fail } from "@sveltejs/kit";
-import { count, eq, sql } from "drizzle-orm";
+import { fail, redirect } from "@sveltejs/kit";
+import { sql } from "drizzle-orm";
 import { nanoid } from "nanoid";
 
 import { db } from "$lib/db";
-import { getUserStats } from "$lib/functions/userStats";
 
-import { apiKey, jobTable, manualRatingTable } from "@repo/database/maimai";
+import { apiKey } from "@repo/database/maimai";
 
 import type { Actions, PageServerLoad } from "./$types";
 
-export const load: PageServerLoad = async ({ parent }) => {
-  const { session } = await parent();
-
-  if (!session?.user?.id) {
-    error(401, "Unauthorized");
-  }
-
-  const [jobResult, apiKeyResult, userStats, manualRatings] = await Promise.all(
-    [
-      db
-        .select({ count: count() })
-        .from(jobTable)
-        .where(eq(jobTable.userId, session.user.id)),
-      db
-        .select({ apiKey: apiKey.apiKey, createdAt: apiKey.createdAt })
-        .from(apiKey)
-        .where(eq(apiKey.userId, session.user.id)),
-      getUserStats(session.user.id),
-      db
-        .select({
-          rating: manualRatingTable.rating,
-          timestamp: manualRatingTable.timestamp,
-        })
-        .from(manualRatingTable)
-        .where(eq(manualRatingTable.userId, session.user.id)),
-    ],
-  );
-
-  return {
-    user: {
-      id: session.user.id,
-      name: session.user.name,
-      image: session.user.image,
-    },
-    jobCount: jobResult[0]?.count,
-    apiKey: apiKeyResult[0]?.apiKey ?? null,
-    apiKeyCreatedAt: apiKeyResult[0]?.createdAt ?? null,
-    userStats,
-    manualRatings,
-  };
+export const load: PageServerLoad = () => {
+  redirect(302, "/dashboard/activity");
 };
 
 export const actions: Actions = {

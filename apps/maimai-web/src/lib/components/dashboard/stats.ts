@@ -1,9 +1,8 @@
 import type {
-  ChuniMetric,
+  MaimaiMetric,
   StatsChartTransformed,
 } from "$lib/components/StatsChart.svelte";
 import type { UserStats } from "$lib/functions/userStats";
-import { resolveChuniRating } from "$lib/utils/chuniRating";
 
 import { withMaxRating } from "@repo/core/web";
 
@@ -23,12 +22,12 @@ export function transformUserStats(
         (a, b) =>
           new Date(a.lastPlayed).getTime() - new Date(b.lastPlayed).getTime(),
       )
-      .map((s) => ({
-        date: new Date(s.lastPlayed),
-        playCount: s.playCount,
-        playerLevel: s.playerLevel,
-        rating: resolveChuniRating(s.rating, s.calculatedRating),
-        overpower: parseFloat(s.overpowerValue),
+      .map((stat) => ({
+        date: new Date(stat.lastPlayed),
+        playCount: stat.playCountTotal,
+        rating: stat.rating,
+        star: stat.star,
+        isManual: false,
       })),
   );
 }
@@ -90,7 +89,7 @@ export function playsDeltaWeek(
 
 export function sparklineValues(
   records: StatsChartTransformed[],
-  metric: ChuniMetric,
+  metric: MaimaiMetric,
 ): number[] {
   const last30 = records.slice(-30);
   if (metric === "playCount") {

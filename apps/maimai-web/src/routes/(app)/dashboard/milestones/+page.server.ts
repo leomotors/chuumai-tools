@@ -1,8 +1,6 @@
 import { error } from "@sveltejs/kit";
 
-import { resolveChuniRating } from "$lib/utils/chuniRating";
-
-import { chuniRatingMilestones } from "@repo/core/chuni";
+import { maimaiRatingMilestones } from "@repo/core/maimai";
 import { buildRatingMilestoneProgress } from "@repo/core/web";
 
 import type { PageServerLoad } from "./$types";
@@ -16,7 +14,7 @@ export const load: PageServerLoad = async ({ parent }) => {
 
   const scrapedMilestoneRecords = userStats.map((stat) => ({
     date: stat.lastPlayed,
-    rating: resolveChuniRating(stat.rating, stat.calculatedRating),
+    rating: stat.rating,
     jobId: stat.jobId,
   }));
   const milestoneRecords = [
@@ -30,7 +28,7 @@ export const load: PageServerLoad = async ({ parent }) => {
 
   return {
     myMilestones: buildRatingMilestoneProgress(
-      [...chuniRatingMilestones],
+      [...maimaiRatingMilestones],
       milestoneRecords,
       { resetRecords: scrapedMilestoneRecords },
     ),

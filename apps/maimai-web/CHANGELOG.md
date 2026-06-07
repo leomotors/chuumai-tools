@@ -1,5 +1,16 @@
 # Changelog
 
+## [minor]
+
+- feat(dashboard): move API key settings into a dashboard Settings tab
+- fix(dashboard): improve milestone scope selector spacing and current-version icon
+- feat(dashboard): split analytics into Activity and Jobs tabs
+- feat(dashboard): add bronze-and-above rating milestones with star tiers through Ultimate Rainbow
+- feat(dashboard): add scraper job list with zoomable rating breakdown image preview and download
+- qol(dashboard): add full job log dialog with copy action
+- feat(dashboard): include manual rating history in rating and max rating graph and heatmap views
+- qol(dashboard): align progression chart styling with CHUNITHM by removing point markers
+
 ## [1.12.0] - 2026-06-05
 
 - feat(dashboard): add Max Rating progression chart with muted below-peak segments

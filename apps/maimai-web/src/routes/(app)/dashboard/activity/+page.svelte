@@ -6,10 +6,9 @@
     transformUserStats,
   } from "$lib/components/dashboard/stats";
   import StatsChart, {
-    CHUNI_METRIC_CONFIG,
-    type ChuniMetric,
+    MAIMAI_METRIC_CONFIG,
+    type MaimaiMetric,
   } from "$lib/components/StatsChart.svelte";
-  import { formatChuniRating } from "$lib/utils/chuniRating";
 
   import { mergeManualRatingRecords, withMaxRating } from "@repo/core/web";
   import {
@@ -20,7 +19,7 @@
 
   let { data } = $props();
 
-  let selectedMetric = $state<ChuniMetric>("rating");
+  let selectedMetric = $state<MaimaiMetric>("rating");
   let timeRange = $state<number>(0);
 
   const scrapedTransformed = $derived(transformUserStats(data.userStats));
@@ -57,19 +56,14 @@
     switch (selectedMetric) {
       case "playCount":
         return buildGainHeatmap(filteredScraped, (record) => record.playCount);
-      case "playerLevel":
-        return buildGainHeatmap(
-          filteredScraped,
-          (record) => record.playerLevel,
-        );
       case "rating":
         return buildGainHeatmap(filteredRating, (record) => record.rating, {
           detectReset: true,
         });
       case "maxRating":
         return buildGainHeatmap(filteredRating, (record) => record.maxRating);
-      case "overpower":
-        return buildGainHeatmap(filteredScraped, (record) => record.overpower);
+      case "star":
+        return buildGainHeatmap(filteredScraped, (record) => record.star);
     }
   });
 
@@ -79,22 +73,16 @@
 
   function formatHeatmapTooltip(day: HeatmapDay): string {
     const dateStr = day.date.toLocaleDateString();
-    const label = CHUNI_METRIC_CONFIG[selectedMetric].label;
+    const label = MAIMAI_METRIC_CONFIG[selectedMetric].label;
     if (!day.hasData) return `${dateStr}: no data`;
     if (selectedMetric === "playCount") {
-      return `${dateStr} — ${day.value.toLocaleString()} ${
+      return `${dateStr} - ${day.value.toLocaleString()} ${
         day.value === 1 ? "play" : "plays"
       }`;
     }
     const sign = day.value > 0 ? "+" : "";
-    const formatted =
-      selectedMetric === "rating" || selectedMetric === "maxRating"
-        ? formatChuniRating(day.value)
-        : selectedMetric === "overpower"
-          ? day.value.toFixed(2)
-          : day.value.toLocaleString();
     const suffix = day.isReset ? " (version reset)" : "";
-    return `${dateStr} — ${label} ${sign}${formatted}${suffix}`;
+    return `${dateStr} - ${label} ${sign}${day.value.toLocaleString()}${suffix}`;
   }
 </script>
 
@@ -112,11 +100,10 @@
   >
     <Heatmap
       days={heatmapDays}
-      color={CHUNI_METRIC_CONFIG[selectedMetric].color}
-      resetColor="#1e293b"
+      color={MAIMAI_METRIC_CONFIG[selectedMetric].color}
       showResetLegend={selectedMetric === "rating"}
       title="Daily Activity"
-      subtitle="{CHUNI_METRIC_CONFIG[selectedMetric].label} · {timeRange === 0
+      subtitle="{MAIMAI_METRIC_CONFIG[selectedMetric].label} / {timeRange === 0
         ? 'all time'
         : timeRange === 365
           ? 'last year'
