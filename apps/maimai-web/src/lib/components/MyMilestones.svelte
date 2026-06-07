@@ -8,7 +8,7 @@
     Timer,
   } from "@lucide/svelte";
 
-  import MaimaiRatingNumber from "$lib/components/MaimaiRatingNumber.svelte";
+  import Rating from "$lib/components/profile/Rating.svelte";
 
   import {
     formatRatingMilestoneElapsed,
@@ -106,6 +106,13 @@
             milestone.previousAchievedAt,
             milestone.achievedAt,
           )}
+          {@const elapsedSincePrevious =
+            isNext && !milestone.achievedAt
+              ? formatRatingMilestoneElapsed(
+                  milestone.previousAchievedAt,
+                  new Date(),
+                )
+              : null}
           <div
             class={cn(
               "flex min-h-24 flex-col justify-between rounded-lg border px-3 py-3 transition-colors",
@@ -118,7 +125,14 @@
           >
             <div class="flex items-start justify-between gap-3">
               <div class="min-w-0">
-                <MaimaiRatingNumber rating={milestone.rating} />
+                <div class="relative h-[43px] w-[148px] shrink-0">
+                  <div class="absolute top-0 left-0 origin-top-left scale-50">
+                    <Rating
+                      rating={milestone.rating}
+                      calculatedRating={milestone.rating}
+                    />
+                  </div>
+                </div>
                 <div class="mt-1 flex min-w-0 flex-wrap items-center gap-1.5">
                   <p class="truncate text-xs font-semibold text-gray-700">
                     {milestone.label}
@@ -175,6 +189,12 @@
                 {/if}
               {:else}
                 <p>Next target</p>
+                {#if elapsedSincePrevious}
+                  <p class="flex items-center gap-1.5">
+                    <Timer class="size-3.5" />
+                    <span>{elapsedSincePrevious} since previous</span>
+                  </p>
+                {/if}
               {/if}
             </div>
           </div>

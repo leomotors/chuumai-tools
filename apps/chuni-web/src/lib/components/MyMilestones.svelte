@@ -107,6 +107,13 @@
             milestone.previousAchievedAt,
             milestone.achievedAt,
           )}
+          {@const elapsedSincePrevious =
+            isNext && !milestone.achievedAt
+              ? formatRatingMilestoneElapsed(
+                  milestone.previousAchievedAt,
+                  new Date(),
+                )
+              : null}
           <div
             class={cn(
               "flex min-h-24 flex-col justify-between rounded-lg border px-3 py-3 transition-colors",
@@ -176,6 +183,12 @@
                 {/if}
               {:else}
                 <p>Next target</p>
+                {#if elapsedSincePrevious}
+                  <p class="flex items-center gap-1.5">
+                    <Timer class="size-3.5" />
+                    <span>{elapsedSincePrevious} since previous</span>
+                  </p>
+                {/if}
               {/if}
             </div>
           </div>

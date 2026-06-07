@@ -82,21 +82,20 @@ function buildAchievements(
     .map((milestone) => {
       const record = sortedRecords.find((r) => r.rating >= milestone.rating);
       const achievedAt = record?.date ?? null;
-      const achievementPreviousAchievedAt = achievedAt
-        ? previousAchievedAt
-        : null;
+
+      const achievement = {
+        ...milestone,
+        achievedAt,
+        achievedRating: record?.rating ?? null,
+        jobId: record?.jobId ?? null,
+        previousAchievedAt,
+      };
 
       if (achievedAt) {
         previousAchievedAt = achievedAt;
       }
 
-      return {
-        ...milestone,
-        achievedAt,
-        achievedRating: record?.rating ?? null,
-        jobId: record?.jobId ?? null,
-        previousAchievedAt: achievementPreviousAchievedAt,
-      };
+      return achievement;
     });
 }
 

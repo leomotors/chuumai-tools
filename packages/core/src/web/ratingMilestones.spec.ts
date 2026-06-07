@@ -29,7 +29,7 @@ test("builds all-time and current-version milestone achievements", () => {
   expect(progress.allTime.map((m) => m.previousAchievedAt)).toStrictEqual([
     null,
     records[0].date,
-    null,
+    records[1].date,
   ]);
   expect(progress.currentVersion.map((m) => m.jobId)).toStrictEqual([
     4,

@@ -23,31 +23,35 @@
 </script>
 
 <div
-  class={cn("flex items-end gap-1", className)}
+  class={cn("flex w-fit shrink-0 items-center gap-1", className)}
   role="img"
   aria-label={label}
 >
   {#if digits.tens}
     <img
       src="/rating/{ratingLevel}/{digits.tens}.png"
-      class={digitClass}
+      class={cn(digitClass, "shrink-0")}
       alt=""
     />
   {/if}
   <img
     src="/rating/{ratingLevel}/{digits.ones}.png"
-    class={digitClass}
+    class={cn(digitClass, "shrink-0")}
     alt=""
   />
-  <img src="/rating/{ratingLevel}/comma.png" class={commaClass} alt="" />
+  <img
+    src="/rating/{ratingLevel}/comma.png"
+    class={cn(commaClass, "shrink-0")}
+    alt=""
+  />
   <img
     src="/rating/{ratingLevel}/{digits.tenths}.png"
-    class={digitClass}
+    class={cn(digitClass, "shrink-0")}
     alt=""
   />
   <img
     src="/rating/{ratingLevel}/{digits.hundredths}.png"
-    class={digitClass}
+    class={cn(digitClass, "shrink-0")}
     alt=""
   />
 </div>
