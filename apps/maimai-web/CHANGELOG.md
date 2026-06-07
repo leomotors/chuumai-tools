@@ -2,6 +2,7 @@
 
 ## [minor]
 
+- feat(dashboard): show elapsed time from previous rating milestone
 - feat(dashboard): move API key settings into a dashboard Settings tab
 - fix(dashboard): improve milestone scope selector spacing and current-version icon
 - feat(dashboard): split analytics into Activity and Jobs tabs

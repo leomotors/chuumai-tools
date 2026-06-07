@@ -5,11 +5,15 @@
     Check,
     Circle,
     Hash,
+    Timer,
   } from "@lucide/svelte";
 
   import MaimaiRatingNumber from "$lib/components/MaimaiRatingNumber.svelte";
 
-  import type { RatingMilestoneProgress } from "@repo/core/web";
+  import {
+    formatRatingMilestoneElapsed,
+    type RatingMilestoneProgress,
+  } from "@repo/core/web";
   import * as Tabs from "@repo/ui/atom/tabs";
   import { cn } from "@repo/ui/utils";
 
@@ -98,6 +102,10 @@
       <div class="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
         {#each rows as milestone (milestone.id)}
           {@const isNext = milestone.id === nextMilestone?.id}
+          {@const elapsedFromPrevious = formatRatingMilestoneElapsed(
+            milestone.previousAchievedAt,
+            milestone.achievedAt,
+          )}
           <div
             class={cn(
               "flex min-h-24 flex-col justify-between rounded-lg border px-3 py-3 transition-colors",
@@ -159,6 +167,12 @@
                     {/if}
                   </span>
                 </p>
+                {#if elapsedFromPrevious}
+                  <p class="flex items-center gap-1.5">
+                    <Timer class="size-3.5" />
+                    <span>{elapsedFromPrevious} from previous</span>
+                  </p>
+                {/if}
               {:else}
                 <p>Next target</p>
               {/if}

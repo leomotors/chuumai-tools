@@ -3,6 +3,7 @@ import { expect, test } from "vitest";
 import {
   buildRatingMilestoneProgress,
   findLatestRatingReset,
+  formatRatingMilestoneElapsed,
   type RatingMilestoneDefinition,
   type RatingMilestoneRecord,
 } from "./ratingMilestones.js";
@@ -25,6 +26,11 @@ test("builds all-time and current-version milestone achievements", () => {
 
   expect(progress.currentVersionStart).toStrictEqual(records[2].date);
   expect(progress.allTime.map((m) => m.jobId)).toStrictEqual([1, 2, null]);
+  expect(progress.allTime.map((m) => m.previousAchievedAt)).toStrictEqual([
+    null,
+    records[0].date,
+    null,
+  ]);
   expect(progress.currentVersion.map((m) => m.jobId)).toStrictEqual([
     4,
     null,
@@ -42,6 +48,33 @@ test("current-version milestones use all records when no reset is detected", () 
 
   expect(progress.currentVersionStart).toBeNull();
   expect(progress.currentVersion).toStrictEqual(progress.allTime);
+});
+
+test("formats elapsed time between milestone achievements", () => {
+  expect(
+    formatRatingMilestoneElapsed(
+      new Date("2025-01-01T10:00:00"),
+      new Date("2025-01-01T18:00:00"),
+    ),
+  ).toBe("same day");
+  expect(
+    formatRatingMilestoneElapsed(
+      new Date("2025-01-01T10:00:00"),
+      new Date("2025-01-08T10:00:00"),
+    ),
+  ).toBe("7 days");
+  expect(
+    formatRatingMilestoneElapsed(
+      new Date("2025-01-01T10:00:00"),
+      new Date("2025-04-01T10:00:00"),
+    ),
+  ).toBe("3 months");
+  expect(
+    formatRatingMilestoneElapsed(
+      new Date("2024-01-01T10:00:00"),
+      new Date("2025-03-01T10:00:00"),
+    ),
+  ).toBe("1 year 2 months");
 });
 
 test("can detect reset from a separate record series", () => {

@@ -14,6 +14,7 @@ export type RatingMilestoneAchievement = RatingMilestoneDefinition & {
   achievedAt: Date | null;
   achievedRating: number | null;
   jobId: number | null;
+  previousAchievedAt: Date | null;
 };
 
 export type RatingMilestoneProgress = {
@@ -74,19 +75,60 @@ function buildAchievements(
   records: RatingMilestoneRecord[],
 ): RatingMilestoneAchievement[] {
   const sortedRecords = sortRecords(records);
+  let previousAchievedAt: Date | null = null;
 
   return [...milestones]
     .sort((a, b) => a.rating - b.rating)
     .map((milestone) => {
       const record = sortedRecords.find((r) => r.rating >= milestone.rating);
+      const achievedAt = record?.date ?? null;
+      const achievementPreviousAchievedAt = achievedAt
+        ? previousAchievedAt
+        : null;
+
+      if (achievedAt) {
+        previousAchievedAt = achievedAt;
+      }
 
       return {
         ...milestone,
-        achievedAt: record?.date ?? null,
+        achievedAt,
         achievedRating: record?.rating ?? null,
         jobId: record?.jobId ?? null,
+        previousAchievedAt: achievementPreviousAchievedAt,
       };
     });
+}
+
+function plural(value: number, unit: string): string {
+  return `${value} ${unit}${value === 1 ? "" : "s"}`;
+}
+
+export function formatRatingMilestoneElapsed(
+  previousAchievedAt: Date | null,
+  achievedAt: Date | null,
+): string | null {
+  if (!previousAchievedAt || !achievedAt) return null;
+
+  const elapsedDays = Math.max(
+    0,
+    Math.round(
+      (achievedAt.getTime() - previousAchievedAt.getTime()) /
+        (24 * 60 * 60 * 1000),
+    ),
+  );
+
+  if (elapsedDays === 0) return "same day";
+  if (elapsedDays < 60) return plural(elapsedDays, "day");
+
+  if (elapsedDays < 365) {
+    return plural(Math.round(elapsedDays / 30), "month");
+  }
+
+  const years = Math.floor(elapsedDays / 365);
+  const months = Math.round((elapsedDays % 365) / 30);
+  if (months === 0) return plural(years, "year");
+  return `${plural(years, "year")} ${plural(months, "month")}`;
 }
 
 export function buildRatingMilestoneProgress(
