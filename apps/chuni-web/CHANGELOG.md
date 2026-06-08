@@ -1,5 +1,19 @@
 # Changelog
 
+## [3.22.0] - 2026-06-09
+
+- feat(dashboard): show the current Overpower percentage on the summary card
+- feat(dashboard): add lower-color rating milestones with a starting point marker
+- feat(dashboard): show play-count progress between rating milestones
+- qol(dashboard): keep milestone previous-progress rows visible with empty states
+- fix(dashboard): align rating and player-level metric colors with maimai
+- fix(dashboard): match next milestone highlight color with maimai
+- fix(dashboard): phrase zero-play milestone deltas as same play
+- fix(dashboard): keep Overpower percentage from increasing KPI card height
+- fix(dashboard): keep primary KPI value typography aligned with other cards
+- refactor(dashboard): reuse the CHUNITHM rating component for milestones
+- fix(nav): preserve dashboard subpage URLs when swapping applications
+
 ## [3.21.0] - 2026-06-08
 
 - feat(dashboard): add manual rating CSV upload with inferred preview on Settings

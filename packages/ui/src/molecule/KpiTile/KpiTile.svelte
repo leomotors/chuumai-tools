@@ -8,6 +8,8 @@
     color: string;
     primary?: boolean;
     sparklineValues?: number[];
+    badgeLabel?: string;
+    badgeValue?: string | number;
   };
 </script>
 
@@ -23,6 +25,8 @@
     color,
     primary = false,
     sparklineValues = [],
+    badgeLabel,
+    badgeValue,
   }: KpiTileProps = $props();
 
   const cardStyle = $derived(
@@ -48,12 +52,18 @@
       {label}
     </span>
   </div>
-  <div class="mt-1.5 flex items-baseline">
+  {#if badgeValue !== undefined}
     <span
-      class="font-bold leading-none tracking-tight text-gray-900"
-      class:text-3xl={!primary}
-      class:text-[38px]={primary}
+      class="absolute top-3.5 right-4 inline-flex items-baseline gap-1 text-xs font-semibold text-gray-700"
     >
+      {#if badgeLabel}
+        <span class="text-[10px] uppercase text-gray-400">{badgeLabel}</span>
+      {/if}
+      {badgeValue}
+    </span>
+  {/if}
+  <div class="mt-1.5 flex min-w-0 items-baseline">
+    <span class="text-3xl font-bold leading-none tracking-tight text-gray-900">
       {value}
     </span>
   </div>

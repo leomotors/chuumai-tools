@@ -1,4 +1,6 @@
 <script lang="ts" module>
+  import { dashboardMetricColors } from "@repo/core/web";
+
   export type ChuniMetric =
     | "playerLevel"
     | "playCount"
@@ -13,6 +15,7 @@
     rating: number;
     maxRating: number;
     overpower: number;
+    overpowerPercent: number;
   };
 
   export type StatsChartDatum = {
@@ -24,11 +27,14 @@
     ChuniMetric,
     { label: string; color: string }
   > = {
-    playerLevel: { label: "Player Level", color: "#3b82f6" },
-    playCount: { label: "Play Count", color: "#22c55e" },
-    rating: { label: "Rating", color: "#f97316" },
-    maxRating: { label: "Max Rating", color: "#ef4444" },
-    overpower: { label: "Overpower", color: "#a855f7" },
+    playerLevel: {
+      label: "Player Level",
+      color: dashboardMetricColors.playerProgress,
+    },
+    playCount: { label: "Play Count", color: dashboardMetricColors.playCount },
+    rating: { label: "Rating", color: dashboardMetricColors.rating },
+    maxRating: { label: "Max Rating", color: dashboardMetricColors.maxRating },
+    overpower: { label: "Overpower", color: dashboardMetricColors.overpower },
   };
 </script>
 

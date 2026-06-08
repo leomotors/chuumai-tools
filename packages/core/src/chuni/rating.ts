@@ -44,6 +44,15 @@ export function calculateRating(score: number, level: number) {
 }
 
 export const chuniRatingMilestones = [
+  {
+    id: "starting-point",
+    label: "Starting Point",
+    rating: 0,
+    isStartingPoint: true,
+  },
+  { id: "orange", label: "Orange", rating: 4 },
+  { id: "red", label: "Red", rating: 7 },
+  { id: "purple", label: "Purple", rating: 10 },
   { id: "bronze", label: "Bronze", rating: 12 },
   { id: "silver", label: "Silver", rating: 13.25 },
   { id: "gold", label: "Gold", rating: 14.5 },

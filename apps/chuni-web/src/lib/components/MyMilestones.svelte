@@ -4,11 +4,12 @@
     CalendarRange,
     Check,
     Circle,
+    Gamepad2,
     Hash,
     Timer,
   } from "@lucide/svelte";
 
-  import ChuniRatingNumber from "$lib/components/ChuniRatingNumber.svelte";
+  import Rating from "$lib/components/profile/Rating.svelte";
   import { formatChuniRating } from "$lib/utils/chuniRating";
 
   import {
@@ -41,7 +42,9 @@
   );
 
   const nextMilestone = $derived(
-    sourceRows.find((milestone) => !milestone.achievedAt),
+    sourceRows.find(
+      (milestone) => !milestone.achievedAt && !milestone.isStartingPoint,
+    ),
   );
 
   const rows = $derived([
@@ -52,7 +55,13 @@
   ]);
 
   const achievedCount = $derived(
-    sourceRows.filter((milestone) => milestone.achievedAt).length,
+    sourceRows.filter(
+      (milestone) => milestone.achievedAt && !milestone.isStartingPoint,
+    ).length,
+  );
+
+  const milestoneCount = $derived(
+    sourceRows.filter((milestone) => !milestone.isStartingPoint).length,
   );
 
   const dateFormatter = new Intl.DateTimeFormat("en-US", {
@@ -63,6 +72,29 @@
 
   function formatDate(date: Date): string {
     return dateFormatter.format(new Date(date));
+  }
+
+  function formatPlayCount(value: number): string {
+    if (value === 0) return "same play";
+    return `${value.toLocaleString()} play${value === 1 ? "" : "s"}`;
+  }
+
+  function formatElapsedRow(
+    elapsed: string | null,
+    suffix: "from previous" | "since previous",
+  ): string {
+    return elapsed ? `${elapsed} ${suffix}` : "No previous milestone";
+  }
+
+  function formatPlayCountRow(
+    playCount: number | null,
+    hasPreviousMilestone: boolean,
+    suffix: "from previous" | "since previous",
+  ): string {
+    if (playCount !== null) return `${formatPlayCount(playCount)} ${suffix}`;
+    return hasPreviousMilestone
+      ? "Play count unavailable"
+      : "No previous milestone";
   }
 </script>
 
@@ -76,7 +108,7 @@
           My Milestones
         </h3>
         <p class="mt-0.5 text-[11.5px] text-gray-400">
-          {achievedCount}/{sourceRows.length} reached{#if scope === "currentVersion" && safeMilestones.currentVersionStart}
+          {achievedCount}/{milestoneCount} reached{#if scope === "currentVersion" && safeMilestones.currentVersionStart}
             since {formatDate(safeMilestones.currentVersionStart)}
           {/if}
         </p>
@@ -118,7 +150,7 @@
             class={cn(
               "flex min-h-24 flex-col justify-between rounded-lg border px-3 py-3 transition-colors",
               isNext
-                ? "border-orange-200 bg-orange-50/70"
+                ? "border-blue-200 bg-blue-50/70"
                 : milestone.achievedAt
                   ? "border-gray-200 bg-white"
                   : "border-gray-100 bg-gray-50/70",
@@ -126,16 +158,22 @@
           >
             <div class="flex items-start justify-between gap-3">
               <div class="min-w-0">
-                <ChuniRatingNumber rating={milestone.rating} />
+                <Rating rating={milestone.rating} showCalculated={false} />
                 <div class="mt-1 flex min-w-0 flex-wrap items-center gap-1.5">
                   <p class="truncate text-xs font-semibold text-gray-700">
                     {milestone.label}
                   </p>
                   {#if isNext}
                     <span
-                      class="rounded-full bg-orange-100 px-1.5 py-0.5 text-[10px] font-semibold text-orange-700"
+                      class="rounded-full bg-blue-100 px-1.5 py-0.5 text-[10px] font-semibold text-blue-700"
                     >
                       Next
+                    </span>
+                  {:else if milestone.isStartingPoint}
+                    <span
+                      class="rounded-full bg-gray-100 px-1.5 py-0.5 text-[10px] font-semibold text-gray-600"
+                    >
+                      Start
                     </span>
                   {/if}
                 </div>
@@ -144,7 +182,7 @@
                 class={cn(
                   "flex size-4 shrink-0 items-center justify-center rounded-full",
                   isNext
-                    ? "bg-orange-100 text-orange-700"
+                    ? "bg-blue-100 text-blue-700"
                     : milestone.achievedAt
                       ? "bg-emerald-100 text-emerald-700"
                       : "bg-gray-200 text-gray-400",
@@ -175,20 +213,40 @@
                     {/if}
                   </span>
                 </p>
-                {#if elapsedFromPrevious}
-                  <p class="flex items-center gap-1.5">
-                    <Timer class="size-3.5" />
-                    <span>{elapsedFromPrevious} from previous</span>
-                  </p>
-                {/if}
+                <p class="flex items-center gap-1.5">
+                  <Timer class="size-3.5" />
+                  <span>
+                    {formatElapsedRow(elapsedFromPrevious, "from previous")}
+                  </span>
+                </p>
+                <p class="flex items-center gap-1.5">
+                  <Gamepad2 class="size-3.5" />
+                  <span>
+                    {formatPlayCountRow(
+                      milestone.playCountFromPrevious,
+                      milestone.previousAchievedAt !== null,
+                      "from previous",
+                    )}
+                  </span>
+                </p>
               {:else}
                 <p>Next target</p>
-                {#if elapsedSincePrevious}
-                  <p class="flex items-center gap-1.5">
-                    <Timer class="size-3.5" />
-                    <span>{elapsedSincePrevious} since previous</span>
-                  </p>
-                {/if}
+                <p class="flex items-center gap-1.5">
+                  <Timer class="size-3.5" />
+                  <span>
+                    {formatElapsedRow(elapsedSincePrevious, "since previous")}
+                  </span>
+                </p>
+                <p class="flex items-center gap-1.5">
+                  <Gamepad2 class="size-3.5" />
+                  <span>
+                    {formatPlayCountRow(
+                      milestone.playCountSincePrevious,
+                      milestone.previousAchievedAt !== null,
+                      "since previous",
+                    )}
+                  </span>
+                </p>
               {/if}
             </div>
           </div>

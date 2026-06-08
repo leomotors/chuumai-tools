@@ -18,6 +18,7 @@ export const userStatsSchema = z
     rating: z.string(),
     calculatedRating: z.string().nullable(),
     overpowerValue: z.string(),
+    overpowerPercent: z.string(),
   })
   .openapi("UserStats");
 
@@ -29,7 +30,7 @@ export type UserStats = z.infer<typeof userStatsSchema>;
  * SQL equivalent:
  * ```sql
  * SELECT DISTINCT ON (last_played)
- *   last_played, job.id, player_level, play_count, play_count_current, rating, overpower_value
+ *   last_played, job.id, player_level, play_count, play_count_current, rating, overpower_value, overpower_percent
  * FROM job
  * INNER JOIN player_data ON user_id = {USER ID} AND job.id = player_data.job_id
  * ```
@@ -47,6 +48,7 @@ export async function getUserStats(userId: string): Promise<UserStats[]> {
       rating: playerDataTable.rating,
       calculatedRating: playerDataTable.calculatedRating,
       overpowerValue: playerDataTable.overpowerValue,
+      overpowerPercent: playerDataTable.overpowerPercent,
     })
     .from(jobTable)
     .innerJoin(playerDataTable, eq(jobTable.id, playerDataTable.jobId))
@@ -62,5 +64,6 @@ export async function getUserStats(userId: string): Promise<UserStats[]> {
     rating: row.rating,
     calculatedRating: row.calculatedRating,
     overpowerValue: row.overpowerValue,
+    overpowerPercent: row.overpowerPercent,
   }));
 }

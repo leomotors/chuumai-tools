@@ -2,19 +2,25 @@ export type RatingMilestoneDefinition = {
   id: string;
   label: string;
   rating: number;
+  isStartingPoint?: boolean;
 };
 
 export type RatingMilestoneRecord = {
   date: Date;
   rating: number;
   jobId?: number | null;
+  playCount?: number | null;
 };
 
 export type RatingMilestoneAchievement = RatingMilestoneDefinition & {
   achievedAt: Date | null;
   achievedRating: number | null;
+  achievedPlayCount: number | null;
   jobId: number | null;
   previousAchievedAt: Date | null;
+  previousAchievedPlayCount: number | null;
+  playCountFromPrevious: number | null;
+  playCountSincePrevious: number | null;
 };
 
 export type RatingMilestoneProgress = {
@@ -75,24 +81,46 @@ function buildAchievements(
   records: RatingMilestoneRecord[],
 ): RatingMilestoneAchievement[] {
   const sortedRecords = sortRecords(records);
+  const latestRecordWithPlayCount =
+    sortedRecords.findLast((record) => record.playCount != null) ?? null;
   let previousAchievedAt: Date | null = null;
+  let previousAchievedPlayCount: number | null = null;
 
   return [...milestones]
     .sort((a, b) => a.rating - b.rating)
     .map((milestone) => {
       const record = sortedRecords.find((r) => r.rating >= milestone.rating);
       const achievedAt = record?.date ?? null;
+      const achievedPlayCount = record?.playCount ?? null;
+      const playCountFromPrevious =
+        achievedPlayCount != null && previousAchievedPlayCount != null
+          ? Math.max(0, achievedPlayCount - previousAchievedPlayCount)
+          : null;
+      const playCountSincePrevious =
+        !record &&
+        latestRecordWithPlayCount?.playCount != null &&
+        previousAchievedPlayCount != null
+          ? Math.max(
+              0,
+              latestRecordWithPlayCount.playCount - previousAchievedPlayCount,
+            )
+          : null;
 
       const achievement = {
         ...milestone,
         achievedAt,
         achievedRating: record?.rating ?? null,
+        achievedPlayCount,
         jobId: record?.jobId ?? null,
         previousAchievedAt,
+        previousAchievedPlayCount,
+        playCountFromPrevious,
+        playCountSincePrevious,
       };
 
       if (achievedAt) {
         previousAchievedAt = achievedAt;
+        previousAchievedPlayCount = achievedPlayCount;
       }
 
       return achievement;

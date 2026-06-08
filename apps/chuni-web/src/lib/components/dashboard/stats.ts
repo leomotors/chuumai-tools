@@ -29,6 +29,7 @@ export function transformUserStats(
         playerLevel: s.playerLevel,
         rating: resolveChuniRating(s.rating, s.calculatedRating),
         overpower: parseFloat(s.overpowerValue),
+        overpowerPercent: parseFloat(s.overpowerPercent),
       })),
   );
 }

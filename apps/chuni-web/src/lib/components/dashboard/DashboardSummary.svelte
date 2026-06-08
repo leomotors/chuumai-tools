@@ -58,6 +58,8 @@
       <KpiTile
         label="Overpower"
         value={parseFloat(latest.overpower.toFixed(2)).toLocaleString()}
+        badgeLabel="OP%"
+        badgeValue={`${latest.overpowerPercent.toFixed(2)}%`}
         delta={od?.text}
         deltaPositive={od?.positive ?? true}
         color={CHUNI_METRIC_CONFIG.overpower.color}

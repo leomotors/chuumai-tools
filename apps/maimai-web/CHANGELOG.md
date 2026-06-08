@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.14.0] - 2026-06-09
+
+- feat(dashboard): add lower-color rating milestones with a starting point marker
+- feat(dashboard): show play-count progress between rating milestones
+- qol(dashboard): keep milestone previous-progress rows visible with empty states
+- fix(dashboard): read dashboard metric colors from shared core palette
+- fix(dashboard): phrase zero-play milestone deltas as same play
+- fix(nav): preserve dashboard subpage URLs when swapping applications
+
 ## [1.13.0] - 2026-06-08
 
 - feat(dashboard): add manual rating CSV upload with inferred preview on Settings

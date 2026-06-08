@@ -16,6 +16,7 @@ export const load: PageServerLoad = async ({ parent }) => {
     date: stat.lastPlayed,
     rating: stat.rating,
     jobId: stat.jobId,
+    playCount: stat.playCountTotal,
   }));
   const milestoneRecords = [
     ...scrapedMilestoneRecords,

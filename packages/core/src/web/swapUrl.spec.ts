@@ -32,6 +32,18 @@ describe("getSwapUrl", () => {
     expect(getSwapUrl(baseUrl, "/dashboard")).toBe(
       "https://chuni.wonderhoy.me/dashboard",
     );
+    expect(getSwapUrl(baseUrl, "/dashboard/activity")).toBe(
+      "https://chuni.wonderhoy.me/dashboard/activity",
+    );
+    expect(getSwapUrl(baseUrl, "/dashboard/milestones")).toBe(
+      "https://chuni.wonderhoy.me/dashboard/milestones",
+    );
+    expect(getSwapUrl(baseUrl, "/dashboard/jobs")).toBe(
+      "https://chuni.wonderhoy.me/dashboard/jobs",
+    );
+    expect(getSwapUrl(baseUrl, "/dashboard/settings")).toBe(
+      "https://chuni.wonderhoy.me/dashboard/settings",
+    );
   });
 
   it("drops non-interchangeable routes and falls back to home page (/)", () => {

@@ -31,11 +31,21 @@ test("Calculate Rating", () => {
 
 test("Maimai rating level thresholds", () => {
   expect(maimaiRatingMilestones.map((milestone) => milestone.rating)).toEqual([
-    12000, 13000, 14000, 14250, 14500, 14750, 15000, 15250, 15500, 15750, 16000,
-    16250, 16500,
+    0, 1000, 2000, 4000, 7000, 10000, 12000, 13000, 14000, 14250, 14500, 14750,
+    15000, 15250, 15500, 15750, 16000, 16250, 16500,
   ]);
+  expect(maimaiRatingMilestones[0]).toMatchObject({
+    label: "Starting Point",
+    isStartingPoint: true,
+  });
   expect(maimaiRatingMilestones.at(-1)?.label).toBe("Ultimate Rainbow ⭐⭐⭐");
 
+  expect(getMaimaiRatingLevel(999)).toBe("normal");
+  expect(getMaimaiRatingLevel(1000)).toBe("blue");
+  expect(getMaimaiRatingLevel(2000)).toBe("green");
+  expect(getMaimaiRatingLevel(4000)).toBe("orange");
+  expect(getMaimaiRatingLevel(7000)).toBe("red");
+  expect(getMaimaiRatingLevel(10000)).toBe("purple");
   expect(getMaimaiRatingLevel(11999)).toBe("purple");
   expect(getMaimaiRatingLevel(12000)).toBe("bronze");
   expect(getMaimaiRatingLevel(13000)).toBe("silver");

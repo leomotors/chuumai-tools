@@ -1,6 +1,10 @@
 import { expect, test } from "vitest";
 
-import { calculateRating } from "./index.js";
+import {
+  calculateRating,
+  chuniRatingMilestones,
+  getChuniRatingLevel,
+} from "./index.js";
 
 test("Calculate Rating", () => {
   const testCases: [number, number, number][] = [
@@ -25,4 +29,27 @@ test("Calculate Rating", () => {
   ];
 
   testCases.forEach((tc) => expect(calculateRating(tc[0], tc[1])).toBe(tc[2]));
+});
+
+test("Chunithm rating level thresholds", () => {
+  expect(chuniRatingMilestones.map((milestone) => milestone.rating)).toEqual([
+    0, 4, 7, 10, 12, 13.25, 14.5, 15.25, 15.5, 15.75, 16, 16.25, 16.5, 16.75,
+    17, 17.25, 17.5,
+  ]);
+  expect(chuniRatingMilestones[0]).toMatchObject({
+    label: "Starting Point",
+    isStartingPoint: true,
+  });
+  expect(chuniRatingMilestones.at(-1)?.label).toBe("Ultimate Rainbow ⭐⭐⭐");
+
+  expect(getChuniRatingLevel(3.99)).toBe("green");
+  expect(getChuniRatingLevel(4)).toBe("orange");
+  expect(getChuniRatingLevel(7)).toBe("red");
+  expect(getChuniRatingLevel(10)).toBe("purple");
+  expect(getChuniRatingLevel(12)).toBe("bronze");
+  expect(getChuniRatingLevel(13.25)).toBe("silver");
+  expect(getChuniRatingLevel(14.5)).toBe("gold");
+  expect(getChuniRatingLevel(15.25)).toBe("platinum");
+  expect(getChuniRatingLevel(16)).toBe("rainbow");
+  expect(getChuniRatingLevel(17)).toBe("kiwami");
 });

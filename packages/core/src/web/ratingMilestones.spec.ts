@@ -9,6 +9,7 @@ import {
 } from "./ratingMilestones.js";
 
 const milestones: RatingMilestoneDefinition[] = [
+  { id: "start", label: "Starting Point", rating: 0, isStartingPoint: true },
   { id: "ten", label: "Ten", rating: 10 },
   { id: "twelve", label: "Twelve", rating: 12 },
   { id: "fourteen", label: "Fourteen", rating: 14 },
@@ -16,22 +17,56 @@ const milestones: RatingMilestoneDefinition[] = [
 
 test("builds all-time and current-version milestone achievements", () => {
   const records: RatingMilestoneRecord[] = [
-    { date: new Date("2025-01-01T10:00:00"), rating: 10.5, jobId: 1 },
-    { date: new Date("2025-02-01T10:00:00"), rating: 12.25, jobId: 2 },
-    { date: new Date("2025-03-01T10:00:00"), rating: 9.75, jobId: 3 },
-    { date: new Date("2025-04-01T10:00:00"), rating: 11.5, jobId: 4 },
+    {
+      date: new Date("2025-01-01T10:00:00"),
+      rating: 10.5,
+      jobId: 1,
+      playCount: 100,
+    },
+    {
+      date: new Date("2025-02-01T10:00:00"),
+      rating: 12.25,
+      jobId: 2,
+      playCount: 175,
+    },
+    {
+      date: new Date("2025-03-01T10:00:00"),
+      rating: 9.75,
+      jobId: 3,
+      playCount: 250,
+    },
+    {
+      date: new Date("2025-04-01T10:00:00"),
+      rating: 11.5,
+      jobId: 4,
+      playCount: 340,
+    },
   ];
 
   const progress = buildRatingMilestoneProgress(milestones, records);
 
   expect(progress.currentVersionStart).toStrictEqual(records[2].date);
-  expect(progress.allTime.map((m) => m.jobId)).toStrictEqual([1, 2, null]);
+  expect(progress.allTime.map((m) => m.jobId)).toStrictEqual([1, 1, 2, null]);
   expect(progress.allTime.map((m) => m.previousAchievedAt)).toStrictEqual([
     null,
     records[0].date,
+    records[0].date,
     records[1].date,
   ]);
+  expect(progress.allTime.map((m) => m.playCountFromPrevious)).toStrictEqual([
+    null,
+    0,
+    75,
+    null,
+  ]);
+  expect(progress.allTime.map((m) => m.playCountSincePrevious)).toStrictEqual([
+    null,
+    null,
+    null,
+    165,
+  ]);
   expect(progress.currentVersion.map((m) => m.jobId)).toStrictEqual([
+    3,
     4,
     null,
     null,
@@ -94,6 +129,7 @@ test("can detect reset from a separate record series", () => {
     new Date("2025-03-01T10:00:00"),
   );
   expect(progress.currentVersion.map((m) => m.jobId)).toStrictEqual([
+    3,
     4,
     null,
     null,

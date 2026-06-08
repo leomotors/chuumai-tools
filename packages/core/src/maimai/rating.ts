@@ -44,6 +44,17 @@ export function calculateRating(
 }
 
 export const maimaiRatingMilestones = [
+  {
+    id: "starting-point",
+    label: "Starting Point",
+    rating: 0,
+    isStartingPoint: true,
+  },
+  { id: "blue", label: "Blue", rating: 1000 },
+  { id: "green", label: "Green", rating: 2000 },
+  { id: "orange", label: "Orange", rating: 4000 },
+  { id: "red", label: "Red", rating: 7000 },
+  { id: "purple", label: "Purple", rating: 10000 },
   { id: "bronze", label: "Bronze", rating: 12000 },
   { id: "silver", label: "Silver", rating: 13000 },
   { id: "gold-1", label: "Gold ⭐", rating: 14000 },

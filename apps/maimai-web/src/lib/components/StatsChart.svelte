@@ -1,4 +1,6 @@
 <script lang="ts" module>
+  import { dashboardMetricColors } from "@repo/core/web";
+
   export type MaimaiMetric = "playCount" | "rating" | "maxRating" | "star";
 
   export type StatsChartTransformed = {
@@ -14,10 +16,10 @@
     MaimaiMetric,
     { label: string; color: string }
   > = {
-    rating: { label: "Rating", color: "#3b82f6" },
-    maxRating: { label: "Max Rating", color: "#ef4444" },
-    playCount: { label: "Play Count", color: "#22c55e" },
-    star: { label: "Star", color: "#a855f7" },
+    rating: { label: "Rating", color: dashboardMetricColors.rating },
+    maxRating: { label: "Max Rating", color: dashboardMetricColors.maxRating },
+    playCount: { label: "Play Count", color: dashboardMetricColors.playCount },
+    star: { label: "Star", color: dashboardMetricColors.playerProgress },
   };
 </script>
 
