@@ -5,6 +5,7 @@ export * from "./jobSchemas";
 export * from "./jobUpload";
 export * from "./manualRatingUpload";
 export * from "./maxRating";
+export * from "./musicForRating";
 export * from "./musicLevelHistory";
 export * from "./openapi";
 export * from "./playCount";

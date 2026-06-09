@@ -38,6 +38,12 @@ describe("getSwapUrl", () => {
     expect(getSwapUrl(baseUrl, "/dashboard/milestones")).toBe(
       "https://chuni.wonderhoy.me/dashboard/milestones",
     );
+    expect(getSwapUrl(baseUrl, "/dashboard/music")).toBe(
+      "https://chuni.wonderhoy.me/dashboard/music",
+    );
+    expect(getSwapUrl(baseUrl, "/dashboard/history")).toBe(
+      "https://chuni.wonderhoy.me/dashboard/history",
+    );
     expect(getSwapUrl(baseUrl, "/dashboard/jobs")).toBe(
       "https://chuni.wonderhoy.me/dashboard/jobs",
     );

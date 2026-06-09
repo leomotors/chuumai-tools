@@ -1,5 +1,11 @@
 # Changelog
 
+## [3.23.0] - 2026-06-09
+
+- feat(dashboard): add Music for Rating and History dashboard pages with compact record cards
+- feat(dashboard): mark rating records achieved within the last seven days
+- fix(ui): use the runtime locale for displayed dates
+
 ## [3.22.0] - 2026-06-09
 
 - feat(dashboard): show the current Overpower percentage on the summary card

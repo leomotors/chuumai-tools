@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.15.0] - 2026-06-09
+
+- feat(dashboard): add Music for Rating and History dashboard pages with compact record cards
+- feat(dashboard): mark rating records achieved within the last seven days
+- fix(data): use the Re:MASTER color for the Re:MAS column
+- fix(ui): use the runtime locale for displayed dates
+
 ## [1.14.0] - 2026-06-09
 
 - feat(dashboard): add lower-color rating milestones with a starting point marker

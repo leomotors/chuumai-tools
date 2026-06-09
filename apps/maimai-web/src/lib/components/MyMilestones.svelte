@@ -63,7 +63,7 @@
     sourceRows.filter((milestone) => !milestone.isStartingPoint).length,
   );
 
-  const dateFormatter = new Intl.DateTimeFormat("en-US", {
+  const dateFormatter = new Intl.DateTimeFormat(undefined, {
     month: "short",
     day: "numeric",
     year: "numeric",

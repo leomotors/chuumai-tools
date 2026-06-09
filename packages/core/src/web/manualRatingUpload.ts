@@ -653,7 +653,7 @@ function getDateTimePartsForTimeZone(
   date: Date,
   timeZone: string,
 ): DateTimeParts {
-  const parts = new Intl.DateTimeFormat("en-US", {
+  const parts = new Intl.DateTimeFormat(undefined, {
     timeZone,
     year: "numeric",
     month: "2-digit",
@@ -707,7 +707,7 @@ function timeZonePartsEqual(
 
 function isValidTimeZone(timeZone: string): boolean {
   try {
-    new Intl.DateTimeFormat("en-US", { timeZone }).format(new Date(0));
+    new Intl.DateTimeFormat(undefined, { timeZone }).format(new Date(0));
     return true;
   } catch {
     return false;

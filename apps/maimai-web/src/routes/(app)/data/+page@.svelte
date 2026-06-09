@@ -501,7 +501,7 @@
                       <ChartLevelCell {...song.master} difficulty="master" />
                     {/if}
                   </Table.Cell>
-                  <Table.Cell class="text-gray-700 bg-black/20">
+                  <Table.Cell class="text-gray-700 bg-[#dcaaff]/30">
                     {#if song.remaster}
                       <ChartLevelCell
                         {...song.remaster}

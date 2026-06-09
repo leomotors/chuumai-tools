@@ -1,5 +1,12 @@
 <script lang="ts">
-  import { ChartLine, ClipboardList, Settings, Trophy } from "@lucide/svelte";
+  import {
+    ChartLine,
+    ClipboardList,
+    History,
+    ListMusic,
+    Settings,
+    Trophy,
+  } from "@lucide/svelte";
 
   import { page } from "$app/state";
 
@@ -8,6 +15,8 @@
   const links = [
     { href: "/dashboard/activity", label: "Activity", icon: ChartLine },
     { href: "/dashboard/milestones", label: "Milestones", icon: Trophy },
+    { href: "/dashboard/music", label: "Music", icon: ListMusic },
+    { href: "/dashboard/history", label: "History", icon: History },
     { href: "/dashboard/jobs", label: "Jobs", icon: ClipboardList },
     { href: "/dashboard/settings", label: "Settings", icon: Settings },
   ];

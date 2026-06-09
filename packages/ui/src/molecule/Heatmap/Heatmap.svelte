@@ -119,7 +119,7 @@
       if (!firstWithData) return "";
       const dom = firstWithData.date.getDate();
       if (dom <= 7) {
-        return firstWithData.date.toLocaleDateString("en-US", {
+        return firstWithData.date.toLocaleDateString(undefined, {
           month: "short",
         });
       }

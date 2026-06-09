@@ -166,7 +166,7 @@
           props={{
             xAxis: {
               format: (d: Date) =>
-                d.toLocaleDateString("en-GB", {
+                d.toLocaleDateString(undefined, {
                   day: data.length > 90 ? undefined : "numeric",
                   month: "short",
                   year: data.length > 90 ? "2-digit" : undefined,
