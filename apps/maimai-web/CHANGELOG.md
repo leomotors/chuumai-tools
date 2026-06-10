@@ -4,6 +4,7 @@
 
 - feat(dashboard): add Music for Rating and History dashboard pages with compact record cards
 - feat(dashboard): mark rating records achieved within the last seven days
+- fix(ci): build web Docker assets on the native Buildx platform before assembling target images
 - fix(data): use the Re:MASTER color for the Re:MAS column
 - fix(ui): use the runtime locale for displayed dates
 

@@ -1,5 +1,9 @@
 # Changelog
 
+## [patch]
+
+- fix(ci): build web Docker assets on the native Buildx platform before assembling target images
+
 ## [3.23.0] - 2026-06-09
 
 - feat(dashboard): add Music for Rating and History dashboard pages with compact record cards
