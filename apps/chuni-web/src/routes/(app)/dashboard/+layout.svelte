@@ -16,6 +16,6 @@
     userStats={data.userStats}
   />
 
-  <DashboardNav />
+  <DashboardNav isAdmin={data.isAdmin} />
   {@render children()}
 </div>

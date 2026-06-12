@@ -1,7 +1,8 @@
 # Changelog
 
-## [patch]
+## [3.24.0] - 2026-06-12
 
+- feat(dashboard): add admin-only cache clearing settings
 - fix(ci): build web Docker assets on the native Buildx platform before assembling target images
 
 ## [3.23.0] - 2026-06-09

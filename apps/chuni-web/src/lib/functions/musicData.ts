@@ -119,6 +119,10 @@ export async function getMusicDataCached(version: string) {
   return data;
 }
 
+export function clearMusicDataCache(): void {
+  musicDataForTableCache.clear();
+}
+
 export async function getMusicLevelHistory(
   musicId: number,
   versions: string[],

@@ -5,6 +5,7 @@
     History,
     ListMusic,
     Settings,
+    ShieldCheck,
     Trophy,
   } from "@lucide/svelte";
 
@@ -12,7 +13,9 @@
 
   import { cn } from "@repo/ui/utils";
 
-  const links = [
+  let { isAdmin = false }: { isAdmin?: boolean } = $props();
+
+  const baseLinks = [
     { href: "/dashboard/activity", label: "Activity", icon: ChartLine },
     { href: "/dashboard/milestones", label: "Milestones", icon: Trophy },
     { href: "/dashboard/music", label: "Music", icon: ListMusic },
@@ -20,6 +23,15 @@
     { href: "/dashboard/jobs", label: "Jobs", icon: ClipboardList },
     { href: "/dashboard/settings", label: "Settings", icon: Settings },
   ];
+
+  const links = $derived(
+    isAdmin
+      ? [
+          ...baseLinks,
+          { href: "/dashboard/admin", label: "Admin", icon: ShieldCheck },
+        ]
+      : baseLinks,
+  );
 
   function isActive(href: string): boolean {
     return (

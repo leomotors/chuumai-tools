@@ -50,6 +50,9 @@ describe("getSwapUrl", () => {
     expect(getSwapUrl(baseUrl, "/dashboard/settings")).toBe(
       "https://chuni.wonderhoy.me/dashboard/settings",
     );
+    expect(getSwapUrl(baseUrl, "/dashboard/admin")).toBe(
+      "https://chuni.wonderhoy.me/dashboard/admin",
+    );
   });
 
   it("drops non-interchangeable routes and falls back to home page (/)", () => {

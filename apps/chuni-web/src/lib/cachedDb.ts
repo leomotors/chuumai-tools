@@ -95,3 +95,9 @@ export async function getCachedMusicIdVersionMap() {
   await fetchAndCacheMusicData();
   return musicIdVersionMapCache.get("music_id_version_map")!;
 }
+
+export function clearCachedDb(): void {
+  chartConstantCache.clear();
+  musicDataCache.clear();
+  musicIdVersionMapCache.clear();
+}

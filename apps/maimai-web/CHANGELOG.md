@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.16.0] - 2026-06-12
+
+- feat(dashboard): add admin-only cache clearing settings
+
 ## [1.15.0] - 2026-06-09
 
 - feat(dashboard): add Music for Rating and History dashboard pages with compact record cards

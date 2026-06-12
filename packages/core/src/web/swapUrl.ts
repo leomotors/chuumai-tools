@@ -17,6 +17,7 @@ export const appSwapAllowedPaths = [
   "/dashboard/history",
   "/dashboard/jobs",
   "/dashboard/settings",
+  "/dashboard/admin",
 ] as const;
 
 export function getSwapUrl(
