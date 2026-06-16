@@ -9,7 +9,10 @@
     OctagonAlert,
     X,
   } from "@lucide/svelte";
+  import { SvelteURLSearchParams } from "svelte/reactivity";
 
+  import { goto } from "$app/navigation";
+  import { resolve } from "$app/paths";
   import AnimatedDialog from "$lib/components/dashboard/AnimatedDialog.svelte";
   import ZoomableImage from "$lib/components/dashboard/ZoomableImage.svelte";
 
@@ -20,6 +23,11 @@
   import type { PageData } from "./$types";
 
   type Job = PageData["jobs"][number];
+  type JobLogResponse = {
+    jobId: number;
+    jobError: string | null;
+    jobLog: string | null;
+  };
 
   let { data }: { data: PageData } = $props();
 
@@ -28,6 +36,10 @@
   let previewOpen = $state(false);
   let logOpen = $state(false);
   let copyFeedback = $state(false);
+  let logText = $state<string | null>(null);
+  let logLoading = $state(false);
+  let logError = $state<string | null>(null);
+  let loadingMore = $state(false);
 
   const dateFormatter = new Intl.DateTimeFormat(undefined, {
     year: "numeric",
@@ -60,7 +72,7 @@
 
   function jobStatus(job: Job) {
     if (!job.jobEnd) return "running";
-    if (job.jobError) return "failed";
+    if (job.hasJobError) return "failed";
     return "success";
   }
 
@@ -87,10 +99,10 @@
   }
 
   function hasLogContent(job: Job) {
-    return Boolean(job.jobError || job.jobLog);
+    return Boolean(job.hasJobError || job.hasJobLog);
   }
 
-  function fullLogText(job: Job) {
+  function fullLogText(job: JobLogResponse) {
     const sections: string[] = [];
     if (job.jobError) sections.push(`=== Error ===\n${job.jobError}`);
     if (job.jobLog) sections.push(`=== Log ===\n${job.jobLog}`);
@@ -98,8 +110,8 @@
   }
 
   function logDialogTitle(job: Job) {
-    if (job.jobError && job.jobLog) return "Error & log";
-    if (job.jobError) return "Error";
+    if (job.hasJobError && job.hasJobLog) return "Error & log";
+    if (job.hasJobError) return "Error";
     return "Log";
   }
 
@@ -115,17 +127,64 @@
   function openLog(job: Job) {
     logJob = job;
     copyFeedback = false;
+    logText = null;
+    logError = null;
     logOpen = true;
+    void loadJobLog(job.id);
   }
 
   function closeLog() {
     logOpen = false;
   }
 
+  async function loadJobLog(jobId: number) {
+    logLoading = true;
+
+    try {
+      const response = await fetch(`/api/jobs/log?jobId=${jobId}`);
+
+      if (!response.ok) {
+        throw new Error(`Failed to load log (${response.status})`);
+      }
+
+      const jobLog = (await response.json()) as JobLogResponse;
+
+      if (logJob?.id === jobId) {
+        logText = fullLogText(jobLog) || "No log content.";
+      }
+    } catch (err) {
+      if (logJob?.id === jobId) {
+        logError =
+          err instanceof Error ? err.message : "Failed to load job log.";
+      }
+    } finally {
+      if (logJob?.id === jobId) {
+        logLoading = false;
+      }
+    }
+  }
+
   async function copyLog() {
-    if (!logJob) return;
-    await navigator.clipboard.writeText(fullLogText(logJob));
+    if (!logText) return;
+    await navigator.clipboard.writeText(logText);
     copyFeedback = true;
+  }
+
+  async function loadMoreJobs() {
+    if (!data.nextLimit) return;
+
+    loadingMore = true;
+
+    try {
+      const params = new SvelteURLSearchParams(window.location.search);
+      params.set("limit", data.nextLimit.toString());
+      await goto(resolve(`/dashboard/jobs?${params.toString()}`), {
+        keepFocus: true,
+        noScroll: true,
+      });
+    } finally {
+      loadingMore = false;
+    }
   }
 </script>
 
@@ -140,7 +199,7 @@
       </p>
     </div>
     <p class="text-xs font-medium text-gray-500">
-      {data.jobs.length.toLocaleString()} recent jobs
+      Showing {data.jobs.length.toLocaleString()} recent jobs
     </p>
   </div>
 
@@ -193,16 +252,16 @@
               {#if hasLogContent(job)}
                 <Button
                   size="sm"
-                  variant={job.jobError ? "outline" : "ghost"}
+                  variant={job.hasJobError ? "outline" : "ghost"}
                   class={cn(
                     "h-7 gap-1 px-2 text-xs",
-                    job.jobError &&
+                    job.hasJobError &&
                       "border-red-200 text-red-700 hover:bg-red-50 hover:text-red-800",
                   )}
                   onclick={() => openLog(job)}
                 >
                   <FileText class="size-3.5" />
-                  {job.jobError ? "View error" : "View log"}
+                  {job.hasJobError ? "View error" : "View log"}
                 </Button>
               {:else if !job.jobEnd}
                 <span class="text-xs text-gray-400">Running…</span>
@@ -235,6 +294,22 @@
         {/each}
       </Table.Body>
     </Table.Root>
+    {#if data.hasMore && data.nextLimit}
+      <div class="flex justify-center border-t border-gray-100 px-5 py-4">
+        <Button
+          size="sm"
+          variant="outline"
+          class="min-w-32 gap-1.5"
+          disabled={loadingMore}
+          onclick={loadMoreJobs}
+        >
+          {#if loadingMore}
+            <LoaderCircle class="size-3.5 animate-spin" />
+          {/if}
+          Load more
+        </Button>
+      </div>
+    {/if}
   {:else}
     <div class="px-5 py-8 text-center">
       <h2 class="text-sm font-semibold text-gray-900">No jobs yet</h2>
@@ -298,6 +373,8 @@
   onClosed={() => {
     logJob = null;
     copyFeedback = false;
+    logText = null;
+    logError = null;
   }}
   class="m-auto w-[min(94vw,42rem)] rounded-xl border border-gray-200 bg-white p-0 shadow-2xl"
 >
@@ -316,6 +393,7 @@
           size="sm"
           variant="ghost"
           class="h-8 gap-1.5 px-2 text-xs"
+          disabled={!logText}
           onclick={copyLog}
         >
           <Copy class="size-3.5" />
@@ -333,10 +411,23 @@
       </div>
     </div>
     <div class="max-h-[70vh] overflow-auto p-4">
-      <pre
-        class="whitespace-pre-wrap break-words rounded-lg border border-gray-200 bg-gray-50 p-3 font-mono text-xs leading-relaxed text-gray-800">{fullLogText(
-          logJob,
-        )}</pre>
+      {#if logLoading}
+        <div
+          class="flex items-center justify-center gap-2 rounded-lg border border-gray-200 bg-gray-50 p-6 text-xs text-gray-500"
+        >
+          <LoaderCircle class="size-4 animate-spin" />
+          Loading log...
+        </div>
+      {:else if logError}
+        <div
+          class="rounded-lg border border-red-200 bg-red-50 p-3 text-xs text-red-700"
+        >
+          {logError}
+        </div>
+      {:else}
+        <pre
+          class="whitespace-pre-wrap break-words rounded-lg border border-gray-200 bg-gray-50 p-3 font-mono text-xs leading-relaxed text-gray-800">{logText}</pre>
+      {/if}
     </div>
   {/if}
 </AnimatedDialog>

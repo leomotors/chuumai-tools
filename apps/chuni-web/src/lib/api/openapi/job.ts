@@ -11,6 +11,8 @@ import {
   createJobResponseSchema,
   finishJobRequestSchema,
   finishJobResponseSchema,
+  jobLogQuerySchema,
+  jobLogResponseSchema,
   ratingBreakdownImageQuerySchema,
   ratingBreakdownImageStatusResponseSchema,
   saveJobDataRequestSchema,
@@ -106,6 +108,65 @@ export function registerJobRoutes(registry: OpenAPIRegistry) {
       },
       401: {
         description: "Unauthorized - Invalid or missing API key",
+        content: {
+          "application/json": {
+            schema: errorSchema,
+          },
+        },
+      },
+      500: {
+        description: "Internal server error",
+        content: {
+          "application/json": {
+            schema: errorSchema,
+          },
+        },
+      },
+    },
+  });
+
+  // GET /api/jobs/log
+  registry.registerPath({
+    method: "get",
+    path: "/api/jobs/log",
+    tags: ["Jobs"],
+    summary: "Retrieve scraper job log",
+    description:
+      "Retrieves the error and log text for a scraping job. Requires API key authentication or an active session.",
+    security: [
+      { [API_KEY_SECURITY_SCHEME]: [] },
+      { [SESSION_SECURITY_SCHEME]: [] },
+    ],
+    request: {
+      query: jobLogQuerySchema,
+    },
+    responses: {
+      200: {
+        description: "Job log returned successfully",
+        content: {
+          "application/json": {
+            schema: jobLogResponseSchema,
+          },
+        },
+      },
+      400: {
+        description: "Bad request - Invalid query or job ID not found",
+        content: {
+          "application/json": {
+            schema: errorSchema,
+          },
+        },
+      },
+      401: {
+        description: "Unauthorized - Invalid or missing API key/session",
+        content: {
+          "application/json": {
+            schema: errorSchema,
+          },
+        },
+      },
+      403: {
+        description: "Forbidden - Job doesn't belong to user",
         content: {
           "application/json": {
             schema: errorSchema,

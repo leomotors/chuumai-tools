@@ -2,6 +2,28 @@ import type { OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
 
 import { z } from "@repo/types/zod";
 
+export const JOB_LIST_DEFAULT_LIMIT = 25;
+export const JOB_LIST_LIMIT_STEP = 25;
+export const JOB_LIST_MAX_LIMIT = 250;
+
+export function parseJobListLimit(value: string | null) {
+  if (value === null) return JOB_LIST_DEFAULT_LIMIT;
+
+  const parsed = Number(value);
+  if (!Number.isFinite(parsed)) return JOB_LIST_DEFAULT_LIMIT;
+
+  return Math.min(
+    JOB_LIST_MAX_LIMIT,
+    Math.max(JOB_LIST_DEFAULT_LIMIT, Math.floor(parsed)),
+  );
+}
+
+export function getNextJobListLimit(currentLimit: number, hasMore: boolean) {
+  if (!hasMore || currentLimit >= JOB_LIST_MAX_LIMIT) return null;
+
+  return Math.min(JOB_LIST_MAX_LIMIT, currentLimit + JOB_LIST_LIMIT_STEP);
+}
+
 /**
  * Response schema for job creation
  * Common to both Chunithm and maimai
@@ -138,6 +160,38 @@ export const ratingBreakdownImageQuerySchema = z
   .openapi("RatingBreakdownImageQuery");
 
 /**
+ * Query schema for authenticated job log lookup.
+ */
+export const jobLogQuerySchema = z
+  .object({
+    jobId: z.coerce.number().int().positive().openapi({
+      description: "The ID of the job to retrieve logs for",
+      example: 12345,
+    }),
+  })
+  .openapi("JobLogQuery");
+
+/**
+ * Response schema for authenticated job log lookup.
+ */
+export const jobLogResponseSchema = z
+  .object({
+    jobId: z.number().int().positive().openapi({
+      description: "The ID of the job",
+      example: 12345,
+    }),
+    jobError: z.string().nullable().openapi({
+      description: "Error text captured by a failed scraper job",
+      example: "Error: Failed to connect to database",
+    }),
+    jobLog: z.string().nullable().openapi({
+      description: "Execution logs captured by the scraper job",
+      example: "Step 1: Login completed\nStep 2: Data fetched successfully",
+    }),
+  })
+  .openapi("JobLogResponse");
+
+/**
  * Response schema for rating breakdown image status.
  */
 export const ratingBreakdownImageStatusResponseSchema = z
@@ -182,4 +236,6 @@ export function registerCommonJobSchemas(registry: OpenAPIRegistry) {
     "RatingBreakdownImageStatusResponse",
     ratingBreakdownImageStatusResponseSchema,
   );
+  registry.register("JobLogQuery", jobLogQuerySchema);
+  registry.register("JobLogResponse", jobLogResponseSchema);
 }

@@ -8,6 +8,8 @@ import {
   finishJobRequestSchema,
   finishJobResponseSchema,
   finishJobSuccessSchema,
+  jobLogQuerySchema,
+  jobLogResponseSchema,
   ratingBreakdownImageQuerySchema,
   ratingBreakdownImageStatusResponseSchema,
   uploadRatingBreakdownImageRequestSchema,
@@ -29,6 +31,8 @@ export {
   finishJobRequestSchema,
   finishJobResponseSchema,
   finishJobSuccessSchema,
+  jobLogQuerySchema,
+  jobLogResponseSchema,
   ratingBreakdownImageQuerySchema,
   ratingBreakdownImageStatusResponseSchema,
   uploadRatingBreakdownImageRequestSchema,
@@ -160,6 +164,8 @@ export function registerJobSchemas(registry: OpenAPIRegistry) {
     "RatingBreakdownImageStatusResponse",
     ratingBreakdownImageStatusResponseSchema,
   );
+  registry.register("JobLogQuery", jobLogQuerySchema);
+  registry.register("JobLogResponse", jobLogResponseSchema);
   registry.register("SavePlayerData", savePlayerDataSchema);
   registry.register("SaveRatingRecords", saveRatingRecordsSchema);
   registry.register("SaveJobDataRequest", saveJobDataRequestSchema);

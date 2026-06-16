@@ -1,5 +1,9 @@
 # Changelog
 
+## [patch]
+
+- perf(dashboard): reduce initial job history payload and load older jobs on demand
+
 ## [1.16.0] - 2026-06-12
 
 - feat(dashboard): add admin-only cache clearing settings
