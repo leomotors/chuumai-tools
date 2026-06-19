@@ -391,6 +391,84 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/jobs/log": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Retrieve scraper job log
+     * @description Retrieves the error and log text for a scraping job. Requires API key authentication or an active session.
+     */
+    get: {
+      parameters: {
+        query: {
+          /** @description The ID of the job to retrieve logs for */
+          jobId: number;
+        };
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description Job log returned successfully */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": components["schemas"]["JobLogResponse"];
+          };
+        };
+        /** @description Bad request - Invalid query or job ID not found */
+        400: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": components["schemas"]["Error"];
+          };
+        };
+        /** @description Unauthorized - Invalid or missing API key/session */
+        401: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": components["schemas"]["Error"];
+          };
+        };
+        /** @description Forbidden - Job doesn't belong to user */
+        403: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": components["schemas"]["Error"];
+          };
+        };
+        /** @description Internal server error */
+        500: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            "application/json": components["schemas"]["Error"];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/jobs/data": {
     parameters: {
       query?: never;
@@ -1152,6 +1230,31 @@ export interface components {
        * @example /api/jobs/ratingBreakdownImage/file?jobId=12345
        */
       imageUrl: string | null;
+    };
+    JobLogQuery: {
+      /**
+       * @description The ID of the job to retrieve logs for
+       * @example 12345
+       */
+      jobId: number;
+    };
+    JobLogResponse: {
+      /**
+       * @description The ID of the job
+       * @example 12345
+       */
+      jobId: number;
+      /**
+       * @description Error text captured by a failed scraper job
+       * @example Error: Failed to connect to database
+       */
+      jobError: string | null;
+      /**
+       * @description Execution logs captured by the scraper job
+       * @example Step 1: Login completed
+       *     Step 2: Data fetched successfully
+       */
+      jobLog: string | null;
     };
     SavePlayerData: {
       characterImage: string;
