@@ -4,6 +4,7 @@
 
 - feat(dashboard): add cached rating analysis with a #1 rating timeline (reigns with score history) and a tabbed daily breakdown splitting rating gains into BEST/CURRENT records
 - refactor(dashboard): group rating composition, daily gains, #1 timeline, and milestones under a single tabbed Rating section
+- feat(dashboard): collapse the Composition Selection pool behind a click-to-show card
 - perf(dashboard): reduce initial job history payload and load older jobs on demand
 - perf(dashboard): reduce the initial History tab to 30 recent plays and load more on demand
 

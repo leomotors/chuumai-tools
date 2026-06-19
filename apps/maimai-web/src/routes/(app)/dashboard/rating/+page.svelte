@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ListMusic } from "@lucide/svelte";
+  import { Eye, ListMusic } from "@lucide/svelte";
 
   import RatingMusicCard from "$lib/components/dashboard/RatingMusicCard.svelte";
 
@@ -16,6 +16,7 @@
   const modes: Mode[] = ["BEST", "CURRENT", "ALL"];
   let mode = $state<Mode>("BEST");
   let bottom = $state(false);
+  let showSelection = $state(false);
 
   const baseRecords = $derived.by(() => {
     if (!data.music) return [];
@@ -88,7 +89,10 @@
           {#each modes as item (item)}
             <button
               type="button"
-              onclick={() => (mode = item)}
+              onclick={() => {
+                mode = item;
+                showSelection = false;
+              }}
               class="h-9 rounded-lg px-3 text-sm font-semibold transition-colors {mode ===
               item
                 ? 'bg-gray-950 text-white shadow-sm'
@@ -140,13 +144,7 @@
       </div>
     </div>
 
-    {#if visibleRecords.length > 0}
-      <div class="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-        {#each visibleRecords as music, index (`${music.title}-${music.chartType}-${music.difficulty}-${music.source}-${index}`)}
-          <RatingMusicCard {music} {index} />
-        {/each}
-      </div>
-    {:else}
+    {#if baseRecords.length === 0 && selectionRecords.length === 0}
       <div
         class="rounded-xl border border-gray-200/70 bg-white px-5 py-8 text-center shadow-sm"
       >
@@ -155,6 +153,50 @@
           Rating records appear after a completed scrape job.
         </p>
       </div>
+    {:else}
+      {#if baseRecords.length > 0}
+        <div class="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+          {#each baseRecords as music, index (`${music.title}-${music.chartType}-${music.difficulty}-${music.source}-${index}`)}
+            <RatingMusicCard {music} {index} />
+          {/each}
+        </div>
+      {/if}
+
+      {#if selectionRecords.length > 0}
+        {#if showSelection}
+          <div class="space-y-3">
+            <div class="flex items-center justify-between gap-2">
+              <h2 class="text-sm font-semibold text-gray-700">
+                Selection ({selectionRecords.length})
+              </h2>
+              <button
+                type="button"
+                onclick={() => (showSelection = false)}
+                class="text-xs font-medium text-gray-500 hover:text-gray-900"
+              >
+                Hide
+              </button>
+            </div>
+            <div class="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+              {#each selectionRecords as music, index (`${music.title}-${music.chartType}-${music.difficulty}-${music.source}-${index}`)}
+                <RatingMusicCard {music} index={baseRecords.length + index} />
+              {/each}
+            </div>
+          </div>
+        {:else}
+          <button
+            type="button"
+            onclick={() => (showSelection = true)}
+            class="flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-gray-300 bg-white px-5 py-6 text-sm font-medium text-gray-600 shadow-sm transition-colors hover:border-gray-400 hover:bg-gray-50 hover:text-gray-900"
+          >
+            <Eye class="size-4" />
+            Show {selectionRecords.length} selection {selectionRecords.length ===
+            1
+              ? "song"
+              : "songs"}
+          </button>
+        {/if}
+      {/if}
     {/if}
   </section>
 {:else}
