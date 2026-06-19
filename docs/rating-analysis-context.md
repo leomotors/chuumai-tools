@@ -3,10 +3,26 @@
 Status as of 2026-06-20: implemented and committed on
 `feature/dashboard-rating-analysis`.
 
+## Navigation (Rating hub)
+
+The dashboard groups all rating views under a single `Rating` nav item backed by
+`/dashboard/rating/+layout.svelte` (a sub-tab bar). Tabs:
+
+- `Composition` -> `/dashboard/rating` (hub index; moved from `/dashboard/music`)
+- `Daily` -> `/dashboard/rating/analysis`
+- `Timeline` -> `/dashboard/rating/analysis?view=timeline`
+- `Milestones` -> `/dashboard/rating/milestones` (moved from `/dashboard/milestones`)
+
+`Daily` and `Timeline` share the analysis route; the page renders one or the
+other from the `view` search param. `appSwapAllowedPaths` in
+`packages/core/src/web/swapUrl.ts` lists the new paths. Old paths
+(`/dashboard/music`, `/dashboard/milestones`, `/dashboard/rating-analysis`) were
+moved, not redirected.
+
 ## What Changed
 
-- Added `/dashboard/rating-analysis` to both `apps/chuni-web` and
-  `apps/maimai-web`.
+- Added the rating analysis page (now at `/dashboard/rating/analysis`) to both
+  `apps/chuni-web` and `apps/maimai-web`.
 - Added a per-user `rating_analysis_cache` table in both app schemas.
 - Added shared pure analysis logic in `packages/core/src/web/ratingAnalysis.ts`
   and exported it through `@repo/core/web`.

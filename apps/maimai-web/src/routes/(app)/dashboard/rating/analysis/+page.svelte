@@ -1,6 +1,5 @@
 <script lang="ts">
   import {
-    Activity,
     ChevronDown,
     CircleDashed,
     Clock,
@@ -12,13 +11,16 @@
     Zap,
   } from "@lucide/svelte";
 
+  import { page } from "$app/state";
+
   import { difficultyColorMap } from "@repo/core/maimai";
   import type { RatingAnalysisDailyContribution } from "@repo/core/web";
-  import * as Tabs from "@repo/ui/atom/tabs";
 
   let { data } = $props();
 
-  let activeTab = $state<"timeline" | "daily">("timeline");
+  const view = $derived(
+    page.url.searchParams.get("view") === "timeline" ? "timeline" : "daily",
+  );
 
   const analysis = $derived(data.analysis);
   const currentTop = $derived(analysis.highestTimeline.at(-1));
@@ -393,21 +395,8 @@
       </div>
     </div>
 
-    <Tabs.Root bind:value={activeTab} class="space-y-4">
-      <Tabs.List
-        class="grid h-10 w-full grid-cols-2 bg-gray-100 p-1 text-gray-500 sm:w-[360px]"
-      >
-        <Tabs.Trigger value="timeline" class="gap-2">
-          <Trophy class="size-4" />
-          Timeline
-        </Tabs.Trigger>
-        <Tabs.Trigger value="daily" class="gap-2">
-          <Activity class="size-4" />
-          Daily
-        </Tabs.Trigger>
-      </Tabs.List>
-
-      <Tabs.Content value="timeline" class="mt-0">
+    <div class="space-y-4">
+      {#if view === "timeline"}
         <section
           class="rounded-xl border border-gray-200/70 bg-white shadow-sm"
         >
@@ -591,9 +580,7 @@
             </ol>
           {/if}
         </section>
-      </Tabs.Content>
-
-      <Tabs.Content value="daily" class="mt-0">
+      {:else}
         <section
           class="rounded-xl border border-gray-200/70 bg-white shadow-sm"
         >
@@ -725,7 +712,7 @@
             {/each}
           </div>
         </section>
-      </Tabs.Content>
-    </Tabs.Root>
+      {/if}
+    </div>
   {/if}
 </section>

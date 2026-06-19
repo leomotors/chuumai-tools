@@ -35,14 +35,14 @@ describe("getSwapUrl", () => {
     expect(getSwapUrl(baseUrl, "/dashboard/activity")).toBe(
       "https://chuni.wonderhoy.me/dashboard/activity",
     );
-    expect(getSwapUrl(baseUrl, "/dashboard/milestones")).toBe(
-      "https://chuni.wonderhoy.me/dashboard/milestones",
+    expect(getSwapUrl(baseUrl, "/dashboard/rating")).toBe(
+      "https://chuni.wonderhoy.me/dashboard/rating",
     );
-    expect(getSwapUrl(baseUrl, "/dashboard/music")).toBe(
-      "https://chuni.wonderhoy.me/dashboard/music",
+    expect(getSwapUrl(baseUrl, "/dashboard/rating/analysis")).toBe(
+      "https://chuni.wonderhoy.me/dashboard/rating/analysis",
     );
-    expect(getSwapUrl(baseUrl, "/dashboard/rating-analysis")).toBe(
-      "https://chuni.wonderhoy.me/dashboard/rating-analysis",
+    expect(getSwapUrl(baseUrl, "/dashboard/rating/milestones")).toBe(
+      "https://chuni.wonderhoy.me/dashboard/rating/milestones",
     );
     expect(getSwapUrl(baseUrl, "/dashboard/history")).toBe(
       "https://chuni.wonderhoy.me/dashboard/history",
