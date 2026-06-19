@@ -1,9 +1,16 @@
 <script lang="ts">
-  import { History } from "@lucide/svelte";
+  import { History, LoaderCircle } from "@lucide/svelte";
+  import { SvelteURLSearchParams } from "svelte/reactivity";
 
+  import { goto } from "$app/navigation";
+  import { resolve } from "$app/paths";
   import RatingMusicCard from "$lib/components/dashboard/RatingMusicCard.svelte";
 
+  import { Button } from "@repo/ui/atom/button";
+
   let { data } = $props();
+
+  let loadingMore = $state(false);
 
   function formatDate(date: Date) {
     return new Date(date).toLocaleString(undefined, {
@@ -12,6 +19,23 @@
       hour: "2-digit",
       minute: "2-digit",
     });
+  }
+
+  async function loadMoreHistory() {
+    if (!data.nextLimit) return;
+
+    loadingMore = true;
+
+    try {
+      const params = new SvelteURLSearchParams(window.location.search);
+      params.set("limit", data.nextLimit.toString());
+      await goto(resolve(`/dashboard/history?${params.toString()}`), {
+        keepFocus: true,
+        noScroll: true,
+      });
+    } finally {
+      loadingMore = false;
+    }
   }
 </script>
 
@@ -24,7 +48,7 @@
       <h1 class="text-lg font-semibold text-gray-950">History</h1>
     </div>
     <p class="mt-1 text-xs text-gray-500">
-      Latest {data.history.length.toLocaleString()} plays from play history.
+      Showing {data.history.length.toLocaleString()} most recent plays from play history.
     </p>
   </div>
 
@@ -37,6 +61,23 @@
         />
       {/each}
     </div>
+
+    {#if data.hasMore && data.nextLimit}
+      <div class="flex justify-center">
+        <Button
+          size="sm"
+          variant="outline"
+          class="min-w-32 gap-1.5"
+          disabled={loadingMore}
+          onclick={loadMoreHistory}
+        >
+          {#if loadingMore}
+            <LoaderCircle class="size-3.5 animate-spin" />
+          {/if}
+          Load more
+        </Button>
+      </div>
+    {/if}
   {:else}
     <div
       class="rounded-xl border border-gray-200/70 bg-white px-5 py-8 text-center shadow-sm"

@@ -303,6 +303,7 @@ export async function getDashboardMusic(
 
 export async function getDashboardPlayHistory(
   userId: string,
+  limit: number,
 ): Promise<DashboardMaimaiHistoryChart[]> {
   const latestMusic = await getDashboardMusic(userId);
   const version = latestMusic?.version;
@@ -344,7 +345,7 @@ export async function getDashboardPlayHistory(
     )
     .where(eq(jobTable.userId, userId))
     .orderBy(desc(playHistoryTable.playedAt), desc(playHistoryTable.trackNo))
-    .limit(200);
+    .limit(limit);
 
   return rows.map((row) => {
     const constantValue = row.level

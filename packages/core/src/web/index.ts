@@ -10,6 +10,7 @@ export * from "./musicForRating";
 export * from "./musicLevelHistory";
 export * from "./openapi";
 export * from "./playCount";
+export * from "./playHistory";
 export * from "./ratingAnalysis";
 export * from "./ratingBreakdownImageStorage";
 export * from "./ratingHistory";
