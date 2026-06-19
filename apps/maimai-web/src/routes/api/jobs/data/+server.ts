@@ -3,6 +3,7 @@ import { eq } from "drizzle-orm";
 
 import { saveJobDataRequestSchema } from "$lib/api/schemas/job";
 import { db } from "$lib/db";
+import { recomputeRatingAnalysis } from "$lib/functions/ratingAnalysis";
 import { getUserIdFromApiKey } from "$lib/server/auth";
 
 import {
@@ -196,6 +197,12 @@ export const POST: RequestHandler = async ({ request }) => {
       allMusicRecordHtml,
       dataForImageGen: JSON.stringify(imgGenInput),
     });
+
+    try {
+      await recomputeRatingAnalysis(userId);
+    } catch (err) {
+      console.error("Error recomputing rating analysis cache:", err);
+    }
 
     return json({
       success: true,

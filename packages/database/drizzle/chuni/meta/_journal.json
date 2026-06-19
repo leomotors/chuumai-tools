@@ -92,6 +92,13 @@
       "when": 1780852177636,
       "tag": "0012_far_rattler",
       "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1781626333659,
+      "tag": "0013_secret_vision",
+      "breakpoints": true
     }
   ]
 }

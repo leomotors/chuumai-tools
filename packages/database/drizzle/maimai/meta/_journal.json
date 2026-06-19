@@ -64,6 +64,13 @@
       "when": 1780503732855,
       "tag": "0008_milky_miss_america",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1781626333663,
+      "tag": "0009_colorful_valeria_richards",
+      "breakpoints": true
     }
   ]
 }

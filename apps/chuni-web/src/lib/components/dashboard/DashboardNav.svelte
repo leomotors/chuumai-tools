@@ -2,6 +2,7 @@
   import {
     ChartLine,
     ClipboardList,
+    Gauge,
     History,
     ListMusic,
     Settings,
@@ -19,6 +20,11 @@
     { href: "/dashboard/activity", label: "Activity", icon: ChartLine },
     { href: "/dashboard/milestones", label: "Milestones", icon: Trophy },
     { href: "/dashboard/music", label: "Music", icon: ListMusic },
+    {
+      href: "/dashboard/rating-analysis",
+      label: "Rating Analysis",
+      icon: Gauge,
+    },
     { href: "/dashboard/history", label: "History", icon: History },
     { href: "/dashboard/jobs", label: "Jobs", icon: ClipboardList },
     { href: "/dashboard/settings", label: "Settings", icon: Settings },

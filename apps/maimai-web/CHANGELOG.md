@@ -2,6 +2,7 @@
 
 ## [patch]
 
+- feat(dashboard): add cached rating analysis timelines with cover art and tabbed daily performance attribution
 - perf(dashboard): reduce initial job history payload and load older jobs on demand
 
 ## [1.16.0] - 2026-06-12

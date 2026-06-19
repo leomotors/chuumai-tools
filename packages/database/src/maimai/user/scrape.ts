@@ -1,4 +1,11 @@
-import { integer, pgTable, text, timestamp, unique } from "drizzle-orm/pg-core";
+import {
+  integer,
+  jsonb,
+  pgTable,
+  text,
+  timestamp,
+  unique,
+} from "drizzle-orm/pg-core";
 
 import { jobTable } from "../../shared";
 import {
@@ -136,4 +143,15 @@ export const rawScrapeDataTable = pgTable("raw_scrape_data", {
   playerDataHtml: text("player_data_html"),
   allMusicRecordHtml: text("all_music_record_html"),
   dataForImageGen: text("data_for_image_gen"),
+});
+
+export const ratingAnalysisCacheTable = pgTable("rating_analysis_cache", {
+  userId: text("user_id").primaryKey(),
+  latestJobId: integer("latest_job_id")
+    .notNull()
+    .references(() => jobTable.id),
+  computedAt: timestamp("computed_at", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
+  payload: jsonb().notNull(),
 });

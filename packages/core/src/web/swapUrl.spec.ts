@@ -41,6 +41,9 @@ describe("getSwapUrl", () => {
     expect(getSwapUrl(baseUrl, "/dashboard/music")).toBe(
       "https://chuni.wonderhoy.me/dashboard/music",
     );
+    expect(getSwapUrl(baseUrl, "/dashboard/rating-analysis")).toBe(
+      "https://chuni.wonderhoy.me/dashboard/rating-analysis",
+    );
     expect(getSwapUrl(baseUrl, "/dashboard/history")).toBe(
       "https://chuni.wonderhoy.me/dashboard/history",
     );

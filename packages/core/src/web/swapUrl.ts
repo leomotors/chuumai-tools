@@ -14,6 +14,7 @@ export const appSwapAllowedPaths = [
   "/dashboard/activity",
   "/dashboard/milestones",
   "/dashboard/music",
+  "/dashboard/rating-analysis",
   "/dashboard/history",
   "/dashboard/jobs",
   "/dashboard/settings",
