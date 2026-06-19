@@ -1,5 +1,5 @@
 const JST_GAME_DAY_SHIFT_MS = 2 * 60 * 60 * 1000;
-const RATING_ANALYSIS_PAYLOAD_VERSION = 3;
+const RATING_ANALYSIS_PAYLOAD_VERSION = 5;
 
 export type RatingAnalysisSlot = "old" | "new";
 
@@ -58,6 +58,24 @@ export type RatingAnalysisTopInterval = {
   ongoing: boolean;
 };
 
+// One score the chart held while it was #1. A reign keeps the full ordered list
+// so the UI can show the score range and, on demand, the whole progression.
+export type RatingAnalysisScoreStep = {
+  score: number;
+  rating: number;
+  startJobId: number;
+  endJobId: number | null;
+  startAt: string;
+  endAt: string | null;
+  durationMs: number;
+};
+
+// A continuous run at #1 by a single chart, carrying the latest score in the
+// top-level fields and every score improvement in `steps` (oldest first).
+export type RatingAnalysisTopReign = RatingAnalysisTopInterval & {
+  steps: RatingAnalysisScoreStep[];
+};
+
 export type RatingAnalysisSongDuration = {
   chartKey: string;
   songKey: string;
@@ -105,7 +123,7 @@ export type RatingAnalysisPayload = {
   computedAt: string;
   latestJobId: number | null;
   snapshotCount: number;
-  highestTimeline: RatingAnalysisTopInterval[];
+  highestTimeline: RatingAnalysisTopReign[];
   songDurations: RatingAnalysisSongDuration[];
   dailyGains: RatingAnalysisDailyGain[];
 };
@@ -133,6 +151,10 @@ function isObject(value: unknown): value is Record<string, unknown> {
 
 function hasImageProperty(value: unknown) {
   return isObject(value) && "image" in value;
+}
+
+function hasReignShape(value: unknown) {
+  return isObject(value) && "image" in value && Array.isArray(value.steps);
 }
 
 function hasCurrentDailyMetrics(value: unknown) {
@@ -164,7 +186,7 @@ export function ratingAnalysisPayloadIsCurrent(
   }
 
   return (
-    highestTimeline.every(hasImageProperty) &&
+    highestTimeline.every(hasReignShape) &&
     songDurations.every(hasImageProperty) &&
     dailyGains.every(
       (day) =>
@@ -260,7 +282,9 @@ function ensureDuration(
   return duration;
 }
 
-function buildHighestTimeline(
+// Splits the run of #1 snapshots into intervals that break whenever the exact
+// top record (chart + score) changes. Used for per-score duration accounting.
+function buildScoreIntervals(
   snapshots: NormalizedSnapshot[],
   computedAt: Date,
 ): RatingAnalysisTopInterval[] {
@@ -309,6 +333,50 @@ function buildHighestTimeline(
   }
 
   return intervals;
+}
+
+function toScoreStep(
+  interval: RatingAnalysisTopInterval,
+): RatingAnalysisScoreStep {
+  return {
+    score: interval.score,
+    rating: interval.rating,
+    startJobId: interval.startJobId,
+    endJobId: interval.endJobId,
+    startAt: interval.startAt,
+    endAt: interval.endAt,
+    durationMs: interval.durationMs,
+  };
+}
+
+// Collapses consecutive score intervals held by the same chart into a single
+// reign. The timeline answers "what was #1 and for how long", so a chart that
+// keeps #1 while its score improves stays one entry: the top-level fields carry
+// the latest score while `steps` retains every score it climbed through.
+function mergeChartReigns(
+  intervals: RatingAnalysisTopInterval[],
+): RatingAnalysisTopReign[] {
+  const reigns: RatingAnalysisTopReign[] = [];
+
+  for (const interval of intervals) {
+    const previous = reigns.at(-1);
+
+    if (previous && previous.chartKey === interval.chartKey) {
+      previous.recordKey = interval.recordKey;
+      previous.score = interval.score;
+      previous.rating = interval.rating;
+      previous.endJobId = interval.endJobId;
+      previous.endAt = interval.endAt;
+      previous.durationMs += interval.durationMs;
+      previous.ongoing = interval.ongoing;
+      previous.steps.push(toScoreStep(interval));
+      continue;
+    }
+
+    reigns.push({ ...interval, steps: [toScoreStep(interval)] });
+  }
+
+  return reigns;
 }
 
 function addDurationSummaries(
@@ -461,12 +529,14 @@ function buildDailyGains(
             .map((record): RatingAnalysisDailyContribution | null => {
               const previousRecord =
                 previousRecords.get(contributionSlotKey(record)) ?? null;
-              const isChanged =
+              // Only count records that actually raised the rating. A pure
+              // score gain that leaves the rating unchanged does not move the
+              // total, so it is not a rating contribution.
+              const increasedRating =
                 previousRecord === null ||
-                previousRecord.recordKey !== record.recordKey ||
-                previousRecord.rating !== record.rating;
+                record.rating > previousRecord.rating;
 
-              if (!isChanged) return null;
+              if (!increasedRating) return null;
 
               const matchedHistory = findMatchedHistory(
                 record,
@@ -525,14 +595,15 @@ export function buildRatingAnalysis({
   const computedAtDate = toDate(computedAt);
   const normalizedSnapshots = normalizeSnapshots(snapshots);
   const latestJobId = normalizedSnapshots.at(-1)?.jobId ?? null;
-  const highestTimeline = buildHighestTimeline(
+  const scoreIntervals = buildScoreIntervals(
     normalizedSnapshots,
     computedAtDate,
   );
+  const highestTimeline = mergeChartReigns(scoreIntervals);
   const durations = new Map<string, DurationDraft>();
 
   addDurationSummaries(durations, normalizedSnapshots, computedAtDate);
-  addTopScoreDurations(durations, highestTimeline);
+  addTopScoreDurations(durations, scoreIntervals);
 
   return {
     schemaVersion: RATING_ANALYSIS_PAYLOAD_VERSION,

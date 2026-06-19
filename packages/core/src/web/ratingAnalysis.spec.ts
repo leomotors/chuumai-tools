@@ -56,6 +56,16 @@ describe("buildRatingAnalysis", () => {
         }),
       }),
     ).toBe(false);
+    expect(
+      ratingAnalysisPayloadIsCurrent({
+        ...analysis,
+        highestTimeline: analysis.highestTimeline.map((interval) => {
+          const clone: Record<string, unknown> = { ...interval };
+          delete clone.steps;
+          return clone;
+        }),
+      }),
+    ).toBe(false);
   });
 
   it("compresses adjacent highest-rating snapshots with the same exact score", () => {
@@ -100,7 +110,7 @@ describe("buildRatingAnalysis", () => {
     });
   });
 
-  it("keeps chart top duration continuous while splitting improved score intervals", () => {
+  it("merges one chart's #1 reign across score improvements while tracking score durations separately", () => {
     const analysis = buildRatingAnalysis({
       computedAt: "2026-05-04T12:00:00.000Z",
       snapshots: [
@@ -123,13 +133,75 @@ describe("buildRatingAnalysis", () => {
       ],
     });
 
-    expect(analysis.highestTimeline).toHaveLength(2);
+    expect(analysis.highestTimeline).toHaveLength(1);
+    expect(analysis.highestTimeline[0]).toMatchObject({
+      chartKey: "a:mas",
+      startJobId: 1,
+      endJobId: null,
+      score: 1_007_000,
+      rating: 16.8,
+      durationMs: 3 * 86_400_000,
+      ongoing: true,
+    });
+    expect(analysis.highestTimeline[0].steps).toMatchObject([
+      {
+        score: 1_006_000,
+        rating: 16.7,
+        startJobId: 1,
+        durationMs: 1 * 86_400_000,
+      },
+      {
+        score: 1_007_000,
+        rating: 16.8,
+        startJobId: 2,
+        endJobId: null,
+        durationMs: 2 * 86_400_000,
+      },
+    ]);
     expect(analysis.songDurations[0]).toMatchObject({
       chartKey: "a:mas",
       topDurationMs: 3 * 86_400_000,
       topScoreDurationMs: 2 * 86_400_000,
       isCurrentTop: true,
     });
+  });
+
+  it("keeps non-consecutive reigns of the same chart as separate timeline entries", () => {
+    const analysis = buildRatingAnalysis({
+      computedAt: "2026-05-04T12:00:00.000Z",
+      snapshots: [
+        {
+          jobId: 1,
+          playedAt: "2026-05-01T12:00:00.000Z",
+          rating: 16,
+          records: [record("a:mas", "Alpha", "MASTER", 1_006_000, 16.7)],
+        },
+        {
+          jobId: 2,
+          playedAt: "2026-05-02T12:00:00.000Z",
+          rating: 16.1,
+          records: [
+            record("a:mas", "Alpha", "MASTER", 1_006_000, 16.7),
+            record("b:mas", "Beta", "MASTER", 1_007_000, 16.85),
+          ],
+        },
+        {
+          jobId: 3,
+          playedAt: "2026-05-03T12:00:00.000Z",
+          rating: 16.2,
+          records: [
+            record("a:mas", "Alpha", "MASTER", 1_009_000, 16.95),
+            record("b:mas", "Beta", "MASTER", 1_007_000, 16.85),
+          ],
+        },
+      ],
+    });
+
+    expect(analysis.highestTimeline.map((reign) => reign.chartKey)).toEqual([
+      "a:mas",
+      "b:mas",
+      "a:mas",
+    ]);
   });
 
   it("tracks old and new contribution durations separately and as a union", () => {
@@ -303,6 +375,31 @@ describe("buildRatingAnalysis", () => {
       previousScore: 1_006_000,
       attribution: "inferred",
       matchedHistoryAt: null,
+    });
+  });
+
+  it("excludes records whose score rose without raising the rating", () => {
+    const analysis = buildRatingAnalysis({
+      computedAt,
+      snapshots: [
+        {
+          jobId: 1,
+          playedAt: "2026-05-01T12:00:00.000Z",
+          rating: 16,
+          records: [record("a:mas", "Alpha", "MASTER", 1_006_000, 16.7)],
+        },
+        {
+          jobId: 2,
+          playedAt: "2026-05-02T12:00:00.000Z",
+          rating: 16,
+          records: [record("a:mas", "Alpha", "MASTER", 1_006_500, 16.7)],
+        },
+      ],
+    });
+
+    expect(analysis.dailyGains[0]).toMatchObject({
+      dayKey: "2026-05-02",
+      contributions: [],
     });
   });
 });
