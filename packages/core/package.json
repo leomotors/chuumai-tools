@@ -45,13 +45,13 @@
   },
   "devDependencies": {
     "@repo/database": "workspace:*",
-    "@vitest/coverage-v8": "^4.1.8",
-    "playwright": "^1.60.0",
-    "vitest": "^4.1.8"
+    "@vitest/coverage-v8": "^4.1.9",
+    "playwright": "^1.61.0",
+    "vitest": "^4.1.9"
   },
   "dependencies": {
     "@asteasolutions/zod-to-openapi": "^8.5.0",
-    "@aws-sdk/client-s3": "^3.1063.0",
+    "@aws-sdk/client-s3": "^3.1072.0",
     "@leomotors/cli-progress": "^4.0.3",
     "@repo/types": "workspace:*",
     "drizzle-orm": "^0.45.2",
