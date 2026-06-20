@@ -1,8 +1,9 @@
 # Changelog
 
-## [patch]
+## [3.25.1] - 2026-06-21
 
 - qol(dashboard): show Rating and Max Rating with 4 decimal places in the progression chart tooltip
+- qol(data): default the music data table sort to Release date descending (newest first)
 
 ## [3.25.0] - 2026-06-20
 

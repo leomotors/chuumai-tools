@@ -21,7 +21,7 @@
   let selectedVersion = $state<string>("");
   let searchQuery = $state<string>("");
   let debouncedSearchQuery = $state<string>("");
-  let sortField = $state<keyof MusicDataViewSchema>("id");
+  let sortField = $state<keyof MusicDataViewSchema>("releaseDate");
   let sortDirection = $state<"asc" | "desc">("desc");
   let currentPage = $state<number>(1);
   let filterNullConstant = $state<boolean>(false);
