@@ -1,5 +1,9 @@
 # Changelog
 
+## [patch]
+
+- qol(dashboard): show Rating and Max Rating with 4 decimal places in the progression chart tooltip
+
 ## [3.25.0] - 2026-06-20
 
 - feat(dashboard): add cached rating analysis with a #1 rating timeline (reigns with score history) and a tabbed daily breakdown splitting rating gains into BEST/CURRENT records

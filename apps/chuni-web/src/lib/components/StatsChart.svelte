@@ -82,6 +82,39 @@
     data.filter((d) => typeof d[selectedMetric] === "number"),
   );
 
+  // Rating and Max Rating tooltip values are shown with 4 decimal places,
+  // while the y-axis keeps 2 decimal places to avoid overly long tick labels.
+  const isRatingMetric = $derived(
+    selectedMetric === "rating" || selectedMetric === "maxRating",
+  );
+  const tooltipFormat = $derived(
+    isRatingMetric ? (v: number) => v.toFixed(4) : undefined,
+  );
+  const yAxisFormat = $derived(
+    isRatingMetric ? (v: number) => v.toFixed(2) : undefined,
+  );
+
+  const chartProps = $derived({
+    xAxis: {
+      format: (d: Date) =>
+        d.toLocaleDateString(undefined, {
+          month: "short",
+          day: "numeric",
+          year: data.length > 90 ? "2-digit" : undefined,
+        }),
+      labelProps: {
+        class: "text-xs fill-gray-500",
+      },
+    },
+    yAxis: {
+      labelProps: {
+        class: "text-xs fill-gray-500",
+      },
+      ...(yAxisFormat ? { format: yAxisFormat } : {}),
+    },
+    ...(tooltipFormat ? { tooltip: { item: { format: tooltipFormat } } } : {}),
+  });
+
   const yDomain = $derived.by((): [number, number] | undefined => {
     if (chartData.length === 0) return undefined;
     let min = Infinity;
@@ -187,24 +220,7 @@
         yNice
         series={chartSeries}
         axis
-        props={{
-          xAxis: {
-            format: (d: Date) =>
-              d.toLocaleDateString(undefined, {
-                month: "short",
-                day: "numeric",
-                year: data.length > 90 ? "2-digit" : undefined,
-              }),
-            labelProps: {
-              class: "text-xs fill-gray-500",
-            },
-          },
-          yAxis: {
-            labelProps: {
-              class: "text-xs fill-gray-500",
-            },
-          },
-        }}
+        props={chartProps}
       >
         {#snippet spline({ props })}
           {#if selectedMetric === "maxRating" && Spline}
