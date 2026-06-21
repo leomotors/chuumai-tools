@@ -1,5 +1,9 @@
 # Changelog
 
+## [patch]
+
+- fix(deps): pin adapter-node to 5.5.4 to avoid the upstream 5.5.5 startup deadlock that emits an unsettled top-level await warning
+
 ## [3.25.1] - 2026-06-21
 
 - qol(dashboard): show Rating and Max Rating with 4 decimal places in the progression chart tooltip
