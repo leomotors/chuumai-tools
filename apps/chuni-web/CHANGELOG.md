@@ -1,6 +1,6 @@
 # Changelog
 
-## [patch]
+## [3.25.2] - 2026-06-21
 
 - fix(deps): pin adapter-node to 5.5.4 to avoid the upstream 5.5.5 startup deadlock that emits an unsettled top-level await warning
 
