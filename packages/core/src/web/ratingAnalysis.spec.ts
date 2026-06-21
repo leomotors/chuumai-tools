@@ -402,4 +402,223 @@ describe("buildRatingAnalysis", () => {
       contributions: [],
     });
   });
+
+  it("attributes a new entry to the single floor it displaced", () => {
+    const analysis = buildRatingAnalysis({
+      computedAt,
+      snapshots: [
+        {
+          jobId: 1,
+          playedAt: "2026-05-01T12:00:00.000Z",
+          rating: 16,
+          records: [
+            record("a:mas", "Alpha", "MASTER", 1_007_000, 16.7, "old", 1),
+            record("b:exp", "Beta", "EXPERT", 1_004_000, 16.0, "old", 2),
+          ],
+        },
+        {
+          jobId: 2,
+          playedAt: "2026-05-02T12:00:00.000Z",
+          rating: 16.05,
+          records: [
+            record("a:mas", "Alpha", "MASTER", 1_007_000, 16.7, "old", 1),
+            record("c:mas", "Gamma", "MASTER", 1_006_000, 16.5, "old", 2),
+          ],
+        },
+      ],
+    });
+
+    expect(analysis.dailyGains[0].contributions).toHaveLength(1);
+    expect(analysis.dailyGains[0].contributions[0]).toMatchObject({
+      chartKey: "c:mas",
+      previousRating: null,
+      replacedFloorRating: 16,
+    });
+    // Gain is the play rating minus the displaced floor, not the whole rating.
+    expect(analysis.dailyGains[0].contributions[0].delta).toBeCloseTo(0.5, 5);
+  });
+
+  it("splits the gain across multiple displaced floors by ascending rating", () => {
+    const analysis = buildRatingAnalysis({
+      computedAt,
+      snapshots: [
+        {
+          jobId: 1,
+          playedAt: "2026-05-01T12:00:00.000Z",
+          rating: 16,
+          records: [
+            record("c:mas", "Gamma", "MASTER", 1_009_000, 17.0, "old", 1),
+            record("a:mas", "Alpha", "MASTER", 1_004_000, 16.1, "old", 2),
+            record("b:exp", "Beta", "EXPERT", 1_003_000, 16.0, "old", 3),
+          ],
+        },
+        {
+          jobId: 2,
+          playedAt: "2026-05-02T12:00:00.000Z",
+          rating: 16.2,
+          records: [
+            record("c:mas", "Gamma", "MASTER", 1_009_000, 17.0, "old", 1),
+            record("e:mas", "Epsilon", "MASTER", 1_006_500, 16.5, "old", 2),
+            record("d:mas", "Delta", "MASTER", 1_005_500, 16.3, "old", 3),
+          ],
+        },
+      ],
+    });
+
+    const byChart = Object.fromEntries(
+      analysis.dailyGains[0].contributions.map((c) => [c.chartKey, c]),
+    );
+    // Removed floors {16.0, 16.1}; with no play history the new entries pair by
+    // ascending rating: 16.3 -> 16.0 floor, 16.5 -> 16.1 floor.
+    expect(byChart["d:mas"].replacedFloorRating).toBe(16);
+    expect(byChart["d:mas"].delta).toBeCloseTo(0.3, 5);
+    expect(byChart["e:mas"].replacedFloorRating).toBeCloseTo(16.1, 5);
+    expect(byChart["e:mas"].delta).toBeCloseTo(0.4, 5);
+  });
+
+  it("orders new entries by play time so the earliest takes the lowest floor", () => {
+    const analysis = buildRatingAnalysis({
+      computedAt,
+      snapshots: [
+        {
+          jobId: 1,
+          playedAt: "2026-05-01T12:00:00.000Z",
+          rating: 16,
+          records: [
+            record("c:mas", "Gamma", "MASTER", 1_009_000, 17.0, "old", 1),
+            record("a:mas", "Alpha", "MASTER", 1_004_000, 16.1, "old", 2),
+            record("b:exp", "Beta", "EXPERT", 1_003_000, 16.0, "old", 3),
+          ],
+        },
+        {
+          jobId: 2,
+          playedAt: "2026-05-02T12:00:00.000Z",
+          rating: 16.2,
+          records: [
+            record("c:mas", "Gamma", "MASTER", 1_009_000, 17.0, "old", 1),
+            record("e:mas", "Epsilon", "MASTER", 1_006_500, 16.5, "old", 2),
+            record("d:mas", "Delta", "MASTER", 1_005_500, 16.3, "old", 3),
+          ],
+        },
+      ],
+      histories: [
+        {
+          chartKey: "e:mas",
+          title: "Epsilon",
+          chartLabel: "MASTER",
+          score: 1_006_500,
+          playedAt: "2026-05-02T09:00:00.000Z",
+        },
+        {
+          chartKey: "d:mas",
+          title: "Delta",
+          chartLabel: "MASTER",
+          score: 1_005_500,
+          playedAt: "2026-05-02T10:00:00.000Z",
+        },
+      ],
+    });
+
+    const byChart = Object.fromEntries(
+      analysis.dailyGains[0].contributions.map((c) => [c.chartKey, c]),
+    );
+    // Epsilon was played first, so it displaced the lowest floor (16.0) even
+    // though it is the higher-rated new entry; Delta then took the 16.1 floor.
+    expect(byChart["e:mas"].replacedFloorRating).toBe(16);
+    expect(byChart["e:mas"].delta).toBeCloseTo(0.5, 5);
+    expect(byChart["d:mas"].replacedFloorRating).toBeCloseTo(16.1, 5);
+    expect(byChart["d:mas"].delta).toBeCloseTo(0.2, 5);
+  });
+
+  it("credits a new entry that fills an empty slot with its full rating", () => {
+    const analysis = buildRatingAnalysis({
+      computedAt,
+      snapshots: [
+        {
+          jobId: 1,
+          playedAt: "2026-05-01T12:00:00.000Z",
+          rating: 16,
+          records: [
+            record("a:mas", "Alpha", "MASTER", 1_007_000, 16.7, "old", 1),
+            record("x:exp", "Xi", "EXPERT", 1_000_000, 15.5, "old", 2),
+          ],
+        },
+        {
+          jobId: 2,
+          playedAt: "2026-05-02T12:00:00.000Z",
+          rating: 16.3,
+          records: [
+            record("a:mas", "Alpha", "MASTER", 1_007_000, 16.7, "old", 1),
+            record("b:mas", "Beta", "MASTER", 1_006_000, 16.5, "old", 2),
+            record("c:mas", "Gamma", "MASTER", 1_005_000, 16.2, "old", 3),
+          ],
+        },
+      ],
+    });
+
+    const byChart = Object.fromEntries(
+      analysis.dailyGains[0].contributions.map((c) => [c.chartKey, c]),
+    );
+    // The list grew from 2 to 3 entries: one new entry takes the freed 15.5
+    // floor, the other fills a brand-new slot (floor 0 -> full-rating credit).
+    expect(byChart["c:mas"].replacedFloorRating).toBe(0);
+    expect(byChart["c:mas"].delta).toBeCloseTo(16.2, 5);
+    expect(byChart["b:mas"].replacedFloorRating).toBeCloseTo(15.5, 5);
+    expect(byChart["b:mas"].delta).toBeCloseTo(1.0, 5);
+  });
+
+  it("handles an improved floor entry and a brand-new entry on the same day", () => {
+    const analysis = buildRatingAnalysis({
+      computedAt,
+      snapshots: [
+        {
+          jobId: 1,
+          playedAt: "2026-05-01T12:00:00.000Z",
+          rating: 16,
+          records: [
+            record("a:mas", "Alpha", "MASTER", 1_009_000, 17.0, "old", 1),
+            record("b:exp", "Beta", "EXPERT", 1_006_000, 16.5, "old", 2),
+            record("f:mas", "Floor", "MASTER", 1_004_000, 16.0, "old", 3),
+          ],
+        },
+        {
+          jobId: 2,
+          playedAt: "2026-05-02T12:00:00.000Z",
+          rating: 16.4,
+          records: [
+            record("a:mas", "Alpha", "MASTER", 1_009_000, 17.0, "old", 1),
+            record("x:mas", "Xenon", "MASTER", 1_008_000, 16.8, "old", 2),
+            record("f:mas", "Floor", "MASTER", 1_006_500, 16.7, "old", 3),
+          ],
+        },
+      ],
+    });
+
+    const contributions = analysis.dailyGains[0].contributions;
+    const byChart = Object.fromEntries(
+      contributions.map((c) => [c.chartKey, c]),
+    );
+
+    // The floor song improved in place: it keeps its own rating gain and
+    // displaces nothing.
+    expect(byChart["f:mas"]).toMatchObject({
+      previousRating: 16,
+      replacedFloorRating: null,
+    });
+    expect(byChart["f:mas"].delta).toBeCloseTo(0.7, 5);
+
+    // The brand-new entry is attributed to the entry actually pushed out of the
+    // list (Beta, 16.5), not to the floor song it sat next to.
+    expect(byChart["x:mas"]).toMatchObject({
+      previousRating: null,
+      replacedFloorRating: 16.5,
+    });
+    expect(byChart["x:mas"].delta).toBeCloseTo(0.3, 5);
+
+    // Unchanged top entry is not a contribution; the two gains reconcile to the
+    // slot's net change: (17.0 + 16.8 + 16.7) - (17.0 + 16.5 + 16.0) = 1.0.
+    expect(contributions).toHaveLength(2);
+    const totalDelta = contributions.reduce((sum, c) => sum + c.delta, 0);
+    expect(totalDelta).toBeCloseTo(1.0, 5);
+  });
 });

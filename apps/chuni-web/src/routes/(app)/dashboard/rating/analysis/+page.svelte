@@ -155,22 +155,17 @@
           class="size-full object-cover"
         />
       </div>
-      {#if contribution.previousRating === null}
-        <span
-          class="flex items-center gap-0.5 text-sm font-bold tabular-nums text-emerald-700"
-        >
+      <span
+        class="flex items-center gap-0.5 text-sm font-bold tabular-nums {contribution.delta >=
+        0
+          ? 'text-emerald-700'
+          : 'text-rose-700'}"
+      >
+        {#if contribution.previousRating === null}
           <Sparkles class="size-3" />
-          {formatRating(contribution.rating)}
-        </span>
-      {:else}
-        <span
-          class="text-sm font-bold tabular-nums {contribution.delta >= 0
-            ? 'text-emerald-700'
-            : 'text-rose-700'}"
-        >
-          {formatDelta(contribution.delta)}
-        </span>
-      {/if}
+        {/if}
+        {formatDelta(contribution.delta)}
+      </span>
     </div>
   {/snippet}
 
@@ -237,6 +232,25 @@
                 -> {formatContributionRating(contribution.rating)}
               </span>
             </div>
+            {#if contribution.previousRating === null}
+              <div>
+                <span class="font-medium text-gray-500">Floor</span>
+                <span class="ml-1 tabular-nums">
+                  {#if contribution.replacedFloorRating}
+                    {formatRating(contribution.replacedFloorRating)} replaced
+                  {:else}
+                    {@render outsideMark()} empty slot
+                  {/if}
+                  <span
+                    class="font-semibold {contribution.delta >= 0
+                      ? 'text-emerald-700'
+                      : 'text-rose-700'}"
+                  >
+                    ({formatDelta(contribution.delta)})
+                  </span>
+                </span>
+              </div>
+            {/if}
           </div>
         </div>
       </div>

@@ -1,5 +1,5 @@
 const JST_GAME_DAY_SHIFT_MS = 2 * 60 * 60 * 1000;
-const RATING_ANALYSIS_PAYLOAD_VERSION = 5;
+const RATING_ANALYSIS_PAYLOAD_VERSION = 6;
 
 export type RatingAnalysisSlot = "old" | "new";
 
@@ -96,6 +96,11 @@ export type RatingAnalysisSongDuration = {
 export type RatingAnalysisDailyContribution = RatingAnalysisRecord & {
   previousRating: number | null;
   previousScore: number | null;
+  // For a new entry (previousRating === null) this is the rating of the floor it
+  // displaced from the list, so `delta` is the real gain it added rather than its
+  // whole play rating. 0 means it filled a slot left empty by a not-yet-full
+  // list. null for improved entries, which were already in the list.
+  replacedFloorRating: number | null;
   delta: number;
   matchedHistoryAt: string | null;
   attribution: "matched" | "inferred";
@@ -493,6 +498,103 @@ function findMatchedHistory(
   );
 }
 
+// A new rating-list entry displaces the lowest surviving entry (the "floor").
+// The floor rises through the day as higher scores land, so the displaced floors
+// are consumed lowest-first. We replay that order using real play times where
+// history pinned them, and fall back to ascending rating (a stable sorted
+// pairing) for entries we could not match. Matched entries come first because we
+// know they were played that day; unmatched ones trail by ascending rating.
+function compareNewEntryConsumption(
+  a: RatingAnalysisDailyContribution,
+  b: RatingAnalysisDailyContribution,
+) {
+  if (a.matchedHistoryAt && b.matchedHistoryAt) {
+    return (
+      a.matchedHistoryAt.localeCompare(b.matchedHistoryAt) ||
+      a.rating - b.rating ||
+      a.chartKey.localeCompare(b.chartKey)
+    );
+  }
+  if (a.matchedHistoryAt) return -1;
+  if (b.matchedHistoryAt) return 1;
+  return a.rating - b.rating || a.chartKey.localeCompare(b.chartKey);
+}
+
+function buildDailyContributions(
+  snapshot: NormalizedSnapshot,
+  previousRecords: Map<string, RatingAnalysisRecord>,
+  removedBySlot: Map<RatingAnalysisSlot, RatingAnalysisRecord[]>,
+  dayKey: string,
+  histories: ReturnType<typeof normalizeHistories>,
+): RatingAnalysisDailyContribution[] {
+  const contributions: RatingAnalysisDailyContribution[] = [];
+  const newBySlot = new Map<
+    RatingAnalysisSlot,
+    RatingAnalysisDailyContribution[]
+  >();
+
+  for (const record of snapshot.records) {
+    const previousRecord =
+      previousRecords.get(contributionSlotKey(record)) ?? null;
+    // Only count records that actually raised the rating. A pure score gain that
+    // leaves the rating unchanged does not move the total, so it is not a rating
+    // contribution.
+    const increasedRating =
+      previousRecord === null || record.rating > previousRecord.rating;
+    if (!increasedRating) continue;
+
+    const matchedHistory = findMatchedHistory(record, dayKey, histories);
+    const contribution: RatingAnalysisDailyContribution = {
+      ...record,
+      previousRating: previousRecord?.rating ?? null,
+      previousScore: previousRecord?.score ?? null,
+      // Improved entries were already in the list, so their gain is their own
+      // rating increase and they displace nothing. New entries get their floor
+      // and gain finalised in the second pass below.
+      replacedFloorRating: previousRecord ? null : 0,
+      delta: previousRecord
+        ? record.rating - previousRecord.rating
+        : record.rating,
+      matchedHistoryAt: matchedHistory ? toIso(matchedHistory.playedAt) : null,
+      attribution: matchedHistory ? "matched" : "inferred",
+    };
+    contributions.push(contribution);
+
+    if (previousRecord === null) {
+      const list = newBySlot.get(record.slot) ?? [];
+      list.push(contribution);
+      newBySlot.set(record.slot, list);
+    }
+  }
+
+  // Attribute each new entry to the floor it displaced. Pairing the new entries
+  // to the displaced floors is a bijection, so the per-entry gains always sum to
+  // the slot's true net change however individual pairs line up.
+  for (const [slot, newEntries] of newBySlot) {
+    const floors = (removedBySlot.get(slot) ?? [])
+      .map((floor) => floor.rating)
+      .sort((a, b) => a - b);
+    // A new entry that filled a slot left empty by a not-yet-full list replaced
+    // nothing, modelled as a floor of 0 (full-rating credit).
+    while (floors.length < newEntries.length) floors.unshift(0);
+
+    newEntries.sort(compareNewEntryConsumption);
+    newEntries.forEach((entry, index) => {
+      const floor = floors[index] ?? 0;
+      entry.replacedFloorRating = floor;
+      entry.delta = entry.rating - floor;
+    });
+  }
+
+  return contributions.sort(
+    (a, b) =>
+      Number(b.attribution === "matched") -
+        Number(a.attribution === "matched") ||
+      b.delta - a.delta ||
+      a.order - b.order,
+  );
+}
+
 function buildDailyGains(
   snapshots: NormalizedSnapshot[],
   histories: RatingAnalysisHistoryInput[],
@@ -522,49 +624,27 @@ function buildDailyGains(
     const roi =
       playCountGain == null || playCountGain <= 0 ? null : gain / playCountGain;
 
+    // Entries present yesterday but gone today are the displaced floors. New
+    // rating-list entries are attributed against them in buildDailyContributions.
+    const todayKeys = new Set(snapshot.records.map(contributionSlotKey));
+    const removedBySlot = new Map<RatingAnalysisSlot, RatingAnalysisRecord[]>();
+    for (const record of previous?.records ?? []) {
+      if (todayKeys.has(contributionSlotKey(record))) continue;
+      const list = removedBySlot.get(record.slot) ?? [];
+      list.push(record);
+      removedBySlot.set(record.slot, list);
+    }
+
     const contributions =
       previous === null
         ? []
-        : snapshot.records
-            .map((record): RatingAnalysisDailyContribution | null => {
-              const previousRecord =
-                previousRecords.get(contributionSlotKey(record)) ?? null;
-              // Only count records that actually raised the rating. A pure
-              // score gain that leaves the rating unchanged does not move the
-              // total, so it is not a rating contribution.
-              const increasedRating =
-                previousRecord === null ||
-                record.rating > previousRecord.rating;
-
-              if (!increasedRating) return null;
-
-              const matchedHistory = findMatchedHistory(
-                record,
-                dayKey,
-                normalizedHistories,
-              );
-
-              return {
-                ...record,
-                previousRating: previousRecord?.rating ?? null,
-                previousScore: previousRecord?.score ?? null,
-                delta: record.rating - (previousRecord?.rating ?? 0),
-                matchedHistoryAt: matchedHistory
-                  ? toIso(matchedHistory.playedAt)
-                  : null,
-                attribution: matchedHistory ? "matched" : "inferred",
-              };
-            })
-            .filter(
-              (record): record is RatingAnalysisDailyContribution => !!record,
-            )
-            .sort(
-              (a, b) =>
-                Number(b.attribution === "matched") -
-                  Number(a.attribution === "matched") ||
-                b.delta - a.delta ||
-                a.order - b.order,
-            );
+        : buildDailyContributions(
+            snapshot,
+            previousRecords,
+            removedBySlot,
+            dayKey,
+            normalizedHistories,
+          );
 
     result.push({
       dayKey,
