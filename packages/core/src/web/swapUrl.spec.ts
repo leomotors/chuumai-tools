@@ -56,6 +56,9 @@ describe("getSwapUrl", () => {
     expect(getSwapUrl(baseUrl, "/dashboard/admin")).toBe(
       "https://chuni.wonderhoy.me/dashboard/admin",
     );
+    expect(getSwapUrl(baseUrl, "/tools/preview-next")).toBe(
+      "https://chuni.wonderhoy.me/tools/preview-next",
+    );
   });
 
   it("drops non-interchangeable routes and falls back to home page (/)", () => {

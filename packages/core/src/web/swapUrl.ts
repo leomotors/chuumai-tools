@@ -19,6 +19,7 @@ export const appSwapAllowedPaths = [
   "/dashboard/jobs",
   "/dashboard/settings",
   "/dashboard/admin",
+  "/tools/preview-next",
 ] as const;
 
 export function getSwapUrl(

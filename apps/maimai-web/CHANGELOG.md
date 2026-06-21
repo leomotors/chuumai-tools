@@ -1,5 +1,9 @@
 # Changelog
 
+## [patch]
+
+- fix(nav): preserve the Preview Next tool page URL when swapping applications
+
 ## [1.17.0] - 2026-06-20
 
 - feat(dashboard): add cached rating analysis with a #1 rating timeline (reigns with score history) and a tabbed daily breakdown splitting rating gains into OLD/NEW records
