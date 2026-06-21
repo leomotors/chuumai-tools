@@ -1,5 +1,9 @@
 # Changelog
 
+## [patch]
+
+- fix(auth): lazy-load the Auth.js hook to avoid an adapter-node startup deadlock after the SvelteKit 2.66 update
+
 ## [3.25.1] - 2026-06-21
 
 - qol(dashboard): show Rating and Max Rating with 4 decimal places in the progression chart tooltip
