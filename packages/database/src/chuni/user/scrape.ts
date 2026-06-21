@@ -154,6 +154,10 @@ export const rawScrapeDataTable = pgTable("raw_scrape_data", {
   playerDataHtml: text("player_data_html"),
   allMusicRecordHtml: text("all_music_record_html"),
   dataForImageGen: text("data_for_image_gen"),
+  // Full play data JSON (superset of dataForImageGen) used by /tools/preview-next.
+  // Large (~200-300 kB); only selected on the explicit download path, so TOAST
+  // keeps it out-of-line and it never affects other queries.
+  fullPlayData: text("full_play_data"),
 });
 
 export const ratingAnalysisCacheTable = pgTable("rating_analysis_cache", {

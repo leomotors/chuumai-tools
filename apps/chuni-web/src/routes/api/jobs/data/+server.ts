@@ -47,6 +47,7 @@ export const POST: RequestHandler = async ({ request }) => {
     playerDataHtml,
     allMusicRecordHtml,
     imgGenInput,
+    fullPlayData,
     calculatedRating,
     version,
   } = bodyResult.data;
@@ -205,6 +206,7 @@ export const POST: RequestHandler = async ({ request }) => {
       playerDataHtml,
       allMusicRecordHtml,
       dataForImageGen: JSON.stringify(imgGenInput),
+      fullPlayData: fullPlayData ? JSON.stringify(fullPlayData) : null,
     });
 
     try {

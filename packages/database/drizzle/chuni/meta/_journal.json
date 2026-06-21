@@ -99,6 +99,13 @@
       "when": 1781626333659,
       "tag": "0013_secret_vision",
       "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1782028078561,
+      "tag": "0014_add_full_play_data",
+      "breakpoints": true
     }
   ]
 }

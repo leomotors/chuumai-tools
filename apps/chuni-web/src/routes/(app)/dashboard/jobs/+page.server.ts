@@ -1,4 +1,4 @@
-import { desc, eq, sql } from "drizzle-orm";
+import { and, desc, eq, inArray, isNotNull, sql } from "drizzle-orm";
 
 import { env } from "$env/dynamic/private";
 import { db } from "$lib/db";
@@ -8,7 +8,7 @@ import {
   parseJobListLimit,
   ratingBreakdownImageExistsInS3,
 } from "@repo/core/web";
-import { jobTable } from "@repo/database/chuni";
+import { jobTable, rawScrapeDataTable } from "@repo/database/chuni";
 
 import type { PageServerLoad } from "./$types";
 
@@ -55,6 +55,26 @@ export const load: PageServerLoad = async ({ parent, url }) => {
   const visibleJobs = jobs.slice(0, limit);
   const hasMore = jobs.length > limit;
 
+  // Which visible jobs have downloadable full play data. Selecting only job_id
+  // with an IS NOT NULL filter never reads (de-TOASTs) the large
+  // full_play_data column itself.
+  const visibleJobIds = visibleJobs.map((job) => job.id);
+  const jobsWithFullData = new Set(
+    visibleJobIds.length
+      ? (
+          await db
+            .select({ jobId: rawScrapeDataTable.jobId })
+            .from(rawScrapeDataTable)
+            .where(
+              and(
+                inArray(rawScrapeDataTable.jobId, visibleJobIds),
+                isNotNull(rawScrapeDataTable.fullPlayData),
+              ),
+            )
+        ).map((row) => row.jobId)
+      : [],
+  );
+
   return {
     limit,
     hasMore,
@@ -64,6 +84,7 @@ export const load: PageServerLoad = async ({ parent, url }) => {
         ...job,
         jobStart: job.jobStart.toISOString(),
         jobEnd: job.jobEnd?.toISOString() ?? null,
+        hasFullData: jobsWithFullData.has(job.id),
         hasRatingBreakdownImage: canCheckImages
           ? await ratingBreakdownImageExistsInS3({
               config: storageConfig,

@@ -1,7 +1,8 @@
 # Changelog
 
-## [patch]
+## [3.26.0] - 2026-06-21
 
+- feat(dashboard): add a JSON download button on the job list to export the full play data captured by the scraper (usable with the Preview Next tool)
 - fix(nav): preserve the Preview Next tool page URL when swapping applications
 
 ## [3.25.2] - 2026-06-21

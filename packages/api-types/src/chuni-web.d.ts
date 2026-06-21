@@ -1542,6 +1542,16 @@ export interface components {
         hidden?: components["schemas"]["HiddenChart"][];
         scraperVersion?: string;
       };
+      /** @description Full play data JSON (superset of imgGenInput, includes all records and history) for download / Preview Next. Optional for backward compatibility with older scrapers. */
+      fullPlayData?: {
+        profile: components["schemas"]["Profile"];
+        best: components["schemas"]["Chart"][];
+        current: components["schemas"]["Chart"][];
+        hidden?: components["schemas"]["HiddenChart"][];
+        scraperVersion?: string;
+        allRecords: components["schemas"]["Chart"][];
+        history?: components["schemas"]["HistoryRecord"][];
+      };
       /**
        * @description Calculated rating from image generation service
        * @example 16.4521

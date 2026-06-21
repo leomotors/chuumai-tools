@@ -1,0 +1,1 @@
+ALTER TABLE "raw_scrape_data" ADD COLUMN "full_play_data" text;

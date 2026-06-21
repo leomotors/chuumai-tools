@@ -4,6 +4,7 @@
     Download,
     Eye,
     FileText,
+    FileX,
     ImageOff,
     LoaderCircle,
     OctagonAlert,
@@ -51,6 +52,10 @@
 
   function imageUrl(jobId: number) {
     return `/api/jobs/ratingBreakdownImage/file?jobId=${jobId}`;
+  }
+
+  function fullDataUrl(jobId: number) {
+    return `/api/jobs/fullData?jobId=${jobId}`;
   }
 
   function formatDate(value: string | null) {
@@ -212,6 +217,7 @@
           <Table.Head class="w-28">Duration</Table.Head>
           <Table.Head class="w-28">Status</Table.Head>
           <Table.Head class="w-28">Log</Table.Head>
+          <Table.Head class="w-20 text-right">JSON</Table.Head>
           <Table.Head class="w-20 text-right">Image</Table.Head>
         </Table.Row>
       </Table.Header>
@@ -267,6 +273,28 @@
                 <span class="text-xs text-gray-400">Running…</span>
               {:else}
                 <span class="text-xs text-gray-400">—</span>
+              {/if}
+            </Table.Cell>
+            <Table.Cell class="text-right">
+              {#if job.hasFullData}
+                <Button
+                  href={fullDataUrl(job.id)}
+                  download={`full-play-data-job-${job.id}.json`}
+                  size="icon-sm"
+                  variant="ghost"
+                  aria-label="Download full play data for job {job.id}"
+                  title="Download full play data JSON"
+                >
+                  <Download class="size-4" />
+                </Button>
+              {:else}
+                <span
+                  class="inline-flex size-8 items-center justify-center text-gray-300"
+                  title="No full play data"
+                  aria-label="No full play data"
+                >
+                  <FileX class="size-4" />
+                </span>
               {/if}
             </Table.Cell>
             <Table.Cell class="text-right">

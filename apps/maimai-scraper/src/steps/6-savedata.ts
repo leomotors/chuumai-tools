@@ -54,6 +54,7 @@ export async function saveDataToService(
       playerDataHtml,
       allMusicRecordHtml,
       imgGenInput,
+      fullPlayData: fullPlayDataInput,
       calculatedRating,
       version: environment.VERSION,
     },

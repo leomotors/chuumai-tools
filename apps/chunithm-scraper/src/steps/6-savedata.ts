@@ -80,6 +80,13 @@ export async function saveDataToService(
           lastPlayed: playerData.lastPlayed.toISOString(),
         },
       },
+      fullPlayData: {
+        ...fullPlayDataInput,
+        profile: {
+          ...fullPlayDataInput.profile,
+          lastPlayed: playerData.lastPlayed.toISOString(),
+        },
+      },
       calculatedRating,
       version: environment.VERSION,
     },

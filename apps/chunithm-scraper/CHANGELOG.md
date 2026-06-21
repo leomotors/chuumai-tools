@@ -2,6 +2,10 @@
 
 For changelog before V4: [here](https://github.com/leomotors/chunithm-net-scraper/blob/main/CHANGELOG.md)
 
+## [6.8.0] - 2026-06-21
+
+- feat: upload full play data JSON to the web service so it can be downloaded from the dashboard (and used with the Preview Next tool)
+
 ## [6.7.1] - 2026-05-29
 
 - fix(api): send the configured web service origin for multipart image uploads

@@ -172,6 +172,18 @@ export const jobLogQuerySchema = z
   .openapi("JobLogQuery");
 
 /**
+ * Query schema for authenticated full play data download.
+ */
+export const jobFullDataQuerySchema = z
+  .object({
+    jobId: z.coerce.number().int().positive().openapi({
+      description: "The ID of the job to download full play data for",
+      example: 12345,
+    }),
+  })
+  .openapi("JobFullDataQuery");
+
+/**
  * Response schema for authenticated job log lookup.
  */
 export const jobLogResponseSchema = z
@@ -238,4 +250,5 @@ export function registerCommonJobSchemas(registry: OpenAPIRegistry) {
   );
   registry.register("JobLogQuery", jobLogQuerySchema);
   registry.register("JobLogResponse", jobLogResponseSchema);
+  registry.register("JobFullDataQuery", jobFullDataQuerySchema);
 }

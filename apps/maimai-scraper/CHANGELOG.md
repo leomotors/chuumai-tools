@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.4.0] - 2026-06-21
+
+- feat: upload full play data JSON to the web service so it can be downloaded from the dashboard (and used with the Preview Next tool)
+
 ## [1.3.0] - 2026-05-29
 
 - feat: check web service compatibility before scraping

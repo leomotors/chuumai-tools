@@ -17,6 +17,7 @@ import {
 } from "@repo/core/web";
 import {
   chartSchema,
+  fullPlayDataInputSchema,
   historyRecordSchema,
   imgGenInputSchema,
   rarityLevelValues,
@@ -108,6 +109,10 @@ export const saveJobDataRequestSchema = z
     }),
     imgGenInput: imgGenInputSchema.openapi({
       description: "Data formatted for image generation",
+    }),
+    fullPlayData: fullPlayDataInputSchema.optional().openapi({
+      description:
+        "Full play data JSON (superset of imgGenInput, includes all records and history) for download / Preview Next. Optional for backward compatibility with older scrapers.",
     }),
     calculatedRating: z.number().optional().openapi({
       description: "Calculated rating from image generation service",

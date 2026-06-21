@@ -1338,6 +1338,7 @@ export interface components {
       /** @description Raw HTML from music record pages (for debugging) */
       allMusicRecordHtml: string;
       imgGenInput: components["schemas"]["ImgGenInput"];
+      fullPlayData?: components["schemas"]["FullPlayDataInput"];
       /**
        * @description Calculated rating from image generation service
        * @example 15420
@@ -1372,6 +1373,11 @@ export interface components {
       star: number;
       playCountCurrent?: number;
       playCountTotal?: number;
+    };
+    /** @description Full play data JSON (superset of imgGenInput, includes all records and history) for download / Preview Next. Optional for backward compatibility with older scrapers. */
+    FullPlayDataInput: components["schemas"]["ImgGenInput"] & {
+      allRecords: components["schemas"]["Chart"][];
+      history: components["schemas"]["HistoryRecord"][];
     };
     SaveJobDataResponse: {
       /**
@@ -1440,10 +1446,6 @@ export interface components {
       currentVersion: string;
       /** @description Use international release date to determine new songs */
       intlVersion: boolean;
-    };
-    FullPlayDataInput: components["schemas"]["ImgGenInput"] & {
-      allRecords: components["schemas"]["Chart"][];
-      history: components["schemas"]["HistoryRecord"][];
     };
     PreviewNextResponse: {
       profile: components["schemas"]["Profile"];
