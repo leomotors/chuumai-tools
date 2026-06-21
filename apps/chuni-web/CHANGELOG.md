@@ -2,7 +2,7 @@
 
 ## [patch]
 
-- fix(auth): lazy-load the Auth.js hook to avoid an adapter-node startup deadlock after the SvelteKit 2.66 update
+- fix(deps): pin adapter-node to 5.5.4 to avoid the upstream 5.5.5 startup deadlock that emits an unsettled top-level await warning
 
 ## [3.25.1] - 2026-06-21
 
