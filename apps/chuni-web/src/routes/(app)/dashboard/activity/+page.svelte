@@ -11,6 +11,7 @@
   } from "$lib/components/StatsChart.svelte";
   import { formatChuniRating } from "$lib/utils/chuniRating";
 
+  import { chuniRatingMilestones } from "@repo/core/chuni";
   import { mergeManualRatingRecords, withMaxRating } from "@repo/core/web";
   import {
     buildGainHeatmap,
@@ -105,6 +106,7 @@
     onMetricChange={(metric) => (selectedMetric = metric)}
     range={timeRange}
     onRangeChange={(range) => (timeRange = range)}
+    milestones={[...chuniRatingMilestones]}
   />
 
   <section

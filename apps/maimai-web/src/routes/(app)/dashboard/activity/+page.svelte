@@ -10,6 +10,7 @@
     type MaimaiMetric,
   } from "$lib/components/StatsChart.svelte";
 
+  import { maimaiRatingMilestones } from "@repo/core/maimai";
   import { mergeManualRatingRecords, withMaxRating } from "@repo/core/web";
   import {
     buildGainHeatmap,
@@ -93,6 +94,7 @@
     onMetricChange={(metric) => (selectedMetric = metric)}
     range={timeRange}
     onRangeChange={(range) => (timeRange = range)}
+    milestones={[...maimaiRatingMilestones]}
   />
 
   <section

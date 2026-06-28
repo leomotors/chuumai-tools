@@ -2,6 +2,8 @@
 
 ## [patch]
 
+- feat(dashboard): add optional linear regression on the Activity progression chart for Rating and Max Rating, with next-milestone prediction based on the selected timeframe
+- qol(dashboard): add an all-milestones switch to expand linear regression predictions for every unreached milestone
 - fix(data): ignore failed rating-list scrapes when building Music for Rating timelines so empty snapshots no longer split stints
 - feat(data): add hover tooltips on timeline markers showing the date and event at each point
 - qol(data): show Music for Rating periods list with latest stint first

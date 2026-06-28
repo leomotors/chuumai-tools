@@ -41,20 +41,30 @@
 <script lang="ts">
   import { scaleTime } from "d3-scale";
   import type {
+    Line as LineType,
     LineChart as LineChartType,
     Spline as SplineType,
   } from "layerchart";
 
   import { browser } from "$app/environment";
 
+  import {
+    analyzeProgressionRegression,
+    formatProgressionMilestonePrediction,
+    type RatingMilestoneDefinition,
+  } from "@repo/core/web";
+  import { ProgressionRegressionPredictions } from "@repo/ui/molecule/ProgressionRegressionPredictions";
+
   // Dynamically import LayerChart only on client side
   let LineChart = $state<typeof LineChartType | null>(null);
   let Spline = $state<typeof SplineType | null>(null);
+  let Line = $state<typeof LineType | null>(null);
   $effect(() => {
     if (browser) {
       import("layerchart").then((module) => {
         LineChart = module.LineChart;
         Spline = module.Spline;
+        Line = module.Line;
       });
     }
   });
@@ -65,10 +75,19 @@
     onMetricChange: (m: ChuniMetric) => void;
     range: number;
     onRangeChange: (r: number) => void;
+    milestones?: RatingMilestoneDefinition[];
   };
 
-  let { data, selectedMetric, onMetricChange, range, onRangeChange }: Props =
-    $props();
+  let {
+    data,
+    selectedMetric,
+    onMetricChange,
+    range,
+    onRangeChange,
+    milestones = [],
+  }: Props = $props();
+
+  let showLinearRegression = $state(false);
 
   const chartSeries = $derived([
     {
@@ -82,11 +101,49 @@
     data.filter((d) => typeof d[selectedMetric] === "number"),
   );
 
-  // Rating and Max Rating tooltip values are shown with 4 decimal places,
-  // while the y-axis keeps 2 decimal places to avoid overly long tick labels.
   const isRatingMetric = $derived(
     selectedMetric === "rating" || selectedMetric === "maxRating",
   );
+
+  const regressionAnalysis = $derived.by(() => {
+    if (!showLinearRegression || !isRatingMetric || chartData.length < 2) {
+      return null;
+    }
+
+    const latestValue = chartData[chartData.length - 1][selectedMetric];
+    if (typeof latestValue !== "number") return null;
+
+    return analyzeProgressionRegression({
+      points: chartData.map((datum) => ({
+        date: datum.date,
+        value: datum[selectedMetric] as number,
+      })),
+      milestones,
+      currentRating: latestValue,
+    });
+  });
+
+  const regressionPredictions = $derived.by(() => {
+    if (!regressionAnalysis) return null;
+
+    const futurePredictions = regressionAnalysis.futureMilestones.map(
+      (entry) => ({
+        id: entry.milestone.id,
+        summary: formatProgressionMilestonePrediction(
+          entry.milestone.label,
+          entry.predictedDate,
+        ),
+      }),
+    );
+
+    return {
+      nextPrediction: futurePredictions[0],
+      futurePredictions,
+    };
+  });
+
+  // Rating and Max Rating tooltip values are shown with 4 decimal places,
+  // while the y-axis keeps 2 decimal places to avoid overly long tick labels.
   const tooltipFormat = $derived(
     isRatingMetric ? (v: number) => v.toFixed(4) : undefined,
   );
@@ -125,6 +182,12 @@
       if (v < min) min = v;
       if (v > max) max = v;
     }
+    if (regressionAnalysis) {
+      for (const point of regressionAnalysis.linePoints) {
+        if (point.value < min) min = point.value;
+        if (point.value > max) max = point.value;
+      }
+    }
     if (!isFinite(min) || !isFinite(max)) return undefined;
     if (min === max) {
       const pad = Math.max(1, Math.abs(min) * 0.05);
@@ -159,6 +222,15 @@
       <p class="mt-0.5 text-[11.5px] text-gray-400">
         {CHUNI_METRIC_CONFIG[selectedMetric].label} over {rangeLabel(range)}
       </p>
+      {#if showLinearRegression && regressionPredictions}
+        {#key `${selectedMetric}-${range}-${regressionPredictions.futurePredictions.map((entry) => entry.id).join(",")}`}
+          <ProgressionRegressionPredictions {...regressionPredictions} />
+        {/key}
+      {:else if showLinearRegression && isRatingMetric && chartData.length >= 2}
+        <p class="mt-1 text-[11.5px] text-gray-400">
+          Linear regression unavailable for this timeframe
+        </p>
+      {/if}
     </div>
     <div class="flex flex-wrap items-center gap-2">
       <div class="flex flex-wrap gap-1">
@@ -201,6 +273,21 @@
           </button>
         {/each}
       </div>
+      {#if isRatingMetric}
+        <button
+          type="button"
+          onclick={() => (showLinearRegression = !showLinearRegression)}
+          class="inline-flex items-center rounded-full border px-3 py-1 text-[11.5px] font-medium transition-colors"
+          class:border-gray-300={showLinearRegression}
+          class:bg-gray-100={showLinearRegression}
+          class:text-gray-900={showLinearRegression}
+          class:border-gray-200={!showLinearRegression}
+          class:text-gray-500={!showLinearRegression}
+          class:hover:text-gray-900={!showLinearRegression}
+        >
+          Linear regression
+        </button>
+      {/if}
     </div>
   </div>
 
@@ -233,6 +320,21 @@
             />
           {:else if Spline}
             <Spline {...props} />
+          {/if}
+        {/snippet}
+        {#snippet aboveMarks({ context })}
+          {#if regressionAnalysis && Line}
+            {@const [startPoint, endPoint] = regressionAnalysis.linePoints}
+            <Line
+              x1={context.xScale(startPoint.date)}
+              y1={context.yScale(startPoint.value)}
+              x2={context.xScale(endPoint.date)}
+              y2={context.yScale(endPoint.value)}
+              stroke="#64748b"
+              stroke-width={1.5}
+              stroke-dasharray="6 4"
+              opacity={0.85}
+            />
           {/if}
         {/snippet}
       </LineChart>
