@@ -21,7 +21,7 @@
     {#snippet generateForm()}
       <form
         method="POST"
-        action="/dashboard?/generateApiKey"
+        action="?/generateApiKey"
         use:enhance={() => {
           isGenerating = true;
           return async ({ update }) => {

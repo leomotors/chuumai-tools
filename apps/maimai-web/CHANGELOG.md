@@ -2,6 +2,7 @@
 
 ## [patch]
 
+- fix(dashboard): only load API keys and manual rating history on pages that use them instead of every dashboard route
 - qol(data): add JP/Intl toggle on the Release column header to switch release-date sorting; missing release dates always sort last when newest-first
 - qol(dashboard): combine Rating and Max Rating into one Activity chart chip with an inline mode toggle (defaults to Max Rating)
 - feat(dashboard): add optional linear regression on the Activity progression chart for Rating and Max Rating, with next-milestone prediction based on the selected timeframe

@@ -1,4 +1,6 @@
 import { fail } from "@sveltejs/kit";
+import { eq, sql } from "drizzle-orm";
+import { nanoid } from "nanoid";
 
 import { db } from "$lib/db";
 
@@ -6,13 +8,53 @@ import {
   parseManualRatingCsv,
   validateManualRatingUploadRecords,
 } from "@repo/core/web";
-import { manualRatingTable } from "@repo/database/maimai";
+import { apiKey, manualRatingTable } from "@repo/database/maimai";
 
-import type { Actions } from "./$types";
+import type { Actions, PageServerLoad } from "./$types";
 
 const MAX_UPLOAD_SIZE = 5 * 1024 * 1024;
 
+export const load: PageServerLoad = async ({ parent }) => {
+  const { user } = await parent();
+
+  const [apiKeyResult] = await db
+    .select({ apiKey: apiKey.apiKey, createdAt: apiKey.createdAt })
+    .from(apiKey)
+    .where(eq(apiKey.userId, user.id));
+
+  return {
+    apiKey: apiKeyResult?.apiKey ?? null,
+    apiKeyCreatedAt: apiKeyResult?.createdAt ?? null,
+  };
+};
+
 export const actions: Actions = {
+  generateApiKey: async ({ locals }) => {
+    const session = await locals.auth();
+
+    if (!session?.user?.id) {
+      return fail(401, { error: "Unauthorized" });
+    }
+
+    const newApiKey = nanoid(32);
+
+    await db
+      .insert(apiKey)
+      .values({
+        userId: session.user.id,
+        apiKey: newApiKey,
+      })
+      .onConflictDoUpdate({
+        target: apiKey.userId,
+        set: {
+          apiKey: newApiKey,
+          createdAt: sql`now()`,
+        },
+      });
+
+    return { success: true, apiKey: newApiKey };
+  },
+
   previewManualRatingUpload: async ({ request, locals }) => {
     const session = await locals.auth();
 
