@@ -1,5 +1,14 @@
 # Changelog
 
+## [patch]
+
+- fix(data): ignore failed rating-list scrapes when building Music for Rating timelines so empty snapshots no longer split stints
+- feat(data): add hover tooltips on timeline markers showing the date and event at each point
+- qol(data): show Music for Rating periods list with latest stint first
+- feat(data): merge consecutive rating-list stints with score changes into one period, with expandable score history
+- feat(data): add a separate Music for Rating card on song detail pages with a visual timeline and exact date ranges for each rating-list stint
+- fix(dashboard): strip NUL characters from rating analysis cache payloads so jsonb inserts no longer fail on scraped titles
+
 ## [1.19.0] - 2026-06-21
 
 - qol(dashboard): in the rating daily view, show a new rating-list entry's gain as its play rating minus the floor it displaced (and surface the replaced floor in the record details) instead of its full play rating; when several entries enter the same day each is attributed to a distinct displaced floor, ordered by play time where known

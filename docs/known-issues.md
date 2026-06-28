@@ -4,9 +4,9 @@ Bugs we've identified but deferred. Pick up and fix when scoped.
 
 ## NUL char (U+0000) in scraped strings crashes the rating-analysis cache refresh (jsonb)
 
-- **Status:** open — deferred
+- **Status:** fixed — NUL characters are stripped before writing `rating_analysis_cache.payload`, and internal record keys no longer embed `\u0000`
 - **Discovered:** 2026-06-21 (seen in maimai-web; the same code path exists in chuni-web)
-- **Severity:** low — the scrape save itself still succeeds; only a cache refresh is skipped
+- **Severity:** low — the scrape save itself still succeeds; only a cache refresh was skipped before the fix
 
 ### Symptom
 

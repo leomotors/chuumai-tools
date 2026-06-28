@@ -2,7 +2,12 @@ import { describe, expect, it } from "vitest";
 
 import {
   buildRatingAnalysis,
+  chuniRatingChartKey,
+  formatRatingAnalysisDuration,
+  indexSongDurationsByChartKey,
+  maimaiRatingChartKey,
   ratingAnalysisPayloadIsCurrent,
+  sanitizeJsonbValue,
 } from "./ratingAnalysis.js";
 
 const computedAt = "2026-05-05T12:00:00.000Z";
@@ -164,6 +169,53 @@ describe("buildRatingAnalysis", () => {
       topScoreDurationMs: 2 * 86_400_000,
       isCurrentTop: true,
     });
+    expect(analysis.contributionIntervals).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          chartKey: "a:mas",
+          slot: "old",
+          score: 1_007_000,
+          startAt: "2026-05-01T12:00:00.000Z",
+          endAt: null,
+          ongoing: true,
+          steps: [
+            expect.objectContaining({
+              slot: "old",
+              score: 1_006_000,
+              startAt: "2026-05-01T12:00:00.000Z",
+              endAt: "2026-05-02T12:00:00.000Z",
+            }),
+            expect.objectContaining({
+              slot: "old",
+              score: 1_007_000,
+              startAt: "2026-05-02T12:00:00.000Z",
+              endAt: null,
+            }),
+          ],
+        }),
+      ]),
+    );
+    expect(
+      analysis.contributionIntervals.filter(
+        (interval) => interval.chartKey === "a:mas",
+      ),
+    ).toHaveLength(1);
+    expect(analysis.contributionIntervals[0]?.steps).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          slot: "old",
+          score: 1_006_000,
+          startAt: "2026-05-01T12:00:00.000Z",
+          endAt: "2026-05-02T12:00:00.000Z",
+        }),
+        expect.objectContaining({
+          slot: "old",
+          score: 1_007_000,
+          startAt: "2026-05-02T12:00:00.000Z",
+          endAt: null,
+        }),
+      ]),
+    );
   });
 
   it("keeps non-consecutive reigns of the same chart as separate timeline entries", () => {
@@ -620,5 +672,150 @@ describe("buildRatingAnalysis", () => {
     expect(contributions).toHaveLength(2);
     const totalDelta = contributions.reduce((sum, c) => sum + c.delta, 0);
     expect(totalDelta).toBeCloseTo(1.0, 5);
+  });
+});
+
+describe("rating analysis display helpers", () => {
+  it("builds stable chart keys for chuni and maimai", () => {
+    expect(chuniRatingChartKey(123, "master")).toBe("123:master");
+    expect(maimaiRatingChartKey("Song", "dx", "expert")).toBe("Song:dx:expert");
+    expect(formatRatingAnalysisDuration(0)).toBe("same day");
+    expect(formatRatingAnalysisDuration(86_400_000)).toBe("1d");
+    expect(formatRatingAnalysisDuration(60 * 86_400_000)).toBe("2mo");
+
+    const analysis = buildRatingAnalysis({
+      computedAt,
+      snapshots: [
+        {
+          jobId: 1,
+          playedAt: "2026-05-01T12:00:00.000Z",
+          rating: 16,
+          records: [record("a:mas", "Alpha", "MASTER", 1_007_000, 16.8)],
+        },
+      ],
+    });
+
+    const indexed = indexSongDurationsByChartKey(analysis.songDurations);
+    expect(indexed.get("a:mas")?.topDurationMs).toBeGreaterThan(0);
+  });
+
+  it("tracks rating-list stints with exact start and end dates", () => {
+    const analysis = buildRatingAnalysis({
+      computedAt: "2026-05-04T12:00:00.000Z",
+      snapshots: [
+        {
+          jobId: 1,
+          playedAt: "2026-05-01T12:00:00.000Z",
+          rating: 16,
+          records: [
+            record("a:mas", "Alpha", "MASTER", 1_006_000, 16.7, "old"),
+            record("b:exp", "Beta", "EXPERT", 1_005_000, 16.2, "new"),
+          ],
+        },
+        {
+          jobId: 2,
+          playedAt: "2026-05-02T12:00:00.000Z",
+          rating: 16.1,
+          records: [
+            record("a:mas", "Alpha", "MASTER", 1_006_000, 16.7, "old"),
+            record("a:mas", "Alpha", "MASTER", 1_006_000, 16.7, "new"),
+          ],
+        },
+        {
+          jobId: 3,
+          playedAt: "2026-05-03T12:00:00.000Z",
+          rating: 16.2,
+          records: [
+            record("a:mas", "Alpha", "MASTER", 1_009_000, 16.95, "new"),
+          ],
+        },
+      ],
+    });
+
+    const alphaIntervals = analysis.contributionIntervals.filter(
+      (interval) => interval.chartKey === "a:mas",
+    );
+
+    expect(alphaIntervals).toHaveLength(1);
+    expect(alphaIntervals[0]).toMatchObject({
+      chartKey: "a:mas",
+      slot: "new",
+      score: 1_009_000,
+      startAt: "2026-05-01T12:00:00.000Z",
+      endAt: null,
+      ongoing: true,
+    });
+    expect(alphaIntervals[0].steps).toEqual([
+      expect.objectContaining({
+        slot: "old",
+        score: 1_006_000,
+        startAt: "2026-05-01T12:00:00.000Z",
+        endAt: "2026-05-02T12:00:00.000Z",
+      }),
+      expect.objectContaining({
+        slot: "new",
+        score: 1_006_000,
+        startAt: "2026-05-02T12:00:00.000Z",
+        endAt: "2026-05-03T12:00:00.000Z",
+      }),
+      expect.objectContaining({
+        slot: "new",
+        score: 1_009_000,
+        startAt: "2026-05-03T12:00:00.000Z",
+        endAt: null,
+      }),
+    ]);
+  });
+
+  it("ignores failed scrapes with empty rating-list snapshots", () => {
+    const analysis = buildRatingAnalysis({
+      computedAt: "2026-05-04T12:00:00.000Z",
+      snapshots: [
+        {
+          jobId: 1,
+          playedAt: "2026-05-01T12:00:00.000Z",
+          rating: 16,
+          records: [record("a:mas", "Alpha", "MASTER", 1_006_000, 16.7, "old")],
+        },
+        {
+          jobId: 2,
+          playedAt: "2026-05-02T12:00:00.000Z",
+          rating: 16.1,
+          records: [],
+        },
+        {
+          jobId: 3,
+          playedAt: "2026-05-03T12:00:00.000Z",
+          rating: 16.2,
+          records: [
+            record("a:mas", "Alpha", "MASTER", 1_009_000, 16.95, "old"),
+          ],
+        },
+      ],
+    });
+
+    const alphaIntervals = analysis.contributionIntervals.filter(
+      (interval) => interval.chartKey === "a:mas",
+    );
+
+    expect(alphaIntervals).toHaveLength(1);
+    expect(alphaIntervals[0]).toMatchObject({
+      startAt: "2026-05-01T12:00:00.000Z",
+      endAt: null,
+      ongoing: true,
+    });
+    expect(analysis.snapshotCount).toBe(2);
+  });
+
+  it("strips NUL characters so payloads can be stored in jsonb", () => {
+    const dirty = {
+      title: "Song\u0000Title",
+      nested: [{ note: "a\u0000b" }],
+    };
+
+    expect(sanitizeJsonbValue(dirty)).toEqual({
+      title: "SongTitle",
+      nested: [{ note: "ab" }],
+    });
   });
 });

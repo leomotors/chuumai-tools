@@ -10,6 +10,7 @@ import {
   type RatingAnalysisPayload,
   ratingAnalysisPayloadIsCurrent,
   type RatingAnalysisSnapshotInput,
+  sanitizeJsonbValue,
 } from "@repo/core/web";
 import {
   forRatingTable,
@@ -84,14 +85,14 @@ async function saveRatingAnalysisCache(
         userId,
         latestJobId: analysis.latestJobId,
         computedAt: new Date(analysis.computedAt),
-        payload: analysis,
+        payload: sanitizeJsonbValue(analysis),
       })
       .onConflictDoUpdate({
         target: ratingAnalysisCacheTable.userId,
         set: {
           latestJobId: analysis.latestJobId,
           computedAt: new Date(analysis.computedAt),
-          payload: analysis,
+          payload: sanitizeJsonbValue(analysis),
         },
       });
   } catch (err) {

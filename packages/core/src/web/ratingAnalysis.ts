@@ -1,5 +1,6 @@
 const JST_GAME_DAY_SHIFT_MS = 2 * 60 * 60 * 1000;
-const RATING_ANALYSIS_PAYLOAD_VERSION = 6;
+const RATING_ANALYSIS_PAYLOAD_VERSION = 10;
+const RECORD_KEY_SEPARATOR = "@";
 
 export type RatingAnalysisSlot = "old" | "new";
 
@@ -93,6 +94,34 @@ export type RatingAnalysisSongDuration = {
   isCurrentContributor: boolean;
 };
 
+export type RatingAnalysisContributionScoreStep = {
+  slot: RatingAnalysisSlot;
+  score: number;
+  rating: number;
+  startJobId: number;
+  endJobId: number | null;
+  startAt: string;
+  endAt: string | null;
+  durationMs: number;
+};
+
+export type RatingAnalysisContributionInterval = {
+  id: string;
+  chartKey: string;
+  songKey: string;
+  image: string | null;
+  slot: RatingAnalysisSlot;
+  score: number;
+  rating: number;
+  startJobId: number;
+  endJobId: number | null;
+  startAt: string;
+  endAt: string | null;
+  durationMs: number;
+  ongoing: boolean;
+  steps: RatingAnalysisContributionScoreStep[];
+};
+
 export type RatingAnalysisDailyContribution = RatingAnalysisRecord & {
   previousRating: number | null;
   previousScore: number | null;
@@ -130,6 +159,7 @@ export type RatingAnalysisPayload = {
   snapshotCount: number;
   highestTimeline: RatingAnalysisTopReign[];
   songDurations: RatingAnalysisSongDuration[];
+  contributionIntervals: RatingAnalysisContributionInterval[];
   dailyGains: RatingAnalysisDailyGain[];
 };
 
@@ -158,6 +188,15 @@ function hasImageProperty(value: unknown) {
   return isObject(value) && "image" in value;
 }
 
+function hasContributionIntervalShape(value: unknown) {
+  if (!isObject(value) || !("image" in value) || !Array.isArray(value.steps)) {
+    return false;
+  }
+  return value.steps.every(
+    (step) => isObject(step) && "slot" in step && "score" in step,
+  );
+}
+
 function hasReignShape(value: unknown) {
   return isObject(value) && "image" in value && Array.isArray(value.steps);
 }
@@ -175,16 +214,158 @@ function hasCurrentDailyMetrics(value: unknown) {
   );
 }
 
+export function chuniRatingChartKey(
+  musicId: number,
+  difficulty: string,
+): string {
+  return `${musicId}:${difficulty}`;
+}
+
+export function maimaiRatingChartKey(
+  title: string,
+  chartType: string,
+  difficulty: string,
+): string {
+  return `${title}:${chartType}:${difficulty}`;
+}
+
+export function indexSongDurationsByChartKey(
+  songDurations: RatingAnalysisSongDuration[],
+): Map<string, RatingAnalysisSongDuration> {
+  return new Map(
+    songDurations.map((duration) => [duration.chartKey, duration]),
+  );
+}
+
+export function formatRatingAnalysisDuration(ms: number): string {
+  if (ms <= 0) return "same day";
+  const days = Math.floor(ms / 86_400_000);
+  if (days < 1) return "<1 day";
+  if (days < 60) return `${days}d`;
+  const months = Math.floor(days / 30);
+  const remainingDays = days % 30;
+  return remainingDays > 0 ? `${months}mo ${remainingDays}d` : `${months}mo`;
+}
+
+export function sanitizeJsonbValue<T>(value: T): T {
+  if (typeof value === "string") {
+    return value.split("\0").join("") as T;
+  }
+  if (Array.isArray(value)) {
+    return value.map((entry) => sanitizeJsonbValue(entry)) as T;
+  }
+  if (value !== null && typeof value === "object") {
+    return Object.fromEntries(
+      Object.entries(value).map(([key, entry]) => [
+        key,
+        sanitizeJsonbValue(entry),
+      ]),
+    ) as T;
+  }
+  return value;
+}
+
+export function filterContributionIntervalsForChart(
+  intervals: RatingAnalysisContributionInterval[],
+  chartKey: string,
+): RatingAnalysisContributionInterval[] {
+  return intervals
+    .filter((interval) => interval.chartKey === chartKey)
+    .sort((a, b) => a.startAt.localeCompare(b.startAt));
+}
+
+export function filterTopIntervalsForChart(
+  intervals: RatingAnalysisTopInterval[],
+  chartKey: string,
+): RatingAnalysisTopInterval[] {
+  return intervals
+    .filter((interval) => interval.chartKey === chartKey)
+    .sort((a, b) => a.startAt.localeCompare(b.startAt));
+}
+
+export type RatingAnalysisTopTimelineSpan = {
+  score: number;
+  rating: number;
+  startAt: string;
+  endAt: string | null;
+  durationMs: number;
+  ongoing: boolean;
+};
+
+export function topTimelineSpansForChart(
+  reigns: RatingAnalysisTopReign[],
+  chartKey: string,
+): RatingAnalysisTopTimelineSpan[] {
+  return reigns
+    .filter((reign) => reign.chartKey === chartKey)
+    .flatMap((reign) =>
+      reign.steps.map((step) => ({
+        score: step.score,
+        rating: step.rating,
+        startAt: step.startAt,
+        endAt: step.endAt,
+        durationMs: step.durationMs,
+        ongoing: step.endAt === null,
+      })),
+    );
+}
+
+export type TimelineSpanLayout = {
+  leftPercent: number;
+  widthPercent: number;
+};
+
+export function layoutTimelineSpans<
+  T extends {
+    startAt: string;
+    endAt: string | null;
+  },
+>(spans: T[], rangeEndAt: string): Array<T & TimelineSpanLayout> {
+  if (spans.length === 0) return [];
+
+  const rangeEndMs = new Date(rangeEndAt).getTime();
+  const starts = spans.map((span) => new Date(span.startAt).getTime());
+  const ends = spans.map((span) =>
+    span.endAt ? new Date(span.endAt).getTime() : rangeEndMs,
+  );
+  const rangeStartMs = Math.min(...starts);
+  const rangeEndBoundMs = Math.max(rangeEndMs, ...ends);
+  const totalMs = Math.max(rangeEndBoundMs - rangeStartMs, 1);
+
+  return spans.map((span, index) => {
+    const startMs = starts[index];
+    const endMs = ends[index];
+    const widthMs = Math.max(endMs - startMs, 0);
+
+    return {
+      ...span,
+      leftPercent: ((startMs - rangeStartMs) / totalMs) * 100,
+      widthPercent: (widthMs / totalMs) * 100,
+    };
+  });
+}
+
+export function contributionStepsForSlot(
+  intervals: RatingAnalysisContributionInterval[],
+  slot: RatingAnalysisSlot,
+): RatingAnalysisContributionScoreStep[] {
+  return intervals.flatMap((interval) =>
+    interval.steps.filter((step) => step.slot === slot),
+  );
+}
+
 export function ratingAnalysisPayloadIsCurrent(
   payload: unknown,
 ): payload is RatingAnalysisPayload {
   if (!isObject(payload)) return false;
   if (payload.schemaVersion !== RATING_ANALYSIS_PAYLOAD_VERSION) return false;
 
-  const { highestTimeline, songDurations, dailyGains } = payload;
+  const { highestTimeline, songDurations, contributionIntervals, dailyGains } =
+    payload;
   if (
     !Array.isArray(highestTimeline) ||
     !Array.isArray(songDurations) ||
+    !Array.isArray(contributionIntervals) ||
     !Array.isArray(dailyGains)
   ) {
     return false;
@@ -193,6 +374,7 @@ export function ratingAnalysisPayloadIsCurrent(
   return (
     highestTimeline.every(hasReignShape) &&
     songDurations.every(hasImageProperty) &&
+    contributionIntervals.every(hasContributionIntervalShape) &&
     dailyGains.every(
       (day) =>
         isObject(day) &&
@@ -212,14 +394,78 @@ function toIso(value: Date): string {
 }
 
 function recordKey(record: { chartKey: string; score: number }): string {
-  return `${record.chartKey}\u0000${record.score}`;
+  return `${record.chartKey}${RECORD_KEY_SEPARATOR}${record.score}`;
 }
 
 function contributionSlotKey(record: {
   chartKey: string;
   slot: RatingAnalysisSlot;
 }): string {
-  return `${record.chartKey}\u0000${record.slot}`;
+  return `${record.chartKey}${RECORD_KEY_SEPARATOR}${record.slot}`;
+}
+
+function toContributionStep(
+  snapshot: NormalizedSnapshot,
+  record: RatingAnalysisRecord,
+  endAt: Date,
+  endJobId: number | null,
+): RatingAnalysisContributionScoreStep {
+  return {
+    slot: record.slot,
+    score: record.score,
+    rating: record.rating,
+    startJobId: snapshot.jobId,
+    endJobId,
+    startAt: toIso(snapshot.playedAt),
+    endAt: endJobId === null ? null : toIso(endAt),
+    durationMs: Math.max(0, endAt.getTime() - snapshot.playedAt.getTime()),
+  };
+}
+
+function contributionStepKey(step: {
+  slot: RatingAnalysisSlot;
+  score: number;
+}) {
+  return `${step.slot}${RECORD_KEY_SEPARATOR}${step.score}`;
+}
+
+function primaryRecordForChart(
+  records: RatingAnalysisRecord[],
+  chartKey: string,
+): RatingAnalysisRecord | null {
+  const chartRecords = records.filter((record) => record.chartKey === chartKey);
+  if (chartRecords.length === 0) return null;
+  return (
+    chartRecords.find((record) => record.slot === "new") ??
+    chartRecords.find((record) => record.slot === "old") ??
+    chartRecords[0]
+  );
+}
+
+function finalizeContributionStep(
+  step: RatingAnalysisContributionScoreStep,
+  endAt: Date,
+  endJobId: number,
+) {
+  step.endAt = toIso(endAt);
+  step.endJobId = endJobId;
+  step.durationMs = Math.max(
+    0,
+    endAt.getTime() - new Date(step.startAt).getTime(),
+  );
+}
+
+function extendContributionStep(
+  step: RatingAnalysisContributionScoreStep,
+  endAt: Date,
+  endJobId: number | null,
+) {
+  step.endJobId = endJobId;
+  step.endAt = endJobId === null ? null : toIso(endAt);
+  step.durationMs = Math.max(
+    0,
+    endAt.getTime() - new Date(step.startAt).getTime(),
+  );
 }
 
 function normalizeSnapshots(
@@ -382,6 +628,112 @@ function mergeChartReigns(
   }
 
   return reigns;
+}
+
+function buildContributionIntervals(
+  snapshots: NormalizedSnapshot[],
+  computedAt: Date,
+): RatingAnalysisContributionInterval[] {
+  const intervals: RatingAnalysisContributionInterval[] = [];
+  const activeIndexByKey = new Map<string, number>();
+
+  for (let index = 0; index < snapshots.length; index += 1) {
+    const snapshot = snapshots[index];
+    const nextSnapshot = snapshots[index + 1] ?? null;
+    const endAt = nextSnapshot?.playedAt ?? computedAt;
+    const chartKeysPresent = new Set(
+      snapshot.records.map((record) => record.chartKey),
+    );
+
+    for (const chartKey of chartKeysPresent) {
+      const record = primaryRecordForChart(snapshot.records, chartKey);
+      if (!record) continue;
+
+      const activeIndex = activeIndexByKey.get(chartKey);
+      const active =
+        activeIndex !== undefined ? intervals[activeIndex] : undefined;
+
+      if (active && activeIndexByKey.has(chartKey)) {
+        const lastStep = active.steps.at(-1);
+
+        if (
+          lastStep &&
+          contributionStepKey(lastStep) !== contributionStepKey(record)
+        ) {
+          finalizeContributionStep(lastStep, snapshot.playedAt, snapshot.jobId);
+          active.steps.push(
+            toContributionStep(
+              snapshot,
+              record,
+              endAt,
+              nextSnapshot?.jobId ?? null,
+            ),
+          );
+        } else if (lastStep) {
+          extendContributionStep(lastStep, endAt, nextSnapshot?.jobId ?? null);
+        }
+
+        active.slot = record.slot;
+        active.score = record.score;
+        active.rating = record.rating;
+        active.endJobId = nextSnapshot?.jobId ?? null;
+        active.endAt = nextSnapshot ? toIso(nextSnapshot.playedAt) : null;
+        active.durationMs = Math.max(
+          0,
+          endAt.getTime() - new Date(active.startAt).getTime(),
+        );
+        active.ongoing = nextSnapshot === null;
+        continue;
+      }
+
+      activeIndexByKey.set(chartKey, intervals.length);
+      intervals.push({
+        id: `${snapshot.jobId}-${chartKey.replaceAll(RECORD_KEY_SEPARATOR, "-")}`,
+        chartKey: record.chartKey,
+        songKey: record.songKey,
+        image: record.image,
+        slot: record.slot,
+        score: record.score,
+        rating: record.rating,
+        startJobId: snapshot.jobId,
+        endJobId: nextSnapshot?.jobId ?? null,
+        startAt: toIso(snapshot.playedAt),
+        endAt: nextSnapshot ? toIso(nextSnapshot.playedAt) : null,
+        durationMs: Math.max(0, endAt.getTime() - snapshot.playedAt.getTime()),
+        ongoing: nextSnapshot === null,
+        steps: [
+          toContributionStep(
+            snapshot,
+            record,
+            endAt,
+            nextSnapshot?.jobId ?? null,
+          ),
+        ],
+      });
+    }
+
+    for (const [chartKey, activeIndex] of activeIndexByKey) {
+      if (chartKeysPresent.has(chartKey)) continue;
+
+      const active = intervals[activeIndex];
+      if (active?.ongoing) {
+        const lastStep = active.steps.at(-1);
+        if (lastStep) {
+          finalizeContributionStep(lastStep, snapshot.playedAt, snapshot.jobId);
+        }
+        active.endJobId = snapshot.jobId;
+        active.endAt = toIso(snapshot.playedAt);
+        active.durationMs = Math.max(
+          0,
+          snapshot.playedAt.getTime() - new Date(active.startAt).getTime(),
+        );
+        active.ongoing = false;
+      }
+      activeIndexByKey.delete(chartKey);
+    }
+  }
+
+  return intervals;
 }
 
 function addDurationSummaries(
@@ -673,9 +1025,15 @@ export function buildRatingAnalysis({
   computedAt = new Date(),
 }: BuildRatingAnalysisOptions): RatingAnalysisPayload {
   const computedAtDate = toDate(computedAt);
-  const normalizedSnapshots = normalizeSnapshots(snapshots);
+  const normalizedSnapshots = normalizeSnapshots(
+    snapshots.filter((snapshot) => snapshot.records.length > 0),
+  );
   const latestJobId = normalizedSnapshots.at(-1)?.jobId ?? null;
   const scoreIntervals = buildScoreIntervals(
+    normalizedSnapshots,
+    computedAtDate,
+  );
+  const contributionIntervals = buildContributionIntervals(
     normalizedSnapshots,
     computedAtDate,
   );
@@ -698,6 +1056,7 @@ export function buildRatingAnalysis({
         a.title.localeCompare(b.title) ||
         a.chartLabel.localeCompare(b.chartLabel),
     ),
+    contributionIntervals,
     dailyGains: buildDailyGains(normalizedSnapshots, histories).sort((a, b) =>
       b.dayKey.localeCompare(a.dayKey),
     ),

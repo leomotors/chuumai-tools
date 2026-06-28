@@ -6,11 +6,19 @@ import {
 } from "$lib/functions/musicData";
 import { getMusicInfo, getMusicRecord } from "$lib/functions/musicRecord";
 import { getPlayHistory } from "$lib/functions/playHistory";
+import { getRatingAnalysis } from "$lib/functions/ratingAnalysis";
 import { getDefaultVersion, getEnabledVersions } from "$lib/version";
 
 import {
   compressLevelHistory,
+  filterContributionIntervalsForChart,
   getOldestToNewestVersions,
+  indexSongDurationsByChartKey,
+  maimaiRatingChartKey,
+  type RatingAnalysisContributionInterval,
+  type RatingAnalysisSongDuration,
+  type RatingAnalysisTopTimelineSpan,
+  topTimelineSpansForChart,
 } from "@repo/core/web";
 import type { StdChartDifficulty } from "@repo/types/maimai";
 
@@ -23,6 +31,14 @@ type RecordWithKey = Awaited<
 };
 type ChartLevel = { level: string; constant: number | null };
 type ChartLevelSnapshot = Record<StdChartDifficulty, ChartLevel | null>;
+
+export type SongRatingTimeline = {
+  key: string;
+  label: string;
+  contributionIntervals: RatingAnalysisContributionInterval[];
+  topIntervals: RatingAnalysisTopTimelineSpan[];
+  duration: RatingAnalysisSongDuration | null;
+};
 
 function safeDecodeURIComponent(value: string) {
   try {
@@ -167,6 +183,65 @@ export const load: PageServerLoad = async ({ params, parent }) => {
   // Check if there are any records at all
   const hasAnyRecords = availableCharts.length > 0;
 
+  const ratingTimelines: SongRatingTimeline[] = [];
+  let ratingComputedAt: string | null = null;
+
+  if (isLoggedIn && userId) {
+    const analysis = await getRatingAnalysis(userId);
+    ratingComputedAt = analysis.computedAt;
+    const durationsByChartKey = indexSongDurationsByChartKey(
+      analysis.songDurations,
+    );
+
+    for (const musicData of musicDataForTitle) {
+      for (const difficulty of [
+        "basic",
+        "advanced",
+        "expert",
+        "master",
+        "remaster",
+      ] as const) {
+        if (!musicData[difficulty]) continue;
+
+        const tabKey = `${musicData.chartType}-${difficulty}`;
+        const chartKey = maimaiRatingChartKey(
+          musicTitle,
+          musicData.chartType,
+          difficulty,
+        );
+        const contributionIntervals = filterContributionIntervalsForChart(
+          analysis.contributionIntervals,
+          chartKey,
+        );
+        const topIntervals = topTimelineSpansForChart(
+          analysis.highestTimeline,
+          chartKey,
+        );
+        const duration = durationsByChartKey.get(chartKey) ?? null;
+
+        if (
+          contributionIntervals.length === 0 &&
+          topIntervals.length === 0 &&
+          !duration
+        ) {
+          continue;
+        }
+
+        ratingTimelines.push({
+          key: tabKey,
+          label: `${musicData.chartType.toUpperCase()} · ${
+            difficulty === "remaster"
+              ? "Re:MASTER"
+              : difficulty.charAt(0).toUpperCase() + difficulty.slice(1)
+          }`,
+          contributionIntervals,
+          topIntervals,
+          duration,
+        });
+      }
+    }
+  }
+
   return {
     musicInfo,
     musicDataForTitle,
@@ -175,6 +250,8 @@ export const load: PageServerLoad = async ({ params, parent }) => {
     hasAnyRecords,
     levelHistory,
     playHistory,
+    ratingTimelines,
+    ratingComputedAt,
     isLoggedIn,
   };
 };

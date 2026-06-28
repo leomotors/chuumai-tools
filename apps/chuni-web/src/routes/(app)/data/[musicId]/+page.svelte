@@ -12,6 +12,7 @@
   import * as Table from "@repo/ui/atom/table";
   import * as Tabs from "@repo/ui/atom/tabs";
   import Discord from "@repo/ui/icons/Discord.svelte";
+  import { RatingListTimelinePanel } from "@repo/ui/molecule/RatingListTimelinePanel";
   import { signInAgreementNotice } from "@repo/ui/utils";
 
   let { data } = $props();
@@ -24,6 +25,9 @@
   const hasAnyRecords = $derived(data.hasAnyRecords);
   const levelHistory = $derived(data.levelHistory);
   const playHistory = $derived(data.playHistory);
+  const ratingTimelines = $derived(data.ratingTimelines);
+  const ratingComputedAt = $derived(data.ratingComputedAt);
+  let selectedRatingChart = $state("");
   const expandedHistoryGroups = new SvelteSet<string>();
   const historyDifficulties = [
     "basic",
@@ -35,6 +39,15 @@
 
   // Default selected tab is the first available difficulty
   let selectedDifficulty = $state<StdChartDifficulty>("master");
+
+  $effect(() => {
+    if (
+      ratingTimelines.length > 0 &&
+      !ratingTimelines.some((timeline) => timeline.key === selectedRatingChart)
+    ) {
+      selectedRatingChart = ratingTimelines[0].key;
+    }
+  });
 
   // Update selectedDifficulty when availableDifficulties changes
   $effect(() => {
@@ -666,4 +679,48 @@
       </p>
     </div>
   </div>
+
+  {#if isLoggedIn}
+    <div
+      class="rounded-xl border border-gray-200/50 bg-white/70 p-6 shadow-lg backdrop-blur-md"
+    >
+      <h2 class="text-xl font-bold text-gray-800">Music for Rating</h2>
+      <p class="mt-1 text-xs text-gray-500">
+        Time on your rating list between scraper uploads. Score changes within a
+        stint are grouped into one period.
+      </p>
+
+      {#if ratingTimelines.length === 0}
+        <p class="py-8 text-center text-sm text-gray-500">
+          No Music for Rating history for this song yet.
+        </p>
+      {:else if ratingComputedAt}
+        <div class="mt-4">
+          <Tabs.Root bind:value={selectedRatingChart}>
+            <Tabs.List class="mb-4 flex w-full gap-1 overflow-x-auto">
+              {#each ratingTimelines as timeline (timeline.key)}
+                <Tabs.Trigger value={timeline.key} class="min-w-max">
+                  {timeline.label}
+                </Tabs.Trigger>
+              {/each}
+            </Tabs.List>
+
+            {#each ratingTimelines as timeline (timeline.key)}
+              <Tabs.Content value={timeline.key}>
+                <RatingListTimelinePanel
+                  contributionIntervals={timeline.contributionIntervals}
+                  topIntervals={timeline.topIntervals}
+                  computedAt={ratingComputedAt}
+                  poolLabels={{ old: "BEST", new: "CURRENT" }}
+                  isCurrentTop={timeline.duration?.isCurrentTop ?? false}
+                  isCurrentContributor={timeline.duration
+                    ?.isCurrentContributor ?? false}
+                />
+              </Tabs.Content>
+            {/each}
+          </Tabs.Root>
+        </div>
+      {/if}
+    </div>
+  {/if}
 </div>
