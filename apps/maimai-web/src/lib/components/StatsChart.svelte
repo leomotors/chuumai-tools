@@ -36,6 +36,10 @@
   } from "@repo/core/web";
   import * as Chart from "@repo/ui/atom/chart";
   import { ProgressionRegressionPredictions } from "@repo/ui/molecule/ProgressionRegressionPredictions";
+  import {
+    RatingMetricChip,
+    type RatingMetricMode,
+  } from "@repo/ui/molecule/RatingMetricChip";
 
   type ChartDatum = {
     date: Date;
@@ -64,6 +68,10 @@
 
   const isRatingMetric = $derived(
     selectedMetric === "rating" || selectedMetric === "maxRating",
+  );
+
+  const ratingMode = $derived<RatingMetricMode>(
+    selectedMetric === "rating" ? "rating" : "maxRating",
   );
 
   const chartSeries = $derived([
@@ -176,25 +184,35 @@
     <div class="flex flex-wrap items-center gap-2">
       <div class="flex flex-wrap gap-1">
         {#each Object.entries(MAIMAI_METRIC_CONFIG) as [key, cfg] (key)}
-          {@const isOn = selectedMetric === key}
-          <button
-            type="button"
-            onclick={() => onMetricChange(key as MaimaiMetric)}
-            class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[11.5px] font-medium transition-colors"
-            class:border-gray-300={isOn}
-            class:bg-gray-100={isOn}
-            class:text-gray-900={isOn}
-            class:border-gray-200={!isOn}
-            class:text-gray-500={!isOn}
-            class:hover:text-gray-900={!isOn}
-          >
-            <span
-              class="size-[7px] rounded-full"
-              style:background-color={cfg.color}
-              aria-hidden="true"
-            ></span>
-            {cfg.label}
-          </button>
+          {#if key === "rating"}
+            <RatingMetricChip
+              selected={isRatingMetric}
+              mode={ratingMode}
+              rating={MAIMAI_METRIC_CONFIG.rating}
+              maxRating={MAIMAI_METRIC_CONFIG.maxRating}
+              onModeChange={(mode) => onMetricChange(mode)}
+            />
+          {:else if key !== "maxRating"}
+            {@const isOn = selectedMetric === key}
+            <button
+              type="button"
+              onclick={() => onMetricChange(key as MaimaiMetric)}
+              class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[11.5px] font-medium transition-colors"
+              class:border-gray-300={isOn}
+              class:bg-gray-100={isOn}
+              class:text-gray-900={isOn}
+              class:border-gray-200={!isOn}
+              class:text-gray-500={!isOn}
+              class:hover:text-gray-900={!isOn}
+            >
+              <span
+                class="size-[7px] rounded-full"
+                style:background-color={cfg.color}
+                aria-hidden="true"
+              ></span>
+              {cfg.label}
+            </button>
+          {/if}
         {/each}
       </div>
       <div class="inline-flex gap-0.5 rounded-lg bg-gray-100 p-0.5">

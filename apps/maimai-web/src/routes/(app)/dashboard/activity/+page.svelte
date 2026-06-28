@@ -20,7 +20,7 @@
 
   let { data } = $props();
 
-  let selectedMetric = $state<MaimaiMetric>("rating");
+  let selectedMetric = $state<MaimaiMetric>("maxRating");
   let timeRange = $state<number>(0);
 
   const scrapedTransformed = $derived(transformUserStats(data.userStats));

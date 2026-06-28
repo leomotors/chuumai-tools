@@ -21,7 +21,7 @@
 
   let { data } = $props();
 
-  let selectedMetric = $state<ChuniMetric>("rating");
+  let selectedMetric = $state<ChuniMetric>("maxRating");
   let timeRange = $state<number>(0);
 
   const scrapedTransformed = $derived(transformUserStats(data.userStats));
