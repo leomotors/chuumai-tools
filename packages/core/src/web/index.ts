@@ -1,5 +1,6 @@
 export * from "./admin";
 export * from "./appInfo";
+export * from "./compareSortableValues";
 export * from "./dashboardMetricColors";
 export * from "./improvementTimeline";
 export * from "./jobSchemas";

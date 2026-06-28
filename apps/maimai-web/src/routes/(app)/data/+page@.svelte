@@ -6,11 +6,16 @@
   import { getDefaultVersion, getEnabledVersions } from "$lib/version";
 
   import { constantFromLevel } from "@repo/core/maimai";
+  import { compareSortableValues } from "@repo/core/web";
   import { Button } from "@repo/ui/atom/button";
   import { Checkbox } from "@repo/ui/atom/checkbox";
   import { Label } from "@repo/ui/atom/label";
   import * as Select from "@repo/ui/atom/select";
   import * as Table from "@repo/ui/atom/table";
+  import {
+    ReleaseDateSortHeader,
+    type ReleaseDateSortMode,
+  } from "@repo/ui/molecule/ReleaseDateSortHeader";
   import { SortableHeader } from "@repo/ui/molecule/sortable-header";
 
   import ChartLevelCell from "./ChartLevelCell.svelte";
@@ -22,6 +27,7 @@
   let sortDirection = $state<"asc" | "desc">("desc");
   let currentPage = $state<number>(1);
   let filterNullConstant = $state<boolean>(false);
+  let releaseDateSortMode = $state<ReleaseDateSortMode>("jp");
 
   let musicData = $state<MusicDataViewSchema[]>([]);
   let loading = $state<boolean>(false);
@@ -140,10 +146,7 @@
       } else {
         aVal = a[sortField as keyof MusicDataViewSchema];
         bVal = b[sortField as keyof MusicDataViewSchema];
-
-        if (aVal === null && bVal === null) return 0;
-        if (aVal === null) return 1;
-        if (bVal === null) return -1;
+        return compareSortableValues(aVal, bVal, sortDirection);
       }
 
       const comparison =
@@ -165,6 +168,26 @@
   });
 
   let totalPages = $derived(Math.ceil(filteredAndSortedData.length / pageSize));
+
+  const isReleaseDateSorting = $derived(
+    sortField === "releaseDate" || sortField === "releaseDateIntl",
+  );
+
+  function releaseSortField(): "releaseDate" | "releaseDateIntl" {
+    return releaseDateSortMode === "jp" ? "releaseDate" : "releaseDateIntl";
+  }
+
+  function handleReleaseSort() {
+    handleSort(releaseSortField());
+  }
+
+  function handleReleaseDateModeChange(mode: ReleaseDateSortMode) {
+    releaseDateSortMode = mode;
+    if (sortField === "releaseDate" || sortField === "releaseDateIntl") {
+      sortField = mode === "jp" ? "releaseDate" : "releaseDateIntl";
+      currentPage = 1;
+    }
+  }
 
   function handleSort(
     field:
@@ -320,14 +343,14 @@
               <Table.Row class="border-white/20 hover:bg-white/5">
                 <Table.Head
                   class="cursor-pointer text-gray-900 hover:text-gray-700"
-                  onclick={() => handleSort("releaseDate")}
+                  onclick={handleReleaseSort}
                 >
-                  <SortableHeader
-                    isSorting={sortField === "releaseDate"}
+                  <ReleaseDateSortHeader
+                    isSorting={isReleaseDateSorting}
                     {sortDirection}
-                  >
-                    Release
-                  </SortableHeader>
+                    mode={releaseDateSortMode}
+                    onModeChange={handleReleaseDateModeChange}
+                  />
                 </Table.Head>
                 <Table.Head class="text-gray-900 hover:text-gray-700">
                   Image
