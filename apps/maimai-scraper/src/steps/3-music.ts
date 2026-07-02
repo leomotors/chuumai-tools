@@ -62,11 +62,7 @@ export async function scrapeMusicRecord(page: Page) {
   const selectionCurrentMusic = [] as Array<ChartSchema>;
 
   let currentSection:
-    | "best"
-    | "current"
-    | "selectionBest"
-    | "selectionCurrent"
-    | null = null;
+    "best" | "current" | "selectionBest" | "selectionCurrent" | null = null;
 
   // Iterate through all children to find screw_block divs and music divs
   for (const child of mainWrapper.children) {

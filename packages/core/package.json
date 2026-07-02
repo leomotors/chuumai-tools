@@ -46,12 +46,12 @@
   "devDependencies": {
     "@repo/database": "workspace:*",
     "@vitest/coverage-v8": "^4.1.9",
-    "playwright": "^1.61.0",
+    "playwright": "^1.61.1",
     "vitest": "^4.1.9"
   },
   "dependencies": {
     "@asteasolutions/zod-to-openapi": "^8.5.0",
-    "@aws-sdk/client-s3": "^3.1072.0",
+    "@aws-sdk/client-s3": "^3.1077.0",
     "@leomotors/cli-progress": "^4.0.3",
     "@repo/types": "workspace:*",
     "drizzle-orm": "^0.45.2",

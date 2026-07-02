@@ -1110,12 +1110,7 @@ export interface components {
       score: number;
       /** @enum {string|null} */
       clearMark?:
-        | "CLEAR"
-        | "HARD"
-        | "BRAVE"
-        | "ABSOLUTE"
-        | "CATASTROPHY"
-        | null;
+        "CLEAR" | "HARD" | "BRAVE" | "ABSOLUTE" | "CATASTROPHY" | null;
       /** @default false */
       fc: boolean;
       /** @default false */
@@ -1180,12 +1175,7 @@ export interface components {
       score: number;
       /** @enum {string|null} */
       clearMark?:
-        | "CLEAR"
-        | "HARD"
-        | "BRAVE"
-        | "ABSOLUTE"
-        | "CATASTROPHY"
-        | null;
+        "CLEAR" | "HARD" | "BRAVE" | "ABSOLUTE" | "CATASTROPHY" | null;
       /** @default false */
       fc: boolean;
       /** @default false */
@@ -1239,12 +1229,7 @@ export interface components {
       score: number;
       /** @enum {string|null} */
       clearMark?:
-        | "CLEAR"
-        | "HARD"
-        | "BRAVE"
-        | "ABSOLUTE"
-        | "CATASTROPHY"
-        | null;
+        "CLEAR" | "HARD" | "BRAVE" | "ABSOLUTE" | "CATASTROPHY" | null;
       /** @default false */
       fc: boolean;
       /** @default false */

@@ -14,7 +14,7 @@
   "license": "MIT",
   "dependencies": {
     "jsdom": "^29.1.1",
-    "playwright": "^1.61.0"
+    "playwright": "^1.61.1"
   },
   "devDependencies": {
     "@discordjs/builders": "^1.14.1",
@@ -26,7 +26,7 @@
     "discord-api-types": "^0.38.49",
     "dotenv-cli": "^11.0.0",
     "openapi-fetch": "^0.17.0",
-    "papaparse": "^5.5.3",
+    "papaparse": "^5.5.4",
     "tsdown": "^0.22.3",
     "typescript": "^6.0.3",
     "vitest": "^4.1.9",

@@ -2,11 +2,7 @@
   import { dashboardMetricColors } from "@repo/core/web";
 
   export type ChuniMetric =
-    | "playerLevel"
-    | "playCount"
-    | "rating"
-    | "maxRating"
-    | "overpower";
+    "playerLevel" | "playCount" | "rating" | "maxRating" | "overpower";
 
   export type StatsChartTransformed = {
     date: Date;

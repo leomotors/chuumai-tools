@@ -1315,12 +1315,7 @@ export interface components {
       chartType: "std" | "dx" | "utage" | "utage-buddy";
       /** @enum {string} */
       difficulty:
-        | "basic"
-        | "advanced"
-        | "expert"
-        | "master"
-        | "remaster"
-        | "utage";
+        "basic" | "advanced" | "expert" | "master" | "remaster" | "utage";
       trackNo: number;
       /** Format: date-time */
       playedAt: string;
@@ -1528,12 +1523,7 @@ export interface components {
       chartType: "std" | "dx" | "utage" | "utage-buddy";
       /** @enum {string} */
       difficulty:
-        | "basic"
-        | "advanced"
-        | "expert"
-        | "master"
-        | "remaster"
-        | "utage";
+        "basic" | "advanced" | "expert" | "master" | "remaster" | "utage";
       score: number;
       dxScore: number;
       dxScoreMax: number;
