@@ -1,5 +1,10 @@
 # Changelog
 
+## [3.29.0] - 2026-07-02
+
+- feat: support assets for Mate
+- fix: format wikiwiki URL
+
 ## [3.28.0] - 2026-06-28
 
 - fix(dashboard): only load API keys and manual rating history on pages that use them instead of every dashboard route

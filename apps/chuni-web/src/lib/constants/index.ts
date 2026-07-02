@@ -28,5 +28,5 @@ export function getVersionNameMapping(version: string) {
 }
 
 export function getLogoScale(version: string) {
-  return version === "XVRSX" ? "" : "scale-125";
+  return ["XVRSX", "Mate"].includes(version) ? "" : "scale-125";
 }
