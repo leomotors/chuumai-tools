@@ -224,7 +224,7 @@
           <span>Category: {musicInfo.category}</span>
           <span>•</span>
           <a
-            href={`https://wikiwiki.jp/chunithmwiki/${encodeURIComponent(musicInfo.title.replaceAll(":", "："))}`}
+            href={`https://wikiwiki.jp/chunithmwiki/${encodeURIComponent(musicInfo.title.replaceAll(":", "：").replaceAll("&", "＆"))}`}
             target="_blank"
             rel="noreferrer"
             class="inline-flex items-center gap-1 text-blue-600 hover:text-blue-800 hover:underline"
