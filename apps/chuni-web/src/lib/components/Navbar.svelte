@@ -26,6 +26,7 @@
   {signOut}
   {swapUrl}
   swapTooltip="Switch to maimai"
+  currentPath={page.url.pathname}
 >
   {#snippet navigationLinks()}
     <Popover.Root bind:open={toolsOpen}>

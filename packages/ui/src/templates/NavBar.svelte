@@ -28,6 +28,8 @@
     signOut: () => void;
     swapUrl?: string;
     swapTooltip?: string;
+    /** Current page path; when it changes, any open menu is closed. */
+    currentPath?: string;
   };
 
   let {
@@ -38,7 +40,18 @@
     signOut,
     swapUrl,
     swapTooltip,
+    currentPath,
   }: Props = $props();
+
+  // Close menus after a navigation. Navigation links come from an
+  // app-provided snippet and nested popovers render in a portal, so a click
+  // handler on the menu content cannot catch them all.
+  $effect(() => {
+    if (currentPath !== undefined) {
+      mobileOpen = false;
+      userOpen = false;
+    }
+  });
 </script>
 
 <nav

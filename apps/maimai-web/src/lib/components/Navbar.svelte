@@ -24,6 +24,7 @@
   {signOut}
   {swapUrl}
   swapTooltip="Switch to Chunithm"
+  currentPath={page.url.pathname}
 >
   {#snippet navigationLinks()}
     <Popover.Root bind:open={toolsOpen}>
