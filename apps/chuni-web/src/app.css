@@ -1,4 +1,8 @@
-@import "tailwindcss";
+/* Single Tailwind entry point: globals.css imports tailwindcss and @source's
+   the ui package. A second `@import "tailwindcss"` here would generate a
+   duplicate utility set whose plain classes (e.g. .hidden) cascade after the
+   ui set's md: media rules, breaking breakpoint toggling. */
+@import "@repo/ui/globals.css";
 
 @font-face {
   font-family: "Helvetica Neue Cyr";

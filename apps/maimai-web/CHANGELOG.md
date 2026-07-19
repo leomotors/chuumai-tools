@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.21.1] - 2026-07-20
+
+- fix(navbar): desktop nav links no longer hidden behind the mobile menu — app.css and @repo/ui/globals.css each ran their own Tailwind pass, and the duplicate plain utilities overrode the md: breakpoint rules; the app now has a single Tailwind entry importing @repo/ui/globals.css
+
 ## [1.21.0] - 2026-07-19
 
 - feat(data): web admins can edit a chart's level and constant by clicking a difficulty cell and saving

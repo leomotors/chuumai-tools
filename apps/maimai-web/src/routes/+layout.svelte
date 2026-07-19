@@ -1,5 +1,4 @@
 <script lang="ts">
-  import "@repo/ui/globals.css";
   import "../app.css";
 
   import type { Snippet } from "svelte";
