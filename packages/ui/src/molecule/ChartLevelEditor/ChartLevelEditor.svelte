@@ -36,7 +36,9 @@
 
   let open = $state(false);
   let levelInput = $state("");
-  let constantInput = $state("");
+  // Svelte coerces bind:value on a number input to number | null | undefined
+  // at runtime, so this holds more than the string it is seeded with.
+  let constantInput = $state<string | number | null | undefined>("");
   let saving = $state(false);
   let errorMessage = $state("");
 
@@ -54,7 +56,10 @@
     errorMessage = "";
 
     try {
-      await onsave({ level: levelInput, constant: constantInput });
+      await onsave({
+        level: levelInput,
+        constant: constantInput?.toString() ?? "",
+      });
       open = false;
     } catch (e) {
       errorMessage = e instanceof Error ? e.message : "Failed to save";

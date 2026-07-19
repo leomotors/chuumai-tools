@@ -16,9 +16,20 @@ describe("parseConstantInput", () => {
     expect(parseConstantInput("13.24")).toBe(13.2);
   });
 
+  it("treats null and undefined as null", () => {
+    expect(parseConstantInput(null)).toBeNull();
+    expect(parseConstantInput(undefined)).toBeNull();
+  });
+
+  it("accepts numbers from number-input bindings", () => {
+    expect(parseConstantInput(13)).toBe(13);
+    expect(parseConstantInput(13.55)).toBe(13.6);
+  });
+
   it("throws on non-numeric input", () => {
     expect(() => parseConstantInput("abc")).toThrow();
     expect(() => parseConstantInput("13a")).toThrow();
+    expect(() => parseConstantInput(Number.NaN)).toThrow();
   });
 });
 

@@ -23,13 +23,29 @@ export const chartLevelEditSchema = z.object({
 export type ChartLevelEdit = z.infer<typeof chartLevelEditSchema>;
 
 /**
- * Parse a raw constant input string (from an admin edit form) into a number
- * rounded to one decimal place, or `null` when the field is left blank / "-".
+ * Parse a raw constant input (from an admin edit form) into a number rounded
+ * to one decimal place, or `null` when the field is left blank / "-". Accepts
+ * numbers as well as strings since binding to a number input yields
+ * `number | null | undefined` at runtime.
  *
  * Throws when the value is present but not a finite number so the caller can
  * surface a friendly message.
  */
-export function parseConstantInput(raw: string): number | null {
+export function parseConstantInput(
+  raw: string | number | null | undefined,
+): number | null {
+  if (raw === null || raw === undefined) {
+    return null;
+  }
+
+  if (typeof raw === "number") {
+    if (!Number.isFinite(raw)) {
+      throw new Error("Constant must be a number");
+    }
+
+    return Math.round(raw * 10) / 10;
+  }
+
   const trimmed = raw.trim();
 
   if (trimmed === "" || trimmed === "-") {
