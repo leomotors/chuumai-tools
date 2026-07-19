@@ -7,6 +7,7 @@
 - fix(data): song detail page no longer 404s for songs that only exist in the latest enabled version
 - fix(data): wiki link now also maps "&" to full-width "＆" in the song title
 - fix(navbar): mobile menu now closes after tapping a navigation link
+- fix(navbar): responsive layout is now CSS-only, so desktop links no longer flash on mobile during first load
 
 ## [3.29.0] - 2026-07-02
 

@@ -6,6 +6,7 @@
 - qol(data): only show the "missing constant data" filter to web admins
 - fix(data): song detail page no longer 404s for songs that only exist in the latest enabled version
 - fix(navbar): mobile menu now closes after tapping a navigation link
+- fix(navbar): responsive layout is now CSS-only, so desktop links no longer flash on mobile during first load
 
 ## [1.20.0] - 2026-06-28
 
