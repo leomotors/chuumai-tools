@@ -13,6 +13,8 @@ import {
   chuniRatingChartKey,
   compressLevelHistory,
   filterContributionIntervalsForChart,
+  findMusicDataWithVersionFallback,
+  getMusicLookupVersions,
   getOldestToNewestVersions,
   indexSongDurationsByChartKey,
   type RatingAnalysisContributionInterval,
@@ -49,10 +51,14 @@ export const load: PageServerLoad = async ({ params, parent }) => {
     error(400, "Invalid music ID");
   }
 
-  // Get music data from cache and filter for this specific music
-  // Note: getMusicDataCached returns all music, but it's cached in memory
-  const musicDataList = await getMusicDataCached(getDefaultVersion());
-  const musicData = musicDataList.find((m) => m.id === musicId);
+  // Look up in the default version first, falling back to the latest enabled
+  // version for songs that only exist there (new songs during a version
+  // transition). Each per-version list is cached in memory.
+  const [musicData] = await findMusicDataWithVersionFallback(
+    getMusicLookupVersions(getDefaultVersion(), getEnabledVersions()),
+    getMusicDataCached,
+    (m) => m.id === musicId,
+  );
 
   if (!musicData) {
     error(404, "Music data not found");

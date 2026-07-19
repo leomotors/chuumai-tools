@@ -12,6 +12,8 @@ import { getDefaultVersion, getEnabledVersions } from "$lib/version";
 import {
   compressLevelHistory,
   filterContributionIntervalsForChart,
+  findMusicDataWithVersionFallback,
+  getMusicLookupVersions,
   getOldestToNewestVersions,
   indexSongDurationsByChartKey,
   maimaiRatingChartKey,
@@ -55,10 +57,14 @@ export const load: PageServerLoad = async ({ params, parent }) => {
 
   const musicTitle = safeDecodeURIComponent(params.musicTitle);
 
-  // Get music data from cache and filter for this specific music
-  // Note: getMusicDataCached returns all music, but it's cached in memory
-  const musicDataList = await getMusicDataCached(getDefaultVersion());
-  const musicDataForTitle = musicDataList.filter((m) => m.title === musicTitle);
+  // Look up in the default version first, falling back to the latest enabled
+  // version for songs that only exist there (new songs during a version
+  // transition). Each per-version list is cached in memory.
+  const musicDataForTitle = await findMusicDataWithVersionFallback(
+    getMusicLookupVersions(getDefaultVersion(), getEnabledVersions()),
+    getMusicDataCached,
+    (m) => m.title === musicTitle,
+  );
 
   if (musicDataForTitle.length === 0) {
     error(404, "Music data not found");

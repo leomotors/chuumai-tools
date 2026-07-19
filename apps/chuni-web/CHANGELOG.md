@@ -4,6 +4,7 @@
 
 - feat(data): web admins can edit a chart's level and constant by clicking a difficulty cell and saving
 - qol(data): only show the "missing constant data" filter to web admins
+- fix(data): song detail page no longer 404s for songs that only exist in the latest enabled version
 
 ## [3.29.0] - 2026-07-02
 
