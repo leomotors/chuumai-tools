@@ -3,6 +3,7 @@ import { and, eq, inArray } from "drizzle-orm";
 import { db } from "$lib/db";
 
 import { SimpleCache } from "@repo/core";
+import { chartLevelEditSchema } from "@repo/core/web";
 import { musicDataTable, musicLevelTable } from "@repo/database/chuni";
 import { stdChartDifficultyValues } from "@repo/types/chuni";
 import { z } from "@repo/types/zod";
@@ -121,6 +122,54 @@ export async function getMusicDataCached(version: string) {
 
 export function clearMusicDataCache(): void {
   musicDataForTableCache.clear();
+}
+
+export const updateMusicLevelRequestSchema = chartLevelEditSchema.extend({
+  musicId: z.number().int(),
+  version: z.string().min(1),
+  difficulty: z.enum(stdChartDifficultyValues),
+});
+
+export type UpdateMusicLevelRequest = z.infer<
+  typeof updateMusicLevelRequestSchema
+>;
+
+/**
+ * Upsert a single chart's level & constant for a given version. Used by web
+ * admins from the data page. Invalidates the table cache so the edit is
+ * reflected immediately.
+ */
+export async function updateMusicLevel({
+  musicId,
+  version,
+  difficulty,
+  level,
+  constant,
+}: UpdateMusicLevelRequest): Promise<void> {
+  const constantValue = constant === null ? null : constant.toString();
+
+  await db
+    .insert(musicLevelTable)
+    .values({
+      musicId,
+      version,
+      difficulty,
+      level,
+      constant: constantValue,
+    })
+    .onConflictDoUpdate({
+      target: [
+        musicLevelTable.musicId,
+        musicLevelTable.difficulty,
+        musicLevelTable.version,
+      ],
+      set: {
+        level,
+        constant: constantValue,
+      },
+    });
+
+  clearMusicDataCache();
 }
 
 export async function getMusicLevelHistory(

@@ -1,5 +1,10 @@
 # Changelog
 
+## [minor]
+
+- feat(data): web admins can edit a chart's level and constant by clicking a difficulty cell and saving
+- qol(data): only show the "missing constant data" filter to web admins
+
 ## [1.20.0] - 2026-06-28
 
 - fix(dashboard): only load API keys and manual rating history on pages that use them instead of every dashboard route

@@ -6,19 +6,29 @@
   import { getDefaultVersion, getEnabledVersions } from "$lib/version";
 
   import { constantFromLevel } from "@repo/core/maimai";
-  import { compareSortableValues } from "@repo/core/web";
+  import {
+    chartLevelEditSchema,
+    compareSortableValues,
+    parseConstantInput,
+  } from "@repo/core/web";
+  import type { StdChartDifficulty } from "@repo/types/maimai";
   import { Button } from "@repo/ui/atom/button";
   import { Checkbox } from "@repo/ui/atom/checkbox";
   import { Label } from "@repo/ui/atom/label";
   import * as Select from "@repo/ui/atom/select";
   import * as Table from "@repo/ui/atom/table";
+  import { ChartLevelEditor } from "@repo/ui/molecule/ChartLevelEditor";
   import {
     ReleaseDateSortHeader,
     type ReleaseDateSortMode,
   } from "@repo/ui/molecule/ReleaseDateSortHeader";
   import { SortableHeader } from "@repo/ui/molecule/sortable-header";
 
+  import type { PageData } from "./$types";
   import ChartLevelCell from "./ChartLevelCell.svelte";
+
+  let { data }: { data: PageData } = $props();
+  let isAdmin = $derived(data.isAdmin);
 
   let selectedVersion = $state<string>("");
   let searchQuery = $state<string>("");
@@ -206,7 +216,72 @@
     }
     currentPage = 1;
   }
+
+  async function saveChartLevel(
+    song: MusicDataViewSchema,
+    difficulty: StdChartDifficulty,
+    raw: { level: string; constant: string },
+  ) {
+    const constant = parseConstantInput(raw.constant);
+    const parsed = chartLevelEditSchema.safeParse({
+      level: raw.level,
+      constant,
+    });
+
+    if (!parsed.success) {
+      throw new Error(parsed.error.issues[0]?.message ?? "Invalid input");
+    }
+
+    const response = await fetch("/api/musicData", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        musicTitle: song.title,
+        chartType: song.chartType,
+        version: selectedVersion,
+        difficulty,
+        level: parsed.data.level,
+        constant: parsed.data.constant,
+      }),
+    });
+
+    if (!response.ok) {
+      const body = await response.json().catch(() => null);
+      throw new Error(body?.message ?? `Failed to save (${response.status})`);
+    }
+
+    song[difficulty] = {
+      level: parsed.data.level,
+      constant: parsed.data.constant,
+    };
+  }
 </script>
+
+{#snippet diffCell(
+  song: MusicDataViewSchema,
+  difficulty: StdChartDifficulty,
+  chart: MusicDataViewSchema["basic"],
+  bgClass: string,
+)}
+  <Table.Cell class="text-gray-700 {bgClass}">
+    {#if isAdmin}
+      <ChartLevelEditor
+        level={chart?.level ?? ""}
+        constant={chart?.constant ?? null}
+        title={`${song.title} — ${difficulty.toUpperCase()}`}
+        onsave={(raw) => saveChartLevel(song, difficulty, raw)}
+      >
+        {#if chart}
+          <ChartLevelCell {...chart} {difficulty} />
+        {:else}
+          <span class="text-gray-400">-</span>
+        {/if}
+      </ChartLevelEditor>
+    {:else if chart}
+      <ChartLevelCell {...chart} {difficulty} />
+    {/if}
+  </Table.Cell>
+{/snippet}
 
 <div
   class="min-h-screen bg-fixed bg-cover bg-center bg-no-repeat pt-24"
@@ -274,15 +349,17 @@
         </div>
       </div>
 
-      <!-- Null Filter -->
-      <div class="mt-4 flex items-center gap-3">
-        <Checkbox
-          id="null-filter"
-          class="bg-white"
-          bind:checked={filterNullConstant}
-        />
-        <Label for="null-filter">Show songs with missing constant data</Label>
-      </div>
+      <!-- Null Filter (admin only) -->
+      {#if isAdmin}
+        <div class="mt-4 flex items-center gap-3">
+          <Checkbox
+            id="null-filter"
+            class="bg-white"
+            bind:checked={filterNullConstant}
+          />
+          <Label for="null-filter">Show songs with missing constant data</Label>
+        </div>
+      {/if}
 
       <!-- Note -->
       <div class="mt-4 text-sm text-gray-700">
@@ -501,37 +578,36 @@
                       class="w-16 mx-auto"
                     />
                   </Table.Cell>
-                  <Table.Cell class="text-gray-700 bg-green-500/20">
-                    {#if song.basic}
-                      <ChartLevelCell {...song.basic} difficulty="basic" />
-                    {/if}
-                  </Table.Cell>
-                  <Table.Cell class="text-gray-700 bg-orange-500/20">
-                    {#if song.advanced}
-                      <ChartLevelCell
-                        {...song.advanced}
-                        difficulty="advanced"
-                      />
-                    {/if}
-                  </Table.Cell>
-                  <Table.Cell class="text-gray-700 bg-red-500/20">
-                    {#if song.expert}
-                      <ChartLevelCell {...song.expert} difficulty="expert" />
-                    {/if}
-                  </Table.Cell>
-                  <Table.Cell class="text-gray-700 bg-purple-500/20">
-                    {#if song.master}
-                      <ChartLevelCell {...song.master} difficulty="master" />
-                    {/if}
-                  </Table.Cell>
-                  <Table.Cell class="text-gray-700 bg-[#dcaaff]/30">
-                    {#if song.remaster}
-                      <ChartLevelCell
-                        {...song.remaster}
-                        difficulty="remaster"
-                      />
-                    {/if}
-                  </Table.Cell>
+                  {@render diffCell(
+                    song,
+                    "basic",
+                    song.basic,
+                    "bg-green-500/20",
+                  )}
+                  {@render diffCell(
+                    song,
+                    "advanced",
+                    song.advanced,
+                    "bg-orange-500/20",
+                  )}
+                  {@render diffCell(
+                    song,
+                    "expert",
+                    song.expert,
+                    "bg-red-500/20",
+                  )}
+                  {@render diffCell(
+                    song,
+                    "master",
+                    song.master,
+                    "bg-purple-500/20",
+                  )}
+                  {@render diffCell(
+                    song,
+                    "remaster",
+                    song.remaster,
+                    "bg-[#dcaaff]/30",
+                  )}
                 </Table.Row>
               {/each}
             </Table.Body>

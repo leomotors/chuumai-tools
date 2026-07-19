@@ -8,6 +8,7 @@ export * from "./jobUpload";
 export * from "./manualRatingUpload";
 export * from "./maxRating";
 export * from "./musicForRating";
+export * from "./musicLevelEdit";
 export * from "./musicLevelHistory";
 export * from "./openapi";
 export * from "./playCount";

@@ -1,5 +1,10 @@
 # Changelog
 
+## [minor]
+
+- feat(data): web admins can edit a chart's level and constant by clicking a difficulty cell and saving
+- qol(data): only show the "missing constant data" filter to web admins
+
 ## [3.29.0] - 2026-07-02
 
 - feat: support assets for Mate
