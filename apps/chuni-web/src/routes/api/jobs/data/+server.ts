@@ -71,142 +71,145 @@ export const POST: RequestHandler = async ({ request }) => {
       );
     }
 
-    // Insert player data
-    await db.insert(playerDataTable).values({
-      jobId,
-      characterRarity: playerData.characterRarity,
-      characterImage: playerData.characterImage,
-      teamName: playerData.teamName,
-      teamEmblem: playerData.teamEmblem,
-      mainHonorText: playerData.mainHonorText,
-      mainHonorRarity: playerData.mainHonorRarity,
-      subHonor1Text: playerData.subHonor1Text,
-      subHonor1Rarity: playerData.subHonor1Rarity,
-      subHonor2Text: playerData.subHonor2Text,
-      subHonor2Rarity: playerData.subHonor2Rarity,
-      playerLevel: playerData.playerLevel,
-      playerName: playerData.playerName,
-      classBand: playerData.classBand,
-      classEmblem: playerData.classEmblem,
-      rating: playerData.rating.toString(),
-      calculatedRating: calculatedRating?.toString(),
-      overpowerValue: playerData.overpowerValue.toFixed(2),
-      overpowerPercent: playerData.overpowerPercent.toFixed(2),
-      lastPlayed: new Date(playerData.lastPlayed),
-      currentCurrency: playerData.currentCurrency,
-      totalCurrency: playerData.totalCurrency,
-      playCount: playerData.playCount,
-      playCountCurrent: playerData.playCountCurrent,
-    });
+    await db.transaction(async (tx) => {
+      // Insert player data
+      await tx.insert(playerDataTable).values({
+        jobId,
+        characterRarity: playerData.characterRarity,
+        characterImage: playerData.characterImage,
+        teamName: playerData.teamName,
+        teamEmblem: playerData.teamEmblem,
+        mainHonorText: playerData.mainHonorText,
+        mainHonorRarity: playerData.mainHonorRarity,
+        subHonor1Text: playerData.subHonor1Text,
+        subHonor1Rarity: playerData.subHonor1Rarity,
+        subHonor2Text: playerData.subHonor2Text,
+        subHonor2Rarity: playerData.subHonor2Rarity,
+        playerLevel: playerData.playerLevel,
+        playerName: playerData.playerName,
+        classBand: playerData.classBand,
+        classEmblem: playerData.classEmblem,
+        rating: playerData.rating.toString(),
+        calculatedRating: calculatedRating?.toString(),
+        overpowerValue: playerData.overpowerValue.toFixed(2),
+        overpowerPercent: playerData.overpowerPercent.toFixed(2),
+        lastPlayed: new Date(playerData.lastPlayed),
+        currentCurrency: playerData.currentCurrency,
+        totalCurrency: playerData.totalCurrency,
+        playCount: playerData.playCount,
+        playCountCurrent: playerData.playCountCurrent,
+      });
 
-    // Insert all music records
-    await db
-      .insert(musicRecordTable)
-      .values(
-        recordData.allRecords.map((record) => ({
-          jobId,
-          musicId: record.id,
-          difficulty: record.difficulty,
-          score: record.score,
-          clearMark: record.clearMark ?? null,
-          fc: record.fc,
-          aj: record.aj,
-          fullChain: record.fullChain,
-        })),
-      )
-      .onConflictDoNothing();
-
-    // Get all records for this job only
-    const allRecords = await db
-      .select({
-        id: musicRecordTable.id,
-        musicId: musicRecordTable.musicId,
-        difficulty: musicRecordTable.difficulty,
-        score: musicRecordTable.score,
-        clearMark: musicRecordTable.clearMark,
-        fc: musicRecordTable.fc,
-        aj: musicRecordTable.aj,
-        fullChain: musicRecordTable.fullChain,
-      })
-      .from(musicRecordTable)
-      .innerJoin(jobTable, eq(musicRecordTable.jobId, jobTable.id))
-      .where(eq(jobTable.userId, userId));
-
-    // Helper function to insert rating records
-    async function insertRating(
-      records: typeof recordData.allRecords,
-      ratingType: RatingType,
-    ) {
-      if (records.length === 0) {
-        return;
-      }
-
-      await db.insert(forRatingTable).values(
-        records.map((record, index) => {
-          const recordId = allRecords.find(
-            (r) =>
-              r.musicId === record.id &&
-              r.difficulty === record.difficulty &&
-              r.score === record.score &&
-              r.clearMark === (record.clearMark ?? null) &&
-              r.fc === record.fc &&
-              r.aj === record.aj &&
-              r.fullChain === record.fullChain,
-          )?.id;
-
-          if (!recordId) {
-            throw new Error(
-              `Insert Database Failure: ${record.id} ${record.difficulty} ${record.score} ${record.clearMark} ${record.fc} ${record.aj} ${record.fullChain} not in musicRecordTable`,
-            );
-          }
-
-          return {
-            jobId,
-            musicId: record.id,
-            recordId,
-            ratingType,
-            order: index + 1,
-            version,
-          };
-        }),
-      );
-    }
-
-    // Insert rating breakdowns
-    await insertRating(recordData.best, "BEST");
-    await insertRating(recordData.current, "CURRENT");
-    await insertRating(recordData.selectionBest, "SELECTION_BEST");
-    await insertRating(recordData.selectionCurrent, "SELECTION_CURRENT");
-
-    // Save History
-    if (recordData.history) {
-      await db
-        .insert(playHistoryTable)
+      // Insert all music records
+      await tx
+        .insert(musicRecordTable)
         .values(
-          recordData.history.map((history) => ({
+          recordData.allRecords.map((record) => ({
             jobId,
-            musicTitle: history.title,
-            difficulty: history.difficulty,
-            score: history.score,
-            clearMark: history.clearMark ?? null,
-            fc: history.fc,
-            aj: history.aj,
-            fullChain: history.fullChain,
-            trackNo: history.trackNo,
-            playedAt: new Date(history.playedAt),
+            userId,
+            musicId: record.id,
+            difficulty: record.difficulty,
+            score: record.score,
+            clearMark: record.clearMark ?? null,
+            fc: record.fc,
+            aj: record.aj,
+            fullChain: record.fullChain,
           })),
         )
         .onConflictDoNothing();
-    }
 
-    // Insert raw scrape data for debugging
-    await db.insert(rawScrapeDataTable).values({
-      jobId,
-      version,
-      playerDataHtml,
-      allMusicRecordHtml,
-      dataForImageGen: JSON.stringify(imgGenInput),
-      fullPlayData: fullPlayData ? JSON.stringify(fullPlayData) : null,
+      // Get every record this user owns, to resolve each rating entry to one
+      const allRecords = await tx
+        .select({
+          id: musicRecordTable.id,
+          musicId: musicRecordTable.musicId,
+          difficulty: musicRecordTable.difficulty,
+          score: musicRecordTable.score,
+          clearMark: musicRecordTable.clearMark,
+          fc: musicRecordTable.fc,
+          aj: musicRecordTable.aj,
+          fullChain: musicRecordTable.fullChain,
+        })
+        .from(musicRecordTable)
+        .where(eq(musicRecordTable.userId, userId));
+
+      // Helper function to insert rating records
+      async function insertRating(
+        records: typeof recordData.allRecords,
+        ratingType: RatingType,
+      ) {
+        if (records.length === 0) {
+          return;
+        }
+
+        await tx.insert(forRatingTable).values(
+          records.map((record, index) => {
+            const recordId = allRecords.find(
+              (r) =>
+                r.musicId === record.id &&
+                r.difficulty === record.difficulty &&
+                r.score === record.score &&
+                r.clearMark === (record.clearMark ?? null) &&
+                r.fc === record.fc &&
+                r.aj === record.aj &&
+                r.fullChain === record.fullChain,
+            )?.id;
+
+            if (!recordId) {
+              throw new Error(
+                `Insert Database Failure: ${record.id} ${record.difficulty} ${record.score} ${record.clearMark} ${record.fc} ${record.aj} ${record.fullChain} not in musicRecordTable`,
+              );
+            }
+
+            return {
+              jobId,
+              musicId: record.id,
+              recordId,
+              ratingType,
+              order: index + 1,
+              version,
+            };
+          }),
+        );
+      }
+
+      // Insert rating breakdowns
+      await insertRating(recordData.best, "BEST");
+      await insertRating(recordData.current, "CURRENT");
+      await insertRating(recordData.selectionBest, "SELECTION_BEST");
+      await insertRating(recordData.selectionCurrent, "SELECTION_CURRENT");
+
+      // Save History
+      if (recordData.history) {
+        await tx
+          .insert(playHistoryTable)
+          .values(
+            recordData.history.map((history) => ({
+              jobId,
+              userId,
+              musicTitle: history.title,
+              difficulty: history.difficulty,
+              score: history.score,
+              clearMark: history.clearMark ?? null,
+              fc: history.fc,
+              aj: history.aj,
+              fullChain: history.fullChain,
+              trackNo: history.trackNo,
+              playedAt: new Date(history.playedAt),
+            })),
+          )
+          .onConflictDoNothing();
+      }
+
+      // Insert raw scrape data for debugging
+      await tx.insert(rawScrapeDataTable).values({
+        jobId,
+        version,
+        playerDataHtml,
+        allMusicRecordHtml,
+        dataForImageGen: JSON.stringify(imgGenInput),
+        fullPlayData: fullPlayData ? JSON.stringify(fullPlayData) : null,
+      });
     });
 
     try {

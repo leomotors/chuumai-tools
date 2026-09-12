@@ -90,17 +90,31 @@ export const hiddenChartSchema = z
 
 export type HiddenChart = z.infer<typeof hiddenChartSchema>;
 
+/**
+ * Upper bounds on request array lengths.
+ *
+ * These arrays are walked in full — on `/api/calcRating` and `/api/previewNext`
+ * each element is matched against the whole chart table, before any slicing —
+ * and both of those routes are unauthenticated, so an unbounded array turns a
+ * single small request into unbounded work on the one Node event loop. The
+ * limits are far above what a real scrape or upload produces.
+ */
+export const MAX_RATING_RECORDS = 100;
+export const MAX_ALL_RECORDS = 30_000;
+export const MAX_HISTORY_RECORDS = 1_000;
+export const MAX_HIDDEN_RECORDS = 50;
+
 export const imgGenInputSchema = z.object({
   profile: profileSchema,
-  best: z.array(chartSchema),
-  current: z.array(chartSchema),
-  hidden: z.array(hiddenChartSchema).optional(),
+  best: z.array(chartSchema).max(MAX_RATING_RECORDS),
+  current: z.array(chartSchema).max(MAX_RATING_RECORDS),
+  hidden: z.array(hiddenChartSchema).max(MAX_HIDDEN_RECORDS).optional(),
   scraperVersion: z.string().optional(),
 });
 
 export const fullPlayDataInputSchema = imgGenInputSchema.extend({
-  allRecords: z.array(chartSchema),
-  history: z.array(historyRecordSchema).optional(),
+  allRecords: z.array(chartSchema).max(MAX_ALL_RECORDS),
+  history: z.array(historyRecordSchema).max(MAX_HISTORY_RECORDS).optional(),
 });
 
 export type ImgGenInput = z.infer<typeof imgGenInputSchema>;

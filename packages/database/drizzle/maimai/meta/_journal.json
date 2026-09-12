@@ -78,6 +78,20 @@
       "when": 1782028079261,
       "tag": "0010_add_full_play_data",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1789233911552,
+      "tag": "0011_scope_record_uniqueness_to_user",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1789233923242,
+      "tag": "0012_backfill_record_user_id",
+      "breakpoints": true
     }
   ]
 }

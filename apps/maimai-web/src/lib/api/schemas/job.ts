@@ -20,6 +20,9 @@ import {
   fullPlayDataInputSchema,
   historyRecordSchema,
   imgGenInputSchema,
+  MAX_ALL_RECORDS,
+  MAX_HISTORY_RECORDS,
+  MAX_RATING_RECORDS,
   rarityLevelValues,
 } from "@repo/types/maimai";
 
@@ -67,22 +70,22 @@ export const savePlayerDataSchema = z
  */
 export const saveRatingRecordsSchema = z
   .object({
-    best: z.array(chartSchema).openapi({
+    best: z.array(chartSchema).max(MAX_RATING_RECORDS).openapi({
       description: "Old (Best) 35 songs for rating",
     }),
-    current: z.array(chartSchema).openapi({
+    current: z.array(chartSchema).max(MAX_RATING_RECORDS).openapi({
       description: "New (Current) 15 songs for rating",
     }),
-    selectionBest: z.array(chartSchema).openapi({
+    selectionBest: z.array(chartSchema).max(MAX_RATING_RECORDS).openapi({
       description: "Selection old candidates",
     }),
-    selectionCurrent: z.array(chartSchema).openapi({
+    selectionCurrent: z.array(chartSchema).max(MAX_RATING_RECORDS).openapi({
       description: "Selection new candidates",
     }),
-    allRecords: z.array(chartSchema).openapi({
+    allRecords: z.array(chartSchema).max(MAX_ALL_RECORDS).openapi({
       description: "All play records",
     }),
-    history: z.array(historyRecordSchema).optional(),
+    history: z.array(historyRecordSchema).max(MAX_HISTORY_RECORDS).optional(),
   })
   .openapi("SaveRatingRecords");
 

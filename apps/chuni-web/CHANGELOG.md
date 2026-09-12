@@ -1,5 +1,13 @@
 # Changelog
 
+## [minor]
+
+- fix(security): music records and play history are now unique per user instead of globally, so one account's uploads can no longer drop or break another account's scrape (requires the new migration)
+- fix(security): job data upload now writes player data, records, rating breakdown and history in one transaction, so a failure no longer leaves partial rows
+- fix(security): rating, record and history arrays in the API request schemas are now length-limited, so the unauthenticated /api/calcRating and /api/previewNext routes cannot be made to do unbounded work
+- fix(security): manual rating CSV upload now rejects files above 64 columns or 20000 rows and picks its time/rating columns in a single pass instead of enumerating every column pair
+- fix(security): API docs page pins the Scalar bundle to an exact version with a Subresource Integrity hash
+
 ## [3.30.1] - 2026-07-20
 
 - fix(navbar): desktop nav links no longer hidden behind the mobile menu — app.css and @repo/ui/globals.css each ran their own Tailwind pass, and the duplicate plain utilities overrode the md: breakpoint rules; the app now has a single Tailwind entry importing @repo/ui/globals.css

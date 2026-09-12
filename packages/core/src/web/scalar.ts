@@ -164,9 +164,17 @@ export const createScalarHTML = (title: string) => `<!doctype html>
     <div id="scalar-app"></div>
 
     <!-- Load the Script -->
+    <!--
+      Pinned to an exact version and guarded by Subresource Integrity: this page
+      is served from our own origin and users paste their API key into it, so an
+      unpinned CDN URL would let any upstream/CDN change run as first-party code.
+      When bumping the version, recompute the hash from the same exact URL:
+      curl -s <url> | openssl dgst -sha384 -binary | openssl base64 -A
+    -->
     <script
-      src="https://cdn.jsdelivr.net/npm/@scalar/api-reference"
-      crossorigin
+      src="https://cdn.jsdelivr.net/npm/@scalar/api-reference@1.68.0/dist/browser/standalone.js"
+      integrity="sha384-PhSzhE9ihf7z/cKeRSKAeP+oJMMzotyFv0EjvNYgL798a2ODBQVuJLTP4Klle6IB"
+      crossorigin="anonymous"
     ></script>
 
     <!-- Initialize the Scalar API Reference -->

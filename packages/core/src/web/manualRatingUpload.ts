@@ -71,6 +71,16 @@ const EXCEL_EPOCH_OFFSET = 25569;
 const MS_PER_DAY = 86_400_000;
 const EXPLICIT_TIME_ZONE_PATTERN = /(?:[zZ]|[+-]\d{2}:?\d{2})$/;
 
+/**
+ * Upper bounds on the shape of an accepted CSV. A rating export is a handful of
+ * columns and at most a few thousand rows, so these are generous for real files
+ * while keeping the work done per upload bounded — without them a small file
+ * made of commas alone drives column-count-proportional scanning and can pin
+ * the server's event loop.
+ */
+export const MAX_CSV_COLUMNS = 64;
+export const MAX_CSV_ROWS = 20_000;
+
 export function parseManualRatingCsv(
   csv: string,
   game: ManualRatingUploadGame,
@@ -83,6 +93,14 @@ export function parseManualRatingCsv(
 
   if (rows.length === 0) {
     throw new Error("CSV file is empty.");
+  }
+
+  const columnCount = maxColumnCount(rows);
+
+  if (columnCount > MAX_CSV_COLUMNS) {
+    throw new Error(
+      `CSV file has too many columns (${columnCount}). Keep it under ${MAX_CSV_COLUMNS} columns.`,
+    );
   }
 
   const scenarios = [
@@ -165,6 +183,16 @@ function parseCsvRows(csv: string): CsvRow[] {
   let inQuotes = false;
   let sourceRow = 1;
 
+  const pushRow = (values: string[]) => {
+    if (rows.length >= MAX_CSV_ROWS) {
+      throw new Error(
+        `CSV file has too many rows. Keep it under ${MAX_CSV_ROWS} rows.`,
+      );
+    }
+
+    rows.push({ sourceRow, values: values.map((value) => value.trim()) });
+  };
+
   const input = csv.replace(/^\uFEFF/, "");
 
   for (let index = 0; index < input.length; index += 1) {
@@ -189,7 +217,7 @@ function parseCsvRows(csv: string): CsvRow[] {
 
     if ((char === "\n" || char === "\r") && !inQuotes) {
       row.push(current);
-      rows.push({ sourceRow, values: row.map((value) => value.trim()) });
+      pushRow(row);
       row = [];
       current = "";
       sourceRow += 1;
@@ -201,9 +229,19 @@ function parseCsvRows(csv: string): CsvRow[] {
   }
 
   row.push(current);
-  rows.push({ sourceRow, values: row.map((value) => value.trim()) });
+  pushRow(row);
 
   return rows;
+}
+
+function maxColumnCount(rows: CsvRow[]): number {
+  let columnCount = 0;
+
+  for (const row of rows) {
+    if (row.values.length > columnCount) columnCount = row.values.length;
+  }
+
+  return columnCount;
 }
 
 function buildScenario(
@@ -213,7 +251,8 @@ function buildScenario(
   options: NormalizedManualRatingUploadOptions,
 ): ParsedScenario {
   const columnCount = Math.max(
-    ...[...(header ? [header] : []), ...rows].map((row) => row.values.length),
+    maxColumnCount(rows),
+    header?.values.length ?? 0,
   );
 
   const timeScores = Array.from({ length: columnCount }, (_, index) =>
@@ -223,17 +262,7 @@ function buildScenario(
     scoreColumn(rows, header, index, "rating", game, options),
   );
 
-  const pairs = timeScores.flatMap((timeScore) =>
-    ratingScores
-      .filter((ratingScore) => ratingScore.index !== timeScore.index)
-      .map((ratingScore) => ({ timeScore, ratingScore })),
-  );
-  const bestPair = pairs.sort(
-    (a, b) =>
-      b.timeScore.score +
-      b.ratingScore.score -
-      (a.timeScore.score + a.ratingScore.score),
-  )[0];
+  const bestPair = pickBestColumnPair(timeScores, ratingScores);
 
   if (!bestPair) {
     return emptyScenario(rows, header, options);
@@ -323,6 +352,77 @@ function emptyScenario(
     warnings: ["No usable rows were found."],
     score: 0,
   };
+}
+
+type ColumnScore = ReturnType<typeof scoreColumn>;
+
+type ColumnPair = {
+  timeScore: ColumnScore;
+  ratingScore: ColumnScore;
+};
+
+/**
+ * Picks the highest scoring (time, rating) column pair with distinct indices in
+ * a single pass. Only the top two columns of each kind can take part in the
+ * answer, so the full column cross product never has to be materialised —
+ * enumerating it made a wide CSV cost columns² allocations. Ties resolve to the
+ * lowest column index, matching the previous enumerate-and-sort behaviour.
+ */
+function pickBestColumnPair(
+  timeScores: ColumnScore[],
+  ratingScores: ColumnScore[],
+): ColumnPair | null {
+  const [bestTime, secondTime] = topTwoScores(timeScores);
+  const [bestRating, secondRating] = topTwoScores(ratingScores);
+
+  if (!bestTime || !bestRating) {
+    return null;
+  }
+
+  if (bestTime.index !== bestRating.index) {
+    return { timeScore: bestTime, ratingScore: bestRating };
+  }
+
+  // Both kinds favour the same column, so one of them has to give way.
+  const keepTime: ColumnPair | null = secondRating
+    ? { timeScore: bestTime, ratingScore: secondRating }
+    : null;
+  const keepRating: ColumnPair | null = secondTime
+    ? { timeScore: secondTime, ratingScore: bestRating }
+    : null;
+
+  if (!keepTime) return keepRating;
+  if (!keepRating) return keepTime;
+
+  const keepTimeTotal = keepTime.timeScore.score + keepTime.ratingScore.score;
+  const keepRatingTotal =
+    keepRating.timeScore.score + keepRating.ratingScore.score;
+
+  if (keepTimeTotal !== keepRatingTotal) {
+    return keepTimeTotal > keepRatingTotal ? keepTime : keepRating;
+  }
+
+  return keepTime.timeScore.index <= keepRating.timeScore.index
+    ? keepTime
+    : keepRating;
+}
+
+function topTwoScores(
+  scores: ColumnScore[],
+): [ColumnScore | null, ColumnScore | null] {
+  let best: ColumnScore | null = null;
+  let second: ColumnScore | null = null;
+
+  for (const score of scores) {
+    if (!best || score.score > best.score) {
+      second = best;
+      best = score;
+    } else if (!second || score.score > second.score) {
+      second = score;
+    }
+  }
+
+  return [best, second];
 }
 
 function scoreColumn(

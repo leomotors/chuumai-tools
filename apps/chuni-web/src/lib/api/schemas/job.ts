@@ -21,6 +21,9 @@ import {
   historyRecordSchema,
   honorRarityLevelValues,
   imgGenInputSchema,
+  MAX_ALL_RECORDS,
+  MAX_HISTORY_RECORDS,
+  MAX_RATING_RECORDS,
   rarityLevelValues,
   teamRarityLevelValues,
 } from "@repo/types/chuni";
@@ -80,22 +83,28 @@ export const savePlayerDataSchema = z
  */
 export const saveRatingRecordsSchema = z
   .object({
-    best: z.array(chartSchemaWithFullChain).openapi({
+    best: z.array(chartSchemaWithFullChain).max(MAX_RATING_RECORDS).openapi({
       description: "Best 30 songs for rating",
     }),
-    current: z.array(chartSchemaWithFullChain).openapi({
+    current: z.array(chartSchemaWithFullChain).max(MAX_RATING_RECORDS).openapi({
       description: "Recent 20 songs for rating",
     }),
-    selectionBest: z.array(chartSchemaWithFullChain).openapi({
-      description: "Selection best candidates",
-    }),
-    selectionCurrent: z.array(chartSchemaWithFullChain).openapi({
-      description: "Selection current candidates",
-    }),
-    allRecords: z.array(chartSchemaWithFullChain).openapi({
+    selectionBest: z
+      .array(chartSchemaWithFullChain)
+      .max(MAX_RATING_RECORDS)
+      .openapi({
+        description: "Selection best candidates",
+      }),
+    selectionCurrent: z
+      .array(chartSchemaWithFullChain)
+      .max(MAX_RATING_RECORDS)
+      .openapi({
+        description: "Selection current candidates",
+      }),
+    allRecords: z.array(chartSchemaWithFullChain).max(MAX_ALL_RECORDS).openapi({
       description: "All play records",
     }),
-    history: z.array(historyRecordSchema).optional(),
+    history: z.array(historyRecordSchema).max(MAX_HISTORY_RECORDS).optional(),
   })
   .openapi("SaveRatingRecords");
 

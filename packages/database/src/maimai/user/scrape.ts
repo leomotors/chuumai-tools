@@ -76,6 +76,9 @@ export const musicRecordTable = pgTable(
     id: integer().primaryKey().generatedAlwaysAsIdentity(),
 
     jobId: integer("job_id").references(() => jobTable.id),
+    // Denormalised from the job so the uniqueness below is scoped per user:
+    // a global constraint lets one user's rows swallow everyone else's.
+    userId: text("user_id"),
 
     ...chartIdentifierFragment,
     ...playDataFragment,
@@ -83,6 +86,7 @@ export const musicRecordTable = pgTable(
   (t) => [
     unique("music_record_unique")
       .on(
+        t.userId,
         t.musicTitle,
         t.chartType,
         t.difficulty,
@@ -96,22 +100,31 @@ export const musicRecordTable = pgTable(
   ],
 );
 
-export const playHistoryTable = pgTable("play_history", {
-  id: integer().primaryKey().generatedAlwaysAsIdentity(),
+export const playHistoryTable = pgTable(
+  "play_history",
+  {
+    id: integer().primaryKey().generatedAlwaysAsIdentity(),
 
-  jobId: integer("job_id").references(() => jobTable.id),
+    jobId: integer("job_id").references(() => jobTable.id),
+    // Denormalised from the job so the uniqueness below is scoped per user:
+    // a global constraint lets one user's rows swallow everyone else's.
+    userId: text("user_id"),
 
-  // Chart Identifier
-  musicTitle: text("music_title").notNull(),
+    // Chart Identifier
+    musicTitle: text("music_title").notNull(),
 
-  chartType: chartTypeWithUtageType("chart_type").notNull(),
-  difficulty: allChartDifficultyType().notNull(),
-  ...playDataFragment,
+    chartType: chartTypeWithUtageType("chart_type").notNull(),
+    difficulty: allChartDifficultyType().notNull(),
+    ...playDataFragment,
 
-  // Play History Specific
-  trackNo: integer("track_no").notNull(),
-  playedAt: timestamp("played_at", { withTimezone: true }).notNull().unique(),
-});
+    // Play History Specific
+    trackNo: integer("track_no").notNull(),
+    playedAt: timestamp("played_at", { withTimezone: true }).notNull(),
+  },
+  (t) => [
+    unique("play_history_user_played_at_unique").on(t.userId, t.playedAt),
+  ],
+);
 
 /**
  * Table for showing Music for Rating for each job.

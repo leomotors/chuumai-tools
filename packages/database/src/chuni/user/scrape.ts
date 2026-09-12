@@ -87,6 +87,9 @@ export const musicRecordTable = pgTable(
     id: integer().primaryKey().generatedAlwaysAsIdentity(),
 
     jobId: integer("job_id").references(() => jobTable.id),
+    // Denormalised from the job so the uniqueness below is scoped per user:
+    // a global constraint lets one user's rows swallow everyone else's.
+    userId: text("user_id"),
 
     musicId: integer("music_id").notNull(),
     difficulty: stdChartDifficultyType().notNull(),
@@ -96,6 +99,7 @@ export const musicRecordTable = pgTable(
   (t) => [
     unique("music_record_unique")
       .on(
+        t.userId,
         t.musicId,
         t.difficulty,
         t.score,
@@ -108,21 +112,30 @@ export const musicRecordTable = pgTable(
   ],
 );
 
-export const playHistoryTable = pgTable("play_history", {
-  id: integer().primaryKey().generatedAlwaysAsIdentity(),
+export const playHistoryTable = pgTable(
+  "play_history",
+  {
+    id: integer().primaryKey().generatedAlwaysAsIdentity(),
 
-  jobId: integer("job_id").references(() => jobTable.id),
+    jobId: integer("job_id").references(() => jobTable.id),
+    // Denormalised from the job so the uniqueness below is scoped per user:
+    // a global constraint lets one user's rows swallow everyone else's.
+    userId: text("user_id"),
 
-  // WORLD'S END will be stored as difficulty = NULL
-  musicTitle: text("music_title").notNull(),
-  difficulty: stdChartDifficultyType(),
+    // WORLD'S END will be stored as difficulty = NULL
+    musicTitle: text("music_title").notNull(),
+    difficulty: stdChartDifficultyType(),
 
-  ...playDataFragment,
+    ...playDataFragment,
 
-  // Play History Specific
-  trackNo: integer("track_no").notNull(),
-  playedAt: timestamp("played_at", { withTimezone: true }).notNull().unique(),
-});
+    // Play History Specific
+    trackNo: integer("track_no").notNull(),
+    playedAt: timestamp("played_at", { withTimezone: true }).notNull(),
+  },
+  (t) => [
+    unique("play_history_user_played_at_unique").on(t.userId, t.playedAt),
+  ],
+);
 
 /**
  * Table for showing Music for Rating for each job.

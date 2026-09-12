@@ -1,6 +1,8 @@
 import { describe, expect, test } from "vitest";
 
 import {
+  MAX_CSV_COLUMNS,
+  MAX_CSV_ROWS,
   parseManualRatingCsv,
   validateManualRatingUploadRecords,
 } from "./manualRatingUpload.js";
@@ -109,6 +111,45 @@ describe("parseManualRatingCsv", () => {
       timestamp: "2026-06-01T03:00:00.000Z",
       localTimestamp: "2026-06-01 10:00:00 UTC+07:00",
     });
+  });
+
+  test("rejects a CSV with more columns than the limit", () => {
+    const header = Array.from(
+      { length: MAX_CSV_COLUMNS + 1 },
+      (_, index) => `column${index}`,
+    ).join(",");
+
+    expect(() => parseManualRatingCsv(header, "chuni")).toThrow(
+      /too many columns/,
+    );
+  });
+
+  test("rejects a CSV with more rows than the limit", () => {
+    const csv = Array.from(
+      { length: MAX_CSV_ROWS + 1 },
+      (_, index) => `2026-06-01T12:00:0${index % 10}+07:00,16.50`,
+    ).join("\n");
+
+    expect(() => parseManualRatingCsv(csv, "chuni")).toThrow(/too many rows/);
+  });
+
+  test("falls back to another column when one scores best for both kinds", () => {
+    // "rating time" earns a header bonus for both kinds, so it is the top
+    // scoring column for time and ties the actual rating column for rating.
+    const preview = parseManualRatingCsv(
+      [
+        "memo,rating time,",
+        "first,2026-06-01T12:00:00+07:00,16.5034",
+        "second,2026-06-02T12:00:00+07:00,16.51",
+      ].join("\n"),
+      "chuni",
+    );
+
+    expect(preview.timeColumn.index).toBe(1);
+    expect(preview.ratingColumn.index).toBe(2);
+    expect(preview.records.map((record) => record.rating)).toEqual([
+      16.5034, 16.51,
+    ]);
   });
 });
 
