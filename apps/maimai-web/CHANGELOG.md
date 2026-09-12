@@ -1,6 +1,6 @@
 # Changelog
 
-## [minor]
+## [1.22.0] - 2026-09-13
 
 - fix(security): music records and play history are now unique per user instead of globally, so one account's uploads can no longer drop or break another account's scrape (requires the new migration)
 - fix(security): job data upload now writes player data, records, rating breakdown and history in one transaction, so a failure no longer leaves partial rows
