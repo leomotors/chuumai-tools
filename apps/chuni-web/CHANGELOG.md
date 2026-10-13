@@ -1,6 +1,6 @@
 # Changelog
 
-## [patch]
+## [3.31.1] - 2026-10-13
 
 - fix(auth): Discord sign-in works again — Discord started returning an `iss` parameter on the OAuth callback, which Auth.js rejected because its Discord provider declares no issuer
 
