@@ -1,5 +1,9 @@
 # Changelog
 
+## [patch]
+
+- fix(auth): Discord sign-in works again — Discord started returning an `iss` parameter on the OAuth callback, which Auth.js rejected because its Discord provider declares no issuer
+
 ## [1.22.0] - 2026-09-13
 
 - fix(security): music records and play history are now unique per user instead of globally, so one account's uploads can no longer drop or break another account's scrape (requires the new migration)
