@@ -9,7 +9,7 @@ export async function fetchPath(
   path: string,
   method = "GET",
   headers?: Record<string, string>,
-  body?: RequestInit["body"],
+  body?: string,
 ) {
   const response = await page.evaluate(
     async ({ fetchPath, method, headers, body }) => {

@@ -43,6 +43,7 @@ yarn-error.log*
 .idea
 
 .vitest-attachments
+.vitest
 
 # Temp
 packages/db-chuni-old

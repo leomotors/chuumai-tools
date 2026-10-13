@@ -13,23 +13,23 @@
   "type": "module",
   "license": "MIT",
   "dependencies": {
-    "jsdom": "^29.1.1",
-    "playwright": "^1.61.1"
+    "jsdom": "^30.1.2",
+    "playwright": "^1.64.0"
   },
   "devDependencies": {
     "@discordjs/builders": "^1.14.1",
     "@repo/api-types": "workspace:*",
     "@repo/core": "workspace:*",
     "@repo/types": "workspace:*",
-    "@types/jsdom": "^28.0.3",
-    "@vitest/coverage-v8": "^4.1.9",
-    "discord-api-types": "^0.38.49",
+    "@types/jsdom": "^30.0.0",
+    "@vitest/coverage-v8": "^5.0.3",
+    "discord-api-types": "^0.38.56",
     "dotenv-cli": "^11.0.0",
     "openapi-fetch": "^0.17.0",
-    "papaparse": "^5.5.4",
-    "tsdown": "^0.22.3",
+    "papaparse": "^5.7.0",
+    "tsdown": "^0.23.0",
     "typescript": "^6.0.3",
-    "vitest": "^4.1.9",
-    "zod": "^4.4.3"
+    "vitest": "^5.0.3",
+    "zod": "^4.6.5"
   }
 }

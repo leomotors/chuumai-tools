@@ -323,18 +323,20 @@
         axis
         props={chartProps}
       >
-        {#snippet spline({ props })}
-          {#if selectedMetric === "maxRating" && Spline}
-            <Spline {...props} stroke="#94a3b8" opacity={0.9} />
-            <Spline
-              {...props}
-              stroke={CHUNI_METRIC_CONFIG.maxRating.color}
-              defined={(d: StatsChartDatum) =>
-                d.rating !== undefined && d.rating === d.maxRating}
-            />
-          {:else if Spline}
-            <Spline {...props} />
-          {/if}
+        {#snippet marks({ context })}
+          {#each context.series.visibleSeries as s (s.key)}
+            {#if selectedMetric === "maxRating" && Spline}
+              <Spline seriesKey={s.key} stroke="#94a3b8" opacity={0.9} />
+              <Spline
+                seriesKey={s.key}
+                stroke={CHUNI_METRIC_CONFIG.maxRating.color}
+                defined={(d: StatsChartDatum) =>
+                  d.rating !== undefined && d.rating === d.maxRating}
+              />
+            {:else if Spline}
+              <Spline seriesKey={s.key} />
+            {/if}
+          {/each}
         {/snippet}
         {#snippet aboveMarks({ context })}
           {#if regressionAnalysis && Line}

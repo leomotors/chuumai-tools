@@ -282,18 +282,20 @@
             },
           }}
         >
-          {#snippet spline({ props })}
-            {#if selectedMetric === "maxRating"}
-              <Spline {...props} stroke="#94a3b8" opacity={0.9} />
-              <Spline
-                {...props}
-                stroke={MAIMAI_METRIC_CONFIG.maxRating.color}
-                defined={(d: ChartDatum) =>
-                  d.rating !== undefined && d.rating === d.maxRating}
-              />
-            {:else}
-              <Spline {...props} />
-            {/if}
+          {#snippet marks({ context })}
+            {#each context.series.visibleSeries as s (s.key)}
+              {#if selectedMetric === "maxRating"}
+                <Spline seriesKey={s.key} stroke="#94a3b8" opacity={0.9} />
+                <Spline
+                  seriesKey={s.key}
+                  stroke={MAIMAI_METRIC_CONFIG.maxRating.color}
+                  defined={(d: ChartDatum) =>
+                    d.rating !== undefined && d.rating === d.maxRating}
+                />
+              {:else}
+                <Spline seriesKey={s.key} />
+              {/if}
+            {/each}
           {/snippet}
           {#snippet aboveMarks({ context })}
             {#if regressionAnalysis}

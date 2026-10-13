@@ -2,6 +2,7 @@ packages:
   - "apps/*"
   - "packages/*"
 overrides:
+  "@types/node": ^24.19.2
   "@remotion/eslint-config-flat>typescript-eslint": ^8.57.1
 allowBuilds:
   '@parcel/watcher': true

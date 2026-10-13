@@ -14,9 +14,9 @@
     "@repo/database": "workspace:*",
     "@repo/types": "workspace:*",
     "dotenv-cli": "^11.0.0",
-    "drizzle-orm": "^0.45.2",
-    "tsdown": "^0.22.3",
+    "drizzle-orm": "^0.45.4",
+    "tsdown": "^0.23.0",
     "typescript": "^6.0.3",
-    "zod": "^4.4.3"
+    "zod": "^4.6.5"
   }
 }
