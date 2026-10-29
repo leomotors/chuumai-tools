@@ -7,7 +7,7 @@ import { updateReleaseDateData } from "./steps/release-date.js";
 const command = process.argv[2];
 
 function validateVersion(version: string) {
-  const EXPECTED_VERSIONS = ["CiRCLE", "CiRCLE+"];
+  const EXPECTED_VERSIONS = ["CiRCLE", "CiRCLE+", "MAGiCAL"];
   if (!EXPECTED_VERSIONS.includes(version)) {
     console.log(
       `Invalid version. Expected one of: ${EXPECTED_VERSIONS.join(", ")}. Are you seeding correct game?`,
