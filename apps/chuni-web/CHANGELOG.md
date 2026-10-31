@@ -1,6 +1,6 @@
 # Changelog
 
-## [minor]
+## [3.32.0] - 2026-10-31
 
 - feat(rating): Composition tab ALL mode now also shows the top (or bottom) 30 AVG and range under the top 50 values
 - fix(security): manual rating CSV upload no longer builds a new date formatter for every cell and picks its time/rating columns from a sample of rows, so a large local-timezone upload cannot block the server
