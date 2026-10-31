@@ -4,6 +4,7 @@
   import { enhance } from "$app/forms";
   import { formatChuniRating } from "$lib/utils/chuniRating";
 
+  import { parseManualRatingCsv } from "@repo/core/web";
   import { ApiKeySection } from "@repo/ui/molecule/ApiKeySection";
   import { ManualRatingUploadSection } from "@repo/ui/molecule/ManualRatingUploadSection";
 
@@ -52,8 +53,9 @@
 
   <ManualRatingUploadSection
     state={form?.manualRatingUpload}
+    parse={(csv, options) => parseManualRatingCsv(csv, "chuni", options)}
     ratingLabel="Rating"
-    ratingDescription="Upload a CSV with or without headers. The preview will infer the timestamp and CHUNITHM decimal rating columns before anything is inserted."
+    ratingDescription="Upload a CSV with or without headers. Your browser infers the timestamp and CHUNITHM decimal rating columns before anything is inserted."
     formatRating={formatChuniRating}
   />
 </div>

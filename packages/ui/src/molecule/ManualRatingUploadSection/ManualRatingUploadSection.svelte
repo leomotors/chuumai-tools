@@ -24,23 +24,25 @@
     reason: string;
   };
 
+  type ManualRatingPreview = {
+    hasHeader: boolean;
+    timeColumn: { label: string; index: number };
+    ratingColumn: { label: string; index: number };
+    records: PreviewRecord[];
+    rejectedRows: RejectedRow[];
+    totalRows: number;
+    dataRows: number;
+    warnings: string[];
+    timeZoneMode: TimeZoneMode;
+    localTimeZone: string;
+  };
+
   type UploadState =
     | {
         status: "preview";
         fileName: string;
         recordsJson: string;
-        preview: {
-          hasHeader: boolean;
-          timeColumn: { label: string; index: number };
-          ratingColumn: { label: string; index: number };
-          records: PreviewRecord[];
-          rejectedRows: RejectedRow[];
-          totalRows: number;
-          dataRows: number;
-          warnings: string[];
-          timeZoneMode: TimeZoneMode;
-          localTimeZone: string;
-        };
+        preview: ManualRatingPreview;
       }
     | {
         status: "inserted";
@@ -51,35 +53,95 @@
         message: string;
       };
 
+  type ServerUploadState = Exclude<UploadState, { status: "preview" }>;
+
   interface Props {
-    state?: UploadState;
+    /** Result of the insert form action. */
+    state?: ServerUploadState;
+    /** Parses the CSV in the browser; the insert action re-validates rows. */
+    parse: (
+      csv: string,
+      options: { timeZoneMode: TimeZoneMode; localTimeZone: string },
+    ) => ManualRatingPreview;
     ratingLabel: string;
     ratingDescription: string;
-    previewAction?: string;
     insertAction?: string;
     formatRating?: (rating: number) => string;
   }
 
+  const MAX_UPLOAD_BYTES = 5 * 1024 * 1024;
+
   let {
-    state: uploadState,
+    state: serverState,
+    parse,
     ratingLabel,
     ratingDescription,
-    previewAction = "?/previewManualRatingUpload",
     insertAction = "?/insertManualRatingUpload",
     formatRating = (rating) => rating.toLocaleString(),
   }: Props = $props();
 
   let localTimeZone = $state("UTC");
+  let timeZoneMode = $state<TimeZoneMode>("local");
+  let localState = $state<UploadState | undefined>();
+  let isParsing = $state(false);
+
+  const uploadState = $derived(localState ?? serverState);
 
   onMount(() => {
     localTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
   });
 
-  const selectedTimeZoneMode = $derived(
-    uploadState?.status === "preview"
-      ? uploadState.preview.timeZoneMode
-      : "local",
-  );
+  async function handlePreview(event: SubmitEvent) {
+    event.preventDefault();
+
+    const form = event.currentTarget as HTMLFormElement;
+    const file = new FormData(form).get("ratingCsv");
+
+    if (!(file instanceof File) || file.size === 0) {
+      localState = { status: "error", message: "Choose a CSV file first." };
+      return;
+    }
+
+    if (file.size > MAX_UPLOAD_BYTES) {
+      localState = {
+        status: "error",
+        message: "CSV file is too large. Please keep it under 5 MB.",
+      };
+      return;
+    }
+
+    isParsing = true;
+
+    try {
+      const preview = parse(await file.text(), {
+        timeZoneMode,
+        localTimeZone,
+      });
+
+      localState = {
+        status: "preview",
+        fileName: file.name,
+        preview,
+        recordsJson: JSON.stringify(
+          preview.records.map((record) => ({
+            timestamp: record.timestamp,
+            rating: record.rating,
+          })),
+        ),
+      };
+    } catch (error) {
+      localState = {
+        status: "error",
+        message:
+          error instanceof Error
+            ? error.message
+            : "Could not read this CSV file.",
+      };
+    } finally {
+      isParsing = false;
+    }
+  }
+
   const previewRows = $derived(
     uploadState?.status === "preview"
       ? uploadState.preview.records.slice(0, 10)
@@ -124,13 +186,9 @@
   </div>
 
   <form
-    method="POST"
-    enctype="multipart/form-data"
-    action={previewAction}
+    onsubmit={handlePreview}
     class="flex flex-col gap-3 rounded-lg border border-dashed border-gray-300 bg-gray-50 p-3"
   >
-    <input type="hidden" name="localTimeZone" value={localTimeZone} />
-
     <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
       <label for="manual-rating-csv" class="sr-only">Rating CSV</label>
       <input
@@ -143,10 +201,11 @@
       />
       <button
         type="submit"
-        class="inline-flex h-9 items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 text-xs font-semibold text-white hover:bg-blue-700"
+        disabled={isParsing}
+        class="inline-flex h-9 items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 text-xs font-semibold text-white hover:bg-blue-700 disabled:opacity-50"
       >
         <Upload class="size-3.5" />
-        Preview CSV
+        {isParsing ? "Reading..." : "Preview CSV"}
       </button>
     </div>
 
@@ -162,7 +221,7 @@
             type="radio"
             name="timeZoneMode"
             value="local"
-            checked={selectedTimeZoneMode === "local"}
+            bind:group={timeZoneMode}
             class="size-3.5"
           />
           Local ({localTimeZone})
@@ -172,7 +231,7 @@
             type="radio"
             name="timeZoneMode"
             value="utc"
-            checked={selectedTimeZoneMode === "utc"}
+            bind:group={timeZoneMode}
             class="size-3.5"
           />
           UTC
@@ -180,7 +239,8 @@
       </div>
       <p class="mt-1 text-gray-500">
         Explicit offsets like Z or +07:00 are honored. Preview times are shown
-        in local time with UTC offset.
+        in local time with UTC offset. The file is read in your browser; only
+        the accepted rows are sent when you insert.
       </p>
     </fieldset>
   </form>

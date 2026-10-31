@@ -136,6 +136,13 @@ export function validateManualRatingUploadRecords(
     throw new Error("Manual rating records must be an array.");
   }
 
+  // Rows now come straight from the browser, so the CSV row cap is enforced here.
+  if (value.length > MAX_CSV_ROWS) {
+    throw new Error(
+      `Too many manual rating rows. Keep it under ${MAX_CSV_ROWS} rows.`,
+    );
+  }
+
   return value.map((record, index) => {
     if (
       record === null ||

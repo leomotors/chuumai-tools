@@ -3,6 +3,7 @@
 ## [patch]
 
 - fix(security): manual rating CSV upload no longer builds a new date formatter for every cell and picks its time/rating columns from a sample of rows, so a large local-timezone upload cannot block the server
+- perf(settings): manual rating CSV preview is now parsed in the browser instead of uploading the file to the server; the insert step still re-validates every row and now rejects more than 20000 rows
 
 ## [3.31.1] - 2026-10-13
 

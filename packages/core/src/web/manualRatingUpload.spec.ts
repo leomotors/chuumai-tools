@@ -199,4 +199,24 @@ describe("validateManualRatingUploadRecords", () => {
       ),
     ).toEqual([{ timestamp: "2026-06-01T00:00:00.000Z", rating: 16.5034 }]);
   });
+
+  test("rejects more rows than the CSV row limit", () => {
+    const records = Array.from({ length: MAX_CSV_ROWS + 1 }, () => ({
+      timestamp: "2026-06-01T00:00:00.000Z",
+      rating: "16.5",
+    }));
+
+    expect(() => validateManualRatingUploadRecords(records, "chuni")).toThrow(
+      /Too many manual rating rows/,
+    );
+  });
+
+  test("rejects rows with an out-of-range rating", () => {
+    expect(() =>
+      validateManualRatingUploadRecords(
+        [{ timestamp: "2026-06-01T00:00:00.000Z", rating: 99 }],
+        "chuni",
+      ),
+    ).toThrow(/row 1 is invalid/);
+  });
 });
