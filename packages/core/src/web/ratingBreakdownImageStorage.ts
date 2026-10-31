@@ -165,7 +165,6 @@ export async function getRatingBreakdownImageFromS3({
 
     return {
       body: arrayBuffer,
-      contentType: response.ContentType ?? "image/png",
       contentLength: response.ContentLength ?? null,
     };
   } catch (err) {

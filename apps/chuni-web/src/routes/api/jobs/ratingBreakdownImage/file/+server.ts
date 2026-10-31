@@ -9,6 +9,7 @@ import { getUserIdFromRequest } from "$lib/server/auth";
 import {
   getRatingBreakdownImageFromS3,
   RatingBreakdownImageNotFoundError,
+  ratingBreakdownImageResponseHeaders,
 } from "@repo/core/web";
 import { jobTable } from "@repo/database/chuni";
 
@@ -65,17 +66,9 @@ export const GET: RequestHandler = async ({ request, url, locals }) => {
       jobId,
     });
 
-    const headers = new Headers({
-      "Content-Type": image.contentType,
-      "Cache-Control": "private, max-age=300",
-      "Cross-Origin-Resource-Policy": "same-origin",
+    return new Response(image.body, {
+      headers: ratingBreakdownImageResponseHeaders(image.contentLength),
     });
-
-    if (image.contentLength !== null) {
-      headers.set("Content-Length", image.contentLength.toString());
-    }
-
-    return new Response(image.body, { headers });
   } catch (err) {
     if (err instanceof RatingBreakdownImageNotFoundError) {
       error(404, "Rating breakdown image not found");

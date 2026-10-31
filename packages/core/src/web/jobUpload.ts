@@ -1,4 +1,11 @@
 const MAX_RATING_BREAKDOWN_IMAGE_BYTES = 10 * 1024 * 1024;
+const PNG_SIGNATURE = [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a];
+
+/**
+ * The image is served from the app's own origin, so anything other than a
+ * real PNG (e.g. SVG or HTML) would run script there. Only PNG is accepted.
+ */
+export const RATING_BREAKDOWN_IMAGE_CONTENT_TYPE = "image/png";
 
 export type RatingBreakdownImageUpload = {
   jobId: number;
@@ -31,8 +38,8 @@ function assertImageFile(value: FormDataEntryValue | null): File {
     throw new RatingBreakdownImageUploadError("image file is required");
   }
 
-  if (!value.type.startsWith("image/")) {
-    throw new RatingBreakdownImageUploadError("image must be an image file");
+  if (value.type !== RATING_BREAKDOWN_IMAGE_CONTENT_TYPE) {
+    throw new RatingBreakdownImageUploadError("image must be a PNG file");
   }
 
   if (value.size > MAX_RATING_BREAKDOWN_IMAGE_BYTES) {
@@ -60,12 +67,40 @@ export async function parseRatingBreakdownImageUploadRequest(
 
   const jobId = parseJobId(formData.get("jobId"));
   const image = assertImageFile(formData.get("image"));
+  const imageBuffer = Buffer.from(await image.arrayBuffer());
+
+  if (!PNG_SIGNATURE.every((byte, index) => imageBuffer[index] === byte)) {
+    throw new RatingBreakdownImageUploadError("image must be a PNG file");
+  }
 
   return {
     jobId,
     fileName: image.name || null,
-    mimeType: image.type,
+    mimeType: RATING_BREAKDOWN_IMAGE_CONTENT_TYPE,
     byteSize: image.size,
-    imageBuffer: Buffer.from(await image.arrayBuffer()),
+    imageBuffer,
   };
+}
+
+/**
+ * Headers for serving a stored breakdown image. The content type is fixed
+ * rather than read from S3 so objects stored before PNG-only validation
+ * cannot be served as a scriptable type.
+ */
+export function ratingBreakdownImageResponseHeaders(
+  contentLength: number | null,
+): Headers {
+  const headers = new Headers({
+    "Content-Type": RATING_BREAKDOWN_IMAGE_CONTENT_TYPE,
+    "Cache-Control": "private, max-age=300",
+    "Cross-Origin-Resource-Policy": "same-origin",
+    "X-Content-Type-Options": "nosniff",
+    "Content-Security-Policy": "default-src 'none'; sandbox",
+  });
+
+  if (contentLength !== null) {
+    headers.set("Content-Length", contentLength.toString());
+  }
+
+  return headers;
 }

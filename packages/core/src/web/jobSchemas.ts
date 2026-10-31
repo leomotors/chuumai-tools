@@ -117,7 +117,7 @@ export const uploadRatingBreakdownImageRequestSchema = z
       example: 12345,
     }),
     image: z.string().openapi({
-      description: "Generated rating breakdown image file",
+      description: "Generated rating breakdown image file (PNG only)",
       format: "binary",
     }),
   })
