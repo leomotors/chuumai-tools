@@ -17,7 +17,6 @@
   let mode = $state<Mode>("BEST");
   let bottom = $state(false);
   let showSelection = $state(false);
-
   const baseRecords = $derived.by(() => {
     if (!data.music) return [];
     if (mode === "BEST") return data.music.best;
@@ -45,14 +44,12 @@
     }
     return summarizeRatings(baseRecords, { limit: 50 });
   });
+  const secondarySummary = $derived(
+    mode === "ALL" ? summarizeRatings(baseRecords, { limit: 30 }) : null,
+  );
+  const windowPrefix = $derived(bottom ? "Bottom" : "Top");
   const rangeLabel = $derived(
-    mode === "ALL"
-      ? bottom
-        ? "Bottom 50"
-        : "Top 50"
-      : mode === "BEST"
-        ? "1-30"
-        : "1-20",
+    mode === "ALL" ? `${windowPrefix} 50` : mode === "BEST" ? "1-30" : "1-20",
   );
 
   function formatRating(value: number | null) {
@@ -106,10 +103,20 @@
 
       <div class="mt-4 grid gap-3 sm:grid-cols-3">
         <div class="rounded-lg border border-gray-200 bg-gray-50 px-4 py-3">
-          <div class="text-xs font-medium text-gray-500">AVG</div>
+          <div class="text-xs font-medium text-gray-500">
+            AVG{mode === "ALL" ? ` (${rangeLabel})` : ""}
+          </div>
           <div class="mt-1 text-2xl font-bold text-gray-950">
             {formatRating(summary.avg)}
           </div>
+          {#if secondarySummary}
+            <div class="mt-0.5 text-xs text-gray-500">
+              {windowPrefix} 30:
+              <span class="font-semibold text-gray-700">
+                {formatRating(secondarySummary.avg)}
+              </span>
+            </div>
+          {/if}
         </div>
         <div class="rounded-lg border border-gray-200 bg-gray-50 px-4 py-3">
           <div class="text-xs font-medium text-gray-500">
@@ -118,6 +125,14 @@
           <div class="mt-1 text-2xl font-bold text-gray-950">
             {formatRange(summary)}
           </div>
+          {#if secondarySummary}
+            <div class="mt-0.5 text-xs text-gray-500">
+              {windowPrefix} 30:
+              <span class="font-semibold text-gray-700">
+                {formatRange(secondarySummary)}
+              </span>
+            </div>
+          {/if}
         </div>
         <div
           class="flex items-center justify-between gap-3 rounded-lg border border-gray-200 bg-gray-50 px-4 py-3"
