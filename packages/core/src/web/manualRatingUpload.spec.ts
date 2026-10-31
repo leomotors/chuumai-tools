@@ -1,4 +1,4 @@
-import { describe, expect, test } from "vitest";
+import { describe, expect, test, vi } from "vitest";
 
 import {
   MAX_CSV_COLUMNS,
@@ -150,6 +150,43 @@ describe("parseManualRatingCsv", () => {
     expect(preview.records.map((record) => record.rating)).toEqual([
       16.5034, 16.51,
     ]);
+  });
+
+  test("parses every row even though column detection uses a sample", () => {
+    const rows = Array.from(
+      { length: 1_000 },
+      (_, index) =>
+        `${new Date(Date.UTC(2026, 0, 1) + index * 60_000).toISOString()},16.50`,
+    );
+    const preview = parseManualRatingCsv(
+      ["played_at,rating", ...rows].join("\n"),
+      "chuni",
+    );
+
+    expect(preview.records).toHaveLength(1_000);
+    expect(preview.records.at(-1)?.sourceRow).toBe(1_001);
+  });
+
+  test("reuses one date formatter per timezone for local-time parsing", () => {
+    const spy = vi.spyOn(Intl, "DateTimeFormat");
+    const rows = Array.from(
+      { length: 500 },
+      (_, index) =>
+        `2026-01-${String((index % 28) + 1).padStart(2, "0")},16.50`,
+    );
+
+    try {
+      const preview = parseManualRatingCsv(
+        ["played_at,rating", ...rows].join("\n"),
+        "chuni",
+        { localTimeZone: "America/New_York", timeZoneMode: "local" },
+      );
+
+      expect(preview.records).toHaveLength(500);
+      expect(spy.mock.calls.length).toBeLessThanOrEqual(1);
+    } finally {
+      spy.mockRestore();
+    }
   });
 });
 

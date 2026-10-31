@@ -1,5 +1,9 @@
 # Changelog
 
+## [patch]
+
+- fix(security): manual rating CSV upload no longer builds a new date formatter for every cell and picks its time/rating columns from a sample of rows, so a large local-timezone upload cannot block the server
+
 ## [1.22.1] - 2026-10-13
 
 - fix(auth): Discord sign-in works again — Discord started returning an `iss` parameter on the OAuth callback, which Auth.js rejected because its Discord provider declares no issuer

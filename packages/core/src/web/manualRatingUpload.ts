@@ -81,6 +81,12 @@ const EXPLICIT_TIME_ZONE_PATTERN = /(?:[zZ]|[+-]\d{2}:?\d{2})$/;
 export const MAX_CSV_COLUMNS = 64;
 export const MAX_CSV_ROWS = 20_000;
 
+/**
+ * Column detection only looks at this many rows; parsing every cell of every
+ * column for both header scenarios made upload cost scale with file size.
+ */
+const COLUMN_SCORE_SAMPLE_ROWS = 200;
+
 export function parseManualRatingCsv(
   csv: string,
   game: ManualRatingUploadGame,
@@ -255,11 +261,12 @@ function buildScenario(
     header?.values.length ?? 0,
   );
 
+  const sampleRows = rows.slice(0, COLUMN_SCORE_SAMPLE_ROWS);
   const timeScores = Array.from({ length: columnCount }, (_, index) =>
-    scoreColumn(rows, header, index, "time", game, options),
+    scoreColumn(sampleRows, header, index, "time", game, options),
   );
   const ratingScores = Array.from({ length: columnCount }, (_, index) =>
-    scoreColumn(rows, header, index, "rating", game, options),
+    scoreColumn(sampleRows, header, index, "rating", game, options),
   );
 
   const bestPair = pickBestColumnPair(timeScores, ratingScores);
@@ -749,20 +756,35 @@ function getTimeZoneOffsetMinutes(date: Date, timeZone: string): number {
   return Math.round((localAsUtc - date.getTime()) / 60_000);
 }
 
+// Constructing an Intl.DateTimeFormat is expensive and this runs several times
+// per date cell. Keys are validated IANA zone names, so the map stays small.
+const timeZoneFormatters = new Map<string, Intl.DateTimeFormat>();
+
+function getTimeZoneFormatter(timeZone: string): Intl.DateTimeFormat {
+  let formatter = timeZoneFormatters.get(timeZone);
+
+  if (!formatter) {
+    formatter = new Intl.DateTimeFormat(undefined, {
+      timeZone,
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hourCycle: "h23",
+    });
+    timeZoneFormatters.set(timeZone, formatter);
+  }
+
+  return formatter;
+}
+
 function getDateTimePartsForTimeZone(
   date: Date,
   timeZone: string,
 ): DateTimeParts {
-  const parts = new Intl.DateTimeFormat(undefined, {
-    timeZone,
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-    hourCycle: "h23",
-  }).formatToParts(date);
+  const parts = getTimeZoneFormatter(timeZone).formatToParts(date);
   const values = Object.fromEntries(
     parts.map((part) => [part.type, part.value]),
   );
@@ -807,7 +829,7 @@ function timeZonePartsEqual(
 
 function isValidTimeZone(timeZone: string): boolean {
   try {
-    new Intl.DateTimeFormat(undefined, { timeZone }).format(new Date(0));
+    getTimeZoneFormatter(timeZone);
     return true;
   } catch {
     return false;
